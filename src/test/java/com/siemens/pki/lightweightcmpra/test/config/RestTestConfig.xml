@@ -1,0 +1,16 @@
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../schemes/Configuration.xsd">
+	<RestService Recipient="CN=MyCA">
+		<Upstream>
+			<CmpCredentials>
+				<in>
+					<SignatureBased TrustStorePath="credentials/CMP_CA_Root.pem"/>
+				</in>
+				<out>
+					<SignatureBased KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_UPSTREAM_Keystore.p12"/>
+				</out>
+			</CmpCredentials>
+			<CmpHttpClient ServerUrl="http://localhost:7000/ca"/>
+		</Upstream>
+		<RestHttpServer ServingUrl="http://localhost:6010/revocation"/>
+	</RestService>
+</Configuration>

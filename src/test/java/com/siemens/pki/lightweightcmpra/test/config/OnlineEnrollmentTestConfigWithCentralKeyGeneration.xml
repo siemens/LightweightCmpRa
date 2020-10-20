@@ -1,0 +1,57 @@
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../schemes/Configuration.xsd">
+	<RaConfiguration>
+		<!--Imprinting and Bootstrapping with signature base protection-->
+		<Upstream>
+			<CmpCredentials>
+				<in>
+					<SignatureBased TrustStorePath="credentials/CMP_CA_Root.pem"/>
+				</in>
+				<out>
+					<SignatureBased KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_UPSTREAM_Keystore.p12"/>
+				</out>
+			</CmpCredentials>
+			<CmpHttpClient ServerUrl="http://localhost:7000/ca"/>
+		</Upstream>
+		<EnrollmentCredentials TrustStorePath="credentials/ENROLL_Root.pem"/>
+		<Downstream AcceptRaVerified="true">
+			<CmpHttpServer ServingUrl="http://localhost:6011/ckgagree"/>
+			<CmpCredentials>
+				<in>
+					<SignatureBased TrustStorePath="credentials/CMP_EE_Root.pem"/>
+				</in>
+				<out>
+					<SignatureBased KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"/>
+				</out>
+			</CmpCredentials>
+		</Downstream>
+	</RaConfiguration>
+	
+	
+	<RaConfiguration>
+		<!--Imprinting and Bootstrapping with password based MAC protection-->
+		<Upstream>
+			<CmpCredentials>
+				<in>
+					<SignatureBased TrustStorePath="credentials/CMP_CA_Root.pem"/>
+				</in>
+				<out>
+					<SignatureBased KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_UPSTREAM_Keystore.p12"/>
+				</out>
+			</CmpCredentials>
+			<CmpHttpClient ServerUrl="http://localhost:7000/ca"/>
+		</Upstream>
+		<EnrollmentCredentials TrustStorePath="credentials/ENROLL_Root.pem"/>
+		<Downstream AcceptRaVerified="true">
+			<CmpHttpServer ServingUrl="http://localhost:6012/ckgwithmac"/>
+			<CmpCredentials>
+				<in>
+					<PasswordBased Password="myPresharedSecret" Username="keyIdentification"/>
+				</in>
+				<out>
+					<PasswordBased Password="myPresharedSecret" Username="keyIdentification"/>
+				</out>
+			</CmpCredentials>
+			<CentralKeyGeneration KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"/>
+		</Downstream>
+	</RaConfiguration>
+</Configuration>
