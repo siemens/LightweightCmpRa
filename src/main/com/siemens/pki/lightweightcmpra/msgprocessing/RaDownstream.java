@@ -395,7 +395,6 @@ class RaDownstream extends BasicDownstream {
                     throw ex;
                 } catch (final Exception ex) {
                     // response broken, without certificate or could not build enrollment chain
-                    ex.printStackTrace();
                     throw new CmpProcessingException(INTERFACE_NAME,
                             PKIFailureInfo.wrongAuthority,
                             "could not validate enrolled certificate: "
