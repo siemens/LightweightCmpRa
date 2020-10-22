@@ -116,7 +116,6 @@ public abstract class BaseHttpServer implements HttpHandler {
             public void configure(final HttpsParameters params) {
                 final SSLContext c = getSSLContext();
                 final SSLParameters sslparams = c.getDefaultSSLParameters();
-                sslparams.setWantClientAuth(clientAuthenticationNeeded);
                 sslparams.setNeedClientAuth(clientAuthenticationNeeded);
                 final SSLEngine engine = c.createSSLEngine();
                 params.setCipherSuites(engine.getEnabledCipherSuites());
