@@ -147,7 +147,7 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<url>git:git@code.siemens.com:product-pki/ct_rda/internal/simplecmp.git</url>
+		<url>git:git@github.com:siemens/LightweightCmpRa.git</url>
 	</scm>
 	<organization>
 		<name>Siemens AG</name>
