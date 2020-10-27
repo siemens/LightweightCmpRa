@@ -28,13 +28,13 @@ import javax.xml.bind.JAXB;
 import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
-import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.CoAP.ResponseCode;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.network.CoapEndpoint;
-import org.eclipse.californium.core.network.EndpointManager;
+import org.eclipse.californium.core.network.config.NetworkConfig;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.eclipse.californium.core.server.resources.Resource;
+import org.eclipse.californium.elements.util.NetworkInterfacesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +48,8 @@ import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 public class CmpCoapServer {
 
     private static CoapServer coapServer;
+    private static final int COAP_PORT =
+            NetworkConfig.getStandard().getInt(NetworkConfig.Keys.COAP_PORT);
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CmpCoapServer.class);
@@ -57,11 +59,16 @@ public class CmpCoapServer {
             return coapServer;
         }
         coapServer = new CoapServer();
-        for (final InetAddress addr : EndpointManager.getEndpointManager()
+        final NetworkConfig config = NetworkConfig.getStandard();
+        for (final InetAddress addr : NetworkInterfacesUtil
                 .getNetworkInterfaces()) {
             if (!addr.isLinkLocalAddress()) {
-                coapServer.addEndpoint(new CoapEndpoint(
-                        new InetSocketAddress(addr, CoAP.DEFAULT_COAP_PORT)));
+                final CoapEndpoint.Builder builder = new CoapEndpoint.Builder();
+                final InetSocketAddress bindToAddress =
+                        new InetSocketAddress(addr, COAP_PORT);
+                builder.setInetSocketAddress(bindToAddress);
+                builder.setNetworkConfig(config);
+                coapServer.addEndpoint(builder.build());
             }
         }
         coapServer.start();
