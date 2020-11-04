@@ -308,6 +308,14 @@ public class MessageDumper {
             }
             return;
         }
+        if (callRet instanceof Iterable<?>) {
+            final Iterable<?> callRetCollection = (Iterable<?>) callRet;
+            int i = 0;
+            for (final Object elem : callRetCollection) {
+                dumpSingleValue(indent + "[" + i++ + "]", elem, ret);
+            }
+            return;
+        }
         if (callRet instanceof ASN1GeneralizedTime) {
             ret.append(indent + ": " + ((ASN1GeneralizedTime) callRet).getDate()
                     + "\n");
