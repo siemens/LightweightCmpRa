@@ -135,15 +135,11 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
 			<version>1.67</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/bcpkix-jdk15on-167b01.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.67</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/bcprov-jdk15on-167b01.jar</systemPath>
 		</dependency>
 	</dependencies>
 	<scm>
