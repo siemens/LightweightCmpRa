@@ -163,7 +163,7 @@ This file is also used to generate the XML parser located in
 
 This implementation provides only the (L)RA specific functional part
 and behavior of all PKI management operations described in
-[Lightweight CMP Profile](https://tools.ietf.org/html/draft-brockhaus-lamps-industrial-cmp-profile).
+[Lightweight CMP Profile](https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).
 
 All mandatory PKI management operations are supported:
 

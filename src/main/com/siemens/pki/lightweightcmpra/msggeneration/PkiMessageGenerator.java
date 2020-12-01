@@ -87,9 +87,8 @@ import com.siemens.pki.lightweightcmpra.cryptoservices.DataSigner;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
 
 /**
- * a generator for PKI messages conforming to "CMP Profile for Industrial
- * Certificate Management Use Cases"
- * {@link "https://wiki.ct.siemens.de/display/ProductPKI/Documents"}
+ * a generator for PKI messages conforming to Lightweight CMP Profile
+ * {@link https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/}
  *
  */
 public class PkiMessageGenerator {
