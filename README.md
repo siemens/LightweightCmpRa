@@ -48,6 +48,16 @@ On a Debian-like system the packages can be installed, e.g., using
 sudo apt install adoptopenjdk-8-hotspot maven git
 ```
 
+If also other versions of Java are installed on your system
+make sure that version 8 is active as the default, e.g., like this:
+```
+sudo update-alternatives --config java
+```
+You can verify the selected version using
+```
+java -version
+```
+
 ## Downloading the sources
 
 ```bash
