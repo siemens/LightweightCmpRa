@@ -14,7 +14,7 @@
 		</Upstream>
 		<EnrollmentCredentials TrustStorePath="credentials/ENROLL_Root.pem"/>
 		<Downstream AcceptRaVerified="false">
-			<OfflineFileServer OutputDirectory="./target/CmpTest/Downstream" InputDirectory="./target/CmpTest/Upstream"/>
+			<OfflineFileServer OutputDirectory="./target/CmpTest/Downstream" InputDirectory="./target/CmpTest/Upstream" InputDirectoryPollcycle="1"/>
 			<CmpCredentials>
 				<in>
 					<SignatureBased TrustStorePassword="Password" TrustStorePath="credentials/CMP_LRA_UPSTREAM_Keystore.p12"/>
@@ -36,7 +36,7 @@
 					<SignatureBased KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_UPSTREAM_Keystore.p12"/>
 				</out>
 			</CmpCredentials>
-			<OfflineFileClient OutputDirectory="./target/CmpTest/Upstream" checkAfterTime="10" InputDirectory="./target/CmpTest/Downstream"/>
+			<OfflineFileClient OutputDirectory="./target/CmpTest/Upstream" checkAfterTime="1" InputDirectory="./target/CmpTest/Downstream" InputDirectoryPollcycle="1"/>
 		</Upstream>
 		<EnrollmentCredentials TrustStorePath="credentials/ENROLL_Root.pem"/>
 		<Downstream AcceptRaVerified="false">

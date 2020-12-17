@@ -43,7 +43,6 @@ import com.siemens.pki.lightweightcmpra.util.MessageDumper;
  */
 public class FileOfflineClient extends OfflineClient {
 
-    private static final long POLL_INTERVAL_MS = 10000;
     private final File inputDirectory;
     private final File outputDirectory;
 
@@ -75,6 +74,7 @@ public class FileOfflineClient extends OfflineClient {
             throw new IOException(config.getOutputDirectory()
                     + " is not a writable directory");
         }
+        final long pollInterval = config.getInputDirectoryPollcycle() * 1000L;
         final Timer pollTimer = new Timer(true);
         final TimerTask task = new TimerTask() {
 
@@ -84,8 +84,8 @@ public class FileOfflineClient extends OfflineClient {
             }
         };
         pollTimer.schedule(task,
-                new Date(System.currentTimeMillis() + POLL_INTERVAL_MS),
-                POLL_INTERVAL_MS);
+                new Date(System.currentTimeMillis() + pollInterval),
+                pollInterval);
     }
 
     @Override
