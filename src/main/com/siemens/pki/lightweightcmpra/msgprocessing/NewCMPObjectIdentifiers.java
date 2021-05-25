@@ -19,6 +19,7 @@ package com.siemens.pki.lightweightcmpra.msgprocessing;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
+import org.bouncycastle.asn1.x509.KeyPurposeId;
 
 /**
  * these constants should later go to {@link CMPObjectIdentifiers}
@@ -36,8 +37,23 @@ public interface NewCMPObjectIdentifiers extends CMPObjectIdentifiers {
     ASN1ObjectIdentifier it_certReqTemplate =
             new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.19");
 
-    // TODO: align with final definition from draft
-    ASN1ObjectIdentifier regCtrl_algId = id_regCtrl.branch("10");
-    ASN1ObjectIdentifier regCtrl_rsaKeyLen = id_regCtrl.branch("11");
+    ASN1ObjectIdentifier it_rootCaCert =
+            new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.20");
+
+    ASN1ObjectIdentifier it_certProfile =
+            new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.21");
+
+    ASN1ObjectIdentifier regCtrl_algId = id_regCtrl.branch("11");
+
+    ASN1ObjectIdentifier regCtrl_rsaKeyLen = id_regCtrl.branch("12");
+
+    ASN1ObjectIdentifier mod_cmp2021_88 =
+            new ASN1ObjectIdentifier("1.3.6.1.5.5.7.0.99");
+
+    ASN1ObjectIdentifier mod_cmp2021_02 =
+            new ASN1ObjectIdentifier("1.3.6.1.5.5.7.0.100");
+
+    KeyPurposeId id_kp_cmKGA = KeyPurposeId
+            .getInstance(new ASN1ObjectIdentifier("1.3.6.1.5.5.7.3.32"));
 
 }
