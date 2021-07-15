@@ -23,11 +23,11 @@ import java.security.SecureRandom;
 import java.util.List;
 
 import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.JAXB;
 
 import org.bouncycastle.asn1.ASN1Encoding;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
@@ -50,32 +50,32 @@ import com.siemens.pki.lightweightcmpra.cryptoservices.PasswordEncryptor;
  */
 public class PasswordBasedMacProtection implements ProtectionProvider {
 
-    private static final int ITERATIONCOUNT = 567;
-    private static final AlgorithmIdentifier SHA1_ALG_ID =
-            new AlgorithmIdentifier(OIWObjectIdentifiers.idSHA1); // SHA1
-    private static final String SHA1_ID = SHA1_ALG_ID.getAlgorithm().getId();
+    public static final ASN1ObjectIdentifier DEFAULT_OWF_OID =
+            OIWObjectIdentifiers.idSHA1;
 
-    private static final AlgorithmIdentifier HMAC_SHA1_ALG_ID =
-            new AlgorithmIdentifier(IANAObjectIdentifiers.hmacSHA1); // HMAC/SHA1
+    //PKCSObjectIdentifiers.id_hmacWith* is also supported
+    public static final ASN1ObjectIdentifier DEFAULT_MAC_OID =
+            IANAObjectIdentifiers.hmacSHA1;
 
-    private static final String MAC_OID =
-            HMAC_SHA1_ALG_ID.getAlgorithm().getId();
+    private static final int DEFAULT_ITERATION_COUNT = 10_000;
+
     /**
      * Random number generator
      */
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private static byte[] getDefaultProtectionSalt() {
-        final byte[] ret = new byte[7];
+        final byte[] ret = new byte[16];
         RANDOM.nextBytes(ret);
         return ret;
     }
 
     private final AlgorithmIdentifier protectionAlg;
-    private final byte basekey[];
 
     private final DEROctetString username;
     private final char[] passwortAsCharArray;
+
+    private final Mac protectingMac;
 
     /**
      * @param config
@@ -86,8 +86,9 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
      */
     public PasswordBasedMacProtection(final MACCREDENTIAL config)
             throws Exception {
-        this(config.getPassword(), config.getUsername(), ITERATIONCOUNT,
-                getDefaultProtectionSalt());
+        this(config.getPassword(), config.getUsername(),
+                DEFAULT_ITERATION_COUNT, getDefaultProtectionSalt(),
+                DEFAULT_OWF_OID, DEFAULT_MAC_OID);
     }
 
     /**
@@ -103,14 +104,16 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
      */
     public PasswordBasedMacProtection(final String password,
             final String userName, final int iterationCount,
-            final byte[] protectionSalt) throws Exception {
+            final byte[] protectionSalt, final ASN1ObjectIdentifier owfOid,
+            final ASN1ObjectIdentifier macOid) throws Exception {
         this.username =
                 userName != null ? new DEROctetString(userName.getBytes())
                         : null;
         protectionAlg =
                 new AlgorithmIdentifier(CMPObjectIdentifiers.passwordBasedMac,
-                        new PBMParameter(protectionSalt, SHA1_ALG_ID,
-                                iterationCount, HMAC_SHA1_ALG_ID));
+                        new PBMParameter(protectionSalt,
+                                new AlgorithmIdentifier(owfOid), iterationCount,
+                                new AlgorithmIdentifier(macOid)));
         passwortAsCharArray = password.toCharArray();
         final byte[] raSecret = password.getBytes(Charset.defaultCharset());
         byte[] calculatingBaseKey =
@@ -119,13 +122,16 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
         System.arraycopy(protectionSalt, 0, calculatingBaseKey, raSecret.length,
                 protectionSalt.length);
         // Construct the base key according to rfc4210, section 5.1.3.1
-        final MessageDigest dig = MessageDigest.getInstance(SHA1_ID,
+        final MessageDigest dig = MessageDigest.getInstance(owfOid.getId(),
                 CertUtility.BOUNCY_CASTLE_PROVIDER);
         for (int i = 0; i < iterationCount; i++) {
             calculatingBaseKey = dig.digest(calculatingBaseKey);
             dig.reset();
         }
-        basekey = calculatingBaseKey;
+        protectingMac = Mac.getInstance(macOid.getId(),
+                CertUtility.BOUNCY_CASTLE_PROVIDER);
+        protectingMac
+                .init(new SecretKeySpec(calculatingBaseKey, macOid.getId()));
     }
 
     @Override
@@ -147,12 +153,9 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
     @Override
     public DERBitString getProtectionFor(final ProtectedPart protectedPart)
             throws Exception {
-        final Mac mac =
-                Mac.getInstance(MAC_OID, CertUtility.BOUNCY_CASTLE_PROVIDER);
-        final SecretKey key = new SecretKeySpec(basekey, MAC_OID);
-        mac.init(key);
-        mac.update(protectedPart.getEncoded(ASN1Encoding.DER));
-        final byte[] bytes = mac.doFinal();
+        protectingMac.reset();
+        protectingMac.update(protectedPart.getEncoded(ASN1Encoding.DER));
+        final byte[] bytes = protectingMac.doFinal();
         return new DERBitString(bytes);
     }
 

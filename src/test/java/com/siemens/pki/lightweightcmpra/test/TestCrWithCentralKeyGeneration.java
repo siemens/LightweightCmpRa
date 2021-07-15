@@ -63,7 +63,9 @@ public class TestCrWithCentralKeyGeneration
         final ProtectionProvider macBasedProvider =
                 new PasswordBasedMacProtection("myPresharedSecret",
                         "keyIdentification", 1234,
-                        new byte[] {6, 5, 4, 3, 2, 1});
+                        new byte[] {6, 5, 4, 3, 2, 1},
+                        PasswordBasedMacProtection.DEFAULT_OWF_OID,
+                        PasswordBasedMacProtection.DEFAULT_MAC_OID);
         executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP, macBasedProvider,
                 TestUtils.createCmpClient("http://localhost:6012/ckgwithmac"),

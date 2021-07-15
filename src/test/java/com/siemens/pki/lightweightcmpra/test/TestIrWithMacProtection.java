@@ -38,7 +38,9 @@ public class TestIrWithMacProtection extends OnlineEnrollmentHttpTestcaseBase {
         final ProtectionProvider macBasedProvider =
                 new PasswordBasedMacProtection("myPresharedSecret",
                         "keyIdentification", 1234,
-                        new byte[] {6, 5, 4, 3, 2, 1});
+                        new byte[] {6, 5, 4, 3, 2, 1},
+                        PasswordBasedMacProtection.DEFAULT_OWF_OID,
+                        PasswordBasedMacProtection.DEFAULT_MAC_OID);
         final Function<PKIMessage, PKIMessage> cmpClient = TestUtils
                 .createCmpClient("http://localhost:6002/lrawithmacprotection");
         executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,
