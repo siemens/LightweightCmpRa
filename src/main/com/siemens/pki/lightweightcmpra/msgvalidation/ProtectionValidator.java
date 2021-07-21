@@ -98,14 +98,14 @@ public class ProtectionValidator implements ValidatorIF {
         if (protectionAlg != null) {
             if (protection == null || protection.getBytes().length == 0) {
                 throw new CmpValidationException(interfaceName,
-                        PKIFailureInfo.wrongIntegrity,
+                        PKIFailureInfo.badMessageCheck,
                         "protectionAlg given but protection missing");
             }
             if (CMPObjectIdentifiers.passwordBasedMac
                     .equals(protectionAlg.getAlgorithm())) {
                 if (passwordProtectionValidator == null) {
                     throw new CmpValidationException(interfaceName,
-                            PKIFailureInfo.wrongIntegrity,
+                            PKIFailureInfo.notAuthorized,
                             "message is protected by PasswordBasedMac but no shared secret is known");
                 }
                 passwordProtectionValidator.validate(message);
@@ -120,7 +120,7 @@ public class ProtectionValidator implements ValidatorIF {
         } else {
             if (protection != null && protection.getBytes().length > 0) {
                 throw new CmpValidationException(interfaceName,
-                        PKIFailureInfo.wrongIntegrity,
+                        PKIFailureInfo.badMessageCheck,
                         "protectionAlg missing but protection given");
             }
             if ((passwordProtectionValidator != null
@@ -138,7 +138,7 @@ public class ProtectionValidator implements ValidatorIF {
                     return;
                 default:
                     throw new CmpValidationException(interfaceName,
-                            PKIFailureInfo.badMessageCheck,
+                            PKIFailureInfo.wrongIntegrity,
                             "a protection is required but not provided");
                 }
             }

@@ -27,6 +27,7 @@ import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 import org.bouncycastle.asn1.cmp.CertConfirmContent;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.CertResponse;
+import org.bouncycastle.asn1.cmp.CertStatus;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
@@ -167,7 +168,7 @@ public class TransactionStateTracker {
             switch (msg.getBody().getType()) {
             case PKIBody.TYPE_CERT_REP:
             case PKIBody.TYPE_INIT_REP:
-            case PKIBody.TYPE_KEY_UPDATE_REP:
+            case PKIBody.TYPE_KEY_UPDATE_REP: {
                 final CertResponse[] responses =
                         ((CertRepMessage) msg.getBody().getContent())
                                 .getResponse();
@@ -182,6 +183,24 @@ public class TransactionStateTracker {
                     return true;
                 }
                 return false;
+            }
+            case PKIBody.TYPE_CERT_CONFIRM: {
+                final CertStatus[] responses =
+                        ((CertConfirmContent) msg.getBody().getContent())
+                                .toCertStatusArray();
+                if (responses != null && responses.length == 1
+                        && responses[0].getStatusInfo() != null) {
+                    switch (responses[0].getStatusInfo().getStatus()
+                            .intValue()) {
+                    case PKIStatus.GRANTED:
+                    case PKIStatus.GRANTED_WITH_MODS:
+                        return false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
             case PKIBody.TYPE_ERROR:
                 return true;
             }
@@ -341,7 +360,7 @@ public class TransactionStateTracker {
                                         .getOctets())) {
                     lastTransactionState = LastTransactionState.IN_ERROR_STATE;
                     throw new CmpValidationException(interfaceName,
-                            PKIFailureInfo.badMessageCheck,
+                            PKIFailureInfo.badCertId,
                             "wrong hash in cert confirmation for "
                                     + MessageDumper.msgAsShortString(msg));
                 }

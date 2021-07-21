@@ -139,7 +139,7 @@ public class SignatureProtectionValidator implements ValidatorIF {
                             "signature check failed, protecting cert not trusted";
                     LOGGER.warn(errorDetails);
                     throw new CmpValidationException(interfaceName,
-                            PKIFailureInfo.wrongIntegrity, errorDetails);
+                            PKIFailureInfo.signerNotTrusted, errorDetails);
                 }
                 final boolean[] keyUsage = protectingCert.getKeyUsage();
                 if (keyUsage != null && !keyUsage[0]/* digitalSignature */) {
@@ -171,11 +171,11 @@ public class SignatureProtectionValidator implements ValidatorIF {
             }
         } catch (final KeyException ex) {
             throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.wrongIntegrity,
+                    PKIFailureInfo.badAlg,
                     "protecting cert has key not suitable for signing");
         } catch (final Exception ex) {
             throw new CmpProcessingException(interfaceName,
-                    PKIFailureInfo.badMessageCheck,
+                    PKIFailureInfo.notAuthorized,
                     ex.getClass() + ":" + ex.getLocalizedMessage());
         }
         throw new CmpValidationException(interfaceName,

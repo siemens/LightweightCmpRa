@@ -21,7 +21,7 @@ import java.security.cert.X509Certificate;
 
 import org.bouncycastle.asn1.cmp.PKIMessage;
 
-import com.siemens.pki.lightweightcmpra.msgvalidation.CmpProcessingException;
+import com.siemens.pki.lightweightcmpra.msgvalidation.CmpEnrollmentException;
 
 /**
  *
@@ -50,7 +50,7 @@ public interface InventoryIF {
      * @param request
      *            request to analyze and maybe modify
      * @return modified request or unchanged request
-     * @throws CmpProcessingException
+     * @throws CmpEnrollmentException
      *             if request is not acceptable and should be answered with an
      *             CMP error
      */

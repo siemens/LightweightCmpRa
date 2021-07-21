@@ -341,9 +341,7 @@ public class MessageValidator implements ValidatorIF {
     }
 
     /**
-     * Validates {@link PKIMessage messages} of type IR (Initialization Request)
-     * and
-     * CR (Certification Request).
+     * Validates {@link PKIMessage messages} of type IR, CR and KUR.
      *
      * @param message
      *            the CMP message to validate
@@ -351,29 +349,33 @@ public class MessageValidator implements ValidatorIF {
     private void validateCrmfCertReq(final PKIMessage message) {
         final ASN1Encodable content = message.getBody().getContent();
         assertContentOfType(content, CertReqMessages.class);
-        assertExactlyOneElement(((CertReqMessages) content).toCertReqMsgArray(),
-                PKIFailureInfo.badDataFormat, "exactly one cert req required");
+        final Object[] array = ((CertReqMessages) content).toCertReqMsgArray();
+        if (array == null || array.length != 1) {
+            throw new CmpEnrollmentException(message, interfaceName,
+                    PKIFailureInfo.badDataFormat,
+                    "exactly one cert req required");
+        }
         final CertReqMsg certReqMsg =
                 ((CertReqMessages) content).toCertReqMsgArray()[0];
         final CertRequest certReq = certReqMsg.getCertReq();
         final CertTemplate certTemplate = certReq.getCertTemplate();
-        assertNotNull(certTemplate.getSubject(), PKIFailureInfo.badCertTemplate,
-                "no subject in template");
-        final SubjectPublicKeyInfo subjectPublicKeyInfo =
-                certTemplate.getPublicKey();
-        assertNotNull(subjectPublicKeyInfo, PKIFailureInfo.badCertTemplate,
-                "no public key in template");
-        assertEqual(certReq.getCertReqId(), ASN1INTEGER_0,
-                "CertReqId must be 0");
+        if (Objects.isNull(certTemplate.getSubject())) {
+            throw new CmpValidationException(interfaceName,
+                    PKIFailureInfo.badCertTemplate, "no subject in template");
+        }
+        if (!Objects.equals(certReq.getCertReqId(), ASN1INTEGER_0)) {
+            throw new CmpValidationException(interfaceName,
+                    PKIFailureInfo.badDataFormat, "CertReqId must be 0");
+        }
         final ProofOfPossession popo = certReqMsg.getPopo();
         if (popo == null) {
-            throw new CmpValidationException(interfaceName,
+            throw new CmpEnrollmentException(message, interfaceName,
                     PKIFailureInfo.badPOP, "POPO missing");
         }
         switch (popo.getType()) {
         case ProofOfPossession.TYPE_RA_VERIFIED:
             if (!acceptRaVerified) {
-                throw new CmpValidationException(interfaceName,
+                throw new CmpEnrollmentException(message, interfaceName,
                         PKIFailureInfo.badPOP,
                         "POPO RaVerified not allowed here");
             }
@@ -385,13 +387,15 @@ public class MessageValidator implements ValidatorIF {
                         (POPOSigningKey) popo.getObject();
                 assertIsNull(popoSigningKey.getPoposkInput(),
                         PKIFailureInfo.badPOP, "PoposkInput must be absent");
+                final SubjectPublicKeyInfo publicKeyInfo =
+                        certTemplate.getPublicKey();
                 final PublicKey publicKey = KeyFactory
                         .getInstance(
-                                subjectPublicKeyInfo.getAlgorithm()
-                                        .getAlgorithm().toString(),
+                                publicKeyInfo.getAlgorithm().getAlgorithm()
+                                        .toString(),
                                 CertUtility.BOUNCY_CASTLE_PROVIDER)
                         .generatePublic(new X509EncodedKeySpec(
-                                subjectPublicKeyInfo.getEncoded()));
+                                publicKeyInfo.getEncoded()));
                 final Signature sig =
                         Signature.getInstance(
                                 popoSigningKey.getAlgorithmIdentifier()
@@ -401,20 +405,20 @@ public class MessageValidator implements ValidatorIF {
                 sig.update(certReq.getEncoded(ASN1Encoding.DER));
                 if (!sig.verify(popoSigningKey.getSignature().getBytes())) {
                     // POPO still valid, continue to use it
-                    throw new CmpValidationException(interfaceName,
+                    throw new CmpEnrollmentException(message, interfaceName,
                             PKIFailureInfo.badPOP, "POPO broken");
                 }
             } catch (final IOException | NoSuchAlgorithmException
                     | InvalidKeyException | InvalidKeySpecException
                     | SignatureException ex) {
-                throw new CmpValidationException(interfaceName,
+                throw new CmpEnrollmentException(message, interfaceName,
                         PKIFailureInfo.badPOP,
                         "exception while calculating POPO: "
                                 + ex.getLocalizedMessage());
             }
             break;
         default:
-            throw new CmpValidationException(interfaceName,
+            throw new CmpEnrollmentException(message, interfaceName,
                     PKIFailureInfo.badPOP, "unsupported POPO type");
         }
     }
@@ -475,14 +479,21 @@ public class MessageValidator implements ValidatorIF {
     private void validateHeader(final PKIMessage message) {
         if (message == null) {
             throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badRequest,
+                    PKIFailureInfo.badDataFormat,
                     "did not get a valid message, message is null");
         }
         final PKIHeader header = message.getHeader();
+        final long versionNumber = header.getPvno().longValueExact();
+        if (versionNumber != PKIHeader.CMP_2000
+                && versionNumber != 3/* PKIHeader.CMP_2021 */) {
+            throw new CmpValidationException(interfaceName,
+                    PKIFailureInfo.unsupportedVersion,
+                    "version " + versionNumber + " not supported");
+        }
         final ASN1OctetString transactionID = header.getTransactionID();
         if (transactionID == null) {
             throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badRequest,
+                    PKIFailureInfo.badDataFormat,
                     "mandatory transaction ID missing");
         }
         final ASN1GeneralizedTime messageTime = header.getMessageTime();

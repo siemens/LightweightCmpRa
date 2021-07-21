@@ -28,8 +28,8 @@ import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
  */
 public class BaseCmpException extends RuntimeException {
     private static final long serialVersionUID = 1;
-    private final int failInfo;
-    private final String errorDetails;
+    protected final int failInfo;
+    protected final String errorDetails;
 
     protected BaseCmpException(final String interfaceName, final Exception ex) {
         super(ex.getMessage() == null ? ex.getCause().toString()

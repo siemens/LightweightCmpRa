@@ -62,6 +62,7 @@ import com.siemens.pki.lightweightcmpra.cryptoservices.KeyPairGeneratorFactory;
 import com.siemens.pki.lightweightcmpra.cryptoservices.TrustCredentialAdapter;
 import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.lightweightcmpra.msgvalidation.BaseCmpException;
+import com.siemens.pki.lightweightcmpra.msgvalidation.CmpEnrollmentException;
 import com.siemens.pki.lightweightcmpra.msgvalidation.CmpProcessingException;
 import com.siemens.pki.lightweightcmpra.msgvalidation.CmpValidationException;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
@@ -164,41 +165,48 @@ class RaDownstream extends BasicDownstream {
             final CertTemplate certTemplate = certRequest.getCertTemplate();
             final SubjectPublicKeyInfo subjectPublicKeyInfo =
                     certTemplate.getPublicKey();
-            if (subjectPublicKeyInfo.getPublicKeyData()
-                    .getBytes().length == 0) {
+            if (subjectPublicKeyInfo == null || subjectPublicKeyInfo
+                    .getPublicKeyData().getBytes().length == 0) {
                 // central key generation requested
                 if (keySigner == null) {
-                    throw new CmpProcessingException(INTERFACE_NAME,
-                            PKIFailureInfo.notAuthorized,
+                    throw new CmpEnrollmentException(incomingCertificateRequest,
+                            INTERFACE_NAME, PKIFailureInfo.notAuthorized,
                             "no credentials for key signing available");
                 }
-                final ASN1ObjectIdentifier algorithm =
-                        subjectPublicKeyInfo.getAlgorithm().getAlgorithm();
                 final KeyPairGenerator kpgen;
-                if (X9ObjectIdentifiers.id_ecPublicKey.equals(algorithm)) {
-                    kpgen = KeyPairGeneratorFactory
-                            .getEcKeyPairGenerator(subjectPublicKeyInfo
-                                    .getAlgorithm().getParameters().toString());
-                } else if (PKCSObjectIdentifiers.rsaEncryption
-                        .equals(algorithm)) {
-                    final AttributeTypeAndValue[] controls = certRequest
-                            .getControls().toAttributeTypeAndValueArray();
-                    int rsaKeyLen = 2048;
-                    if (controls != null) {
-                        for (final AttributeTypeAndValue aktControl : controls) {
-                            if (it_rsaKeyLen.equals(aktControl.getType())) {
-                                rsaKeyLen = ASN1Integer
-                                        .getInstance(aktControl.getValue())
-                                        .getPositiveValue().intValue();
-                                break;
+                if (subjectPublicKeyInfo != null) {
+                    // end entity has a preference on the key type to be generated
+                    final ASN1ObjectIdentifier algorithm =
+                            subjectPublicKeyInfo.getAlgorithm().getAlgorithm();
+                    if (X9ObjectIdentifiers.id_ecPublicKey.equals(algorithm)) {
+                        kpgen = KeyPairGeneratorFactory.getEcKeyPairGenerator(
+                                subjectPublicKeyInfo.getAlgorithm()
+                                        .getParameters().toString());
+                    } else if (PKCSObjectIdentifiers.rsaEncryption
+                            .equals(algorithm)) {
+                        final AttributeTypeAndValue[] controls = certRequest
+                                .getControls().toAttributeTypeAndValueArray();
+                        int rsaKeyLen = 2048;
+                        if (controls != null) {
+                            for (final AttributeTypeAndValue aktControl : controls) {
+                                if (it_rsaKeyLen.equals(aktControl.getType())) {
+                                    rsaKeyLen = ASN1Integer
+                                            .getInstance(aktControl.getValue())
+                                            .getPositiveValue().intValue();
+                                    break;
+                                }
                             }
                         }
+                        kpgen = KeyPairGeneratorFactory
+                                .getRsaKeyPairGenerator(rsaKeyLen);
+                    } else {
+                        // maybe the JCE can help
+                        kpgen = KeyPairGenerator.getInstance(algorithm.getId());
                     }
-                    kpgen = KeyPairGeneratorFactory
-                            .getRsaKeyPairGenerator(rsaKeyLen);
                 } else {
-                    // maybe the JCE can help
-                    kpgen = KeyPairGenerator.getInstance(algorithm.getId());
+                    // end entity has no preference on the key type to be generated
+                    kpgen = KeyPairGeneratorFactory
+                            .getRsaKeyPairGenerator(2048);
                 }
                 final KeyPair keyPair = kpgen.genKeyPair();
                 // regenerate template but with newly generated public key
