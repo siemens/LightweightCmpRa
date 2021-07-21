@@ -69,7 +69,7 @@ public class MsgProcessingAdapter {
             } catch (final BaseCmpException ex) {
                 throw ex;
             } catch (final Exception e) {
-                throw new CmpProcessingException(e);
+                throw new CmpProcessingException(interfaceName, e);
             }
         };
     }
@@ -106,7 +106,7 @@ public class MsgProcessingAdapter {
             } catch (final BaseCmpException ex) {
                 throw ex;
             } catch (final Exception e) {
-                throw new CmpProcessingException(e);
+                throw new CmpProcessingException(interfaceName, e);
             }
         };
     }
@@ -142,7 +142,7 @@ public class MsgProcessingAdapter {
             } catch (final BaseCmpException ex) {
                 throw ex;
             } catch (final Exception e) {
-                throw new CmpProcessingException(e);
+                throw new CmpProcessingException(interfaceName, e);
             }
 
         };
@@ -183,7 +183,7 @@ public class MsgProcessingAdapter {
             } catch (final BaseCmpException ex) {
                 throw ex;
             } catch (final Exception e) {
-                throw new CmpProcessingException(e);
+                throw new CmpProcessingException(interfaceName, e);
             }
         };
     }

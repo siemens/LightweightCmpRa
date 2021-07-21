@@ -68,7 +68,8 @@ public class TestUtils {
                                         MediaTypeRegistry.APPLICATION_OCTET_STREAM)
                                         .getPayload();
                             } catch (ConnectorException | IOException e) {
-                                throw new CmpProcessingException(e);
+                                throw new CmpProcessingException(
+                                        "COAP test client", e);
                             }
                         });
             }

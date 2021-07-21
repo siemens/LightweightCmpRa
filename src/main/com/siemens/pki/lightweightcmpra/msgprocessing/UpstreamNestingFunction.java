@@ -109,7 +109,7 @@ public class UpstreamNestingFunction implements UpstreamNestingFunctionIF {
                             PKIFailureInfo.systemUnavail,
                             "request or response lost in transmission"));
         } catch (final Exception e) {
-            throw new CmpProcessingException(e);
+            throw new CmpProcessingException(INTERFACE_NAME, e);
         }
     }
 
@@ -249,7 +249,7 @@ public class UpstreamNestingFunction implements UpstreamNestingFunctionIF {
                     protectionProvider, new PKIBody(PKIBody.TYPE_NESTED,
                             new PKIMessages(requests)));
         } catch (final Exception e) {
-            throw new CmpProcessingException(e);
+            throw new CmpProcessingException(INTERFACE_NAME, e);
         }
         if (pendingTransactionMap.put(transactionId,
                 new SentNestedMessageSummary(requests, senderNonce)) != null) {

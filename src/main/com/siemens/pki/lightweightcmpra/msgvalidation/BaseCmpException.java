@@ -31,20 +31,11 @@ public class BaseCmpException extends RuntimeException {
     private final int failInfo;
     private final String errorDetails;
 
-    protected BaseCmpException(final Exception ex) {
+    protected BaseCmpException(final String interfaceName, final Exception ex) {
         super(ex.getMessage() == null ? ex.getCause().toString()
                 : ex.getMessage(), ex.getCause() == null ? ex : ex.getCause());
-        /*
-         * String whereThrown = "<unknown>";
-         * final StackTraceElement[] stacktrace = ex.getStackTrace();
-         * 
-         * if (stacktrace != null && stacktrace.length > 0) {
-         * whereThrown = Arrays.toString(Arrays.copyOf(stacktrace, 3));
-         * }
-         */
         this.failInfo = PKIFailureInfo.systemFailure;
-        this.errorDetails = // ex.getClass().toGenericString() + ": " +
-                ex.getLocalizedMessage(); // + " at " + whereThrown;
+        this.errorDetails = interfaceName + ": " + ex.getLocalizedMessage();
     }
 
     /**
@@ -69,10 +60,6 @@ public class BaseCmpException extends RuntimeException {
 
     public PKIBody asErrorBody() {
         return PkiMessageGenerator.generateErrorBody(failInfo, errorDetails);
-    }
-
-    public String getErrorDetails() {
-        return errorDetails;
     }
 
     @Override

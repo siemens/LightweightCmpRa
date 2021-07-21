@@ -103,7 +103,7 @@ public class SignatureBasedProtection extends BaseCredentialService
         if (endEntityCertificate == null) {
             throw new CmpProcessingException("downstream",
                     PKIFailureInfo.notAuthorized,
-                    "private key encryption failed, no end etity certificate available");
+                    "private key encryption failed, no end entity certificate available");
         }
         final X509Certificate endEntityCertificateAsX509 =
                 CertUtility.certificateFromCmpCertificate(endEntityCertificate);

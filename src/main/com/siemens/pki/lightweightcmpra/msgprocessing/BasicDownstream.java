@@ -125,7 +125,7 @@ public abstract class BasicDownstream {
         } catch (final BaseCmpException ex) {
             throw ex;
         } catch (final Exception ex) {
-            throw new CmpProcessingException(ex);
+            throw new CmpProcessingException(INTERFACE_NAME, ex);
         }
     }
 

@@ -410,15 +410,7 @@ class RaDownstream extends BasicDownstream {
                             responseFromUpstream.getProtection(), extraCerts),
                     issuingChain);
         } catch (final BaseCmpException ex) {
-            final String details = ex.getErrorDetails();
-            if (details.startsWith("upstream: ")
-                    || details.startsWith("downstream: ")) {
-                throw ex; // exception was already tagged with interface name
-            } else {
-                LOGGER.error("exception at downstream interface", ex);
-                throw new CmpProcessingException(INTERFACE_NAME,
-                        PKIFailureInfo.systemFailure, details, ex);
-            }
+            throw ex;
         } catch (final Exception ex) {
             LOGGER.error("exception at downstream interface", ex);
             throw new CmpProcessingException(INTERFACE_NAME,

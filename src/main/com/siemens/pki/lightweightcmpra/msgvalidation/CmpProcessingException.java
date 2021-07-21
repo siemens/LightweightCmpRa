@@ -25,8 +25,30 @@ public class CmpProcessingException extends BaseCmpException {
 
     private static final long serialVersionUID = 1L;
 
-    public CmpProcessingException(final Exception ex) {
-        super(ex);
+    /**
+     *
+     * @param interfaceName
+     *            interface name used as prefix message text
+     * @param ex
+     *            exception to be wrapped
+     */
+    public CmpProcessingException(final String interfaceName,
+            final Exception ex) {
+        super(interfaceName, ex);
+    }
+
+    /**
+     *
+     * @param interfaceName
+     *            interface name used as prefix message text
+     * @param failInfo
+     *            CMP failInfo proposed for CMP error message
+     * @param ex
+     *            the underlying exception
+     */
+    public CmpProcessingException(final String interfaceName,
+            final int failInfo, final Exception ex) {
+        super(interfaceName, failInfo, ex.getLocalizedMessage(), ex);
     }
 
     /**
@@ -44,33 +66,19 @@ public class CmpProcessingException extends BaseCmpException {
     }
 
     /**
-    *
-    * @param interfaceName
-    *            interface name used as prefix message text
-    * @param failInfo
-    *            CMP failInfo proposed for CMP error message
-    * @param ex
-    *            the underlying exception
-    */
-   public CmpProcessingException(final String interfaceName,
-           final int failInfo, final Exception ex) {
-        super(interfaceName, failInfo, ex.getLocalizedMessage(), ex);
-   }
-
-   /**
-    *
-    * @param interfaceName
-    *            interface name used as prefix message text
-    * @param failInfo
-    *            CMP failInfo proposed for CMP error message
-    * @param errorDetails
-    *            description of some details related to the error
-    * @param ex
-    *            the underlying exception
-    */
-   public CmpProcessingException(final String interfaceName,
-           final int failInfo, final String errorDetails, final Exception ex) {
+     *
+     * @param interfaceName
+     *            interface name used as prefix message text
+     * @param failInfo
+     *            CMP failInfo proposed for CMP error message
+     * @param errorDetails
+     *            description of some details related to the error
+     * @param ex
+     *            the underlying exception
+     */
+    public CmpProcessingException(final String interfaceName,
+            final int failInfo, final String errorDetails, final Exception ex) {
         super(interfaceName, failInfo, errorDetails, ex);
-   }
+    }
 
 }

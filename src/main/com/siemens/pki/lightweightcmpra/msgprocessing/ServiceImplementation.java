@@ -106,7 +106,7 @@ public class ServiceImplementation extends BasicDownstream {
         } catch (final BaseCmpException ex) {
             throw ex;
         } catch (final Exception e) {
-            throw new CmpProcessingException(e);
+            throw new CmpProcessingException(INTERFACE_NAME, e);
         }
     }
 }

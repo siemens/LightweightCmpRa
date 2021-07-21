@@ -60,7 +60,8 @@ public class HttpSession extends ClientSession {
         } catch (final BaseCmpException ex) {
             throw ex;
         } catch (final Exception e) {
-            throw new CmpProcessingException(e);
+            throw new CmpProcessingException(
+                    "client connection to " + remoteUrl, e);
         }
     }
 
