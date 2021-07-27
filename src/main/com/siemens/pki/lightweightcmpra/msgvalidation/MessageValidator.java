@@ -369,57 +369,66 @@ public class MessageValidator implements ValidatorIF {
         }
         final ProofOfPossession popo = certReqMsg.getPopo();
         if (popo == null) {
-            throw new CmpEnrollmentException(message, interfaceName,
-                    PKIFailureInfo.badPOP, "POPO missing");
-        }
-        switch (popo.getType()) {
-        case ProofOfPossession.TYPE_RA_VERIFIED:
-            if (!acceptRaVerified) {
+            final SubjectPublicKeyInfo publicKeyInTemplate =
+                    certTemplate.getPublicKey();
+            if (publicKeyInTemplate != null
+                    && publicKeyInTemplate.getPublicKeyData() != null
+                    && publicKeyInTemplate.getPublicKeyData()
+                            .getBytes().length > 0) {
                 throw new CmpEnrollmentException(message, interfaceName,
                         PKIFailureInfo.badPOP,
-                        "POPO RaVerified not allowed here");
+                        "public key present in template but POPO missing");
             }
-            break;
-        case ProofOfPossession.TYPE_SIGNING_KEY:
-            try {
-                // a POPO is still there and maybe re-usable
-                final POPOSigningKey popoSigningKey =
-                        (POPOSigningKey) popo.getObject();
-                assertIsNull(popoSigningKey.getPoposkInput(),
-                        PKIFailureInfo.badPOP, "PoposkInput must be absent");
-                final SubjectPublicKeyInfo publicKeyInfo =
-                        certTemplate.getPublicKey();
-                final PublicKey publicKey = KeyFactory
-                        .getInstance(
-                                publicKeyInfo.getAlgorithm().getAlgorithm()
-                                        .toString(),
-                                CertUtility.BOUNCY_CASTLE_PROVIDER)
-                        .generatePublic(new X509EncodedKeySpec(
-                                publicKeyInfo.getEncoded()));
-                final Signature sig =
-                        Signature.getInstance(
-                                popoSigningKey.getAlgorithmIdentifier()
-                                        .getAlgorithm().getId(),
-                                CertUtility.BOUNCY_CASTLE_PROVIDER);
-                sig.initVerify(publicKey);
-                sig.update(certReq.getEncoded(ASN1Encoding.DER));
-                if (!sig.verify(popoSigningKey.getSignature().getBytes())) {
-                    // POPO still valid, continue to use it
+        } else {
+            switch (popo.getType()) {
+            case ProofOfPossession.TYPE_RA_VERIFIED:
+                if (!acceptRaVerified) {
                     throw new CmpEnrollmentException(message, interfaceName,
-                            PKIFailureInfo.badPOP, "POPO broken");
+                            PKIFailureInfo.badPOP,
+                            "POPO RaVerified not allowed here");
                 }
-            } catch (final IOException | NoSuchAlgorithmException
-                    | InvalidKeyException | InvalidKeySpecException
-                    | SignatureException ex) {
+                break;
+            case ProofOfPossession.TYPE_SIGNING_KEY:
+                try {
+                    // a POPO is still there and maybe re-usable
+                    final POPOSigningKey popoSigningKey =
+                            (POPOSigningKey) popo.getObject();
+                    assertIsNull(popoSigningKey.getPoposkInput(),
+                            PKIFailureInfo.badPOP,
+                            "PoposkInput must be absent");
+                    final SubjectPublicKeyInfo publicKeyInfo =
+                            certTemplate.getPublicKey();
+                    final PublicKey publicKey = KeyFactory
+                            .getInstance(
+                                    publicKeyInfo.getAlgorithm().getAlgorithm()
+                                            .toString(),
+                                    CertUtility.BOUNCY_CASTLE_PROVIDER)
+                            .generatePublic(new X509EncodedKeySpec(
+                                    publicKeyInfo.getEncoded()));
+                    final Signature sig = Signature.getInstance(
+                            popoSigningKey.getAlgorithmIdentifier()
+                                    .getAlgorithm().getId(),
+                            CertUtility.BOUNCY_CASTLE_PROVIDER);
+                    sig.initVerify(publicKey);
+                    sig.update(certReq.getEncoded(ASN1Encoding.DER));
+                    if (!sig.verify(popoSigningKey.getSignature().getBytes())) {
+                        throw new CmpEnrollmentException(message, interfaceName,
+                                PKIFailureInfo.badPOP, "POPO broken");
+                    }
+                    // POPO still valid, continue to use it
+                } catch (final IOException | NoSuchAlgorithmException
+                        | InvalidKeyException | InvalidKeySpecException
+                        | SignatureException ex) {
+                    throw new CmpEnrollmentException(message, interfaceName,
+                            PKIFailureInfo.badPOP,
+                            "exception while calculating POPO: "
+                                    + ex.getLocalizedMessage());
+                }
+                break;
+            default:
                 throw new CmpEnrollmentException(message, interfaceName,
-                        PKIFailureInfo.badPOP,
-                        "exception while calculating POPO: "
-                                + ex.getLocalizedMessage());
+                        PKIFailureInfo.badPOP, "unsupported POPO type");
             }
-            break;
-        default:
-            throw new CmpEnrollmentException(message, interfaceName,
-                    PKIFailureInfo.badPOP, "unsupported POPO type");
         }
     }
 
