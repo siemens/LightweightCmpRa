@@ -17,13 +17,23 @@
  */
 package com.siemens.pki.lightweightcmpra.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
 import org.bouncycastle.asn1.cmp.PKIMessage;
+import org.bouncycastle.asn1.util.ASN1Dump;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +47,28 @@ import com.siemens.pki.lightweightcmpra.msgvalidation.CmpValidationException;
  */
 public class MsgProcessingAdapter {
 
+    private static final Encoder B64_ENCODER_WITHOUT_PADDING =
+            Base64.getUrlEncoder().withoutPadding();
+
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MsgProcessingAdapter.class);
+
+    private static File msgDumpDirectory;
+
+    static {
+        final String dumpDirName = System.getProperty("dumpdir");
+        if (dumpDirName != null) {
+            msgDumpDirectory = new File(dumpDirName);
+            if (!msgDumpDirectory.isDirectory()
+                    || !msgDumpDirectory.canWrite()) {
+                LOGGER.error(
+                        msgDumpDirectory + " is not writable, disable dump");
+                msgDumpDirectory = null;
+            } else {
+                LOGGER.info("dump transactions below " + msgDumpDirectory);
+            }
+        }
+    }
 
     public static Function<PKIMessage, PKIMessage> adaptByteToByteFunctionToMsgHandler(
             final String interfaceName,
@@ -53,8 +83,9 @@ public class MsgProcessingAdapter {
             if (msg == null) {
                 return null;
             }
-            try (final ASN1InputStream asn1InputStream =
-                    new ASN1InputStream(wrapped.apply(msg.getEncoded()))) {
+            dumpMessage(msg, interfaceName);
+            try (final ASN1InputStream asn1InputStream = new ASN1InputStream(
+                    wrapped.apply(msg.getEncoded(ASN1Encoding.DER)))) {
                 final PKIMessage ret =
                         PKIMessage.getInstance(asn1InputStream.readObject());
                 if (LOGGER.isTraceEnabled()) {
@@ -64,6 +95,7 @@ public class MsgProcessingAdapter {
                     LOGGER.debug(
                             "return " + MessageDumper.msgAsShortString(ret));
                 }
+                dumpMessage(ret, interfaceName);
                 checkNonce(interfaceName, msg, ret);
                 return ret;
             } catch (final BaseCmpException ex) {
@@ -90,8 +122,9 @@ public class MsgProcessingAdapter {
             if (msg == null) {
                 return null;
             }
-            try (final ASN1InputStream asn1InputStream =
-                    new ASN1InputStream(wrapped.apply(msg.getEncoded()))) {
+            dumpMessage(msg, interfaceName);
+            try (final ASN1InputStream asn1InputStream = new ASN1InputStream(
+                    wrapped.apply(msg.getEncoded(ASN1Encoding.DER)))) {
                 final PKIMessage ret =
                         PKIMessage.getInstance(asn1InputStream.readObject());
                 if (LOGGER.isTraceEnabled()) {
@@ -102,6 +135,7 @@ public class MsgProcessingAdapter {
                     LOGGER.debug("received from upstream "
                             + MessageDumper.msgAsShortString(ret));
                 }
+                dumpMessage(ret, interfaceName);
                 checkNonce(interfaceName, msg, ret);
                 return ret;
             } catch (final BaseCmpException ex) {
@@ -131,6 +165,7 @@ public class MsgProcessingAdapter {
                 if (msg == null) {
                     return null;
                 }
+                dumpMessage(msg, interfaceName);
                 final PKIMessage ret = wrapped.apply(msg);
                 if (LOGGER.isTraceEnabled()) {
                     LOGGER.trace("return " + MessageDumper.dumpPkiMessage(ret));
@@ -139,8 +174,9 @@ public class MsgProcessingAdapter {
                     LOGGER.debug(
                             "return " + MessageDumper.msgAsShortString(ret));
                 }
+                dumpMessage(ret, interfaceName);
                 checkNonce(interfaceName, msg, ret);
-                return ret.getEncoded();
+                return ret.getEncoded(ASN1Encoding.DER);
             } catch (final BaseCmpException ex) {
                 throw ex;
             } catch (final Exception e) {
@@ -171,6 +207,7 @@ public class MsgProcessingAdapter {
                 if (msg == null) {
                     return null;
                 }
+                dumpMessage(msg, interfaceName);
                 final PKIMessage ret = wrapped.apply(msg);
                 if (LOGGER.isTraceEnabled()) {
                     // avoid unnecessary call of MessageDumper.dumpPkiMessage, if trace isn't enabled
@@ -181,8 +218,9 @@ public class MsgProcessingAdapter {
                     LOGGER.debug("returning to downstream "
                             + MessageDumper.msgAsShortString(ret));
                 }
+                dumpMessage(ret, interfaceName);
                 checkNonce(interfaceName, msg, ret);
-                return ret.getEncoded();
+                return ret.getEncoded(ASN1Encoding.DER);
             } catch (final BaseCmpException ex) {
                 throw ex;
             } catch (final Exception e) {
@@ -199,6 +237,34 @@ public class MsgProcessingAdapter {
             throw new CmpValidationException(interfaceName,
                     PKIFailureInfo.badRecipientNonce,
                     "mismatch between sent senderNonce and received recipientNonce");
+        }
+    }
+
+    private static void dumpMessage(final PKIMessage msg,
+            final String interfaceName) {
+        if (msgDumpDirectory == null || msg == null) {
+            return;
+        }
+        final String subDirName = "trans_" + B64_ENCODER_WITHOUT_PADDING
+                .encodeToString(msg.getHeader().getTransactionID().getOctets());
+        final File subDir = new File(msgDumpDirectory, subDirName);
+        if (!subDir.isDirectory()) {
+            subDir.mkdirs();
+        }
+        final String fileprefix =
+                interfaceName + "_" + MessageDumper.msgTypeAsString(msg);
+        try (final FileOutputStream binOut =
+                new FileOutputStream(new File(subDir, fileprefix + ".PKI"));
+                final FileWriter txtOut =
+                        new FileWriter(new File(subDir, fileprefix + ".txt"));
+                final PemWriter pemOut = new PemWriter(new FileWriter(
+                        new File(subDir, fileprefix + ".pem")))) {
+            final byte[] encodedMessage = msg.getEncoded(ASN1Encoding.DER);
+            binOut.write(encodedMessage);
+            pemOut.writeObject(new PemObject("PKIXCMP", encodedMessage));
+            txtOut.write(ASN1Dump.dumpAsString(msg, true));
+        } catch (final IOException e) {
+            LOGGER.error("error writing dump", e);
         }
     }
 

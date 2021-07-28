@@ -254,8 +254,9 @@ class RaDownstream extends BasicDownstream {
                 final PublicKey publicKey = KeyFactory
                         .getInstance(algorithm.toString(),
                                 CertUtility.BOUNCY_CASTLE_PROVIDER)
-                        .generatePublic(new X509EncodedKeySpec(
-                                subjectPublicKeyInfo.getEncoded()));
+                        .generatePublic(
+                                new X509EncodedKeySpec(subjectPublicKeyInfo
+                                        .getEncoded(ASN1Encoding.DER)));
                 final Signature sig =
                         Signature.getInstance(
                                 popoSigningKey.getAlgorithmIdentifier()

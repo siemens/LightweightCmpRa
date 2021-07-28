@@ -102,8 +102,9 @@ class TrustChainAndPrivateKey {
                     X9ObjectIdentifiers.ecdsa_with_SHA256);
         }
         final String signatureAlgorithmName = "SHA256with" + algorithmName;
-        final GeneralName senderName = new GeneralName(X500Name.getInstance(
-                certificate.getX509v3PKCert().getSubject().getEncoded()));
+        final GeneralName senderName = new GeneralName(
+                X500Name.getInstance(certificate.getX509v3PKCert().getSubject()
+                        .getEncoded(ASN1Encoding.DER)));
         final DEROctetString senderKid =
                 CertUtility.extractSubjectKeyIdentifierFromCert(
                         CertUtility.certificateFromCmpCertificate(certificate));

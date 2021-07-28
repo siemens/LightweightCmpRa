@@ -25,6 +25,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.util.function.Function;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.CertifiedKeyPair;
@@ -126,7 +127,7 @@ public class OnlineEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
                 .setSubject(new X500Name("CN=Subject"));
 
         final CertTemplate template = ctb.build();
-        CertTemplate.getInstance(template.getEncoded());
+        CertTemplate.getInstance(template.getEncoded(ASN1Encoding.DER));
         final PKIBody crBody = PkiMessageGenerator
                 .generateIrCrKurBody(requestMesssageType, template, null, null);
 

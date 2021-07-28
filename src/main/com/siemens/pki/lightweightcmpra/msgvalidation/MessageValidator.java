@@ -399,12 +399,11 @@ public class MessageValidator implements ValidatorIF {
                     final SubjectPublicKeyInfo publicKeyInfo =
                             certTemplate.getPublicKey();
                     final PublicKey publicKey = KeyFactory
-                            .getInstance(
-                                    publicKeyInfo.getAlgorithm().getAlgorithm()
-                                            .toString(),
+                            .getInstance(publicKeyInfo.getAlgorithm()
+                                    .getAlgorithm().toString(),
                                     CertUtility.BOUNCY_CASTLE_PROVIDER)
-                            .generatePublic(new X509EncodedKeySpec(
-                                    publicKeyInfo.getEncoded()));
+                            .generatePublic(new X509EncodedKeySpec(publicKeyInfo
+                                    .getEncoded(ASN1Encoding.DER)));
                     final Signature sig = Signature.getInstance(
                             popoSigningKey.getAlgorithmIdentifier()
                                     .getAlgorithm().getId(),

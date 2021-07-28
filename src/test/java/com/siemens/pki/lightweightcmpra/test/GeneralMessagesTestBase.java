@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.function.Function;
 
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -66,7 +67,7 @@ public class GeneralMessagesTestBase extends CmpTestcaseBase {
                     new ASN1Integer(2048)));
             final ASN1Sequence certReqTemplateContent = new DERSequence(
                     new ASN1Encodable[] {ctb.build(), controls});
-            out.write(certReqTemplateContent.getEncoded());
+            out.write(certReqTemplateContent.getEncoded(ASN1Encoding.DER));
         }
 
     }

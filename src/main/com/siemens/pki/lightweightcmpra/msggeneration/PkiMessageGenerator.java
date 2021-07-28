@@ -334,7 +334,8 @@ public class PkiMessageGenerator {
 
         final DigestCalculator digester =
                 BC_DIGEST_CALCULATOR_PROVIDER.get(digAlg);
-        digester.getOutputStream().write(certificate.getEncoded());
+        digester.getOutputStream()
+                .write(certificate.getEncoded(ASN1Encoding.DER));
         final ASN1Sequence content = new DERSequence(new CertStatus[] {
                 new CertStatus(digester.getDigest(), BigInteger.ZERO,
                         new PKIStatusInfo(PKIStatus.granted))});

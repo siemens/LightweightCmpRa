@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
@@ -128,6 +129,6 @@ public class DataSigner {
     public CMSSignedData signPrivateKey(final PrivateKey privateKey)
             throws CMSException, IOException {
         return signData(PrivateKeyInfo.getInstance(privateKey.getEncoded())
-                .getEncoded());
+                .getEncoded(ASN1Encoding.DER));
     }
 }

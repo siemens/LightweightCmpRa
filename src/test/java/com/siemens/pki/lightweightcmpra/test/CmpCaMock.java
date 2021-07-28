@@ -108,7 +108,7 @@ public class CmpCaMock implements Function<PKIMessage, PKIMessage> {
                 protectionCredentials, TestUtils.PASSWORD_AS_CHAR_ARRAY);
         httpServer = new CmpHttpServer(new URL(servingUrl),
                 MsgProcessingAdapter.adaptMsgHandlerToInputStreamToByteFunction(
-                        "CMP CA mock", this));
+                        "CMP_CA_mock", this));
 
     }
 

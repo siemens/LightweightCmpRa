@@ -56,13 +56,13 @@ public class TestUtils {
         if (serverPath.toLowerCase().startsWith("http")) {
             return MsgProcessingAdapter
                     .adaptByteToInputStreamFunctionToMsgHandler(
-                            "HTTP(S) test client",
+                            "HTTP_test_client",
                             new HttpSession(new URL(serverPath)));
         } else {
             if (serverPath.toLowerCase().startsWith("coap")) {
                 final CoapClient client = new CoapClient(serverPath);
                 return MsgProcessingAdapter.adaptByteToByteFunctionToMsgHandler(
-                        "COAP test client", in -> {
+                        "COAP_test_client", in -> {
                             try {
                                 return client.post(in,
                                         MediaTypeRegistry.APPLICATION_OCTET_STREAM)

@@ -78,7 +78,7 @@ abstract public class ClientSession implements Function<byte[], InputStream> {
         }
         return nestingFunction.getAsWrappingFunction(
                 MsgProcessingAdapter.adaptByteToInputStreamFunctionToMsgHandler(
-                        "HTTP(S) client", session));
+                        "HTTP_client", session));
 
     }
 

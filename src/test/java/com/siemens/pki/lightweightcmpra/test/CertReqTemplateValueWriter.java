@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -52,7 +53,8 @@ public class CertReqTemplateValueWriter {
     private Extension createExtendedKeyUsageExtension(
             final KeyPurposeId... extendedKeyUsages) throws IOException {
         return new Extension(Extension.extendedKeyUsage, true,
-                new ExtendedKeyUsage(extendedKeyUsages).getEncoded());
+                new ExtendedKeyUsage(extendedKeyUsages)
+                        .getEncoded(ASN1Encoding.DER));
     }
 
     // KeyUsage.digitalSignature | KeyUsage.keyCertSign | KeyUsage.cRLSign
@@ -63,7 +65,7 @@ public class CertReqTemplateValueWriter {
             keyUsage |= aktUsage;
         }
         return new Extension(Extension.keyUsage, true,
-                new KeyUsage(keyUsage).getEncoded());
+                new KeyUsage(keyUsage).getEncoded(ASN1Encoding.DER));
     }
 
     // GeneralName.iPAddress, GeneralName.dNSName, GeneralName.rfc822Name
@@ -74,7 +76,7 @@ public class CertReqTemplateValueWriter {
             gnb.addName(gn);
         }
         return new Extension(Extension.subjectAlternativeName, true,
-                gnb.build().getEncoded());
+                gnb.build().getEncoded(ASN1Encoding.DER));
     }
 
     private Extension createSubjectAlternativeNameExtension(

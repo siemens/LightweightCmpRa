@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 import org.bouncycastle.asn1.cmp.CertConfirmContent;
@@ -98,12 +99,14 @@ public class TransactionStateTracker {
                                         .getX509v3PKCert();
                 final DigestCalculator dc = digestProvider.get(digestFinder
                         .find(enrolledCertificate.getSignatureAlgorithm()));
-                dc.getOutputStream().write(enrolledCertificate.getEncoded());
+                dc.getOutputStream().write(
+                        enrolledCertificate.getEncoded(ASN1Encoding.DER));
                 digestToConfirm = dc.getDigest();
                 final SubjectPublicKeyInfo enrolledPublicKey =
                         enrolledCertificate.getSubjectPublicKeyInfo();
-                if (!Arrays.equals(requestedPublicKey.getEncoded(),
-                        enrolledPublicKey.getEncoded())) {
+                if (!Arrays.equals(
+                        requestedPublicKey.getEncoded(ASN1Encoding.DER),
+                        enrolledPublicKey.getEncoded(ASN1Encoding.DER))) {
                     throw new CmpValidationException(interfaceName,
                             PKIFailureInfo.badMessageCheck,
                             "wrong public key in cert response");

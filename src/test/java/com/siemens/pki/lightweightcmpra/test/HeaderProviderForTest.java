@@ -25,6 +25,7 @@ import org.bouncycastle.asn1.DERGeneralizedTime;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIHeader;
+import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.GeneralName;
 
 import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
@@ -65,7 +66,7 @@ final class HeaderProviderForTest implements HeaderProvider {
 
     @Override
     public GeneralName getRecipient() {
-        return null;
+        return new GeneralName(new X500Name("CN=CA-Mock"));
     }
 
     @Override
@@ -75,7 +76,7 @@ final class HeaderProviderForTest implements HeaderProvider {
 
     @Override
     public GeneralName getSender() {
-        return null;
+        return new GeneralName(new X500Name("CN=EE-Mock"));
     }
 
     @Override

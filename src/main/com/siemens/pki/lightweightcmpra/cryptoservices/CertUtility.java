@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
@@ -79,7 +80,7 @@ public class CertUtility {
     static public X509Certificate certificateFromCmpCertificate(
             final CMPCertificate cert) throws Exception {
         try {
-            return certificateFromEncoded(cert.getEncoded());
+            return certificateFromEncoded(cert.getEncoded(ASN1Encoding.DER));
         } catch (final IOException excpt) {
             throw new CertificateException(excpt);
         }
@@ -119,7 +120,8 @@ public class CertUtility {
             final ArrayList<X509Certificate> ret =
                     new ArrayList<>(certs.length);
             for (final CMPCertificate aktCert : certs) {
-                ret.add(certificateFromEncoded(aktCert.getEncoded()));
+                ret.add(certificateFromEncoded(
+                        aktCert.getEncoded(ASN1Encoding.DER)));
             }
             return ret;
         } catch (final IOException excpt) {
