@@ -256,3 +256,8 @@ based on OpenSSL can be found at
 [CMPforOpenSSL](https://github.com/mpeylo/cmpossl/wiki).
 The [openssl-cmp manual page](https://github.com/openssl/openssl/blob/master/doc/man1/openssl-cmp.pod.in)
 gives an overview of the functionality.
+
+## Interoperability
+
+Details about with other CMP implementations and reference message flows can be found in the 
+[Interoperability document](./doc/interop/Interoperability.md) 

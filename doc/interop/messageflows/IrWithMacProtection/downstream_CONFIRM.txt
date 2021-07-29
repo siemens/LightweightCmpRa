@@ -1,0 +1,45 @@
+DER Sequence
+    DER Sequence
+        Integer(2)
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(CMPCA-ENDENTITY) 
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(Upstream-CMP-ENDENTITY) 
+        Tagged [0]
+            GeneralizedTime(20210729083602GMT+00:00) 
+        Tagged [1]
+            DER Sequence
+                ObjectIdentifier(1.2.840.113533.7.66.13)
+                DER Sequence
+                    DER Octet String[16] 
+                        2e163a86083490e9144d29c2aa8314d4                                    .:4M)
+                    DER Sequence
+                        ObjectIdentifier(1.3.14.3.2.26)
+                    Integer(10000)
+                    DER Sequence
+                        ObjectIdentifier(1.3.6.1.5.5.8.1.2)
+        Tagged [2]
+            DER Octet String[17] 
+                6b65794964656e74696669636174696f6e                                  keyIdentification
+        Tagged [4]
+            DER Octet String[16] 
+                d3b30d791804b0dd7dbe2626bd1d20ff                                    y}&& 
+        Tagged [5]
+            DER Octet String[16] 
+                a53d4074d3545803ffdfad39106e9b99                                    =@tTX9n
+        Tagged [6]
+            DER Octet String[16] 
+                12b4622e5c4f75025adf49f0ace26134                                    b.\OuZIa4
+    Tagged [19]
+        NULL
+    Tagged [0]
+        DER Bit String[20, 0] 
+            c33bc3bcb5ea6c473a84fb6ebd33aa4869cdf333                            ;lG:n3Hi3

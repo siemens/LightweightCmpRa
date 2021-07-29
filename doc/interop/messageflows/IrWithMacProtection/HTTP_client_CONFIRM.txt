@@ -1,0 +1,209 @@
+DER Sequence
+    DER Sequence
+        Integer(2)
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(CMPCA-ENDENTITY) 
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(Upstream-CMP-ENDENTITY) 
+        Tagged [0]
+            GeneralizedTime(20210729083602GMT+00:00) 
+        Tagged [1]
+            DER Sequence
+                ObjectIdentifier(1.2.840.10045.4.3.2)
+        Tagged [2]
+            DER Octet String[20] 
+                4e6eab66f1576b26d63a90aa0b899d061a78167d                            NnfWk&:x}
+        Tagged [4]
+            DER Octet String[16] 
+                d3b30d791804b0dd7dbe2626bd1d20ff                                    y}&& 
+        Tagged [5]
+            DER Octet String[16] 
+                a53d4074d3545803ffdfad39106e9b99                                    =@tTX9n
+        Tagged [6]
+            DER Octet String[16] 
+                12b4622e5c4f75025adf49f0ace26134                                    b.\OuZIa4
+    Tagged [19]
+        NULL
+    Tagged [0]
+        DER Bit String[72, 0] 
+            30460221008bf3fd2c739d31f18ba9223f30629be1ba55eed1f2e80bcd8917b2    0F!,s1"?0bU
+            90066eb81e022100c8c6ad2cd5ea3ed1a3b10768825db819f5564eac21d9c2b2    n!,>h]VN!
+            113c7293c19e3dfa                                                    <r=
+    Tagged [1]
+        Sequence
+            Sequence
+                Sequence
+                    Tagged [0]
+                        Integer(2)
+                    Integer(1599122797384)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-2) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-ENDENTITY) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            04ce60005b95f0fa1555a33978ee956d3629688151cfe84fbcd9f5d77695b115    `[U9xm6)hQOv
+                            d4ead0036b3b6a8cf8081d19b6f7dc7199e19357175f0e713874e61c35b1cec5    k;jqW_q8t5
+                            4a                                                                  J
+                    Tagged [3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    04144e6eab66f1576b26d63a90aa0b899d061a78167d                        NnfWk&:x}
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[69] 
+                                    30438014fe32195304e251a12ca57fa24ffd37fe5098ff57a123a421301f311d    0C2SQ,O7PW#!01
+                                    301b06035504030c14434d5043412d494e5445524d4544494154452d31820601    0UCMPCA-INTERMEDIATE-1
+                                    7453257343                                                          tS%sC
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    0302028c                                                            
+                            Sequence
+                                ObjectIdentifier(2.5.29.37)
+                                Boolean(true)
+                                DER Octet String[22] 
+                                    301406082b0601050507032006082b0601050507031b                        0+ +
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[72, 0] 
+                    3046022100d337cb3303369b7f25bbc11eae0a4508ebcab22faf0e7cf8d043f4    0F!736%E/|C
+                    4ec7db8de802210089160e5be2cf64557fd342481f9ad9d7676bc212c4a69a10    N![dUBHgk
+                    a20a5cad8f3c9486                                                    \<
+            Sequence
+                Sequence
+                    Tagged [0]
+                        Integer(2)
+                    Integer(1599122797379)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-1) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-2) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            04df9b8ec4734cff997ef6ee40af49b5a984acc048857d04ac0d65d435bdf256    sL~@IH}e5V
+                            fd20bd893b3b31ae8c5c7e4f2b1fa2923c84f4f21ff25c9b1682eda265fac97f     ;;1\~O+<\e
+                            2c                                                                  ,
+                    Tagged [3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414fe32195304e251a12ca57fa24ffd37fe5098ff57                        2SQ,O7PW
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[75] 
+                                    30498014304bcaead6d64ffdc181a4f4e724e94d52d5f0d8a129a42730253123    0I0KO$MR)'0%1#
+                                    302106035504030c1a557073747265616d2d434d505045455254525553542d52    0!UUpstream-CMPPEERTRUST-R
+                                    4f4f548206017453257338                                              OOTtS%s8
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020102                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    3045022100c2a8c4afc8ba7abb0bc98f3d1cc13cc04cf0297c625eeea5c6506a    0E!z=<L)|b^Pj
+                    94bcb5c17a02207a9fc35be8bf19c13033668008f97bf73d7578f03684da08ad    z z[03f{=ux6
+                    53dd585dc6c3bd                                                      SX]
+            Sequence
+                Sequence
+                    Tagged [0]
+                        Integer(2)
+                    Integer(1599122797368)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Upstream-CMPPEERTRUST-ROOT) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-1) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            0420c32355de10bfd8babdfe206b28fc1468fe742715d3d343f734d9edc0962d     #U k(ht'C4-
+                            ae5815af755bd2e01244443781231eee1329c2ba065766a341d0d2700c137817    Xu[DD7#)WfApx
+                            37                                                                  7
+                    Tagged [3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414304bcaead6d64ffdc181a4f4e724e94d52d5f0d8                        0KO$MR
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[75] 
+                                    30498014ced4af510deed7c40b12b7972c6f8f6aedcfecb9a129a42730253123    0IQ,oj)'0%1#
+                                    302106035504030c1a557073747265616d2d434d505045455254525553542d52    0!UUpstream-CMPPEERTRUST-R
+                                    4f4f54820601745325728a                                              OOTtS%r
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020103                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[70, 0] 
+                    30440220499fe8f77fbb7073059e5481fb57da7093a326e5a12c2a4a7d8aff3a    0D IpsTWp&,*J}:
+                    913cb9d702206aeb11a2fbe59516963df7d294a5b12fe01fa2fa6798ea080b1c    < j=/g
+                    a363aca6f9f1                                                        c

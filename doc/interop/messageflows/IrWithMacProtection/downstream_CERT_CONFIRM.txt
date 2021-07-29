@@ -1,0 +1,52 @@
+DER Sequence
+    DER Sequence
+        Integer(2)
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(EE-Mock) 
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(CA-Mock) 
+        Tagged [0]
+            GeneralizedTime(20210729083602GMT+00:00) 
+        Tagged [1]
+            DER Sequence
+                ObjectIdentifier(1.2.840.113533.7.66.13)
+                Sequence
+                    DER Octet String[6] 
+                        060504030201                                                        
+                    Sequence
+                        ObjectIdentifier(1.3.14.3.2.26)
+                    Integer(1234)
+                    Sequence
+                        ObjectIdentifier(1.3.6.1.5.5.8.1.2)
+        Tagged [2]
+            DER Octet String[17] 
+                6b65794964656e74696669636174696f6e                                  keyIdentification
+        Tagged [4]
+            DER Octet String[16] 
+                d3b30d791804b0dd7dbe2626bd1d20ff                                    y}&& 
+        Tagged [5]
+            DER Octet String[16] 
+                12b4622e5c4f75025adf49f0ace26134                                    b.\OuZIa4
+        Tagged [6]
+            DER Octet String[16] 
+                dfdb42c1bd49488ac9fe497d0f694234                                    BIHI}iB4
+    Tagged [24]
+        Sequence
+            Sequence
+                DER Octet String[48] 
+                    1b4ebb4b3b3f5e41d5a53309c19e8b9d6b496fcd30375fe0dbbd390685d67903    NK;?^A3kIo07_9y
+                    cab5ee9b512d1ce820958c3fcc0ae36e                                    Q- ?n
+                Integer(0)
+                Sequence
+                    Integer(0)
+    Tagged [0]
+        DER Bit String[20, 0] 
+            f9d528efaec221f3fe83ecef1f62b7fc86f61c08                            (!b

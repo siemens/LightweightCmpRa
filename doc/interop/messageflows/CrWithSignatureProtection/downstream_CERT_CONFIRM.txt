@@ -1,0 +1,216 @@
+DER Sequence
+    DER Sequence
+        Integer(2)
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(EE-CMP-ENDENTITY) 
+        Tagged [4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(CA-Mock) 
+        Tagged [0]
+            GeneralizedTime(20210729085411GMT+00:00) 
+        Tagged [1]
+            DER Sequence
+                ObjectIdentifier(1.2.840.10045.4.3.2)
+        Tagged [2]
+            DER Octet String[20] 
+                128692208752f00fe686d338955f956e33477442                             R8_n3GtB
+        Tagged [4]
+            DER Octet String[16] 
+                eed896ca7a91332ef6ea297d9c05c34b                                    z3.)}K
+        Tagged [5]
+            DER Octet String[16] 
+                85fa6faeafbd54684cb305dc745fbb49                                    oThLt_I
+        Tagged [6]
+            DER Octet String[16] 
+                ecb988522c4969c5d95944f9cbcabe37                                    R,IiYD7
+    Tagged [24]
+        Sequence
+            Sequence
+                DER Octet String[48] 
+                    94f0f249ce11473f749009fd80726e925b2fde089140db7dcb148fa5c5a88bdf    IG?trn[/@}
+                    7a3ec3169ea847bf41ca8c63c3e76449                                    z>GAcdI
+                Integer(0)
+                Sequence
+                    Integer(0)
+    Tagged [0]
+        DER Bit String[70, 0] 
+            304402204c1cc186d84bcb58955b93b46f95b42b1b298c23e072f825240e5d50    0D LKX[o+)#r%$]P
+            14825cc602207a42ed1ef708e1f751114bf278ca2e6e1ca812f0180359b20790    \ zBQKx.nY
+            677b49d5c538                                                        g{I8
+    Tagged [1]
+        Sequence
+            Sequence
+                Sequence
+                    Tagged [0]
+                        Integer(2)
+                    Integer(1599122797092)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(EE-CMP-INTERMEDIATE-2) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(EE-CMP-ENDENTITY) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            0410fb55e6aec08b6bcf4d864c9fffd94ae3f1d6d2bd25de11c38db7497c1fbd    UkMLJ%I|
+                            5785cee87542d6b89c22e79d1494fcc12b4b4c0a1014084f8bfef79865863ac3    WuB"+KLOe:
+                            3d                                                                  =
+                    Tagged [3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414128692208752f00fe686d338955f956e33477442                         R8_n3GtB
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[70] 
+                                    3044801486218bb36fdad9c9bf5d5b42bc49475e99c56486a124a4223020311e    0D!o][BIG^d$"0 1
+                                    301c06035504030c1545452d434d502d494e5445524d4544494154452d318206    0UEE-CMP-INTERMEDIATE-1
+                                    01745325721d                                                        tS%r
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    0302028c                                                            
+                            Sequence
+                                ObjectIdentifier(2.5.29.37)
+                                Boolean(true)
+                                DER Octet String[22] 
+                                    301406082b0601050507032006082b0601050507031b                        0+ +
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    304502210089352029c3b7c7dd78e4324e7123ba739cc4c83561ad9b0b81eee8    0E!5 )x2Nq#s5a
+                    34b16fb5ef02205380cdaca97455932914ae4790c8144acbcf2caff74b2138f9    4o StU)GJ,K!8
+                    554e5eb9e90ec3                                                      UN^
+            Sequence
+                Sequence
+                    Tagged [0]
+                        Integer(2)
+                    Integer(1599122797085)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(EE-CMP-INTERMEDIATE-1) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(EE-CMP-INTERMEDIATE-2) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            04bc789571c29af31f1325a42c51b87193688350e44b7d24b0746cf3d9f2d70c    xq%,QqhPK}$tl
+                            28490f8a878530d1b53b4b3bb24660d03b6ec09d4b4703606f8e1f98bdcf60ab    (I0;K;F`;nKG`o`
+                            9d                                                                  
+                    Tagged [3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    041486218bb36fdad9c9bf5d5b42bc49475e99c56486                        !o][BIG^d
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[77] 
+                                    304b8014abbf76540e548e949e370b946686ede375458a40a12ba42930273125    0KvTT7fuE@+)0'1%
+                                    302306035504030c1c446f776e73747265616d2d434d50504545525452555354    0#UDownstream-CMPPEERTRUST
+                                    2d524f4f548206017453257216                                          -ROOTtS%r
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020102                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    30450220471eea9d1b648e789c150b8f58d5dfb64a7164dc081280499022c575    0E GdxXJqdI"u
+                    0a4c0b550221009c96e612a53b798850322916e253c199085ba6b3bf94e495c4    LU!;yP2)S[
+                    6a6a4c41621e28                                                      jjLAb(
+            Sequence
+                Sequence
+                    Tagged [0]
+                        Integer(2)
+                    Integer(1599122797078)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Downstream-CMPPEERTRUST-ROOT) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(EE-CMP-INTERMEDIATE-1) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            04a185c3e85c39f75f9636a5df79d1908310ef245fe638aba72aaa01422661e7    \9_6y$_8*B&a
+                            51d211130f54dfc9a18ec28af57e50334ae9ed0671c20f96a771bf3107f7bf57    QT~P3Jqq1W
+                            d6                                                                  
+                    Tagged [3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414abbf76540e548e949e370b946686ede375458a40                        vTT7fuE@
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[77] 
+                                    304b801418e24a4024d54f3bd4ac4f2bbd717b77e4afe32ea12ba42930273125    0KJ@$O;O+q{w.+)0'1%
+                                    302306035504030c1c446f776e73747265616d2d434d50504545525452555354    0#UDownstream-CMPPEERTRUST
+                                    2d524f4f5482060174532570f7                                          -ROOTtS%p
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020103                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    3045022100a79da7655d8083754d971cdf68dbd4ec94013c160863601ccd0960    0E!e]uMh<c``
+                    37e7cbd8ba02202453a06048bdf016718a8cfa179771dc4b484b16820aee8f5c    7 $S`HqqKHK\
+                    151fed6a74eded                                                      jt
