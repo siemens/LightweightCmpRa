@@ -39,7 +39,7 @@ import org.bouncycastle.asn1.x509.KeyUsage;
 
 /**
  *
- * a helper class for writing a proper CertReqTemplateValue
+ * a HELPER class for writing a proper CertReqTemplateValue
  *
  */
 public class CertReqTemplateValueWriter {

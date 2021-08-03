@@ -19,36 +19,27 @@ package com.siemens.pki.lightweightcmpra.protection;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.List;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.JAXB;
 
-import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.DERBitString;
-import org.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 import org.bouncycastle.asn1.cmp.PBMParameter;
-import org.bouncycastle.asn1.cmp.ProtectedPart;
 import org.bouncycastle.asn1.iana.IANAObjectIdentifiers;
 import org.bouncycastle.asn1.oiw.OIWObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.bouncycastle.asn1.x509.GeneralName;
 
 import com.siemens.pki.lightweightcmpra.config.xmlparser.MACCREDENTIAL;
 import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CmsEncryptorBase;
-import com.siemens.pki.lightweightcmpra.cryptoservices.PasswordEncryptor;
+import com.siemens.pki.lightweightcmpra.cryptoservices.WrappedMac;
 
 /**
  * a {@link ProtectionProvider} enforcing a CMP message with password based MAC
  * protection
  */
-public class PasswordBasedMacProtection implements ProtectionProvider {
+public class PasswordBasedMacProtection extends MacProtection {
 
     public static final ASN1ObjectIdentifier DEFAULT_OWF_OID =
             OIWObjectIdentifiers.idSHA1;
@@ -60,24 +51,6 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
     private static final int DEFAULT_ITERATION_COUNT = 10_000;
 
     /**
-     * Random number generator
-     */
-    private static final SecureRandom RANDOM = new SecureRandom();
-
-    private static byte[] getDefaultProtectionSalt() {
-        final byte[] ret = new byte[16];
-        RANDOM.nextBytes(ret);
-        return ret;
-    }
-
-    private final AlgorithmIdentifier protectionAlg;
-
-    private final DEROctetString username;
-    private final char[] passwortAsCharArray;
-
-    private final Mac protectingMac;
-
-    /**
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
      *
@@ -86,35 +59,31 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
      */
     public PasswordBasedMacProtection(final MACCREDENTIAL config)
             throws Exception {
-        this(config.getPassword(), config.getUsername(),
-                DEFAULT_ITERATION_COUNT, getDefaultProtectionSalt(),
-                DEFAULT_OWF_OID, DEFAULT_MAC_OID);
+        this(config.getUsername(), config.getPassword(), getDefaultSalt(),
+                DEFAULT_ITERATION_COUNT, DEFAULT_OWF_OID, DEFAULT_MAC_OID);
     }
 
     /**
      *
-     * @param password
-     *            shared secret to protect with
      * @param userName
      *            senderKID to use, can be null
-     * @param iterationCount
+     * @param password
+     *            shared secret to protect with
      * @param protectionSalt
+     * @param iterationCount
      * @throws Exception
      *             in case of error
      */
-    public PasswordBasedMacProtection(final String password,
-            final String userName, final int iterationCount,
-            final byte[] protectionSalt, final ASN1ObjectIdentifier owfOid,
+    public PasswordBasedMacProtection(final String userName,
+            final String password, final byte[] protectionSalt,
+            final int iterationCount, final ASN1ObjectIdentifier owfOid,
             final ASN1ObjectIdentifier macOid) throws Exception {
-        this.username =
-                userName != null ? new DEROctetString(userName.getBytes())
-                        : null;
-        protectionAlg =
+        super(userName, password);
+        setProtectionAlg(
                 new AlgorithmIdentifier(CMPObjectIdentifiers.passwordBasedMac,
                         new PBMParameter(protectionSalt,
                                 new AlgorithmIdentifier(owfOid), iterationCount,
-                                new AlgorithmIdentifier(macOid)));
-        passwortAsCharArray = password.toCharArray();
+                                new AlgorithmIdentifier(macOid))));
         final byte[] raSecret = password.getBytes(Charset.defaultCharset());
         byte[] calculatingBaseKey =
                 new byte[raSecret.length + protectionSalt.length];
@@ -128,45 +97,16 @@ public class PasswordBasedMacProtection implements ProtectionProvider {
             calculatingBaseKey = dig.digest(calculatingBaseKey);
             dig.reset();
         }
-        protectingMac = Mac.getInstance(macOid.getId(),
+        final Mac protectingMac = Mac.getInstance(macOid.getId(),
                 CertUtility.BOUNCY_CASTLE_PROVIDER);
         protectingMac
                 .init(new SecretKeySpec(calculatingBaseKey, macOid.getId()));
-    }
-
-    @Override
-    public CmsEncryptorBase getKeyEncryptor(
-            final CMPCertificate endEntityCertificate) throws Exception {
-        return new PasswordEncryptor(passwortAsCharArray);
-    }
-
-    @Override
-    public List<CMPCertificate> getProtectingExtraCerts() {
-        return null;
-    }
-
-    @Override
-    public AlgorithmIdentifier getProtectionAlg() {
-        return protectionAlg;
-    }
-
-    @Override
-    public DERBitString getProtectionFor(final ProtectedPart protectedPart)
-            throws Exception {
-        protectingMac.reset();
-        protectingMac.update(protectedPart.getEncoded(ASN1Encoding.DER));
-        final byte[] bytes = protectingMac.doFinal();
-        return new DERBitString(bytes);
-    }
-
-    @Override
-    public GeneralName getSender() {
-        return null;
-    }
-
-    @Override
-    public DEROctetString getSenderKID() {
-        return username;
+        final WrappedMac wrappedMac = in -> {
+            protectingMac.reset();
+            protectingMac.update(in);
+            return protectingMac.doFinal();
+        };
+        setProtectingMac(wrappedMac);
     }
 
 }

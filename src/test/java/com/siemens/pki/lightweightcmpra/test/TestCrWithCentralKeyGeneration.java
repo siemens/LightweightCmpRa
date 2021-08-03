@@ -61,9 +61,9 @@ public class TestCrWithCentralKeyGeneration
     @Test
     public void testCrWithPassword() throws Exception {
         final ProtectionProvider macBasedProvider =
-                new PasswordBasedMacProtection("myPresharedSecret",
-                        "keyIdentification", 1234,
-                        new byte[] {6, 5, 4, 3, 2, 1},
+                new PasswordBasedMacProtection("keyIdentification",
+                        "myPresharedSecret", new byte[] {6, 5, 4, 3, 2, 1},
+                        1234,
                         PasswordBasedMacProtection.DEFAULT_OWF_OID,
                         PasswordBasedMacProtection.DEFAULT_MAC_OID);
         executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,

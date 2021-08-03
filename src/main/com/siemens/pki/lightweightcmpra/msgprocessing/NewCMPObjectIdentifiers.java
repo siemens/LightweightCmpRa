@@ -53,6 +53,9 @@ public interface NewCMPObjectIdentifiers extends CMPObjectIdentifiers {
     ASN1ObjectIdentifier mod_cmp2021_02 =
             new ASN1ObjectIdentifier("1.3.6.1.5.5.7.0.100");
 
+    ASN1ObjectIdentifier pbmac1 =
+            new ASN1ObjectIdentifier("1.2.840.113549.1.5.14");
+
     KeyPurposeId id_kp_cmKGA = KeyPurposeId
             .getInstance(new ASN1ObjectIdentifier("1.3.6.1.5.5.7.3.32"));
 

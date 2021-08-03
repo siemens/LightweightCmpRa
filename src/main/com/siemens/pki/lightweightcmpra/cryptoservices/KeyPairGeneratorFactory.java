@@ -27,7 +27,7 @@ import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.jce.spec.ECParameterSpec;
 
 /**
- * helper for generation {@link KeyPairGenerator}s
+ * HELPER for generation {@link KeyPairGenerator}s
  *
  */
 public class KeyPairGeneratorFactory {

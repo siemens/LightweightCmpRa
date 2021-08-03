@@ -296,6 +296,13 @@ public class MessageDumper {
             return;
         }
         if (callRet.getClass().isArray()) {
+            if (callRet instanceof byte[]) {
+                ret.append(indent);
+                ret.append(": ");
+                ret.append(Arrays.toString((byte[]) callRet));
+                ret.append("\n");
+                return;
+            }
             final Object[] callRetArray = (Object[]) callRet;
             if (callRetArray.length == 0) {
                 ret.append(indent);

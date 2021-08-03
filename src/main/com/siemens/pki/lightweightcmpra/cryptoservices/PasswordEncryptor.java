@@ -27,7 +27,7 @@ import org.bouncycastle.cms.jcajce.JcePasswordRecipientInfoGenerator;
  *
  */
 public class PasswordEncryptor extends CmsEncryptorBase {
-    private static final int ITERATIONCOUNT = 567;
+    private static final int ITERATIONCOUNT = 10_000;
 
     /**
      *

@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.siemens.pki.lightweightcmpra.config.xmlparser.CMPCREDENTIALS;
 import com.siemens.pki.lightweightcmpra.config.xmlparser.CMPCREDENTIALS.In.SignatureBased;
 import com.siemens.pki.lightweightcmpra.config.xmlparser.MACCREDENTIAL;
+import com.siemens.pki.lightweightcmpra.msgprocessing.NewCMPObjectIdentifiers;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 /**
@@ -47,7 +48,8 @@ public class ProtectionValidator implements ValidatorIF {
 
     private final String interfaceName;
 
-    private PasswordProtectionValidator passwordProtectionValidator;
+    private PasswordBasedMacValidator passwordBasedMacValidator;
+    private PBMAC1ProtectionValidator pbmac1MacValidator;
 
     private SignatureProtectionValidator signatureProtectionValidator;
 
@@ -66,10 +68,13 @@ public class ProtectionValidator implements ValidatorIF {
         enforceIncomingProtection = config.isEnforceProtection();
         final MACCREDENTIAL passwordBased = config.getPasswordBased();
         if (passwordBased != null) {
-            passwordProtectionValidator = new PasswordProtectionValidator(
-                    interfaceName, passwordBased);
+            passwordBasedMacValidator =
+                    new PasswordBasedMacValidator(interfaceName, passwordBased);
+            pbmac1MacValidator =
+                    new PBMAC1ProtectionValidator(interfaceName, passwordBased);
         } else {
-            passwordProtectionValidator = null;
+            passwordBasedMacValidator = null;
+            pbmac1MacValidator = null;
         }
         final SignatureBased signatureBased = config.getSignatureBased();
         if (signatureBased != null) {
@@ -103,12 +108,20 @@ public class ProtectionValidator implements ValidatorIF {
             }
             if (CMPObjectIdentifiers.passwordBasedMac
                     .equals(protectionAlg.getAlgorithm())) {
-                if (passwordProtectionValidator == null) {
+                if (passwordBasedMacValidator == null) {
                     throw new CmpValidationException(interfaceName,
                             PKIFailureInfo.notAuthorized,
                             "message is protected by PasswordBasedMac but no shared secret is known");
                 }
-                passwordProtectionValidator.validate(message);
+                passwordBasedMacValidator.validate(message);
+            } else if (NewCMPObjectIdentifiers.pbmac1
+                    .equals(protectionAlg.getAlgorithm())) {
+                if (pbmac1MacValidator == null) {
+                    throw new CmpValidationException(interfaceName,
+                            PKIFailureInfo.notAuthorized,
+                            "message is protected by PBMAC1 but no shared secret is known");
+                }
+                pbmac1MacValidator.validate(message);
             } else {
                 if (signatureProtectionValidator == null) {
                     throw new CmpValidationException(interfaceName,
@@ -123,7 +136,7 @@ public class ProtectionValidator implements ValidatorIF {
                         PKIFailureInfo.badMessageCheck,
                         "protectionAlg missing but protection given");
             }
-            if ((passwordProtectionValidator != null
+            if ((passwordBasedMacValidator != null
                     || signatureProtectionValidator != null)
                     && enforceIncomingProtection) {
                 switch (message.getBody().getType()) {
@@ -131,8 +144,7 @@ public class ProtectionValidator implements ValidatorIF {
                 case PKIBody.TYPE_CONFIRM:
                 case PKIBody.TYPE_REVOCATION_REP:
                     // some messages are allowed to be unprotected or protected
-                    // in an
-                    // strange way
+                    // in a strange way
                     LOGGER.warn("broken protection ignored for "
                             + MessageDumper.msgTypeAsString(message.getBody()));
                     return;
