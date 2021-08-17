@@ -119,8 +119,7 @@
 				An RA_INSTANCE element type describes one RaConfiguration.
 				A Downstream element describes a set of downstream interface implementations
 				sharing the same CMP protection configuration and the same
-				(optional) inventory. An InventoryClient describes the HTTP(S) REST
-				interface to the inventory. The CmpHttpServer describes an
+				(optional) inventory. The CmpHttpServer describes an
 				HTTP(S) server accepting POST requests for CMP message exchange.
 				The CmpFileServer describes a pair of directories used for file-based
 				CMP message exchange. The CmpOfflineWebServer provides web pages for

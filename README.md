@@ -163,9 +163,9 @@ describes structure, purpose and use of the test credentials.
 
 ## Configuration
 
-An annotated XML schema for the configuration can be found at
-[src/schemes/Configuration.xsd](src/schemes/Configuration.xsd).
-This file is also used to generate the XML parser located in
+A [README file](/src/schemes/README.md) and an 
+[annotated XML schema for the configuration](/src/schemes/Configuration.xsd) are provided.
+The XML schema is also used to generate the XML parser located in
 `com.siemens.pki.lightweightcmpra.config.xmlparser`.
 
 ## State of implementation
@@ -260,4 +260,4 @@ gives an overview of the functionality.
 ## Interoperability
 
 Details about with other CMP implementations and reference message flows can be found in the 
-[Interoperability document](./doc/interop/Interoperability.md) 
+[Interoperability document](/doc/interop/Interoperability.md) 
