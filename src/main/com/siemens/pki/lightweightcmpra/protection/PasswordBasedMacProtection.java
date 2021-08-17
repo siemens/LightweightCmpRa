@@ -59,7 +59,7 @@ public class PasswordBasedMacProtection extends MacProtection {
      */
     public PasswordBasedMacProtection(final MACCREDENTIAL config)
             throws Exception {
-        this(config.getUsername(), config.getPassword(), getDefaultSalt(),
+        this(config.getUsername(), config.getPassword(), 16,
                 DEFAULT_ITERATION_COUNT, DEFAULT_OWF_OID, DEFAULT_MAC_OID);
     }
 
@@ -69,22 +69,30 @@ public class PasswordBasedMacProtection extends MacProtection {
      *            senderKID to use, can be null
      * @param password
      *            shared secret to protect with
-     * @param protectionSalt
+     * @param saltLength
+     *            length of salt
      * @param iterationCount
+     *            number of iterations in key deviation
+     * @param owfOid
+     *            one way function used for key deviation
+     * @param macOid
+     *            MAC function
      * @throws Exception
      *             in case of error
      */
     public PasswordBasedMacProtection(final String userName,
-            final String password, final byte[] protectionSalt,
+            final String password, final int saltLength,
             final int iterationCount, final ASN1ObjectIdentifier owfOid,
             final ASN1ObjectIdentifier macOid) throws Exception {
         super(userName, password);
+        final byte[] raSecret = password.getBytes(Charset.defaultCharset());
+
+        final byte[] protectionSalt = createNewSalt(saltLength);
         setProtectionAlg(
                 new AlgorithmIdentifier(CMPObjectIdentifiers.passwordBasedMac,
                         new PBMParameter(protectionSalt,
                                 new AlgorithmIdentifier(owfOid), iterationCount,
                                 new AlgorithmIdentifier(macOid))));
-        final byte[] raSecret = password.getBytes(Charset.defaultCharset());
         byte[] calculatingBaseKey =
                 new byte[raSecret.length + protectionSalt.length];
         System.arraycopy(raSecret, 0, calculatingBaseKey, 0, raSecret.length);
@@ -102,9 +110,10 @@ public class PasswordBasedMacProtection extends MacProtection {
         protectingMac
                 .init(new SecretKeySpec(calculatingBaseKey, macOid.getId()));
         final WrappedMac wrappedMac = in -> {
-            protectingMac.reset();
             protectingMac.update(in);
-            return protectingMac.doFinal();
+            final byte[] ret = protectingMac.doFinal();
+            protectingMac.reset();
+            return ret;
         };
         setProtectingMac(wrappedMac);
     }

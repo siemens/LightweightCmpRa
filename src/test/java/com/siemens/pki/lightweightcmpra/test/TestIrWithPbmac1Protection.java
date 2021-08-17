@@ -170,7 +170,7 @@ public class TestIrWithPbmac1Protection
     public void testIrWithPbmac1Protection() throws Exception {
         final ProtectionProvider macBasedProvider =
                 new PBMAC1Protection("keyIdentification", "myPresharedSecret",
-                        new byte[] {6, 5, 4, 3, 2, 1}, 1234, 256, prf, mac);
+                        16, 1234, 256, prf, mac);
         final Function<PKIMessage, PKIMessage> cmpClient = TestUtils
                 .createCmpClient("http://localhost:6002/lrawithmacprotection");
         executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,

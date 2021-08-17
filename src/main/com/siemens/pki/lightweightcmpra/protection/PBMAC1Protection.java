@@ -33,7 +33,6 @@ import org.bouncycastle.cms.PasswordRecipient;
 import org.bouncycastle.jcajce.util.DefaultJcaJceHelper;
 
 import com.siemens.pki.lightweightcmpra.config.xmlparser.MACCREDENTIAL;
-import com.siemens.pki.lightweightcmpra.cryptoservices.WrappedMac;
 import com.siemens.pki.lightweightcmpra.cryptoservices.WrappedMacFactory;
 import com.siemens.pki.lightweightcmpra.msgprocessing.NewCMPObjectIdentifiers;
 import com.siemens.pki.lightweightcmpra.msgprocessing.PBMAC1Params;
@@ -69,6 +68,16 @@ public class PBMAC1Protection extends MacProtection {
 
     private static final DefaultJcaJceHelper HELPER = new DefaultJcaJceHelper();
 
+    private final int saltLength;
+
+    private final int iterationCount;
+
+    private final int keyLength;
+
+    private final AlgorithmIdentifier messageAuthScheme;
+
+    private final AlgorithmIdentifier prf;
+
     /**
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
@@ -77,7 +86,7 @@ public class PBMAC1Protection extends MacProtection {
      *             in the case of an internal error
      */
     public PBMAC1Protection(final MACCREDENTIAL config) throws Exception {
-        this(config.getUsername(), config.getPassword(), getDefaultSalt(),
+        this(config.getUsername(), config.getPassword(), 16,
                 DEFAULT_ITERATION_COUNT, 256, DEFAULT_PRF, DEFAULT_MAC);
     }
 
@@ -87,31 +96,45 @@ public class PBMAC1Protection extends MacProtection {
      *            senderKID to use, can be null
      * @param password
      *            shared secret to protect with
-     * @param salt
+     * @param saltLength
+     *            length of salt
      * @param iterationCount
+     *            number of iterations in key deviation
      * @param keyLength
-     * @param prf
+     *            length of deviated key
+     * @param owfOid
+     *            PRF function used for key deviation
      * @param messageAuthScheme
+     *            MAC function
      * @throws Exception
      */
     public PBMAC1Protection(final String userName, final String password,
-            final byte[] salt, final int iterationCount, final int keyLength,
+            final int saltLength, final int iterationCount, final int keyLength,
             final AlgorithmIdentifier prf,
             final AlgorithmIdentifier messageAuthScheme) throws Exception {
         super(userName, password);
+        this.saltLength = saltLength;
+        this.iterationCount = iterationCount;
+        this.keyLength = keyLength;
+        this.prf = prf;
+        this.messageAuthScheme = messageAuthScheme;
+    }
+
+    @Override
+    public void reinitMac() throws Exception {
+        final byte[] salt = createNewSalt(saltLength);
         final AlgorithmIdentifier keyDerivationFunc =
                 new AlgorithmIdentifier(PKCSObjectIdentifiers.id_PBKDF2,
                         new PBKDF2Params(salt, iterationCount, keyLength, prf));
-        setProtectionAlg(new AlgorithmIdentifier(NewCMPObjectIdentifiers.pbmac1,
-                new PBMAC1Params(keyDerivationFunc, messageAuthScheme)));
         final SecretKeyFactory keyFact =
                 HELPER.createSecretKeyFactory(PBKDF2_ALG_NAMES.get(prf));
         final SecretKey key =
                 keyFact.generateSecret(new PBEKeySpec(passwordAsCharArrays,
                         salt, iterationCount, keyLength));
-        final WrappedMac protectingMac = WrappedMacFactory
-                .createWrappedMac(messageAuthScheme, key.getEncoded());
-        setProtectingMac(protectingMac);
+        setProtectionAlg(new AlgorithmIdentifier(NewCMPObjectIdentifiers.pbmac1,
+                new PBMAC1Params(keyDerivationFunc, messageAuthScheme)));
+        setProtectingMac(WrappedMacFactory.createWrappedMac(messageAuthScheme,
+                key.getEncoded()));
     }
 
 }

@@ -47,8 +47,8 @@ public abstract class MacProtection implements ProtectionProvider {
 
     protected static final int DEFAULT_ITERATION_COUNT = 10_000;
 
-    protected static byte[] getDefaultSalt() {
-        final byte[] ret = new byte[16];
+    protected static byte[] createNewSalt(final int saltLength) {
+        final byte[] ret = new byte[saltLength];
         RANDOM.nextBytes(ret);
         return ret;
     }

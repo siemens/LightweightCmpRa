@@ -31,8 +31,6 @@ import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 /**
  * base class for all MAC based validators
  *
- * @author kretscha
- *
  */
 public class MacValidator implements ValidatorIF {
 
@@ -51,6 +49,10 @@ public class MacValidator implements ValidatorIF {
         } else {
             pbeUsernameForProtectionValidation = null;
         }
+    }
+
+    protected String getInterfaceName() {
+        return interfaceName;
     }
 
     @Override
@@ -83,9 +85,5 @@ public class MacValidator implements ValidatorIF {
                 }
             }
         }
-    }
-
-    protected String getInterfaceName() {
-        return interfaceName;
     }
 }

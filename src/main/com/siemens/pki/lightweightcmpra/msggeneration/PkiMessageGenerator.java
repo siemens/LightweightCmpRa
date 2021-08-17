@@ -273,45 +273,50 @@ public class PkiMessageGenerator {
             final HeaderProvider headerProvider,
             final ProtectionProvider protectionProvider, final PKIBody body,
             final List<CMPCertificate> issuingChain) throws Exception {
-        GeneralName sender = protectionProvider.getSender();
-        if (sender == null) {
-            sender = headerProvider.getSender();
-        }
-        final GeneralName recipient = headerProvider.getRecipient();
-        final PKIHeaderBuilder headerBuilder = new PKIHeaderBuilder(
-                PKIHeader.CMP_2000, sender != null ? sender : NULL_DN,
-                recipient != null ? recipient : NULL_DN);
-        headerBuilder.setMessageTime(headerProvider.getMessageTime());
-        headerBuilder.setProtectionAlg(protectionProvider.getProtectionAlg());
-        headerBuilder.setSenderKID(protectionProvider.getSenderKID());
-        final ASN1OctetString transactionID = headerProvider.getTransactionID();
-        headerBuilder.setTransactionID(transactionID);
-        headerBuilder.setSenderNonce(headerProvider.getSenderNonce());
-        headerBuilder.setRecipNonce(headerProvider.getRecipNonce());
-        headerBuilder.setGeneralInfo(headerProvider.getGeneralInfo());
-        final PKIHeader generatedHeader = headerBuilder.build();
-        final ProtectedPart protectedPart =
-                new ProtectedPart(generatedHeader, body);
-        final DERBitString protection =
-                protectionProvider.getProtectionFor(protectedPart);
-        final List<CMPCertificate> protectingExtraCerts =
-                protectionProvider.getProtectingExtraCerts();
-        final List<CMPCertificate> generatedExtraCerts = new ArrayList<>();
-        if (protectingExtraCerts != null) {
-            generatedExtraCerts.addAll(protectingExtraCerts);
-        }
-        if (issuingChain != null && !issuingChain.isEmpty()) {
-            for (final CMPCertificate akt : issuingChain) {
-                if (!generatedExtraCerts.contains(akt)) {
-                    generatedExtraCerts.add(akt);
+        synchronized (protectionProvider) {
+            protectionProvider.reinitMac();
+            GeneralName sender = protectionProvider.getSender();
+            if (sender == null) {
+                sender = headerProvider.getSender();
+            }
+            final GeneralName recipient = headerProvider.getRecipient();
+            final PKIHeaderBuilder headerBuilder = new PKIHeaderBuilder(
+                    PKIHeader.CMP_2000, sender != null ? sender : NULL_DN,
+                    recipient != null ? recipient : NULL_DN);
+            headerBuilder.setMessageTime(headerProvider.getMessageTime());
+            headerBuilder
+                    .setProtectionAlg(protectionProvider.getProtectionAlg());
+            headerBuilder.setSenderKID(protectionProvider.getSenderKID());
+            final ASN1OctetString transactionID =
+                    headerProvider.getTransactionID();
+            headerBuilder.setTransactionID(transactionID);
+            headerBuilder.setSenderNonce(headerProvider.getSenderNonce());
+            headerBuilder.setRecipNonce(headerProvider.getRecipNonce());
+            headerBuilder.setGeneralInfo(headerProvider.getGeneralInfo());
+            final PKIHeader generatedHeader = headerBuilder.build();
+            final ProtectedPart protectedPart =
+                    new ProtectedPart(generatedHeader, body);
+            final DERBitString protection =
+                    protectionProvider.getProtectionFor(protectedPart);
+            final List<CMPCertificate> protectingExtraCerts =
+                    protectionProvider.getProtectingExtraCerts();
+            final List<CMPCertificate> generatedExtraCerts = new ArrayList<>();
+            if (protectingExtraCerts != null) {
+                generatedExtraCerts.addAll(protectingExtraCerts);
+            }
+            if (issuingChain != null && !issuingChain.isEmpty()) {
+                for (final CMPCertificate akt : issuingChain) {
+                    if (!generatedExtraCerts.contains(akt)) {
+                        generatedExtraCerts.add(akt);
+                    }
                 }
             }
+            return new PKIMessage(generatedHeader, body, protection,
+                    generatedExtraCerts.isEmpty() ? null
+                            : generatedExtraCerts.toArray(
+                                    new CMPCertificate[generatedExtraCerts
+                                            .size()]));
         }
-        return new PKIMessage(generatedHeader, body, protection,
-                generatedExtraCerts.isEmpty() ? null
-                        : generatedExtraCerts
-                                .toArray(new CMPCertificate[generatedExtraCerts
-                                        .size()]));
     }
 
     /**

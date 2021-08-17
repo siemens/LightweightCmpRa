@@ -47,9 +47,9 @@ public class WrappedMacFactory {
             mac.init(new KeyParameter(key));
             return in -> {
                 final byte[] out = new byte[128];
-                mac.reset();
                 mac.update(in, 0, in.length);
                 mac.doFinal(out, 0);
+                mac.reset();
                 return out;
             };
         }
@@ -58,36 +58,34 @@ public class WrappedMacFactory {
             mac.init(new KeyParameter(key));
             return in -> {
                 final byte[] out = new byte[256];
-                mac.reset();
                 mac.update(in, 0, in.length);
                 mac.doFinal(out, 0);
+                mac.reset();
                 return out;
             };
         }
         if (NISTObjectIdentifiers.id_aes128_GCM.equals(algorithm)
                 || NISTObjectIdentifiers.id_aes192_GCM.equals(algorithm)
                 || NISTObjectIdentifiers.id_aes256_GCM.equals(algorithm)) {
+            final GMac mac = new GMac((GCMBlockCipher) CipherFactory
+                    .createContentCipher(true, new KeyParameter(key), macid));
             return in -> {
-                final GMac mac = new GMac(
-                        (GCMBlockCipher) CipherFactory.createContentCipher(true,
-                                new KeyParameter(key), macid));
                 final byte[] out = new byte[256];
                 mac.update(in, 0, in.length);
                 mac.doFinal(out, 0);
+                mac.reset();
                 return out;
             };
         }
-
-        // TODO  id-aes*-GMAC missing
-
-        // hopefully BC will know
+        // hopefully BC will know and find
         final String algorithmAsString = algorithm.getId();
         final Mac mac = Mac.getInstance(algorithmAsString,
                 CertUtility.BOUNCY_CASTLE_PROVIDER);
         mac.init(new SecretKeySpec(key, algorithmAsString));
         return in -> {
+            final byte[] ret = mac.doFinal(in);
             mac.reset();
-            return mac.doFinal(in);
+            return ret;
         };
 
     }
