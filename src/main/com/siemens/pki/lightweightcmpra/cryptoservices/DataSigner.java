@@ -27,6 +27,8 @@ import java.util.List;
 
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.cms.ContentInfo;
+import org.bouncycastle.asn1.cms.SignedData;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cms.CMSException;
@@ -106,13 +108,15 @@ public class DataSigner {
      * @param msg
      *            the raw message data to encapsulate and sign
      *
-     * @return a CMSSignedData holding the SignedData created.
+     * @return the SignedData.
      * @throws CMSException
      *             in case of error
      */
-    public CMSSignedData signData(final byte[] msg) throws CMSException {
-        return gen.generate(
+    public SignedData signData(final byte[] msg) throws CMSException {
+        final CMSSignedData cmsSigned = gen.generate(
                 new CMSProcessableByteArray(id_ct_KP_aKeyPackage, msg), true);
+        final ContentInfo contentInfo = cmsSigned.toASN1Structure();
+        return SignedData.getInstance(contentInfo.getContent());
     }
 
     /**
@@ -121,12 +125,12 @@ public class DataSigner {
      * @param privateKey
      *            a private key to encapsulate and sign
      *
-     * @return a CMSSignedData holding the SignedData created.
+     * @return the SignedData
      * @throws CMSException
      *             in case of error
      * @throws IOException
      */
-    public CMSSignedData signPrivateKey(final PrivateKey privateKey)
+    public SignedData signPrivateKey(final PrivateKey privateKey)
             throws CMSException, IOException {
         return signData(PrivateKeyInfo.getInstance(privateKey.getEncoded())
                 .getEncoded(ASN1Encoding.DER));

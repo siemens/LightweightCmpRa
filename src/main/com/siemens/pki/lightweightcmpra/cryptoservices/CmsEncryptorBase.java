@@ -20,12 +20,12 @@ package com.siemens.pki.lightweightcmpra.cryptoservices;
 import java.io.IOException;
 
 import org.bouncycastle.asn1.cms.EnvelopedData;
+import org.bouncycastle.asn1.cms.SignedData;
 import org.bouncycastle.cms.CMSAlgorithm;
 import org.bouncycastle.cms.CMSEnvelopedData;
 import org.bouncycastle.cms.CMSEnvelopedDataGenerator;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessableByteArray;
-import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
 
 /**
@@ -71,7 +71,7 @@ public class CmsEncryptorBase {
      * @throws CMSException
      * @throws IOException
      */
-    public EnvelopedData encrypt(final CMSSignedData data)
+    public EnvelopedData encrypt(final SignedData data)
             throws CMSException, IOException {
         final CMSEnvelopedData cmsEnvData = envGen.generate(
                 new CMSProcessableByteArray(data.getEncoded()),

@@ -32,6 +32,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.bouncycastle.asn1.cms.CMSObjectIdentifiers;
+import org.bouncycastle.asn1.cms.ContentInfo;
+import org.bouncycastle.asn1.cms.SignedData;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSSignedData;
@@ -63,7 +66,10 @@ public class DataSignVerifier extends TrustCredentialAdapter {
     private static byte[] verifySignature(final byte[] encodedSignedData,
             final BiFunction<X509CertificateHolder, List<X509Certificate>, Boolean> trustValidator)
             throws CMSException, Exception, IOException {
-        final CMSSignedData signedData = new CMSSignedData(encodedSignedData);
+
+        final CMSSignedData signedData = new CMSSignedData(
+                new ContentInfo(CMSObjectIdentifiers.signedData,
+                        SignedData.getInstance(encodedSignedData)));
         final SignerInformationStore signers = signedData.getSignerInfos();
         final Store<X509CertificateHolder> certs = signedData.getCertificates();
         final List<X509Certificate> allCerts = new ArrayList<X509Certificate>();

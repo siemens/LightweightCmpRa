@@ -35,6 +35,7 @@ import java.util.Date;
 import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.cms.EnvelopedData;
+import org.bouncycastle.asn1.cms.SignedData;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.cert.CertIOException;
@@ -43,7 +44,6 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.cms.CMSException;
-import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -138,10 +138,10 @@ public class TestCmsFunctions {
                 new DataSigner("credentials/CMP_CA_Keystore.p12",
                         TestUtils.PASSWORD_AS_CHAR_ARRAY);
         final byte[] msgToSign = "Hello Signer, I am the message".getBytes();
-        final CMSSignedData signedData = signer.signData(msgToSign);
+        final SignedData signedData = signer.signData(msgToSign);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("CMSSignedData:\n" + MessageDumper
-                    .dumpAsn1Object(signedData.toASN1Structure()));
+            LOGGER.debug("CMSSignedData:\n"
+                    + MessageDumper.dumpAsn1Object(signedData));
         }
         final byte[] signedAndEncoded = signedData.getEncoded();
         final TRUSTCREDENTIALS verifierConfig = new TRUSTCREDENTIALS();
