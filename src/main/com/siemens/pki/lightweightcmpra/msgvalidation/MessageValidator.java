@@ -71,7 +71,6 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCSException;
 
 import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 /**
@@ -223,6 +222,20 @@ public class MessageValidator implements ValidatorIF {
         }
     }
 
+    private void assertOctetString(final ASN1OctetString ostring,
+            final int minimalLength, final String fieldName) {
+        if (ostring == null) {
+            throw new CmpValidationException(interfaceName,
+                    PKIFailureInfo.badDataFormat,
+                    "mandatory " + fieldName + " missing");
+        }
+        if (ostring.getOctets().length < 16) {
+            throw new CmpValidationException(interfaceName,
+                    PKIFailureInfo.badRequest,
+                    "used " + fieldName + " too short");
+        }
+    }
+
     /**
      * Validates the given <code>message</code> to ensure that it conforms to
      * the
@@ -236,7 +249,10 @@ public class MessageValidator implements ValidatorIF {
     @Override
     public void validate(final PKIMessage message) {
 
-        validateHeader(message);
+        assertNotNull(message, PKIFailureInfo.badDataFormat,
+                "did not get a valid message, message is null");
+
+        validateHeader(message.getHeader());
 
         final PKIBody body = message.getBody();
         switch (body.getType()) {
@@ -481,29 +497,27 @@ public class MessageValidator implements ValidatorIF {
      * See RFC4210 Section 5.1.1. PKI Message Header for further details.
      *
      * @param message
-     *            the CMP message to validate
+     *            the header to validate
      * @throws Exception
      */
-    private void validateHeader(final PKIMessage message) {
-        if (message == null) {
-            throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badDataFormat,
-                    "did not get a valid message, message is null");
-        }
-        final PKIHeader header = message.getHeader();
-        final long versionNumber = header.getPvno().longValueExact();
+    private void validateHeader(final PKIHeader header) {
+        assertNotNull(header, PKIFailureInfo.badDataFormat,
+                "did not get a valid message header");
+        final ASN1Integer pvno = header.getPvno();
+        assertNotNull(pvno, PKIFailureInfo.unsupportedVersion, "pvno is null");
+        final long versionNumber = pvno.longValueExact();
         if (versionNumber != PKIHeader.CMP_2000
                 && versionNumber != 3/* PKIHeader.CMP_2021 */) {
             throw new CmpValidationException(interfaceName,
                     PKIFailureInfo.unsupportedVersion,
                     "version " + versionNumber + " not supported");
         }
-        final ASN1OctetString transactionID = header.getTransactionID();
-        if (transactionID == null) {
-            throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badDataFormat,
-                    "mandatory transaction ID missing");
-        }
+        assertOctetString(header.getTransactionID(), 16, "transaction ID");
+        assertOctetString(header.getSenderNonce(), 16, "sender nonce");
+        assertNotNull(header.getSender(), PKIFailureInfo.badDataFormat,
+                "missing sender");
+        assertNotNull(header.getRecipient(), PKIFailureInfo.badDataFormat,
+                "invalid recipient");
         final ASN1GeneralizedTime messageTime = header.getMessageTime();
         if (messageTime != null) {
             try {
@@ -522,32 +536,6 @@ public class MessageValidator implements ValidatorIF {
                                 + e.getLocalizedMessage());
             }
         }
-        if (transactionID.getOctets().length < 16) {
-            throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badRequest, "used transaction ID too short");
-        }
-        final ASN1OctetString senderNonce = header.getSenderNonce();
-        if (senderNonce == null) {
-            throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badSenderNonce,
-                    "mandatory sender nonce missing");
-        }
-        if (senderNonce.getOctets().length < 16) {
-            throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badSenderNonce, " sender nonce too short");
-        }
-        validatePvno(header.getPvno());
-        assertNotNull(header.getSender(), PKIFailureInfo.badDataFormat,
-                "missing sender");
-        // if the "sender" field contain a "NULL" value, the senderKID field
-        // MUST hold an identifier
-        if (PkiMessageGenerator.NULL_DN.equals(header.getSender())
-                && header.getProtectionAlg() != null) {
-            assertNotNull(header.getSenderKID(), PKIFailureInfo.badDataFormat,
-                    "missing sender KID");
-        }
-        assertNotNull(header.getRecipient(), PKIFailureInfo.badDataFormat,
-                "invalid recipient");
     }
 
     /**
@@ -602,21 +590,6 @@ public class MessageValidator implements ValidatorIF {
                 "one certReqId reqired");
         assertEqual(reqIds[0], BigInteger.ZERO, "certReqId mus be zero");
 
-    }
-
-    /**
-     * Validates the given <code>pvno</code>, a field within the header, to
-     * ensure
-     * that it is not <code>null</code> and set to <code>2</code> (equivalent to
-     * PKIHeader.CMP_2000).
-     *
-     * @param pvno
-     *            the value of the <code>pvno</code> field to validate
-     */
-    private void validatePvno(final ASN1Integer pvno) {
-        assertNotNull(pvno, PKIFailureInfo.unsupportedVersion, "pvno is null");
-        assertEqual(pvno.getValue().intValue(), PKIHeader.CMP_2000,
-                "invalid pvno");
     }
 
     /**
