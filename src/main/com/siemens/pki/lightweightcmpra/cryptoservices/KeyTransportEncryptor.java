@@ -18,18 +18,13 @@
 package com.siemens.pki.lightweightcmpra.cryptoservices;
 
 import java.security.GeneralSecurityException;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.security.spec.MGF1ParameterSpec;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.crypto.spec.OAEPParameterSpec;
-import javax.crypto.spec.PSource;
-
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipientInfoGenerator;
-import org.bouncycastle.operator.jcajce.JcaAlgorithmParametersConverter;
 
 /**
  * encryptor which uses the key agreement key management technique for
@@ -45,19 +40,17 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
     public KeyTransportEncryptor(
             final Collection<X509Certificate> encryptionCerts)
             throws GeneralSecurityException {
-        final JcaAlgorithmParametersConverter paramsConverter =
-                new JcaAlgorithmParametersConverter();
 
-        final AlgorithmIdentifier oaepParams = paramsConverter
-                .getAlgorithmIdentifier(PKCSObjectIdentifiers.id_RSAES_OAEP,
-                        new OAEPParameterSpec("SHA-256", "MGF1",
-                                new MGF1ParameterSpec("SHA-256"),
-                                PSource.PSpecified.DEFAULT));
-
+        final JcaX509ExtensionUtils jcaX509ExtensionUtils =
+                new JcaX509ExtensionUtils();
         for (final X509Certificate encryptionCert : encryptionCerts) {
+            final PublicKey publicKey = encryptionCert.getPublicKey();
             envGen.addRecipientInfoGenerator(
-                    new JceKeyTransRecipientInfoGenerator(encryptionCert,
-                            oaepParams).setProvider(
+                    new JceKeyTransRecipientInfoGenerator(
+                            jcaX509ExtensionUtils
+                                    .createSubjectKeyIdentifier(publicKey)
+                                    .getKeyIdentifier(),
+                            publicKey).setProvider(
                                     CertUtility.BOUNCY_CASTLE_PROVIDER));
         }
     }
