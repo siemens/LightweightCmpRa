@@ -279,9 +279,12 @@ public class TransactionStateTracker {
             }
             switch (lastTransactionState) {
             case IN_ERROR_STATE:
-                throw new CmpValidationException(interfaceName,
-                        PKIFailureInfo.transactionIdInUse,
-                        "transaction already in error state");
+                if (!isConfirmConfirm(msg)) {
+                    throw new CmpValidationException(interfaceName,
+                            PKIFailureInfo.transactionIdInUse,
+                            "transaction already in error state");
+                }
+                return;
             case INITIAL_STATE:
                 if (isGenMessage(msg)) {
                     lastTransactionState = LastTransactionState.GENM_RECEIVED;
