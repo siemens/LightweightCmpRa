@@ -41,6 +41,12 @@ public interface HeaderProvider {
     ASN1GeneralizedTime getMessageTime();
 
     /**
+     *
+     * @return CMP version used in CMP header.
+     */
+    int getPvno();
+
+    /**
      * @return Recipient used in CMP header.
      */
     GeneralName getRecipient();

@@ -29,6 +29,7 @@ import org.bouncycastle.asn1.BEROctetString;
 import org.bouncycastle.asn1.DERGeneralizedTime;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIBody;
+import org.bouncycastle.asn1.cmp.PKIHeader;
 import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.cmp.RevRepContent;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -118,6 +119,11 @@ public class RestServiceImplementation {
             }
 
             @Override
+            public int getPvno() {
+                return PKIHeader.CMP_2000;
+            }
+
+            @Override
             public GeneralName getRecipient() {
                 return usedRecipient;
             }
@@ -141,6 +147,7 @@ public class RestServiceImplementation {
             public ASN1OctetString getTransactionID() {
                 return transactionId;
             }
+
         };
         // the upstream will do the protection if configured
         final PKIMessage request =

@@ -132,7 +132,7 @@ public class OnlineEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
                 .generateIrCrKurBody(requestMesssageType, template, null, null);
 
         final PKIMessage cr = PkiMessageGenerator.generateAndProtectMessage(
-                new HeaderProviderForTest(), protectionProvider, crBody);
+                new HeaderProviderForTest(3), protectionProvider, crBody);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(cr));
         }

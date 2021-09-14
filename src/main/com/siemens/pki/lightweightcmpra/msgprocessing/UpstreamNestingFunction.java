@@ -206,6 +206,15 @@ public class UpstreamNestingFunction implements UpstreamNestingFunctionIF {
         final BEROctetString transactionId =
                 new BEROctetString(CertUtility.generateRandomBytes(20));
         final byte[] senderNonce = CertUtility.generateRandomBytes(20);
+        int maxPvno = PKIHeader.CMP_2000;
+        for (final PKIMessage aktRequest : requests) {
+            final int aktPvno =
+                    aktRequest.getHeader().getPvno().intValueExact();
+            if (aktPvno > maxPvno) {
+                maxPvno = aktPvno;
+            }
+        }
+        final int pvno = maxPvno;
         final HeaderProvider headerProvider = new HeaderProvider() {
 
             @Override
@@ -216,6 +225,11 @@ public class UpstreamNestingFunction implements UpstreamNestingFunctionIF {
             @Override
             public ASN1GeneralizedTime getMessageTime() {
                 return new DERGeneralizedTime(new Date());
+            }
+
+            @Override
+            public int getPvno() {
+                return pvno;
             }
 
             @Override

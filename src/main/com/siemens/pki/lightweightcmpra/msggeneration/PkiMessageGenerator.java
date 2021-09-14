@@ -149,6 +149,18 @@ public class PkiMessageGenerator {
             }
 
             @Override
+            public int getPvno() {
+                final int requestPvno = header.getPvno().intValueExact();
+                if (requestPvno < PKIHeader.CMP_2000) {
+                    return PKIHeader.CMP_2000;
+                }
+                if (requestPvno > 3 /* PKIHeader.CMP_2021 */) {
+                    return 3;
+                }
+                return requestPvno;
+            }
+
+            @Override
             public GeneralName getRecipient() {
                 return header.getRecipient();
             }
@@ -200,6 +212,18 @@ public class PkiMessageGenerator {
             @Override
             public ASN1GeneralizedTime getMessageTime() {
                 return new ASN1GeneralizedTime(new Date());
+            }
+
+            @Override
+            public int getPvno() {
+                final int requestPvno = header.getPvno().intValueExact();
+                if (requestPvno < PKIHeader.CMP_2000) {
+                    return PKIHeader.CMP_2000;
+                }
+                if (requestPvno > 3 /* PKIHeader.CMP_2021 */) {
+                    return 3;
+                }
+                return requestPvno;
             }
 
             @Override
@@ -281,7 +305,7 @@ public class PkiMessageGenerator {
             }
             final GeneralName recipient = headerProvider.getRecipient();
             final PKIHeaderBuilder headerBuilder = new PKIHeaderBuilder(
-                    PKIHeader.CMP_2000, sender != null ? sender : NULL_DN,
+                    headerProvider.getPvno(), sender != null ? sender : NULL_DN,
                     recipient != null ? recipient : NULL_DN);
             headerBuilder.setMessageTime(headerProvider.getMessageTime());
             headerBuilder

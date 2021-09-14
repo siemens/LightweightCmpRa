@@ -42,16 +42,24 @@ final class HeaderProviderForTest implements HeaderProvider {
     private final ASN1GeneralizedTime messageTime =
             new DERGeneralizedTime(new Date());
     private final byte[] recipientNonce;
+    private final int pvno;
 
-    HeaderProviderForTest() {
+    public HeaderProviderForTest() {
+        this(PKIHeader.CMP_2000);
+    }
+
+    HeaderProviderForTest(final int pvno) {
         this.recipientNonce = null;
         this.transactionId =
                 new DEROctetString(CertUtility.generateRandomBytes(16));
+        this.pvno = pvno;
     }
 
     HeaderProviderForTest(final PKIHeader lastHeader) {
         this.transactionId = lastHeader.getTransactionID();
         this.recipientNonce = lastHeader.getSenderNonce().getOctets();
+        this.pvno = lastHeader.getPvno().intValueExact();
+
     }
 
     @Override
@@ -62,6 +70,11 @@ final class HeaderProviderForTest implements HeaderProvider {
     @Override
     public ASN1GeneralizedTime getMessageTime() {
         return messageTime;
+    }
+
+    @Override
+    public int getPvno() {
+        return pvno;
     }
 
     @Override
