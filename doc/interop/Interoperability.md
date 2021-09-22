@@ -11,6 +11,16 @@ The Lightweight CMP RA was tested for interoperability with the implementations 
     developed initially by Nokia to support the CMP functionality needed for LTE backbone components
     and is in productive use for many years already.
 
+- [generic CMP client](https://github.com/siemens/gencmpclient)
+    - Provides a high-level API on top of the detailed CMP (and CRMF) 
+      API of CMPforOpenSSL and and OpenSSL since version 3.0. 
+      The library supports developing CMP clients that follow 
+      the Lightweight Certificate Management Protocol (CMP)
+      Profile, which is geared towards simple and interoperable
+      industrial use. The software also provides a 
+      command-line interface (CLI) that is handy for interactive 
+      exploration of using CMP in a PKI.
+    
 - [embeddedCMP](https://github.com/siemens/embeddedCMP)
     - The embeddedCMP project has has been developed and published as a proof-of-concept implementation
     for demonstration and standardization purposes to show that CMP can be implemented and used even
