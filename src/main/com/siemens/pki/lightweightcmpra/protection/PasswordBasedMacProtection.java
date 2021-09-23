@@ -88,11 +88,6 @@ public class PasswordBasedMacProtection extends MacProtection {
         final byte[] raSecret = password.getBytes(Charset.defaultCharset());
 
         final byte[] protectionSalt = createNewSalt(saltLength);
-        setProtectionAlg(
-                new AlgorithmIdentifier(CMPObjectIdentifiers.passwordBasedMac,
-                        new PBMParameter(protectionSalt,
-                                new AlgorithmIdentifier(owfOid), iterationCount,
-                                new AlgorithmIdentifier(macOid))));
         byte[] calculatingBaseKey =
                 new byte[raSecret.length + protectionSalt.length];
         System.arraycopy(raSecret, 0, calculatingBaseKey, 0, raSecret.length);
@@ -115,7 +110,12 @@ public class PasswordBasedMacProtection extends MacProtection {
             protectingMac.reset();
             return ret;
         };
-        setProtectingMac(wrappedMac);
+        final AlgorithmIdentifier protectionAlg =
+                new AlgorithmIdentifier(CMPObjectIdentifiers.passwordBasedMac,
+                        new PBMParameter(protectionSalt,
+                                new AlgorithmIdentifier(owfOid), iterationCount,
+                                new AlgorithmIdentifier(macOid)));
+        init(protectionAlg, wrappedMac);
     }
 
 }

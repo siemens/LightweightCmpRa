@@ -81,10 +81,4 @@ public interface ProtectionProvider {
      */
     DEROctetString getSenderKID();
 
-    /**
-     * reinitialize MAC for next round of protection
-     */
-    default void reinitMac() throws Exception {
-    }
-
 }

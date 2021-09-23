@@ -25,7 +25,6 @@ import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.DERNull;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
-import org.bouncycastle.asn1.cms.GCMParameters;
 import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
@@ -44,32 +43,6 @@ public class TestIrWithPbmac1Protection
 
     public static Object[][] inputList = new Object[][] {
             {PBMAC1Protection.DEFAULT_PRF, PBMAC1Protection.DEFAULT_MAC},
-            //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA1,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(NISTObjectIdentifiers.id_aes128_GCM,
-                            new GCMParameters(new byte[12], 12))},
-            //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA224,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(NISTObjectIdentifiers.id_aes192_GCM,
-                            new GCMParameters(new byte[] {1, 2, 3, 4, 5, 6, 7,
-                                    8, 9, 10, 11, 12}, 13))},
-            //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA224,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(NISTObjectIdentifiers.id_aes256_GCM,
-                            new GCMParameters(new byte[] {12, 11, 10, 9, 8, 7,
-                                    6, 5, 4, 3, 2, 1}, 16))},
             //
             {
                     //

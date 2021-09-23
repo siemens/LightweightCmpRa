@@ -33,6 +33,7 @@ import org.bouncycastle.cms.PasswordRecipient;
 import org.bouncycastle.jcajce.util.DefaultJcaJceHelper;
 
 import com.siemens.pki.lightweightcmpra.config.xmlparser.MACCREDENTIAL;
+import com.siemens.pki.lightweightcmpra.cryptoservices.WrappedMac;
 import com.siemens.pki.lightweightcmpra.cryptoservices.WrappedMacFactory;
 import com.siemens.pki.lightweightcmpra.msgprocessing.NewCMPObjectIdentifiers;
 import com.siemens.pki.lightweightcmpra.msgprocessing.PBMAC1Params;
@@ -67,16 +68,6 @@ public class PBMAC1Protection extends MacProtection {
     }
 
     private static final DefaultJcaJceHelper HELPER = new DefaultJcaJceHelper();
-
-    private final int saltLength;
-
-    private final int iterationCount;
-
-    private final int keyLength;
-
-    private final AlgorithmIdentifier messageAuthScheme;
-
-    private final AlgorithmIdentifier prf;
 
     /**
      * @param config
@@ -113,15 +104,6 @@ public class PBMAC1Protection extends MacProtection {
             final AlgorithmIdentifier prf,
             final AlgorithmIdentifier messageAuthScheme) throws Exception {
         super(userName, password);
-        this.saltLength = saltLength;
-        this.iterationCount = iterationCount;
-        this.keyLength = keyLength;
-        this.prf = prf;
-        this.messageAuthScheme = messageAuthScheme;
-    }
-
-    @Override
-    public void reinitMac() throws Exception {
         final byte[] salt = createNewSalt(saltLength);
         final AlgorithmIdentifier keyDerivationFunc =
                 new AlgorithmIdentifier(PKCSObjectIdentifiers.id_PBKDF2,
@@ -131,10 +113,11 @@ public class PBMAC1Protection extends MacProtection {
         final SecretKey key =
                 keyFact.generateSecret(new PBEKeySpec(passwordAsCharArrays,
                         salt, iterationCount, keyLength));
-        setProtectionAlg(new AlgorithmIdentifier(NewCMPObjectIdentifiers.pbmac1,
-                new PBMAC1Params(keyDerivationFunc, messageAuthScheme)));
-        setProtectingMac(WrappedMacFactory.createWrappedMac(messageAuthScheme,
-                key.getEncoded()));
+        final AlgorithmIdentifier protectionAlg =
+                new AlgorithmIdentifier(NewCMPObjectIdentifiers.pbmac1,
+                        new PBMAC1Params(keyDerivationFunc, messageAuthScheme));
+        final WrappedMac wrappedMac = WrappedMacFactory
+                .createWrappedMac(messageAuthScheme, key.getEncoded());
+        init(protectionAlg, wrappedMac);
     }
-
 }

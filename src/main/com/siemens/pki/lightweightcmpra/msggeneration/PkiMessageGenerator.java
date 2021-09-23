@@ -298,7 +298,6 @@ public class PkiMessageGenerator {
             final ProtectionProvider protectionProvider, final PKIBody body,
             final List<CMPCertificate> issuingChain) throws Exception {
         synchronized (protectionProvider) {
-            protectionProvider.reinitMac();
             GeneralName sender = protectionProvider.getSender();
             if (sender == null) {
                 sender = headerProvider.getSender();

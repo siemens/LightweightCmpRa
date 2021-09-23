@@ -26,11 +26,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.bouncycastle.crypto.macs.GMac;
 import org.bouncycastle.crypto.macs.KMAC;
-import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.bouncycastle.crypto.util.CipherFactory;
 
 /**
  * factory for {@link WrappedMac}
@@ -56,19 +53,6 @@ public class WrappedMacFactory {
         if (NISTObjectIdentifiers.id_KmacWithSHAKE256.equals(algorithm)) {
             final KMAC mac = new KMAC(256, EMPTY_STRING);
             mac.init(new KeyParameter(key));
-            return in -> {
-                final byte[] out = new byte[256];
-                mac.update(in, 0, in.length);
-                mac.doFinal(out, 0);
-                mac.reset();
-                return out;
-            };
-        }
-        if (NISTObjectIdentifiers.id_aes128_GCM.equals(algorithm)
-                || NISTObjectIdentifiers.id_aes192_GCM.equals(algorithm)
-                || NISTObjectIdentifiers.id_aes256_GCM.equals(algorithm)) {
-            final GMac mac = new GMac((GCMBlockCipher) CipherFactory
-                    .createContentCipher(true, new KeyParameter(key), macid));
             return in -> {
                 final byte[] out = new byte[256];
                 mac.update(in, 0, in.length);

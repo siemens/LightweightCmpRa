@@ -98,11 +98,9 @@ public abstract class MacProtection implements ProtectionProvider {
         return username;
     }
 
-    protected void setProtectingMac(final WrappedMac protectingMac) {
+    protected void init(final AlgorithmIdentifier protectionAlg,
+            final WrappedMac protectingMac) {
         this.protectingMac = protectingMac;
-    }
-
-    protected void setProtectionAlg(final AlgorithmIdentifier protectionAlg) {
         this.protectionAlg = protectionAlg;
     }
 
