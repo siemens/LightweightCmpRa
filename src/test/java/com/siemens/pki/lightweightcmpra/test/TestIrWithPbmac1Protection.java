@@ -65,6 +65,15 @@ public class TestIrWithPbmac1Protection
             {
                     //
                     new AlgorithmIdentifier(
+                            PKCSObjectIdentifiers.id_hmacWithSHA256,
+                            DERNull.INSTANCE),
+                    new AlgorithmIdentifier(
+                            PKCSObjectIdentifiers.id_hmacWithSHA256,
+                            DERNull.INSTANCE)},
+            //
+            {
+                    //
+                    new AlgorithmIdentifier(
                             PKCSObjectIdentifiers.id_hmacWithSHA384,
                             DERNull.INSTANCE),
                     new AlgorithmIdentifier(
