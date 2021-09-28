@@ -27,10 +27,12 @@ import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
 import com.siemens.pki.lightweightcmpra.cryptoservices.DataSignVerifier;
 import com.siemens.pki.lightweightcmpra.protection.PasswordBasedMacProtection;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
+import com.siemens.pki.lightweightcmpra.protection.SignatureBasedProtection;
 
 public class TestCrWithCentralKeyGeneration
         extends OnlineEnrollmentTestcaseBase {
     private CmsDecryptor keyAgreementDecryptor;
+    private CmsDecryptor keyTransportDecryptor;
     private DataSignVerifier verifier;
 
     @Before
@@ -48,6 +50,12 @@ public class TestCrWithCentralKeyGeneration
         keyAgreementDecryptor =
                 new CmsDecryptor(eeCredentials.getEndCertificate(),
                         eeCredentials.getPrivateKey(), null);
+        final BaseCredentialService eeRsaCredentials =
+                new BaseCredentialService("credentials/CMP_EE_Keystore_RSA.p12",
+                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
+        keyTransportDecryptor =
+                new CmsDecryptor(eeRsaCredentials.getEndCertificate(),
+                        eeRsaCredentials.getPrivateKey(), null);
     }
 
     @Test
@@ -56,6 +64,17 @@ public class TestCrWithCentralKeyGeneration
                 PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
                 TestUtils.createCmpClient("http://localhost:6011/ckgagree"),
                 keyAgreementDecryptor, verifier);
+    }
+
+    @Test
+    public void testCrWithKeyTransport() throws Exception {
+        executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                new SignatureBasedProtection(
+                        "credentials/CMP_EE_Keystore_RSA.p12",
+                        TestUtils.PASSWORD_AS_CHAR_ARRAY),
+                TestUtils.createCmpClient("http://localhost:6010/ckgtrans"),
+                keyTransportDecryptor, verifier);
     }
 
     @Test
