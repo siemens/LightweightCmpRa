@@ -17,8 +17,10 @@
  */
 package com.siemens.pki.lightweightcmpra.cryptoservices;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.cms.CMSAlgorithm;
 import org.bouncycastle.cms.PasswordRecipient;
+import org.bouncycastle.cms.PasswordRecipient.PRF;
 import org.bouncycastle.cms.jcajce.JcePasswordRecipientInfoGenerator;
 
 /**
@@ -27,7 +29,34 @@ import org.bouncycastle.cms.jcajce.JcePasswordRecipientInfoGenerator;
  *
  */
 public class PasswordEncryptor extends CmsEncryptorBase {
+
+    private static PRF prf = PasswordRecipient.PRF.HMacSHA256;
+
+    private static ASN1ObjectIdentifier kekAlgorithmOID =
+            CMSAlgorithm.AES256_CBC;
+
     private static final int ITERATIONCOUNT = 10_000;
+
+    /**
+     * set key encryption algorithm, initial value is AES256_CBC
+     *
+     * @param kekAlgorithmOID
+     *            key encryption algorithm
+     */
+    public static void setKekAlgorithmOID(
+            final ASN1ObjectIdentifier kekAlgorithmOID) {
+        PasswordEncryptor.kekAlgorithmOID = kekAlgorithmOID;
+    }
+
+    /**
+     * set pseudo random function, initial value is HMacSHA256
+     *
+     * @param prf
+     *            pseudo random function
+     */
+    public static void setPrf(final PRF prf) {
+        PasswordEncryptor.prf = prf;
+    }
 
     /**
      *
@@ -37,15 +66,14 @@ public class PasswordEncryptor extends CmsEncryptorBase {
      *             in case of error
      */
     public PasswordEncryptor(final char[] passwd) throws Exception {
-        envGen.addRecipientInfoGenerator(
-                new JcePasswordRecipientInfoGenerator(CMSAlgorithm.AES256_CBC,
-                        passwd).setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
-                                .setPasswordConversionScheme(
-                                        PasswordRecipient.PKCS5_SCHEME2_UTF8)
-                                .setPRF(PasswordRecipient.PRF.HMacSHA256)
-                                .setSaltAndIterationCount(
-                                        CertUtility.generateRandomBytes(20),
-                                        ITERATIONCOUNT));
+        addRecipientInfoGenerator(
+                new JcePasswordRecipientInfoGenerator(kekAlgorithmOID, passwd)
+                        .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
+                        .setPasswordConversionScheme(
+                                PasswordRecipient.PKCS5_SCHEME2_UTF8)
+                        .setPRF(prf).setSaltAndIterationCount(
+                                CertUtility.generateRandomBytes(20),
+                                ITERATIONCOUNT));
     }
 
     /**

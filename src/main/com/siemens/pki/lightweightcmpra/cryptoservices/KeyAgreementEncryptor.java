@@ -22,6 +22,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.cms.CMSAlgorithm;
 import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientInfoGenerator;
 
@@ -31,6 +32,35 @@ import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientInfoGenerator;
  *
  */
 public class KeyAgreementEncryptor extends CmsEncryptorBase {
+
+    private static ASN1ObjectIdentifier keyEncryptionOID =
+            CMSAlgorithm.AES256_WRAP;
+
+    private static ASN1ObjectIdentifier keyAgreementOID =
+            CMSAlgorithm.ECCDH_SHA256KDF;
+
+    /**
+     * set key agreement algorithm, initial value is ECCDH_SHA256KDF
+     *
+     * @param keyAgreementOID
+     *            key agreement algorithm
+     */
+    public static void setKeyAgreementOID(
+            final ASN1ObjectIdentifier keyAgreementOID) {
+        KeyAgreementEncryptor.keyAgreementOID = keyAgreementOID;
+    }
+
+    /**
+     * set key encryption algorithm, initial value is AES256_WRAP
+     *
+     * @param keyEncryptionOID
+     *            key encryption algorithm
+     */
+    public static void setKeyEncryptionOID(
+            final ASN1ObjectIdentifier keyEncryptionOID) {
+        KeyAgreementEncryptor.keyEncryptionOID = keyEncryptionOID;
+    }
+
     /**
      *
      * @param keystore
@@ -44,14 +74,14 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
             final Collection<X509Certificate> recipientCerts)
             throws GeneralSecurityException {
         final JceKeyAgreeRecipientInfoGenerator infGen =
-                new JceKeyAgreeRecipientInfoGenerator(
-                        CMSAlgorithm.ECCDH_SHA256KDF, keystore.getPrivateKey(),
+                new JceKeyAgreeRecipientInfoGenerator(keyAgreementOID,
+                        keystore.getPrivateKey(),
                         keystore.getEndCertificate().getPublicKey(),
-                        CMSAlgorithm.AES256_WRAP);
+                        keyEncryptionOID);
         for (final X509Certificate aktCert : recipientCerts) {
             infGen.addRecipient(aktCert);
         }
-        envGen.addRecipientInfoGenerator(
+        addRecipientInfoGenerator(
                 infGen.setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER));
     }
 

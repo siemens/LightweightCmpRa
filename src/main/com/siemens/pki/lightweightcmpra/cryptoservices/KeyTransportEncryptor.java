@@ -45,13 +45,10 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
                 new JcaX509ExtensionUtils();
         for (final X509Certificate encryptionCert : encryptionCerts) {
             final PublicKey publicKey = encryptionCert.getPublicKey();
-            envGen.addRecipientInfoGenerator(
-                    new JceKeyTransRecipientInfoGenerator(
-                            jcaX509ExtensionUtils
-                                    .createSubjectKeyIdentifier(publicKey)
-                                    .getKeyIdentifier(),
-                            publicKey).setProvider(
-                                    CertUtility.BOUNCY_CASTLE_PROVIDER));
+            addRecipientInfoGenerator(new JceKeyTransRecipientInfoGenerator(
+                    jcaX509ExtensionUtils.createSubjectKeyIdentifier(publicKey)
+                            .getKeyIdentifier(),
+                    publicKey).setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER));
         }
     }
 

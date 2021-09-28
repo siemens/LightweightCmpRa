@@ -26,6 +26,7 @@ import org.bouncycastle.cms.CMSEnvelopedData;
 import org.bouncycastle.cms.CMSEnvelopedDataGenerator;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessableByteArray;
+import org.bouncycastle.cms.RecipientInfoGenerator;
 import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
 
 /**
@@ -35,11 +36,16 @@ import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
  */
 public class CmsEncryptorBase {
 
-    protected final CMSEnvelopedDataGenerator envGen =
+    private final CMSEnvelopedDataGenerator envGen =
             new CMSEnvelopedDataGenerator();
 
     protected CmsEncryptorBase() {
 
+    }
+
+    protected void addRecipientInfoGenerator(
+            final RecipientInfoGenerator recipientGenerator) {
+        envGen.addRecipientInfoGenerator(recipientGenerator);
     }
 
     /**
