@@ -11,6 +11,6 @@
 			</CmpCredentials>
 			<CmpHttpClient ServerUrl="http://localhost:7000/ca"/>
 		</Upstream>
-		<RestHttpServer ServingUrl="http://localhost:6010/revocation"/>
+		<RestHttpServer ServingUrl="http://localhost:6015/revocation"/>
 	</RestService>
 </Configuration>

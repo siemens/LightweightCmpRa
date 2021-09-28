@@ -38,7 +38,7 @@ public class TestRestRevocation extends EnrollmentTestcaseBase {
     @Test
     public void testRevocationOnBehalfOfAnotherEntity() throws Exception {
         final URL clientURL = new URL(
-                "http://localhost:6010/revocation?issuer=CN=MyEndEntityId,C=DE&serial=0xABCDEF1234567890");
+                "http://localhost:6015/revocation?issuer=CN=MyEndEntityId,C=DE&serial=0xABCDEF1234567890");
         final HttpURLConnection httpConnection =
                 (HttpURLConnection) clientURL.openConnection();
         httpConnection.setDoInput(true);

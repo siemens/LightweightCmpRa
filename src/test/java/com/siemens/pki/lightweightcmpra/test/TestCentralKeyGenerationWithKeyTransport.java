@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Siemens AG
+ *  Copyright (c) 2021 Siemens AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -21,49 +21,27 @@ import org.bouncycastle.asn1.cmp.PKIBody;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.siemens.pki.lightweightcmpra.config.xmlparser.TRUSTCREDENTIALS;
 import com.siemens.pki.lightweightcmpra.cryptoservices.BaseCredentialService;
 import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.cryptoservices.DataSignVerifier;
 import com.siemens.pki.lightweightcmpra.protection.PasswordBasedMacProtection;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
 import com.siemens.pki.lightweightcmpra.protection.SignatureBasedProtection;
 
-public class TestCrWithCentralKeyGeneration
-        extends OnlineEnrollmentTestcaseBase {
-    private CmsDecryptor keyAgreementDecryptor;
-    private CmsDecryptor keyTransportDecryptor;
-    private DataSignVerifier verifier;
+public class TestCentralKeyGenerationWithKeyTransport
+        extends CkgOnlineEnrollmentTestcaseBase {
 
+    private CmsDecryptor keyTransportDecryptor;
+
+    @Override
     @Before
     public void setUp() throws Exception {
-
-        initTestbed("OnlineEnrollmentTestConfigWithCentralKeyGeneration.xml",
-                null);
-        final TRUSTCREDENTIALS verifierConfig = new TRUSTCREDENTIALS();
-        verifierConfig
-                .setTrustStorePath("credentials/CMP_LRA_DOWNSTREAM_Root.pem");
-        verifier = new DataSignVerifier(verifierConfig);
-        final BaseCredentialService eeCredentials =
-                new BaseCredentialService("credentials/CMP_EE_Keystore.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
-        keyAgreementDecryptor =
-                new CmsDecryptor(eeCredentials.getEndCertificate(),
-                        eeCredentials.getPrivateKey(), null);
+        super.setUp();
         final BaseCredentialService eeRsaCredentials =
                 new BaseCredentialService("credentials/CMP_EE_Keystore_RSA.p12",
                         TestUtils.PASSWORD_AS_CHAR_ARRAY);
         keyTransportDecryptor =
                 new CmsDecryptor(eeRsaCredentials.getEndCertificate(),
                         eeRsaCredentials.getPrivateKey(), null);
-    }
-
-    @Test
-    public void testCrWithKeyAgreement() throws Exception {
-        executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
-                TestUtils.createCmpClient("http://localhost:6011/ckgagree"),
-                keyAgreementDecryptor, verifier);
     }
 
     @Test
