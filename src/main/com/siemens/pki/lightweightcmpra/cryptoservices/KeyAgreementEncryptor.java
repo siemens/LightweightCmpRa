@@ -33,11 +33,16 @@ import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientInfoGenerator;
  */
 public class KeyAgreementEncryptor extends CmsEncryptorBase {
 
-    private static ASN1ObjectIdentifier keyEncryptionOID =
+    public static final ASN1ObjectIdentifier DEFAULT_KEY_AGREEMENT =
+            CMSAlgorithm.ECCDH_SHA256KDF;
+
+    public static final ASN1ObjectIdentifier DEFAULT_KEY_ENCRYPTION =
             CMSAlgorithm.AES256_WRAP;
 
-    private static ASN1ObjectIdentifier keyAgreementOID =
-            CMSAlgorithm.ECCDH_SHA256KDF;
+    private static ASN1ObjectIdentifier keyEncryptionOID =
+            DEFAULT_KEY_ENCRYPTION;
+
+    private static ASN1ObjectIdentifier keyAgreementOID = DEFAULT_KEY_AGREEMENT;
 
     /**
      * set key agreement algorithm, initial value is ECCDH_SHA256KDF
