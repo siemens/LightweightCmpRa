@@ -30,12 +30,27 @@ import org.bouncycastle.cms.jcajce.JcePasswordRecipientInfoGenerator;
  */
 public class PasswordEncryptor extends CmsEncryptorBase {
 
-    private static PRF prf = PasswordRecipient.PRF.HMacSHA256;
-
-    private static ASN1ObjectIdentifier kekAlgorithmOID =
+    public static final ASN1ObjectIdentifier DEFAULT_KEK_ALG =
             CMSAlgorithm.AES256_CBC;
 
-    private static final int ITERATIONCOUNT = 10_000;
+    public static final PRF DEFAULT_PRF = PasswordRecipient.PRF.HMacSHA256;
+
+    private static PRF prf = DEFAULT_PRF;
+
+    private static ASN1ObjectIdentifier kekAlgorithmOID = DEFAULT_KEK_ALG;
+
+    public static final int DEFAULT_ITERATIONCOUNT = 10_000;
+
+    private static int iterationCount = DEFAULT_ITERATIONCOUNT;
+
+    /**
+     * set iterationCount for key deviation, initial value is 10000
+     *
+     * @param iterationCount
+     */
+    public static void setIterationCount(final int iterationCount) {
+        PasswordEncryptor.iterationCount = iterationCount;
+    }
 
     /**
      * set key encryption algorithm, initial value is AES256_CBC
@@ -49,7 +64,7 @@ public class PasswordEncryptor extends CmsEncryptorBase {
     }
 
     /**
-     * set pseudo random function, initial value is HMacSHA256
+     * set pseudo random function for key deviation, initial value is HMacSHA256
      *
      * @param prf
      *            pseudo random function
@@ -73,7 +88,7 @@ public class PasswordEncryptor extends CmsEncryptorBase {
                                 PasswordRecipient.PKCS5_SCHEME2_UTF8)
                         .setPRF(prf).setSaltAndIterationCount(
                                 CertUtility.generateRandomBytes(20),
-                                ITERATIONCOUNT));
+                                iterationCount));
     }
 
     /**
