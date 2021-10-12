@@ -62,8 +62,8 @@ public class FileOfflineClient extends OfflineClient {
             final MsgOutputProtector localResponseProtector,
             final UpstreamNestingFunctionIF nestingFunction)
             throws IOException {
-        super(localResponseProtector, config.getCheckAfterTime().intValue(),
-                nestingFunction);
+        super("upstream offline filesystem", localResponseProtector,
+                config.getCheckAfterTime().intValue(), nestingFunction);
         inputDirectory = new File(config.getInputDirectory());
         if (!inputDirectory.isDirectory() || !inputDirectory.canWrite()) {
             throw new IOException(config.getInputDirectory()

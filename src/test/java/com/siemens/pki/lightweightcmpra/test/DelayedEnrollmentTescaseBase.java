@@ -22,14 +22,10 @@ import static org.junit.Assert.assertEquals;
 import java.security.KeyPair;
 import java.util.function.Function;
 
-import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
-import org.bouncycastle.asn1.cmp.CertResponse;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
-import org.bouncycastle.asn1.cmp.PKIStatus;
-import org.bouncycastle.asn1.cmp.PollRepContent;
 import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
@@ -45,9 +41,9 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DelayedEnrollmentTescaseBase.class);
 
-    static public EnrollmentResult executeDelayedCertificateRequest(
+    static protected EnrollmentResult executeDelayedCertificateRequest(
             final int requestMesssageType,
-            final int expectedResponseMessageType,
+            final int expectedWaitingResponseMessageType,
             final ProtectionProvider protectionProvider,
             final Function<PKIMessage, PKIMessage> cmpClient) throws Exception {
         final KeyPair keyPair = getKeyGenerator().generateKeyPair();
@@ -65,39 +61,9 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(cr));
         }
-        PKIMessage crResponse = cmpClient.apply(cr);
-
-        if (LOGGER.isDebugEnabled()) {
-            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
-            LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(crResponse));
-        }
-        assertEquals("message type", expectedResponseMessageType,
-                crResponse.getBody().getType());
-
-        final CertResponse certResponseInBody =
-                ((CertRepMessage) crResponse.getBody().getContent())
-                        .getResponse()[0];
-        if (certResponseInBody.getStatus() != null && certResponseInBody
-                .getStatus().getStatus().intValue() == PKIStatus.WAITING) {
-            // delayed enrollment triggered, start polling
-            for (;;) {
-                final PKIMessage pollReq =
-                        PkiMessageGenerator.generateAndProtectMessage(
-                                new HeaderProviderForTest(
-                                        crResponse.getHeader()),
-                                protectionProvider,
-                                PkiMessageGenerator.generatePollReq());
-                crResponse = cmpClient.apply(pollReq);
-                if (crResponse.getBody().getType() != PKIBody.TYPE_POLL_REP) {
-                    break;
-                }
-                final ASN1Integer checkAfter =
-                        ((PollRepContent) crResponse.getBody().getContent())
-                                .getCheckAfter(0);
-                Thread.sleep(1000L * checkAfter.getValue().longValue());
-            }
-
-        }
+        final PKIMessage crResponse = DelayedDeliveryTestcaseBase
+                .executeRequestWithPolling(expectedWaitingResponseMessageType,
+                        protectionProvider, cmpClient, cr);
         final CMPCertificate enrolledCertificate =
                 ((CertRepMessage) crResponse.getBody().getContent())
                         .getResponse()[0].getCertifiedKeyPair()

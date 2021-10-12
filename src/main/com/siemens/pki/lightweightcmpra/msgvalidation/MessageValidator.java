@@ -43,6 +43,7 @@ import org.bouncycastle.asn1.cmp.CertResponse;
 import org.bouncycastle.asn1.cmp.CertStatus;
 import org.bouncycastle.asn1.cmp.CertifiedKeyPair;
 import org.bouncycastle.asn1.cmp.GenMsgContent;
+import org.bouncycastle.asn1.cmp.GenRepContent;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIConfirmContent;
@@ -82,6 +83,8 @@ public class MessageValidator implements ValidatorIF {
      *
      */
     private static final ASN1Integer ASN1INTEGER_0 = new ASN1Integer(0);
+
+    private static final BigInteger MINUS_ONE = BigInteger.ONE.negate();
 
     private final String interfaceName;
 
@@ -480,10 +483,10 @@ public class MessageValidator implements ValidatorIF {
     }
 
     private void validateGenRep(final PKIMessage message) {
-        final GenMsgContent genMessageContent =
-                (GenMsgContent) message.getBody().getContent();
+        final GenRepContent genRepContent =
+                (GenRepContent) message.getBody().getContent();
         final InfoTypeAndValue[] itav =
-                genMessageContent.toInfoTypeAndValueArray();
+                genRepContent.toInfoTypeAndValueArray();
         assertExactlyOneElement(itav, PKIFailureInfo.badMessageCheck,
                 "one InfoTypeAndValue is required");
         assertNotNull(itav[0].getInfoType(), PKIFailureInfo.badMessageCheck,
@@ -588,7 +591,10 @@ public class MessageValidator implements ValidatorIF {
 
         assertExactlyOneElement(reqIds, PKIFailureInfo.badDataFormat,
                 "one certReqId reqired");
-        assertEqual(reqIds[0], BigInteger.ZERO, "certReqId mus be zero");
+        final BigInteger reqId = reqIds[0];
+        if (!reqId.equals(BigInteger.ZERO) && !reqId.equals(MINUS_ONE)) {
+            assertEqual(reqId, BigInteger.ZERO, "certReqId mus be 0 or -1");
+        }
 
     }
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Siemens AG
+ *  Copyright (c) 2021 Siemens AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -21,16 +21,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.function.Function;
 
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.cmp.GenMsgContent;
 import org.bouncycastle.asn1.cmp.GenRepContent;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
@@ -38,11 +34,9 @@ import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.crmf.AttributeTypeAndValue;
 import org.bouncycastle.asn1.crmf.CertTemplate;
-import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.crmf.Controls;
-import org.bouncycastle.asn1.x500.X500Name;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,32 +44,25 @@ import org.slf4j.LoggerFactory;
 import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
-public class GeneralMessagesTestBase extends CmpTestcaseBase {
+public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
+
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(GeneralMessagesTestBase.class);
-
-    @Test
-    @Ignore("only used for generation of a new CertReqTemplateContent")
-    public void generateCertReqTemplateContent() throws IOException {
-        try (FileOutputStream out =
-                new FileOutputStream(new File(CmpTestcaseBase.CONFIG_DIRECTORY,
-                        "credentials/CertTemplate.der"))) {
-            final CertTemplateBuilder ctb = new CertTemplateBuilder();
-            ctb.setSubject(new X500Name("CN=test"));
-            final Controls controls = new Controls(new AttributeTypeAndValue(
-                    new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.11"),
-                    new ASN1Integer(2048)));
-            final ASN1Sequence certReqTemplateContent = new DERSequence(
-                    new ASN1Encodable[] {ctb.build(), controls});
-            out.write(certReqTemplateContent.getEncoded(ASN1Encoding.DER));
-        }
-
-    }
+            LoggerFactory.getLogger(TestGeneralMessagesWithPolling.class);
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("SupportMessagesTestConfig.xml",
-                "http://localhost:6004/supportlra");
+        new File("./target/CmpTest/GenDownstream").mkdirs();
+        new File("./target/CmpTest/GenUpstream").mkdirs();
+        initTestbed("DelayedSupportMessagesTestConfig.xml",
+                "http://localhost:6006/delayedsupportlra");
+    }
+
+    @After
+    public void shutDown() throws Exception {
+        DelayedDeliveryTestcaseBase
+                .deleteDirectory(new File("./target/CmpTest/GenDownstream"));
+        DelayedDeliveryTestcaseBase
+                .deleteDirectory(new File("./target/CmpTest/GenUpstream"));
     }
 
     /*
@@ -96,7 +83,11 @@ public class GeneralMessagesTestBase extends CmpTestcaseBase {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
             LOGGER.debug("send" + MessageDumper.dumpPkiMessage(genm));
         }
-        final PKIMessage genr = eeCmpClient.apply(genm);
+        final PKIMessage genr = DelayedDeliveryTestcaseBase
+                .executeRequestWithPolling(PKIBody.TYPE_ERROR,
+                        getEeSignaturebasedProtectionProvider(), eeCmpClient,
+                        genm);
+
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
             LOGGER.debug("got" + MessageDumper.dumpPkiMessage(genr));
@@ -133,7 +124,10 @@ public class GeneralMessagesTestBase extends CmpTestcaseBase {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
             LOGGER.debug("send" + MessageDumper.dumpPkiMessage(genm));
         }
-        final PKIMessage genr = eeCmpClient.apply(genm);
+        final PKIMessage genr = DelayedDeliveryTestcaseBase
+                .executeRequestWithPolling(PKIBody.TYPE_ERROR,
+                        getEeSignaturebasedProtectionProvider(), eeCmpClient,
+                        genm);
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("got" + MessageDumper.dumpPkiMessage(genr));
@@ -167,7 +161,6 @@ public class GeneralMessagesTestBase extends CmpTestcaseBase {
 
         assertNotNull("parse INTEGER",
                 ASN1Integer.getInstance(controls[0].getValue()));
-        System.out.println(MessageDumper.dumpAsn1Object(value));
     }
 
     /*
@@ -188,7 +181,10 @@ public class GeneralMessagesTestBase extends CmpTestcaseBase {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("send" + MessageDumper.dumpPkiMessage(genm));
         }
-        final PKIMessage genr = eeCmpClient.apply(genm);
+        final PKIMessage genr = DelayedDeliveryTestcaseBase
+                .executeRequestWithPolling(PKIBody.TYPE_ERROR,
+                        getEeSignaturebasedProtectionProvider(), eeCmpClient,
+                        genm);
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("got" + MessageDumper.dumpPkiMessage(genr));

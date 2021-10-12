@@ -29,6 +29,7 @@ import org.bouncycastle.asn1.cmp.CertConfirmContent;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.CertResponse;
 import org.bouncycastle.asn1.cmp.CertStatus;
+import org.bouncycastle.asn1.cmp.ErrorMsgContent;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
@@ -59,7 +60,15 @@ public class TransactionStateTracker {
      *
      */
     enum LastTransactionState {
-        INITIAL_STATE, REQUEST_SENT, CERTIFICATE_RECEIVED, CERTIFICATE_CONFIRMEND, CONFIRM_CONFIRMED, POLLING, REVOCATION_SENT, REVOCATION_CONFIRMED, GENM_RECEIVED, GENREP_RETURNED, IN_ERROR_STATE
+        INITIAL_STATE,
+        //
+        CERTIFICATE_REQUEST_SENT, CERTIFICATE_RECEIVED, CERTIFICATE_CONFIRMEND, CONFIRM_CONFIRMED, CERTIFICATE_POLLING,
+        //
+        REVOCATION_SENT, REVOCATION_CONFIRMED, REVOCATION_POLLING,
+        //
+        GENM_RECEIVED, GENREP_RETURNED, GEN_POLLING,
+        //
+        IN_ERROR_STATE
     }
 
     /**
@@ -168,13 +177,13 @@ public class TransactionStateTracker {
         }
 
         private boolean isError(final PKIMessage msg) {
-            switch (msg.getBody().getType()) {
+            final PKIBody body = msg.getBody();
+            switch (body.getType()) {
             case PKIBody.TYPE_CERT_REP:
             case PKIBody.TYPE_INIT_REP:
             case PKIBody.TYPE_KEY_UPDATE_REP: {
                 final CertResponse[] responses =
-                        ((CertRepMessage) msg.getBody().getContent())
-                                .getResponse();
+                        ((CertRepMessage) body.getContent()).getResponse();
                 if (responses != null && responses.length == 1
                         && responses[0].getStatus() != null) {
                     switch (responses[0].getStatus().getStatus().intValue()) {
@@ -189,7 +198,7 @@ public class TransactionStateTracker {
             }
             case PKIBody.TYPE_CERT_CONFIRM: {
                 final CertStatus[] responses =
-                        ((CertConfirmContent) msg.getBody().getContent())
+                        ((CertConfirmContent) body.getContent())
                                 .toCertStatusArray();
                 if (responses != null && responses.length == 1
                         && responses[0].getStatusInfo() != null) {
@@ -203,15 +212,16 @@ public class TransactionStateTracker {
                 }
                 return false;
             }
-
             case PKIBody.TYPE_ERROR:
+                final ErrorMsgContent errorContent =
+                        (ErrorMsgContent) body.getContent();
+                if (errorContent.getPKIStatusInfo().getStatus()
+                        .intValue() == PKIStatus.WAITING) {
+                    return false;
+                }
                 return true;
             }
             return false;
-        }
-
-        private boolean isFirstResponse(final PKIMessage msg) {
-            return isCertResponse(msg) || isPollResponse(msg);
         }
 
         private boolean isGenMessage(final PKIMessage msg) {
@@ -234,6 +244,19 @@ public class TransactionStateTracker {
             return msg.getBody().getType() == PKIBody.TYPE_POLL_REP;
         }
 
+        private boolean isResponse(final PKIMessage msg) {
+            switch (msg.getBody().getType()) {
+            case PKIBody.TYPE_CERT_REP:
+            case PKIBody.TYPE_INIT_REP:
+            case PKIBody.TYPE_KEY_UPDATE_REP:
+            case PKIBody.TYPE_ERROR:
+            case PKIBody.TYPE_GEN_REP:
+            case PKIBody.TYPE_POLL_REP:
+                return true;
+            }
+            return false;
+        }
+
         private boolean isRevocationRequest(final PKIMessage msg) {
             return msg.getBody().getType() == PKIBody.TYPE_REVOCATION_REQ;
         }
@@ -252,6 +275,32 @@ public class TransactionStateTracker {
             }
         }
 
+        private boolean isWaitingIndication(final PKIMessage msg) {
+            final PKIBody body = msg.getBody();
+            switch (body.getType()) {
+            case PKIBody.TYPE_CERT_REP:
+            case PKIBody.TYPE_INIT_REP:
+            case PKIBody.TYPE_KEY_UPDATE_REP: {
+                final CertResponse[] responses =
+                        ((CertRepMessage) body.getContent()).getResponse();
+                if (responses != null && responses.length == 1
+                        && responses[0].getStatus() != null) {
+                    return responses[0].getStatus().getStatus()
+                            .intValue() == PKIStatus.WAITING;
+                }
+                return false;
+            }
+            case PKIBody.TYPE_ERROR: {
+                final ErrorMsgContent errorContent =
+                        (ErrorMsgContent) body.getContent();
+                return errorContent.getPKIStatusInfo().getStatus()
+                        .intValue() == PKIStatus.WAITING;
+            }
+            default:
+                return false;
+            }
+        }
+
         /**
          * the main state machine
          *
@@ -262,13 +311,14 @@ public class TransactionStateTracker {
          *             of error
          */
         void trackMessage(final PKIMessage msg) {
+            if (isResponse(msg)) {
+                lastSenderNonce = msg.getHeader().getSenderNonce();
+            }
             if (isError(msg)) {
                 lastTransactionState = LastTransactionState.IN_ERROR_STATE;
                 return;
             }
-            if (isFirstResponse(msg)) {
-                lastSenderNonce = msg.getHeader().getSenderNonce();
-            } else if (isSecondRequest(msg)) {
+            if (isSecondRequest(msg)) {
                 if (!Objects.equals(lastSenderNonce,
                         msg.getHeader().getRecipNonce())) {
                     throw new CmpValidationException(interfaceName,
@@ -282,7 +332,8 @@ public class TransactionStateTracker {
                 if (!isConfirmConfirm(msg)) {
                     throw new CmpValidationException(interfaceName,
                             PKIFailureInfo.transactionIdInUse,
-                            "transaction already in error state");
+                            "got " + MessageDumper.msgTypeAsString(msg)
+                                    + ", but transaction already in error state");
                 }
                 return;
             case INITIAL_STATE:
@@ -313,9 +364,10 @@ public class TransactionStateTracker {
                                             .getCertTemplate().getPublicKey();
                 }
                 implicitConfirmGranted &= grantsImplicitConfirm(msg);
-                lastTransactionState = LastTransactionState.REQUEST_SENT;
+                lastTransactionState =
+                        LastTransactionState.CERTIFICATE_REQUEST_SENT;
                 return;
-            case REQUEST_SENT:
+            case CERTIFICATE_REQUEST_SENT:
                 if (isCertRequest(msg)) {
                     throw new CmpValidationException(interfaceName,
                             PKIFailureInfo.transactionIdInUse,
@@ -330,12 +382,13 @@ public class TransactionStateTracker {
                                     + MessageDumper.msgAsShortString(msg));
                 }
                 if (isCertResponseWithWaitingIndication(msg)) {
-                    lastTransactionState = LastTransactionState.POLLING;
+                    lastTransactionState =
+                            LastTransactionState.CERTIFICATE_POLLING;
                     return;
                 }
                 handleCertResponse(msg);
                 return;
-            case POLLING:
+            case CERTIFICATE_POLLING:
                 if (isPollRequest(msg)) {
                     return;
                 }
@@ -384,6 +437,27 @@ public class TransactionStateTracker {
                 lastTransactionState = LastTransactionState.CONFIRM_CONFIRMED;
                 return;
             case REVOCATION_SENT:
+                if (isWaitingIndication(msg)) {
+                    lastTransactionState =
+                            LastTransactionState.REVOCATION_POLLING;
+                    return;
+                }
+                if (!isRevocationResponse(msg)) {
+                    throw new CmpValidationException(interfaceName,
+                            PKIFailureInfo.transactionIdInUse,
+                            "transaction in wrong state for "
+                                    + MessageDumper.msgAsShortString(msg));
+                }
+                lastTransactionState =
+                        LastTransactionState.REVOCATION_CONFIRMED;
+                return;
+            case REVOCATION_POLLING:
+                if (isPollRequest(msg)) {
+                    return;
+                }
+                if (isPollResponse(msg)) {
+                    return;
+                }
                 if (!isRevocationResponse(msg)) {
                     throw new CmpValidationException(interfaceName,
                             PKIFailureInfo.transactionIdInUse,
@@ -394,6 +468,25 @@ public class TransactionStateTracker {
                         LastTransactionState.REVOCATION_CONFIRMED;
                 return;
             case GENM_RECEIVED:
+                if (isWaitingIndication(msg)) {
+                    lastTransactionState = LastTransactionState.GEN_POLLING;
+                    return;
+                }
+                if (!isGenRep(msg)) {
+                    throw new CmpValidationException(interfaceName,
+                            PKIFailureInfo.transactionIdInUse,
+                            "transaction in wrong state for "
+                                    + MessageDumper.msgAsShortString(msg));
+                }
+                lastTransactionState = LastTransactionState.GENREP_RETURNED;
+                return;
+            case GEN_POLLING:
+                if (isPollRequest(msg)) {
+                    return;
+                }
+                if (isPollResponse(msg)) {
+                    return;
+                }
                 if (!isGenRep(msg)) {
                     throw new CmpValidationException(interfaceName,
                             PKIFailureInfo.transactionIdInUse,
@@ -405,7 +498,8 @@ public class TransactionStateTracker {
             default:
                 throw new CmpValidationException(interfaceName,
                         PKIFailureInfo.transactionIdInUse,
-                        "transaction in wrong state for "
+                        "transaction in wrong state (" + lastTransactionState
+                                + ") for "
                                 + MessageDumper.msgAsShortString(msg));
             }
         }

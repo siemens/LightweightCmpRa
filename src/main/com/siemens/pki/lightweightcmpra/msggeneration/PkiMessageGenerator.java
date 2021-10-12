@@ -85,6 +85,7 @@ import org.bouncycastle.operator.bc.BcDigestCalculatorProvider;
 import com.siemens.pki.lightweightcmpra.cryptoservices.CmsEncryptorBase;
 import com.siemens.pki.lightweightcmpra.cryptoservices.DataSigner;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
+import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 /**
  * a generator for PKI messages conforming to Lightweight CMP Profile
@@ -444,21 +445,6 @@ public class PkiMessageGenerator {
     }
 
     /**
-     * generate a IP, CP or KUP body indication a waiting status
-     *
-     * @param bodyType
-     *            PKIBody.TYPE_INIT_REP, PKIBody.TYPE_CERT_REP or
-     *            PKIBody.TYPE_KEY_UPDATE_REP
-     * @return a IP, CP or KUP body
-     */
-    public static PKIBody generateIpCpKupBodyWithWaiting(final int bodyType) {
-        final CertResponse[] response =
-                new CertResponse[] {new CertResponse(CERT_REQ_ID_0,
-                        new PKIStatusInfo(PKIStatus.waiting), null, null)};
-        return new PKIBody(bodyType, new CertRepMessage(null, response));
-    }
-
-    /**
      * generate a IP, CP or KUP body containing an error
      *
      * @param bodyType
@@ -551,6 +537,38 @@ public class PkiMessageGenerator {
     public static PKIBody generatePollReq() {
         return new PKIBody(PKIBody.TYPE_POLL_REQ,
                 new PollReqContent(CERT_REQ_ID_0));
+    }
+
+    /**
+     * generate a response body with a waiting indication
+     *
+     * @param interfaceName
+     *
+     * @param requestBody
+     *            body of related request
+     * @return a IP, CP, KUP or ERROR body
+     */
+    public static PKIBody generateResponseBodyWithWaiting(
+            final PKIBody requestBody, final String interfaceName) {
+        final PKIFreeText errorDetails = new PKIFreeText("delayed delivery of "
+                + MessageDumper.msgTypeAsString(requestBody.getType()) + " at "
+                + interfaceName);
+        switch (requestBody.getType()) {
+        case PKIBody.TYPE_INIT_REQ:
+        case PKIBody.TYPE_CERT_REQ:
+        case PKIBody.TYPE_KEY_UPDATE_REQ: {
+            final CertResponse[] response =
+                    new CertResponse[] {new CertResponse(CERT_REQ_ID_0,
+                            new PKIStatusInfo(PKIStatus.waiting, errorDetails),
+                            null, null)};
+            return new PKIBody(requestBody.getType() + 1,
+                    new CertRepMessage(null, response));
+        }
+        default:
+            return new PKIBody(PKIBody.TYPE_ERROR, new ErrorMsgContent(
+                    new PKIStatusInfo(PKIStatus.waiting, errorDetails)));
+
+        }
     }
 
     /**

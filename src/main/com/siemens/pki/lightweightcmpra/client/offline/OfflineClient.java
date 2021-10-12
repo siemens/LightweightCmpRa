@@ -44,14 +44,14 @@ import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 abstract public class OfflineClient
         implements Function<PKIMessage, PKIMessage> {
 
-    private static final String INTERFACE_NAME = "offline upstream";
-
     // placeholder for not yet received response
     private static final PKIMessage RESPONSE_TO_MESSAGE_NOT_YET_RECEIVED =
             new PKIMessage(null, null);
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(OfflineClient.class);
+
+    private final String interfaceName;
 
     private final Map<ASN1OctetString, PKIMessage> transactionResponseMap =
             new ConcurrentHashMap<>();
@@ -63,6 +63,8 @@ abstract public class OfflineClient
     private final UpstreamNestingFunctionIF nestingFunction;
 
     /**
+     * @param interfaceName
+     *            name of the interface
      * @param localResponseProtector
      *            protector used to protect locally generated errors an
      *            responses
@@ -71,9 +73,11 @@ abstract public class OfflineClient
      * @param nestingFunction
      *            function used for adding protection (nesting)
      */
-    public OfflineClient(final MsgOutputProtector localResponseProtector,
+    public OfflineClient(final String interfaceName,
+            final MsgOutputProtector localResponseProtector,
             final int checkAfterTime,
             final UpstreamNestingFunctionIF nestingFunction) {
+        this.interfaceName = interfaceName;
         this.localResponseProtector = localResponseProtector;
         this.checkAfterTime = checkAfterTime;
         this.nestingFunction = nestingFunction;
@@ -87,13 +91,16 @@ abstract public class OfflineClient
             case PKIBody.TYPE_INIT_REQ:
             case PKIBody.TYPE_CERT_REQ:
             case PKIBody.TYPE_KEY_UPDATE_REQ:
+            case PKIBody.TYPE_P10_CERT_REQ:
+            case PKIBody.TYPE_REVOCATION_REQ:
+            case PKIBody.TYPE_GEN_MSG:
                 return forwardRequest(msg);
             case PKIBody.TYPE_POLL_REQ:
                 return respondToPolling(msg);
             case PKIBody.TYPE_CERT_CONFIRM:
                 return respondToCertConfirm(msg);
             default:
-                throw new CmpProcessingException(INTERFACE_NAME,
+                throw new CmpProcessingException(interfaceName,
                         PKIFailureInfo.badRequest,
                         "request with body type " + bodyType
                                 + " not supported by offline upstream interface");
@@ -101,7 +108,7 @@ abstract public class OfflineClient
         } catch (final BaseCmpException ex) {
             throw ex;
         } catch (final Exception ex) {
-            throw new CmpProcessingException(INTERFACE_NAME, ex);
+            throw new CmpProcessingException(interfaceName, ex);
         }
     }
 
@@ -113,7 +120,7 @@ abstract public class OfflineClient
                 msg.getHeader().getTransactionID();
         if (transactionResponseMap.putIfAbsent(transactionID,
                 RESPONSE_TO_MESSAGE_NOT_YET_RECEIVED) != null) {
-            throw new CmpProcessingException(INTERFACE_NAME,
+            throw new CmpProcessingException(interfaceName,
                     PKIFailureInfo.transactionIdInUse,
                     "transactionId " + transactionID
                             + " was already useded for another request");
@@ -127,8 +134,8 @@ abstract public class OfflineClient
         forwardRequestToInterface(wrappedRequests);
         return localResponseProtector.generateAndProtectMessage(
                 PkiMessageGenerator.buildRespondingHeaderProvider(msg),
-                PkiMessageGenerator.generateIpCpKupBodyWithWaiting(
-                        msg.getBody().getType() + 1));
+                PkiMessageGenerator.generateResponseBodyWithWaiting(
+                        msg.getBody(), interfaceName));
     }
 
     /**
@@ -159,7 +166,7 @@ abstract public class OfflineClient
                 msg.getHeader().getTransactionID();
         final PKIMessage response = transactionResponseMap.get(transactionID);
         if (response == null) {
-            throw new CmpProcessingException(INTERFACE_NAME,
+            throw new CmpProcessingException(interfaceName,
                     PKIFailureInfo.badRequest,
                     "no request for transactionId " + transactionID + " known");
         }
@@ -170,7 +177,8 @@ abstract public class OfflineClient
         }
         return localResponseProtector.generateAndProtectMessage(
                 PkiMessageGenerator.buildRespondingHeaderProvider(msg),
-                response.getBody(), Arrays.asList(response.getExtraCerts()));
+                response.getBody(), response.getExtraCerts() == null ? null
+                        : Arrays.asList(response.getExtraCerts()));
     }
 
     /**
@@ -193,7 +201,7 @@ abstract public class OfflineClient
             final PKIMessage formerlyStoredResponse =
                     transactionResponseMap.put(transactionID, msg);
             if (formerlyStoredResponse == null) {
-                LOGGER.warn("got unwanted response for transactionID "
+                LOGGER.warn("got response related to unknown transactionID "
                         + transactionID);
                 transactionResponseMap.remove(transactionID);
                 continue;

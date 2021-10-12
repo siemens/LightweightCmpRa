@@ -128,7 +128,8 @@ class RaDownstream extends BasicDownstream {
         super(config, config.isAcceptRaVerified(), PKIBody.TYPE_INIT_REQ,
                 PKIBody.TYPE_CERT_REQ, PKIBody.TYPE_KEY_UPDATE_REQ,
                 PKIBody.TYPE_P10_CERT_REQ, PKIBody.TYPE_POLL_REQ,
-                PKIBody.TYPE_CERT_CONFIRM, PKIBody.TYPE_REVOCATION_REQ);
+                PKIBody.TYPE_CERT_CONFIRM, PKIBody.TYPE_REVOCATION_REQ,
+                PKIBody.TYPE_GEN_MSG);
         enrollmentValidator = new TrustCredentialAdapter(enrollmentCredentials);
         this.upstreamHandler = upstreamHandler;
         this.enforceRaVerified = enforceRaVerified;

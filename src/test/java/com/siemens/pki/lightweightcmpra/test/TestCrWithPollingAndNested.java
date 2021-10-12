@@ -20,6 +20,7 @@ package com.siemens.pki.lightweightcmpra.test;
 import java.io.File;
 
 import org.bouncycastle.asn1.cmp.PKIBody;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +31,14 @@ public class TestCrWithPollingAndNested extends DelayedEnrollmentTescaseBase {
         new File("./target/CmpTest/NestedUpstream").mkdirs();
         initTestbed("DelayedNestedEnrollmentTestConfig.xml",
                 "http://localhost:6005/nestedlra");
+    }
+
+    @After
+    public void shutDown() throws Exception {
+        DelayedDeliveryTestcaseBase
+                .deleteDirectory(new File("./target/CmpTest/NestedDownstream"));
+        DelayedDeliveryTestcaseBase
+                .deleteDirectory(new File("./target/CmpTest/NestedUpstream"));
     }
 
     /**

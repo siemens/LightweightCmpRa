@@ -68,7 +68,8 @@ class RaUpstream implements Function<PKIMessage, PKIMessage> {
                 cmpCredentials.getIn(), PKIBody.TYPE_INIT_REP,
                 PKIBody.TYPE_CERT_REP, PKIBody.TYPE_KEY_UPDATE_REP,
                 PKIBody.TYPE_POLL_REP, PKIBody.TYPE_CONFIRM,
-                PKIBody.TYPE_REVOCATION_REP, PKIBody.TYPE_ERROR);
+                PKIBody.TYPE_REVOCATION_REP, PKIBody.TYPE_GEN_MSG,
+                PKIBody.TYPE_GEN_REP, PKIBody.TYPE_ERROR);
         outputProtector = new MsgOutputProtector(cmpCredentials.getOut());
 
         forwardMessage = "forward".equalsIgnoreCase(
