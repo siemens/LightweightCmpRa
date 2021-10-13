@@ -76,11 +76,12 @@ public class RA {
         final BufferedReader br =
                 new BufferedReader(new InputStreamReader(bufConfigStream));
         for (String line; (line = br.readLine()) != null;) {
-            if (line.isBlank()) {
-                continue;
-            }
             if (line.trim().startsWith("<")) {
                 isXmlInput = true;
+                break;
+            }
+            if (!line.isBlank()) {
+                break;
             }
         }
         bufConfigStream.reset();
