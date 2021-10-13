@@ -23,10 +23,10 @@ toplevelentity:
   attribute1: "value 1" 
   attribute2: Value2
     subentity1:
-	   attribute3: "value 3" 
-	   attribute4: Value4
-	   
-	... more nested entities
+      attribute3: "value 3" 
+      attribute4: Value4
+
+# ... more nested entities
 
     subentity2:
       attribute5: value5
@@ -38,12 +38,13 @@ or
 ```json
 "toplevelentity": {
    "attribute1" : "value 1",
-   "attribute2" : "Value2"
+   "attribute2" : "Value2",
 	"subentity1" : {
 	   "attribute3" : "value 3",
 	   "attribute4" : "Value4",
-	   
-	... more nested entities
+	  
+	  "___COMMENT___":  "more nested entities"
+	  
 	},
 	"subentity2" : {
 	   "attribute5" : "value5",
