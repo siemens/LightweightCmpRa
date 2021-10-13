@@ -25,7 +25,7 @@ public class OnlineEnrollmentHttpTestcaseBase
     @Before
     public void setUp() throws Exception {
 
-        initTestbed("OnlineEnrollmentTestConfigWithHttp.xml",
+        initTestbed("OnlineEnrollmentTestConfigWithHttp.yaml",
                 "http://localhost:6000/onlinelra");
     }
 }

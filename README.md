@@ -81,18 +81,21 @@ mvn test
 
 ## Running the RA
 
-Example XML configuration files can be found at
+Example XML/YAML configuration files can be found at
 [src/test/java/com/siemens/pki/lightweightcmpra/test/config](
  src/test/java/com/siemens/pki/lightweightcmpra/test/config)
 and after installation also at `target/test-classes`.
 
 ```bash
 cd target/test-classes
-java -jar ../LightweightCmpRa-0.0.1-SNAPSHOT.jar <XML configuration File>
+java -jar ../LightweightCmpRa-0.0.1-SNAPSHOT.jar <XML/YAML/JSON configuration File>
 ```
 
 For standalone start it is recommended  to export a "Runnable JAR file" and have 
 the required libraries in a subfolder.
+
+If the RA is started with a second command line argument this argument is used as filename for writing the
+loaded configuration in YAML format. This allows to convert existing XML configuration files to YAML.
 
 
 # Software architecture
@@ -165,8 +168,8 @@ describes structure, purpose and use of the test credentials.
 
 A [README file](/src/schemes/README.md) and an 
 [annotated XML schema for the configuration](/src/schemes/Configuration.xsd) are provided.
-The XML schema is also used to generate the XML parser located in
-`com.siemens.pki.lightweightcmpra.config.xmlparser`.
+The XML schema is also used to generate the annotated java classes located in
+`com.siemens.pki.lightweightcmpra.config.xmlparser` needed by the configuration file parser.
 
 ## State of implementation
 

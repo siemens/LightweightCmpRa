@@ -1,10 +1,12 @@
 # Configuration of the Lightweight CMP RA
-The **Lightweight CMP RA** behavior is specified in an XML file. Path and name of this XML file
-is the one and only command line parameter needed to start the **Lightweight CMP RA**.
-This XML file is structured in many hierarchical entity sections holding attributes and sub entity sections.
-So the structure looks like
+The **Lightweight CMP RA** behavior is specified in an configuration file. Path and name of this configuration file
+is the first command line parameter needed to start the **Lightweight CMP RA**.
+This configuration file is structured in many hierarchical entity sections holding attributes and sub entity sections.
+The configuration file can be written in XML, YAML or JSON
 
-```
+So the structure coulds looks like
+
+```xml
 <toplevelentity attribute1="value 1" attribute2="Value2">
 	<subentity1 attribute3="value 3" attribute4="Value4">
 	... more nested entities
@@ -14,7 +16,44 @@ So the structure looks like
 
 ```
 
-The XML configuration file must contain **exactly one** [Configuration entity](#the-configuration-entity).
+or
+
+```yaml
+toplevelentity:
+  attribute1: "value 1" 
+  attribute2: Value2
+    subentity1:
+	   attribute3: "value 3" 
+	   attribute4: Value4
+	   
+	... more nested entities
+
+    subentity2:
+      attribute5: value5
+      attribute6: "Value 6"
+```
+
+or 
+
+```json
+"toplevelentity": {
+   "attribute1" : "value 1",
+   "attribute2" : "Value2"
+	"subentity1" : {
+	   "attribute3" : "value 3",
+	   "attribute4" : "Value4",
+	   
+	... more nested entities
+	},
+	"subentity2" : {
+	   "attribute5" : "value5",
+	   "attribute6" : "Value 6"
+	}
+}
+
+```
+
+The configuration file must contain **exactly one** [Configuration entity](#the-configuration-entity).
 In a production environment the integrity of this configuration file must be protected by external measures.
 
 Examples can be found in the [Test Configuration](/src/test/java/com/siemens/pki/lightweightcmpra/test/config).
@@ -108,7 +147,7 @@ can be used. Additional the **TlsConfig entity** has the optional attribute **En
 
  
 ## The Mutual Certificate Credentials Type
-The **Mutual Certificate Credentials Type** is used for different entities in the XML file. 
+The **Mutual Certificate Credentials Type** is used for different entities in the configuration file. 
 This type holds the attributes and sub entities needed to describe the credentials required to provide certificate-based
 mutual authentication. All attributes and sub entities of the [Trust Credentials Type](#the-trust-credentials-type)
 can be used to describe the authentication of a trusted TLS peer or the protection of a received CMP message.
@@ -118,7 +157,7 @@ The **Mutual Certificate Credentials Type** has two mandatory attributes needed 
 
 
 ## The Trust Credentials Type
-The **Trust Credentials Type** is used for different entities and types in the XML file. 
+The **Trust Credentials Type** is used for different entities and types in the configuration file. 
 This type holds the attributes and sub entities needed to describe credentials required to provide certificate-based authentication and trust.
 It may contain 
 - **zero or more** [CrlFile entities](#the-crlfile-entity),

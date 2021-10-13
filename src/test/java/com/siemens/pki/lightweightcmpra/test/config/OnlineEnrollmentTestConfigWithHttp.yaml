@@ -1,0 +1,78 @@
+---
+RaConfiguration:
+- Upstream:
+    CmpCredentials:
+      in:
+        SignatureBased:
+          TrustStorePath: "credentials/CMP_CA_Root.pem"
+      out:
+        SignatureBased:
+          KeyStorePath: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+          KeyStorePassword: "Password"
+    CmpHttpClient:
+      ServerUrl: "http://localhost:7000/ca"
+  EnrollmentCredentials:
+    TrustStorePath: "credentials/ENROLL_Root.pem"
+  Downstream:
+    CmpCredentials:
+      in:
+        SignatureBased:
+          TrustStorePath: "credentials/CMP_EE_Root.pem"
+      out:
+        SignatureBased:
+          KeyStorePath: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+          KeyStorePassword: "Password"
+    CmpHttpServer:
+      ServingUrl: "http://localhost:6000/onlinelra"
+    AcceptRaVerified: false
+- Upstream:
+    CmpCredentials:
+      in:
+        SignatureBased:
+          TrustStorePath: "credentials/CMP_CA_Root.pem"
+      out:
+        SignatureBased:
+          KeyStorePath: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+          KeyStorePassword: "Password"
+    CmpHttpClient:
+      ServerUrl: "http://localhost:7000/ca"
+  EnrollmentCredentials:
+    TrustStorePath: "credentials/ENROLL_Root.pem"
+  Downstream:
+    CmpCredentials:
+      in:
+        PasswordBased:
+          Password: "myPresharedSecret"
+          Username: "keyIdentification"
+      out:
+        PasswordBased:
+          Password: "myPresharedSecret"
+          Username: "keyIdentification"
+    CmpHttpServer:
+      ServingUrl: "http://localhost:6002/lrawithmacprotection"
+    AcceptRaVerified: false
+- Upstream:
+    CmpCredentials:
+      in:
+        SignatureBased:
+          TrustStorePath: "credentials/CMP_CA_Root.pem"
+      out:
+        SignatureBased:
+          KeyStorePath: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+          KeyStorePassword: "Password"
+    CmpHttpClient:
+      ServerUrl: "http://localhost:7000/ca"
+  EnrollmentCredentials:
+    TrustStorePath: "credentials/ENROLL_Root.pem"
+  Downstream:
+    CmpCredentials:
+      in:
+        SignatureBased:
+          TrustStorePath: "credentials/ENROLL_Root.pem"
+      out:
+        SignatureBased:
+          KeyStorePath: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+          KeyStorePassword: "Password"
+    CmpHttpServer:
+      ServingUrl: "http://localhost:6001/rrkur"
+    AcceptRaVerified: false
