@@ -45,7 +45,7 @@ and can only serve as an example for developers.
 On a Debian-like system the packages can be installed, e.g., using
 
 ```
-sudo apt install adoptopenjdk-8-hotspot maven git
+sudo apt install adoptopenjdk-11-hotspot maven git
 ```
 
 The code has been adapted to work with Java version 1.11 (at least).
@@ -120,35 +120,35 @@ is used for implementing some tests.
 ## Internal structure
 
 * In the Java package [`com.siemens.pki.lightweightcmpra.msggeneration`](
-               src/main/com/siemens/pki/lightweightcmpra/msggeneration/)
+               src/main/java/com/siemens/pki/lightweightcmpra/msggeneration/)
   all functions related to message generation can be found.
 * The package [`com.siemens.pki.lightweightcmpra.msgvalidation`](
-       src/main/com/siemens/pki/lightweightcmpra/msgvalidation/)
+       src/main/java/com/siemens/pki/lightweightcmpra/msgvalidation/)
   provides classes and functions needed for CMP message validation.
 * CMP Message protection is done by the classes located in
          [`com.siemens.pki.lightweightcmpra.protection`](
-  src/main/com/siemens/pki/lightweightcmpra/protection/).
+  src/main/java/com/siemens/pki/lightweightcmpra/protection/).
 * The basic crypto functions and utilities for signing, encryption and key generation 
          are located in 
          [`com.siemens.pki.lightweightcmpra.cryptoservices`](
-  src/main/com/siemens/pki/lightweightcmpra/cryptoservices/).
+  src/main/java/com/siemens/pki/lightweightcmpra/cryptoservices/).
 * Other utility functions are located in
          [`com.siemens.pki.lightweightcmpra.util`](
-  src/main/com/siemens/pki/lightweightcmpra/util/).
+  src/main/java/com/siemens/pki/lightweightcmpra/util/).
 * The classes in [`com.siemens.pki.lightweightcmpra.client`](
-          src/main/com/siemens/pki/lightweightcmpra/client/)
+          src/main/java/com/siemens/pki/lightweightcmpra/client/)
   and its sub-packages implement upstream interfaces
   towards the certificate authority (CA).
 * The classes in [`com.siemens.pki.lightweightcmpra.server`](
-            src/main/com/siemens/pki/lightweightcmpra/server/)
+            src/main/java/com/siemens/pki/lightweightcmpra/server/)
   and its sub packages implement downstream interfaces
   towards the end entity (EE).
 * All packages described before are used by the classes in
          [`com.siemens.pki.lightweightcmpra.msgprocessing`](
-  src/main/com/siemens/pki/lightweightcmpra/msgprocessing/)
+  src/main/java/com/siemens/pki/lightweightcmpra/msgprocessing/)
   to implement the CMP (L)RA functionality.
 * The package [`com.siemens.pki.lightweightcmpra.main`](
-       src/main/com/siemens/pki/lightweightcmpra/main/)
+       src/main/java/com/siemens/pki/lightweightcmpra/main/)
   holds the startup code.
 * The JUnit tests are located in
               [`com.siemens.pki.lightweightcmpra.test`](
@@ -166,8 +166,8 @@ describes structure, purpose and use of the test credentials.
 
 ## Configuration
 
-A [README file](/src/schemes/README.md) and an 
-[annotated XML schema for the configuration](/src/schemes/Configuration.xsd) are provided.
+A [README file](/src/main/schemes/README.md) and an 
+[annotated XML schema for the configuration](src/main/schemes/Configuration.xsd) are provided.
 The XML schema is also used to generate the annotated java classes located in
 `com.siemens.pki.lightweightcmpra.config.xmlparser` needed by the configuration file parser.
 
@@ -230,13 +230,13 @@ Due to a lack of public available implementations the
 If your would like to do "Piggybacking on other reliable transport"
 please have a look at the protocol implementations in
        [`com.siemens.pki.lightweightcmpra.client`](
-src/main/com/siemens/pki/lightweightcmpra/client/) and
+src/main/java/com/siemens/pki/lightweightcmpra/client/) and
        [`com.siemens.pki.lightweightcmpra.server`](
-src/main/com/siemens/pki/lightweightcmpra/server/).
+src/main/java/com/siemens/pki/lightweightcmpra/server/).
 
 On downstream interface side
 your new protocol adapter has to call the message handler function of the
-[BasicDownstream](src/main/com/siemens/pki/lightweightcmpra/msgprocessing/BasicDownstream.java)
+[BasicDownstream](src/main/java/com/siemens/pki/lightweightcmpra/msgprocessing/BasicDownstream.java)
 instance for each incoming PKIMessage.
 The new protocol adapter should be configured and set up in the constructor
 of the BasicDownstream class.
@@ -245,11 +245,11 @@ On upstream interface side your new protocol adapter must implement
 a message handler function.
 The new protocol adapter should be configured and registered
 in the constructor of the class
-[RaUpstream](src/main/com/siemens/pki/lightweightcmpra/msgprocessing/RaUpstream.java).
+[RaUpstream](src/main/java/com/siemens/pki/lightweightcmpra/msgprocessing/RaUpstream.java).
 If your new protocol adapter on upstream side is expected to support
 delayed enrollment
 it is recommended to inherit this function in some way from the base class
-[OfflineClient](src/main/com/siemens/pki/lightweightcmpra/client/offline/OfflineClient.java).
+[OfflineClient](src/main/java/com/siemens/pki/lightweightcmpra/client/offline/OfflineClient.java).
 
 ## Other resources
 

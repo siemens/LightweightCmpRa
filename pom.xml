@@ -20,7 +20,6 @@
 		<maven-site-plugin.version>3.8.2</maven-site-plugin.version>
 	</properties>
 	<build>
-		<sourceDirectory>src/main</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
@@ -41,7 +40,7 @@
 							<encoding>UTF-8</encoding>
 							<xsdOptions>
 								<xsdOption>
-									<xsd>${basedir}/src/schemes/Configuration.xsd</xsd>
+									<xsd>${basedir}/src/main/schemes/Configuration.xsd</xsd>
 									<packagename>com.siemens.pki.lightweightcmpra.config.xmlparser</packagename>
 								</xsdOption>
 							</xsdOptions>
