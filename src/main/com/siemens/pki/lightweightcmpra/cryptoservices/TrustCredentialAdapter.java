@@ -64,8 +64,6 @@ import com.siemens.pki.lightweightcmpra.server.CmpHttpServer;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import com.siemens.pki.lightweightcmpra.util.RegexCertMatcher;
 
-import sun.security.provider.certpath.SunCertPathBuilderException;
-
 /**
  * Class for building a certification chain for given certificate and verifying
  * it. Relies on a set of root CA certificates and intermediate certificates
@@ -562,11 +560,6 @@ public class TrustCredentialAdapter {
                 }
                 for (final TrustAnchor aktTrust : trust) {
                     LOGGER.debug("trusted :" + aktTrust);
-                }
-                if (certExcpt instanceof SunCertPathBuilderException) {
-                    LOGGER.debug("adjacency list: "
-                            + ((SunCertPathBuilderException) certExcpt)
-                                    .getAdjacencyList());
                 }
             }
             throw new PkiCertVerificationException(

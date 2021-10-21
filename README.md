@@ -34,9 +34,9 @@ and can only serve as an example for developers.
 ## Preconditions
 
 * The *Java SE Development Kit (JDK)*.
-  The Lightweight CMP RA has been developed under JDK 1.8.\
+  The Lightweight CMP RA is now developed using JDK 11.\
   It can be found at
-  <https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html>.
+  <https://www.oracle.com/java/technologies/downloads/#java11>.
 * The *Apache Maven tool*.
   For details, documentation, and download see <http://maven.apache.org/>.
 * The *GIT version control system*.
@@ -48,7 +48,7 @@ On a Debian-like system the packages can be installed, e.g., using
 sudo apt install adoptopenjdk-8-hotspot maven git
 ```
 
-The code has been adapted to work also with Java version 1.11 (at least).
+The code has been adapted to work with Java version 1.11 (at least).
 If also other versions of Java are installed on your system
 make sure that a suitable version is active, e.g., like this:
 ```
