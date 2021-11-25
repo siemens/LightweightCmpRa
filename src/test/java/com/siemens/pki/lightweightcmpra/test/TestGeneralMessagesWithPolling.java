@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.lightweightcmpra.msgprocessing.RootCaKeyUpdateContent;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
@@ -196,13 +197,14 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
         final InfoTypeAndValue[] itav = content.toInfoTypeAndValueArray();
         assertEquals("number of itavs", 1, itav.length);
         assertEquals("getCaCertOid", getCaCertOid, itav[0].getInfoType());
-        final ASN1Sequence value = (ASN1Sequence) itav[0].getInfoValue();
         //        id-it-rootCaKeyUpdate OBJECT IDENTIFIER ::= {1 3 6 1 5 5 7 4 18}
         //        RootCaKeyUpdate ::= SEQUENCE {
         //            newWithNew       CMPCertificate
         //            newWithOld   [0] CMPCertificate OPTIONAL,
         //            oldWithNew   [1] CMPCertificate OPTIONAL,
         //        }
-        assertEquals("number of returned certificates", 3, value.size());
+        final ASN1Sequence value = (ASN1Sequence) itav[0].getInfoValue();
+        assertNotNull("parse RootCaKeyUpdateContent",
+                RootCaKeyUpdateContent.getInstance(value));
     }
 }

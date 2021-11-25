@@ -71,14 +71,14 @@ public class ServiceImplementation extends BasicDownstream {
                                 : NewCMPObjectIdentifiers.it_caCerts,
                         new SequenceOfCMPCertificateResponse(
                                 aktResponse.getSequenceOfCMPCertificate()));
-            } else if (aktResponse.getCAKeyUpdAnnContent() != null) {
+            } else if (aktResponse.getRootCaKeyUpdateContent() != null) {
                 responseMap.put(
                         aktResponse.getServingOid() != null
                                 ? new ASN1ObjectIdentifier(
                                         aktResponse.getServingOid())
                                 : NewCMPObjectIdentifiers.it_rootCaKeyUpdate,
-                        new CAKeyUpdAnnContentResponse(
-                                aktResponse.getCAKeyUpdAnnContent()));
+                        new RootCaKeyUpdateContentResponse(
+                                aktResponse.getRootCaKeyUpdateContent()));
             } else if (aktResponse.getAnyAsn1Content() != null) {
                 responseMap.put(
                         aktResponse.getServingOid() != null

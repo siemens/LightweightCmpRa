@@ -1,4 +1,4 @@
-<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../schemes/Configuration.xsd">
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../main/schemes/Configuration.xsd">
 	<RaConfiguration>
 		<!-- Lower RA close to EE-->
 		<Upstream>
@@ -36,7 +36,7 @@
 		</Response>
 		<Response>
 			<!--preliminary id-it-caKeyUpdateInfo-->
-			<CAKeyUpdAnnContent newWithNew="credentials/newWithNew.pem" oldWithNew="credentials/oldWithNew.pem" newWithOld="credentials/newWithOld.pem"/>
+			<RootCaKeyUpdateContent newWithNew="credentials/newWithNew.pem" oldWithNew="credentials/oldWithNew.pem" newWithOld="credentials/newWithOld.pem"/>
 		</Response>
 		<Downstream>
 			<OfflineFileServer OutputDirectory="./target/CmpTest/GenDownstream" InputDirectory="./target/CmpTest/GenUpstream" InputDirectoryPollcycle="1"/>

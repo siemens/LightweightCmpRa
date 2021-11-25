@@ -269,7 +269,7 @@ It contains
 The **Response entity** describes one specific general message response (genp). The optional attribute **servingOid** specifies the OID to respond to. If not provided, the defaults (id-it-caCerts, id-it-rootCaKeyUpdate, id-it-certReqTemplate) are used.
 The **Response entity** contains 
 - **one** [SequenceOfCMPCertificate entity](#the-sequenceofcmpcertificate-entity) or
-- **one** [CAKeyUpdAnnContent entity](#the-cakeyupdanncontent-entity) or
+- **one** [RootCaKeyUpdateContent entity](#the-rootcakeyupdatecontent-entity) or
 - **one** [AnyAsn1Content entity](#the-anyasn1content-entity)
 
 ## The SequenceOfCMPCertificate entity
@@ -279,13 +279,12 @@ More details are described in
 the [Lightweight CMP Profile](https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/), chapter "4.3.1. Get CA certificates".
 The mandatory attribute **sourceFile** specifies the absolute or relative path and name of a file containing the certificates to return.
 
-## The CAKeyUpdAnnContent entity
+## The RootCaKeyUpdateContent entity
 
-The service described in **CAKeyUpdAnnContent entity** returns up to 3 certificates as partly tagged SEQUENCE members. 
+The service described in **RootCaKeyUpdateContent entity** returns up to 3 certificates as partly tagged SEQUENCE members. 
 More details are described in 
 the [Lightweight CMP Profile](https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/), chapter "4.3.2. Get root CA certificate update".
-The optional attributes **oldWithNew**, **newWithOld** and **newWithNew** specifies the absolute or relative path and name of a file containing each 
-one certificate.
+The mandatory attributes **newWithNew** and **newWithOld** and the optional attribute **oldWithNew** and specifies the absolute or relative path and name of a file containing each one certificate.
 
 ## The AnyAsn1Content entity
 

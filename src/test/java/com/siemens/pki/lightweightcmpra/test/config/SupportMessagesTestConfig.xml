@@ -1,4 +1,4 @@
-<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../schemes/Configuration.xsd">
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../main/schemes/Configuration.xsd">
 	<ServiceConfiguration>
 		<Response>
 			<!--preliminary id-it-getCaCerts-->
@@ -10,7 +10,7 @@
 		</Response>
 		<Response>
 			<!--preliminary id-it-caKeyUpdateInfo-->
-			<CAKeyUpdAnnContent newWithNew="credentials/newWithNew.pem" oldWithNew="credentials/oldWithNew.pem" newWithOld="credentials/newWithOld.pem"/>
+			<RootCaKeyUpdateContent newWithNew="credentials/newWithNew.pem" oldWithNew="credentials/oldWithNew.pem" newWithOld="credentials/newWithOld.pem"/>
 		</Response>
 		<Downstream>
 			<CmpHttpServer ServingUrl="http://localhost:6004/supportlra"/>

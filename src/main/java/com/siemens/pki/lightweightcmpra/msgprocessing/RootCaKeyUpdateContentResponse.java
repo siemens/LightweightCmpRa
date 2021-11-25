@@ -30,23 +30,15 @@ import org.bouncycastle.asn1.cmp.GenRepContent;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIBody;
 
-import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration.ServiceConfiguration.Response.CAKeyUpdAnnContent;
+import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration.ServiceConfiguration.Response.RootCaKeyUpdateContent;
 import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
 
 /**
- * a handler able to return pre configured
- * {@link org.bouncycastle.asn1.cmp.CAKeyUpdAnnContent}
+ * a handler able to return a pre configured
+ * {@link com.siemens.pki.lightweightcmpra.msgprocessing.RootCaKeyUpdateContent}
  *
- * id-it-rootCaKeyUpdate OBJECT IDENTIFIER ::= {1 3 6 1 5 5 7 4 xxx}
- * RootCaKeyUpdate ::= SEQUENCE {
- * newWithNew CMPCertificate
- * newWithOld [0] CMPCertificate OPTIONAL,
- * oldWithNew [1] CMPCertificate OPTIONAL,
- * }
- *
- * 
  */
-public class CAKeyUpdAnnContentResponse
+public class RootCaKeyUpdateContentResponse
         implements Function<ASN1ObjectIdentifier, PKIBody> {
 
     private static CMPCertificate loadCertificate(final String filename)
@@ -73,16 +65,17 @@ public class CAKeyUpdAnnContentResponse
 
     /**
      *
-     * @param config
+     * @param rootCaKeyUpdateContent
      *            {@link JAXB} configuration subtree from XML configuration file
      * @throws Exception
      *             in case of error
      */
-    public CAKeyUpdAnnContentResponse(final CAKeyUpdAnnContent config)
+    public RootCaKeyUpdateContentResponse(
+            final RootCaKeyUpdateContent rootCaKeyUpdateContent)
             throws Exception {
-        oldWithNew = loadCertificate(config.getOldWithNew());
-        newWithOld = loadCertificate(config.getNewWithOld());
-        newWithNew = loadCertificate(config.getNewWithNew());
+        oldWithNew = loadCertificate(rootCaKeyUpdateContent.getOldWithNew());
+        newWithOld = loadCertificate(rootCaKeyUpdateContent.getNewWithOld());
+        newWithNew = loadCertificate(rootCaKeyUpdateContent.getNewWithNew());
     }
 
     /**
@@ -92,8 +85,8 @@ public class CAKeyUpdAnnContentResponse
     public PKIBody apply(final ASN1ObjectIdentifier oid) {
         return new PKIBody(PKIBody.TYPE_GEN_REP,
                 new GenRepContent(new InfoTypeAndValue(oid,
-                        new org.bouncycastle.asn1.cmp.CAKeyUpdAnnContent(
-                                oldWithNew, newWithOld, newWithNew))));
+                        new com.siemens.pki.lightweightcmpra.msgprocessing.RootCaKeyUpdateContent(
+                                newWithNew, newWithOld, oldWithNew))));
     }
 
 }

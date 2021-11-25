@@ -44,13 +44,13 @@
 												</xs:attribute>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="CAKeyUpdAnnContent">
+										<xs:element name="RootCaKeyUpdateContent">
 											<xs:annotation>
-												<xs:documentation>return a CAKeyUpdAnnContent SEQUENCE
+												<xs:documentation>return a RootCaKeyUpdateContent SEQUENCE
 												</xs:documentation>
 											</xs:annotation>
 											<xs:complexType>
-												<xs:attribute name="oldWithNew" type="FileName" use="required">
+												<xs:attribute name="newWithNew" type="FileName" use="required">
 													<xs:annotation>
 														<xs:documentation>file to read one certificate from
 														</xs:documentation>
@@ -62,7 +62,7 @@
 														</xs:documentation>
 													</xs:annotation>
 												</xs:attribute>
-												<xs:attribute name="newWithNew" type="FileName" use="required">
+												<xs:attribute name="oldWithNew" type="FileName" use="optional">
 													<xs:annotation>
 														<xs:documentation>file to read one certificate from
 														</xs:documentation>
