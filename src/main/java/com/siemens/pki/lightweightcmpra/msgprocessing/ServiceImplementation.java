@@ -35,7 +35,6 @@ import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration.ServiceCo
 import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.lightweightcmpra.msgvalidation.BaseCmpException;
 import com.siemens.pki.lightweightcmpra.msgvalidation.CmpProcessingException;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
 
 /**
  * implementation of a GENM service composed from
@@ -100,9 +99,9 @@ public class ServiceImplementation extends BasicDownstream {
             final ASN1ObjectIdentifier infoType = itav.getInfoType();
             final Function<ASN1ObjectIdentifier, PKIBody> handler = responseMap
                     .getOrDefault(infoType, COULD_NOT_HANDLE_OID_HANDLER);
-            return PkiMessageGenerator.generateAndProtectMessage(
+            return outputProtector.generateAndProtectMessage(
                     PkiMessageGenerator.buildRespondingHeaderProvider(msg),
-                    ProtectionProvider.NO_PROTECTION, handler.apply(infoType));
+                    handler.apply(infoType));
         } catch (final BaseCmpException ex) {
             throw ex;
         } catch (final Exception e) {

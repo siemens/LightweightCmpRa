@@ -46,7 +46,7 @@ import com.siemens.pki.lightweightcmpra.util.MsgProcessingAdapter;
 public abstract class BasicDownstream {
 
     protected static final String INTERFACE_NAME = "downstream";
-    protected final InputValidator inputValidator;
+    private final InputValidator inputValidator;
     protected final MsgOutputProtector outputProtector;
 
     /**
