@@ -64,7 +64,7 @@ public class TestGeneralMessages extends CmpTestcaseBase {
             final CertTemplateBuilder ctb = new CertTemplateBuilder();
             ctb.setSubject(new X500Name("CN=test"));
             final Controls controls = new Controls(new AttributeTypeAndValue(
-                    new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.11"),
+                    new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.12"),
                     new ASN1Integer(2048)));
             final ASN1Sequence certReqTemplateContent = new DERSequence(
                     new ASN1Encodable[] {ctb.build(), controls});
