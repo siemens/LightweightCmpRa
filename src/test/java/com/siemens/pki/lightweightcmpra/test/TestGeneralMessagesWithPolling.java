@@ -157,7 +157,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
         final AttributeTypeAndValue[] controls = Controls
                 .getInstance(optionalControls).toAttributeTypeAndValueArray();
 
-        assertEquals(new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.11"),
+        assertEquals(new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.12"),
                 controls[0].getType());
 
         assertNotNull("parse INTEGER",
