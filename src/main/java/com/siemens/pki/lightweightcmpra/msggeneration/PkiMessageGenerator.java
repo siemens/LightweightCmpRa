@@ -89,7 +89,9 @@ import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 /**
  * a generator for PKI messages conforming to Lightweight CMP Profile
- * {@link https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/}
+ * <a href=
+ * "https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/">Lihtweight
+ * CMP profile"</a>
  *
  */
 public class PkiMessageGenerator {
@@ -427,7 +429,9 @@ public class PkiMessageGenerator {
      *            CMS signer used for private key transport
      * @return a IP, CP or KUP body
      * @throws Exception
+     *             in case of general error
      * @throws CMSException
+     *             in case of error in CMS processing
      */
     public static PKIBody generateIpCpKupBody(final int bodyType,
             final CMPCertificate certificate, final PrivateKey privateKey,
@@ -543,6 +547,7 @@ public class PkiMessageGenerator {
      * generate a response body with a waiting indication
      *
      * @param interfaceName
+     *            name of processing interface for trace purposes
      *
      * @param requestBody
      *            body of related request
@@ -577,9 +582,11 @@ public class PkiMessageGenerator {
      * @param certificate
      *            certificate to revoke
      * @return generated RR body
+     * @throws IOException
+     *             in case of ASN.1 processing errors
      */
     public static PKIBody generateRrBody(final CMPCertificate certificate)
-            throws Exception {
+            throws IOException {
 
         final Certificate x509v3pkCert = certificate.getX509v3PKCert();
         return generateRrBody(x509v3pkCert.getIssuer(),
@@ -594,7 +601,8 @@ public class PkiMessageGenerator {
      * @param serialNumber
      *            serialNumber of certificate to revoke
      * @return generated RR body
-     * @throws Exception
+     * @throws IOException
+     *             in case of ASN.1 processing errors
      */
     public static PKIBody generateRrBody(final X500Name issuer,
             final ASN1Integer serialNumber) throws IOException {

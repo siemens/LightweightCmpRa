@@ -71,6 +71,8 @@ public class BaseCredentialService {
      *            path to load the serving keystore
      * @param password
      *            password to open the serving keystore
+     * @throws Exception
+     *             in case of an error
      */
     public BaseCredentialService(final String keyStorePath,
             final char[] password) throws Exception {

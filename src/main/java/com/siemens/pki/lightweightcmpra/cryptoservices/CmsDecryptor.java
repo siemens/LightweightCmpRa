@@ -84,13 +84,12 @@ public class CmsDecryptor {
      * Extract the original data that was encrypted from the EnvelopedData
      * structure by using the recipient matching the passed in parameters.
      *
-     * @param encEnvelopedData
-     *            the BER encoded EnvelopedData structure.
-     * @param privateKey
-     *            the recipient private key (for key transport).
-     * @param encryptionCert
-     *            the recipient's corresponding public key certificate.
+     * @param envelopedData
+     *            the EnvelopedData structure.
      * @return the original data that was enveloped as a byte[].
+     *
+     * @throws CMSException
+     *             in case of an CMS processing error
      */
     public byte[] decrypt(final EnvelopedData envelopedData)
             throws CMSException {

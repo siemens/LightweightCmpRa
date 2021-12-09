@@ -184,18 +184,15 @@ abstract public class OfflineClient
     /**
      * callback from messages received from upstream interface
      *
-     * @param msg
+     * @param response
      *            received message
      */
-    protected void responseFromInterfaceReceived(
-            final PKIMessage maybeNestedResponse) {
+    protected void responseFromInterfaceReceived(final PKIMessage response) {
         // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("got msg:\n"
-                    + MessageDumper.dumpPkiMessage(maybeNestedResponse));
+            LOGGER.debug("got msg:\n" + MessageDumper.dumpPkiMessage(response));
         }
-        for (final PKIMessage msg : nestingFunction
-                .unwrapResponses(maybeNestedResponse)) {
+        for (final PKIMessage msg : nestingFunction.unwrapResponses(response)) {
             final ASN1OctetString transactionID =
                     msg.getHeader().getTransactionID();
             final PKIMessage formerlyStoredResponse =

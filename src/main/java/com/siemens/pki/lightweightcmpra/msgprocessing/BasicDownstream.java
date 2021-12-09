@@ -17,8 +17,6 @@
  */
 package com.siemens.pki.lightweightcmpra.msgprocessing;
 
-import java.io.IOException;
-
 import javax.xml.bind.JAXB;
 
 import org.bouncycastle.asn1.cmp.PKIMessage;
@@ -53,19 +51,17 @@ public abstract class BasicDownstream {
      *
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
-     * @param upstreamHandler
-     *            link to related upstream
+     *
      * @param acceptRaVerified
      *            if raVerfied is acceptable in IR, CR, KUR
      * @param supportedMessageTypes
      *            acceptable message types
      * @throws Exception
-     *             in case of error
+     *             in case of general error
      */
     public BasicDownstream(final DOWNSTREAMCONFIGURATION config,
             final boolean acceptRaVerified,
-            final Integer... supportedMessageTypes)
-            throws Exception, IOException {
+            final Integer... supportedMessageTypes) throws Exception {
         final CMPCREDENTIALS cmpCredentials = config.getCmpCredentials();
         inputValidator = new InputValidator(INTERFACE_NAME, acceptRaVerified,
                 cmpCredentials.getIn(), supportedMessageTypes);

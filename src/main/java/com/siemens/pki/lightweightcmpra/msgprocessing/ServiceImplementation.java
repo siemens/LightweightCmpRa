@@ -38,7 +38,8 @@ import com.siemens.pki.lightweightcmpra.msgvalidation.CmpProcessingException;
 
 /**
  * implementation of a GENM service composed from
- * some {@link Function<ASN1ObjectIdentifier, PKIBody>} handlers and a
+ * some {@link Function Function&lt;ASN1ObjectIdentifier, PKIBody&gt;} handlers
+ * and a
  * {@link BasicDownstream}
  *
  */

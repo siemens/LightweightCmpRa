@@ -78,9 +78,9 @@ public class RestServiceImplementation {
     /**
      * send a revocation request to the upstream
      *
-     * @param issuer
+     * @param issuerAsString
      *            issuer of the certificate to revoke
-     * @param serialNumber
+     * @param serialNumberAsString
      *            serialNumber of the certificate to revoke
      * @return true if the certificate was revoked
      *

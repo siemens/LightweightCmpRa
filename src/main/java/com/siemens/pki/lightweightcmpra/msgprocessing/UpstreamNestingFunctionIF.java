@@ -104,9 +104,7 @@ public interface UpstreamNestingFunctionIF {
      *
      * @param requests
      *            requests to wrap in a nested message
-     * @return {@link PKIMessage} of Type {@link PKIBody.TYPE_NESTED}
-     * @throws Exception
-     *             in case of error
+     * @return {@link PKIMessage} of Type {@link PKIBody#TYPE_NESTED}
      */
     PKIMessage wrapRequests(final PKIMessage... requests);
 

@@ -83,6 +83,8 @@ public class DataSigner {
      *            path to load the signing keystore
      * @param password
      *            password to open the signing keystore
+     * @throws Exception
+     *             in case of an error
      */
     public DataSigner(final String keyStorePath, final char[] password)
             throws Exception {
@@ -127,8 +129,9 @@ public class DataSigner {
      *
      * @return the SignedData
      * @throws CMSException
-     *             in case of error
+     *             in case of an CMS processing error
      * @throws IOException
+     *             in case of ASN.1 encoding error
      */
     public SignedData signPrivateKey(final PrivateKey privateKey)
             throws CMSException, IOException {

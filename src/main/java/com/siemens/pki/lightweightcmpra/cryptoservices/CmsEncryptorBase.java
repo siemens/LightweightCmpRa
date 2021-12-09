@@ -54,11 +54,11 @@ public class CmsEncryptorBase {
      * @param msg
      *            data to encrypt
      * @return encrypted data
+     *
      * @throws CMSException
-     * @throws IOException
+     *             in case of an CMS processing error
      */
-    public EnvelopedData encrypt(final byte[] msg)
-            throws CMSException, IOException {
+    public EnvelopedData encrypt(final byte[] msg) throws CMSException {
         final CMSEnvelopedData cmsEnvData = envGen.generate(
                 new CMSProcessableByteArray(msg),
                 new JceCMSContentEncryptorBuilder(CMSAlgorithm.AES256_CBC)
@@ -71,11 +71,13 @@ public class CmsEncryptorBase {
     /**
      * encrypt the data
      *
-     * @param msg
-     *            data to encrypt
+     * @param data
+     *            signed data to encrypt
      * @return encrypted data
      * @throws CMSException
+     *             in case of an CMS processing error
      * @throws IOException
+     *             in case of ASN.1 encoding error
      */
     public EnvelopedData encrypt(final SignedData data)
             throws CMSException, IOException {

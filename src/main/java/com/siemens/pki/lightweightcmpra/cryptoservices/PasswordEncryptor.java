@@ -47,6 +47,7 @@ public class PasswordEncryptor extends CmsEncryptorBase {
      * set iterationCount for key deviation, initial value is 10000
      *
      * @param iterationCount
+     *            iterationCount for key deviation
      */
     public static void setIterationCount(final int iterationCount) {
         PasswordEncryptor.iterationCount = iterationCount;

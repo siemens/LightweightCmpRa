@@ -119,9 +119,14 @@ public class DataSignVerifier extends TrustCredentialAdapter {
      *            the BER encoding of the SignedData
      * @return signed content or null if not trusted
      * @throws Exception
+     *             in case of general error
+     * @throws IOException
+     *             in case of ASN.1 encoding error
+     * @throws CMSException
+     *             in case of error in CMS processing
      */
     public byte[] verifySignatureAndTrust(final byte[] encodedSignedData)
-            throws Exception {
+            throws CMSException, IOException, Exception {
         return verifySignature(encodedSignedData,
                 (cert, additionalIntermediateCerts) -> {
                     try {

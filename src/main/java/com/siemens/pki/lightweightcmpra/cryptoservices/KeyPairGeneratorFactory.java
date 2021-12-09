@@ -19,6 +19,7 @@ package com.siemens.pki.lightweightcmpra.cryptoservices;
 
 import java.security.GeneralSecurityException;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
 
@@ -27,7 +28,7 @@ import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.jce.spec.ECParameterSpec;
 
 /**
- * HELPER for generation {@link KeyPairGenerator}s
+ * helper class for generation of {@link KeyPairGenerator}s
  *
  */
 public class KeyPairGeneratorFactory {
@@ -41,7 +42,7 @@ public class KeyPairGeneratorFactory {
      *
      * @return the generated key pair generator
      *
-     * @throws Exception
+     * @throws GeneralSecurityException
      *             if key pair generator generation failed
      */
     public static KeyPairGenerator getEcKeyPairGenerator(final String curve)
@@ -62,14 +63,16 @@ public class KeyPairGeneratorFactory {
     }
 
     /**
+     * generate RSA key pair generator
      *
      * @param keyLength
      *            length of generated keys
      * @return generated KeyPairGenerator
-     * @throws GeneralSecurityException
+     * @throws NoSuchAlgorithmException
+     *             if RSA is not supported
      */
     public static KeyPairGenerator getRsaKeyPairGenerator(final int keyLength)
-            throws GeneralSecurityException {
+            throws NoSuchAlgorithmException {
         final KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
         keygen.initialize(keyLength);
         return keygen;

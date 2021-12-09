@@ -15,4 +15,7 @@
  *
  *  SPDX-License-Identifier: Apache-2.0
  */
+/**
+ * {@link org.bouncycastle.asn1.cmp.PKIMessage} generation functions
+ */
 package com.siemens.pki.lightweightcmpra.msggeneration;

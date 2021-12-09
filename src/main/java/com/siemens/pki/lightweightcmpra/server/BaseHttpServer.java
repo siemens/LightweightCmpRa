@@ -62,8 +62,6 @@ public abstract class BaseHttpServer implements HttpHandler {
      *
      * @param servingUrl
      *            URL to server
-     * @param messageHandler
-     *            related downstream handler
      * @throws IOException
      *             in case of error
      */

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Siemens AG
+ *  Copyright (c) 2021 Siemens AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
  *  not use this file except in compliance with the License.
@@ -14,5 +14,9 @@
  *  limitations under the License.
  *
  *  SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * functions for applying {@link org.bouncycastle.asn1.cmp.PKIMessage}
+ * protection
  */
 package com.siemens.pki.lightweightcmpra.protection;

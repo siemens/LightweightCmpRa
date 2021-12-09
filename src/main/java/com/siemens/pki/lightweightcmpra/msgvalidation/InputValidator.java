@@ -51,8 +51,8 @@ public class InputValidator implements ValidatorIF {
      *            {@link JAXB} configuration subtree for CMP protection
      * @param supportedMessageTypes
      *            acceptable CMP message types
-     * @param allowedTimeDeviationInSeconds
      * @throws Exception
+     *             in case of general error
      */
     public InputValidator(final String interfaceName,
             final boolean acceptRaVerify, final CMPCREDENTIALS.In config,

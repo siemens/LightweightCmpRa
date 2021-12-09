@@ -46,6 +46,8 @@ public class RestHttpServer extends BaseHttpServer {
      *
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
+     * @param restServiceImplementation
+     *            the rest service to use
      *
      * @return a HTTP/HTTPS server created from the given config
      * @throws Exception

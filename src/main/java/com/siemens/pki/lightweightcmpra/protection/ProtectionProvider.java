@@ -45,6 +45,7 @@ public interface ProtectionProvider {
      *            <code>null</code>
      * @return an CMS key encryptor
      * @throws Exception
+     *             in case of general error
      */
     CmsEncryptorBase getKeyEncryptor(CMPCertificate endEntityCertificate)
             throws Exception;
@@ -52,6 +53,7 @@ public interface ProtectionProvider {
     /**
      * @return extra certs used for protection
      * @throws Exception
+     *             in case of error
      */
     List<CMPCertificate> getProtectingExtraCerts() throws Exception;
 

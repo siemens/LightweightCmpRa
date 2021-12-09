@@ -84,6 +84,8 @@ public class SignatureBasedProtection extends BaseCredentialService
      *            path to load the protecting keystore
      * @param password
      *            password to open the protecting keystore
+     * @throws Exception
+     *             in case of error
      */
     public SignatureBasedProtection(final String keyStorePath,
             final char[] password) throws Exception {

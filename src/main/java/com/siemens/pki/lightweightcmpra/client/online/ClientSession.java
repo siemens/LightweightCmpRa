@@ -49,6 +49,7 @@ abstract public class ClientSession implements Function<byte[], InputStream> {
      * @param config
      *            {@link JAXB} configuration from XML configuration file
      * @param nestingFunction
+     *            wrapper/un-wrapper for nested messages
      * @return a new created {@link ClientSession}
      * @throws Exception
      *             in case of error

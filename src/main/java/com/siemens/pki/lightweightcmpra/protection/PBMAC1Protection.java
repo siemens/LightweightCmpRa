@@ -93,11 +93,12 @@ public class PBMAC1Protection extends MacProtection {
      *            number of iterations in key deviation
      * @param keyLength
      *            length of deviated key
-     * @param owfOid
+     * @param prf
      *            PRF function used for key deviation
      * @param messageAuthScheme
      *            MAC function
      * @throws Exception
+     *             in case of error
      */
     public PBMAC1Protection(final String userName, final String password,
             final int saltLength, final int iterationCount, final int keyLength,

@@ -51,7 +51,7 @@ public class FileOfflineClient extends OfflineClient {
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
      * @param localResponseProtector
-     *            protector used to protect locally generated errors an
+     *            protector used to protect locally generated errors and
      *            responses
      * @param nestingFunction
      *            function used for adding protection (nesting)

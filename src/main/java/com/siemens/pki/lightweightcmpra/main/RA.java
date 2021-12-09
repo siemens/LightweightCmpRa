@@ -59,8 +59,9 @@ public class RA {
     /**
      * @param configStream
      *            XML/JSON/YAML configuration as stream
-     * @return
+     * @return the loaded configuration tree
      * @throws Exception
+     *             in case of errors while loading the configuration
      */
     public static Configuration init(final InputStream configStream)
             throws Exception {
@@ -113,7 +114,7 @@ public class RA {
     /**
      * @param nameOfConfigFile
      *            XMl configuration file
-     * @return
+     * @return the loaded configuration tree
      */
     public static Configuration init(final String nameOfConfigFile) {
         try (InputStream configStream =
@@ -127,9 +128,9 @@ public class RA {
 
     /**
      * @param args
-     *            command line arguments. Call with <name of XML/YAML/JSON
-     *            config file> as
-     *            the only parameter
+     *            command line arguments. Call with &lt;name of XML/YAML/JSON
+     *            config file&gt;, [&lt;name of config file converted to
+     *            YAML&gt;]
      */
     public static void main(final String[] args) {
         if (args == null || args.length < 1) {

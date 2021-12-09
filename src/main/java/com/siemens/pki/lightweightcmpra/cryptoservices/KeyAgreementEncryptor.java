@@ -74,6 +74,10 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      *
      * @param recipientCerts
      *            the public key certificate for the targeted recipients.
+     *
+     * @throws GeneralSecurityException
+     *             if the necessary data cannot be extracted from the
+     *             certificates
      */
     public KeyAgreementEncryptor(final BaseCredentialService keystore,
             final Collection<X509Certificate> recipientCerts)
@@ -100,6 +104,8 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      * @param recipientCerts
      *            the public key certificate for the targeted recipients.
      * @throws GeneralSecurityException
+     *             if the necessary data cannot be extracted from the
+     *             certificates
      */
     public KeyAgreementEncryptor(final BaseCredentialService keystore,
             final X509Certificate... recipientCerts)
@@ -117,6 +123,7 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      * @param pathOfCertificateFile
      *            path to file holding the recipients certificates
      * @throws Exception
+     *             in case of general error while loading certificates
      */
     public KeyAgreementEncryptor(final String keystorePath,
             final String keystorePassword, final String pathOfCertificateFile)

@@ -51,6 +51,7 @@ public class SequenceOfCMPCertificateResponse
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
      * @throws Exception
+     *             if the certificate could no be loaded or parsed
      */
     public SequenceOfCMPCertificateResponse(
             final SequenceOfCMPCertificate config) throws Exception {

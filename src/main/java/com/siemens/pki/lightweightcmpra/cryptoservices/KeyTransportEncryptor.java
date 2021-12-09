@@ -17,7 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpra.cryptoservices;
 
-import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -36,10 +36,12 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
      *
      * @param encryptionCerts
      *            the public key certificate for the targeted recipients.
+     * @throws NoSuchAlgorithmException
+     *             if some predefined algorithms are not supported
      */
     public KeyTransportEncryptor(
             final Collection<X509Certificate> encryptionCerts)
-            throws GeneralSecurityException {
+            throws NoSuchAlgorithmException {
 
         final JcaX509ExtensionUtils jcaX509ExtensionUtils =
                 new JcaX509ExtensionUtils();
@@ -56,6 +58,9 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
      * @param pathOfCertificateFile
      *            path to file holding the recipients certificates
      * @throws Exception
+     *             in case of general errors while loading certificates
+     * @throws NoSuchAlgorithmException
+     *             if an algorithm is not supported
      */
     public KeyTransportEncryptor(final String pathOfCertificateFile)
             throws Exception {
@@ -66,10 +71,11 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
      *
      * @param encryptionCerts
      *            the public key certificate for the targeted recipients.
-     * @throws GeneralSecurityException
+     * @throws NoSuchAlgorithmException
+     *             if some predefined algorithms are not supported
      */
     public KeyTransportEncryptor(final X509Certificate... encryptionCerts)
-            throws GeneralSecurityException {
+            throws NoSuchAlgorithmException {
         this(Arrays.asList(encryptionCerts));
     }
 

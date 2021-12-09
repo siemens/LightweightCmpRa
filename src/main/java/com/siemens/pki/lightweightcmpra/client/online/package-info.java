@@ -15,4 +15,7 @@
  *
  *  SPDX-License-Identifier: Apache-2.0
  */
+/**
+ * online client upstream interfaces
+ */
 package com.siemens.pki.lightweightcmpra.client.online;

@@ -86,12 +86,18 @@ public class TrustCredentialAdapter {
      *            file
      *
      * @param peerAuthenticationNeeded
-     * @return
+     *            true if additional authentication should be supported
+     * @return the created factory
      * @throws Exception
+     *             in case of general error
      * @throws PkiCertVerificationException
+     *             in case of error during chain building
      * @throws InvalidAlgorithmParameterException
+     *             in case if invalid parameters given in algorithms
      * @throws NoSuchAlgorithmException
+     *             in case of unsupported algorithms
      * @throws KeyStoreException
+     *             in case of error in key store handling
      */
     public static TrustManagerFactory createTrustManagerFactoryFromConfig(
             final TRUSTCREDENTIALS config,
@@ -267,10 +273,13 @@ public class TrustCredentialAdapter {
      * @param config
      *            {@link JAXB} configuration subtree from XML configuration file
      * @throws KeyStoreException
+     *             in case of errors during keystore handling
      * @throws CertificateException
+     *             in case of errors in certificate handling and chain building
      * @throws NoSuchAlgorithmException
+     *             in case of unsupported algorithms
      * @throws Exception
-     *             in case of error
+     *             in case of general error
      */
     public TrustCredentialAdapter(final TRUSTCREDENTIALS config)
             throws KeyStoreException, CertificateException,
@@ -304,13 +313,10 @@ public class TrustCredentialAdapter {
      *
      * @param cert
      *            certificate for validation
-     * @param trustedRootCerts
-     *            set of trusted root CA certificates
+     *
      * @param additionalIntermediateCerts
      *            set of intermediate certificates, must also include the
      *            certificate for validation
-     * @param certVerifyConfig
-     *            configuration for the certificate verification
      *
      * @return the validated chain without trust anchor but with cert
      *
@@ -320,8 +326,13 @@ public class TrustCredentialAdapter {
      *             of an missing algorithm, provider or a certificate/CRL could
      *             be read
      * @throws Exception
-     * @throws NoSuchAlgorithmException
+     *             in case of general error
+     * @throws PkiCertVerificationException
+     *             in case of error during chain building
      * @throws CertificateException
+     *             in case if error during certificate handling
+     * @throws NoSuchAlgorithmException
+     *             in case of unsupported algorithms
      */
     @SuppressWarnings({"unchecked"})
     synchronized public List<? extends X509Certificate> validateCertAgainstTrust(
