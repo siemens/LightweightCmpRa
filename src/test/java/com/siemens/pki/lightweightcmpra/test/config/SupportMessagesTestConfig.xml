@@ -16,9 +16,11 @@
 			<CmpHttpServer ServingUrl="http://localhost:6004/supportlra"/>
 			<CmpCredentials>
 				<in>
+					<PasswordBased Password="myPresharedSecret" Username="keyIdentification"/>
 					<SignatureBased TrustStorePath="credentials/CMP_EE_Root.pem"/>
 				</in>
 				<out>
+					<PasswordBased Password="myPresharedSecret" Username="keyIdentification"/>
 					<SignatureBased KeyStorePassword="Password" KeyStorePath="credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"/>
 				</out>
 			</CmpCredentials>
