@@ -112,12 +112,17 @@ public class ServiceImplementation extends BasicDownstream {
             final ASN1ObjectIdentifier infoType = itav.getInfoType();
 
             // Search whether there is a certificateProfile defined
-            Optional<ASN1OctetString> certProfile = Arrays.stream(msg.getHeader().getGeneralInfo())
-                    .filter(it -> NewCMPObjectIdentifiers.it_certProfile.equals(it.getInfoType()))
-                    .map(InfoTypeAndValue::getInfoValue)
-                    .filter(ASN1OctetString.class::isInstance)
-                    .map(ASN1OctetString.class::cast)
-                    .findFirst();
+            Optional<ASN1OctetString> certProfile;
+            if(msg.getHeader().getGeneralInfo()!=null) {
+                certProfile = Arrays.stream(msg.getHeader().getGeneralInfo())
+                        .filter(it -> NewCMPObjectIdentifiers.it_certProfile.equals(it.getInfoType()))
+                        .map(InfoTypeAndValue::getInfoValue)
+                        .filter(ASN1OctetString.class::isInstance)
+                        .map(ASN1OctetString.class::cast)
+                        .findFirst();
+            } else {
+                certProfile = Optional.empty();
+            }
 
             Map<ASN1ObjectIdentifier, Function<ASN1ObjectIdentifier, PKIBody>> mapToSearchForHandler;
             if (certProfile.isPresent()
