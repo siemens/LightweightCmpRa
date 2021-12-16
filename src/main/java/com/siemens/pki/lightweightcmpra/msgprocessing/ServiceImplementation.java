@@ -24,6 +24,7 @@ import com.siemens.pki.lightweightcmpra.msgvalidation.BaseCmpException;
 import com.siemens.pki.lightweightcmpra.msgvalidation.CmpProcessingException;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.ASN1String;
 import org.bouncycastle.asn1.cmp.GenMsgContent;
 import org.bouncycastle.asn1.cmp.GenRepContent;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
@@ -112,13 +113,13 @@ public class ServiceImplementation extends BasicDownstream {
             final ASN1ObjectIdentifier infoType = itav.getInfoType();
 
             // Search whether there is a certificateProfile defined
-            Optional<ASN1OctetString> certProfile;
-            if(msg.getHeader().getGeneralInfo()!=null) {
+            Optional<ASN1String> certProfile;
+            if (msg.getHeader().getGeneralInfo() != null) {
                 certProfile = Arrays.stream(msg.getHeader().getGeneralInfo())
                         .filter(it -> NewCMPObjectIdentifiers.it_certProfile.equals(it.getInfoType()))
                         .map(InfoTypeAndValue::getInfoValue)
-                        .filter(ASN1OctetString.class::isInstance)
-                        .map(ASN1OctetString.class::cast)
+                        .filter(ASN1String.class::isInstance)
+                        .map(ASN1String.class::cast)
                         .findFirst();
             } else {
                 certProfile = Optional.empty();
@@ -126,8 +127,8 @@ public class ServiceImplementation extends BasicDownstream {
 
             Map<ASN1ObjectIdentifier, Function<ASN1ObjectIdentifier, PKIBody>> mapToSearchForHandler;
             if (certProfile.isPresent()
-                    && profileSpecificResponseMap.containsKey(certProfile.get().toString())) {
-                mapToSearchForHandler = profileSpecificResponseMap.get(certProfile.get().toString());
+                    && profileSpecificResponseMap.containsKey(certProfile.get().getString())) {
+                mapToSearchForHandler = profileSpecificResponseMap.get(certProfile.get().getString());
             } else {
                 mapToSearchForHandler = responseMap;
             }
