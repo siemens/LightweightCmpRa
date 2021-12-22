@@ -34,11 +34,11 @@ import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 /**
  * a handler able to return pre configured ASN1.1 content loaded from a file
  *
- * id-it-certReqTemplate OBJECT IDENTIFIER ::= {1 3 6 1 5 5 7 4 xxx}
- * CertReqTemplateValue ::= SEQUENCE {
+ * id-it-certReqTemplate OBJECT IDENTIFIER ::= {1 3 6 1 5 5 7 4 19}
+ * CertReqTemplateContent ::= SEQUENCE {
  * certTemplate CertTemplate,
- * rsaKeyLen INTEGER OPTIONAL,
- * }
+ * keySpec Controls OPTIONAL }
+ *
  *
  */
 public class AnyAsn1ContentResponse

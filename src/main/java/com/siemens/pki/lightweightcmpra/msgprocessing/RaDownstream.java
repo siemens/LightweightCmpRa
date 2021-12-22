@@ -91,9 +91,6 @@ class RaDownstream extends BasicDownstream {
         }
     }
 
-    static final ASN1ObjectIdentifier it_rsaKeyLen =
-            new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.20");
-
     private static final Logger LOGGER =
             LoggerFactory.getLogger(RaDownstream.class);
 
@@ -190,7 +187,8 @@ class RaDownstream extends BasicDownstream {
                         int rsaKeyLen = 2048;
                         if (controls != null) {
                             for (final AttributeTypeAndValue aktControl : controls) {
-                                if (it_rsaKeyLen.equals(aktControl.getType())) {
+                                if (NewCMPObjectIdentifiers.regCtrl_rsaKeyLen
+                                        .equals(aktControl.getType())) {
                                     rsaKeyLen = ASN1Integer
                                             .getInstance(aktControl.getValue())
                                             .getPositiveValue().intValue();
