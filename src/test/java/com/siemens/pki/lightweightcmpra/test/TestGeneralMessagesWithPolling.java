@@ -104,7 +104,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
         //        CaCerts ::= SEQUENCE OF CMPCertificate
         //        }
         final ASN1Sequence value = (ASN1Sequence) itav[0].getInfoValue();
-        assertEquals("number of returned certificates", 21, value.size());
+        assertEquals("number of returned certificates", 20, value.size());
     }
 
     /*
