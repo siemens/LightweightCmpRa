@@ -350,9 +350,9 @@ public class MessageValidator implements ValidatorIF {
         final CertStatus certStatus = certStatusArray[0];
         // statusInfo OPTIONAL validate if set
         final PKIStatusInfo status = certStatus.getStatusInfo();
-        assertNotNull(status, PKIFailureInfo.addInfoNotAvailable,
-                "certStatus.StatusInfo required");
-        validateStatusInfo(status);
+        if (status != null) {
+            validateStatusInfo(status);
+        }
         assertNotNull(certStatus.getCertReqId(),
                 PKIFailureInfo.addInfoNotAvailable, "cert req id is null");
         assertEqual(certStatus.getCertReqId(), ASN1INTEGER_0,
