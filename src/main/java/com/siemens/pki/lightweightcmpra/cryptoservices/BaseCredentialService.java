@@ -30,9 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 
 /**
  * base class for certificate based signing and encryption services
@@ -48,22 +46,13 @@ public class BaseCredentialService {
 
     public BaseCredentialService(final PrivateKey privateKey,
             final X509Certificate endCertificate,
-            final Collection<X509Certificate> certChain) {
+            final Collection<X509Certificate> certChain) throws Exception {
         this.privateKey = privateKey;
         this.endCertificate = endCertificate;
         this.certChain.addAll(certChain);
-        String algorithmName = privateKey.getAlgorithm();
-        if ("EC".equalsIgnoreCase(algorithmName)) {
-            algorithmName = "ECDSA";
-        }
-        if ("RSA".equalsIgnoreCase(algorithmName)) {
-            signatureAlgorithm = new AlgorithmIdentifier(
-                    PKCSObjectIdentifiers.sha256WithRSAEncryption);
-        } else {
-            signatureAlgorithm = new AlgorithmIdentifier(
-                    X9ObjectIdentifiers.ecdsa_with_SHA256);
-        }
-        signatureAlgorithmName = "SHA256with" + algorithmName;
+        signatureAlgorithmName =
+                SignHelperUtil.getSigningAlgNameFromKey(privateKey);
+        signatureAlgorithm = SignHelperUtil.getSigningAlgIdFromKey(privateKey);
     }
 
     /**
@@ -123,18 +112,9 @@ public class BaseCredentialService {
             throw new KeyStoreException(
                     "no keypair (certificate + private key) for protection found");
         }
-        String algorithmName = privateKey.getAlgorithm();
-        if ("EC".equalsIgnoreCase(algorithmName)) {
-            algorithmName = "ECDSA";
-        }
-        if ("RSA".equalsIgnoreCase(algorithmName)) {
-            signatureAlgorithm = new AlgorithmIdentifier(
-                    PKCSObjectIdentifiers.sha256WithRSAEncryption);
-        } else {
-            signatureAlgorithm = new AlgorithmIdentifier(
-                    X9ObjectIdentifiers.ecdsa_with_SHA256);
-        }
-        signatureAlgorithmName = "SHA256with" + algorithmName;
+        signatureAlgorithmName =
+                SignHelperUtil.getSigningAlgNameFromKey(privateKey);
+        signatureAlgorithm = SignHelperUtil.getSigningAlgIdFromKey(privateKey);
         // bring the certificates in the correct order
         // poor mens chain building, never use this algorithm for chain validation!
         certChain.add(endCertificate);

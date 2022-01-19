@@ -66,7 +66,6 @@ import org.bouncycastle.asn1.crmf.Controls;
 import org.bouncycastle.asn1.crmf.EncryptedKey;
 import org.bouncycastle.asn1.crmf.POPOSigningKey;
 import org.bouncycastle.asn1.crmf.ProofOfPossession;
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
@@ -74,7 +73,6 @@ import org.bouncycastle.asn1.x509.Certificate;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.ExtensionsGenerator;
 import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 import org.bouncycastle.cert.cmp.CMPException;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
@@ -84,6 +82,7 @@ import org.bouncycastle.operator.bc.BcDigestCalculatorProvider;
 
 import com.siemens.pki.lightweightcmpra.cryptoservices.CmsEncryptorBase;
 import com.siemens.pki.lightweightcmpra.cryptoservices.DataSigner;
+import com.siemens.pki.lightweightcmpra.cryptoservices.SignHelperUtil;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
@@ -497,21 +496,14 @@ public class PkiMessageGenerator {
             return new PKIBody(bodyType, new CertReqMessages(
                     new CertReqMsg(certReq, new ProofOfPossession(), null)));
         }
-        final Signature sig;
-        final AlgorithmIdentifier sigAlg;
-        if (privateKey.getAlgorithm().equalsIgnoreCase("RSA")) {
-            sig = Signature.getInstance("SHA256withRSA");
-            sigAlg = new AlgorithmIdentifier(
-                    PKCSObjectIdentifiers.sha256WithRSAEncryption);
-        } else {
-            sig = Signature.getInstance("SHA256withECDSA");
-            sigAlg = new AlgorithmIdentifier(
-                    X9ObjectIdentifiers.ecdsa_with_SHA256);
-        }
+        final Signature sig = Signature.getInstance(
+                SignHelperUtil.getSigningAlgNameFromKey(privateKey));
         sig.initSign(privateKey);
         sig.update(certReq.getEncoded(ASN1Encoding.DER));
-        final ProofOfPossession popo = new ProofOfPossession(
-                new POPOSigningKey(null, sigAlg, new DERBitString(sig.sign())));
+        final ProofOfPossession popo =
+                new ProofOfPossession(new POPOSigningKey(null,
+                        SignHelperUtil.getSigningAlgIdFromKey(privateKey),
+                        new DERBitString(sig.sign())));
         return new PKIBody(bodyType,
                 new CertReqMessages(new CertReqMsg(certReq, popo, null)));
     }

@@ -33,14 +33,13 @@ import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
 import org.bouncycastle.asn1.cmp.ProtectedPart;
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x9.X9ObjectIdentifiers;
 
 import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
 import com.siemens.pki.lightweightcmpra.cryptoservices.CmsEncryptorBase;
+import com.siemens.pki.lightweightcmpra.cryptoservices.SignHelperUtil;
 import com.siemens.pki.lightweightcmpra.msgvalidation.CmpProcessingException;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
 
@@ -89,19 +88,9 @@ class TrustChainAndPrivateKey {
 
     ProtectionProvider setEndEntityToProtect(final CMPCertificate certificate,
             final PrivateKey privateKey) throws Exception {
-        String algorithmName = privateKey.getAlgorithm();
-        if ("EC".equalsIgnoreCase(algorithmName)) {
-            algorithmName = "ECDSA";
-        }
-        AlgorithmIdentifier protectionAlg;
-        if ("RSA".equalsIgnoreCase(algorithmName)) {
-            protectionAlg = new AlgorithmIdentifier(
-                    PKCSObjectIdentifiers.sha256WithRSAEncryption);
-        } else {
-            protectionAlg = new AlgorithmIdentifier(
-                    X9ObjectIdentifiers.ecdsa_with_SHA256);
-        }
-        final String signatureAlgorithmName = "SHA256with" + algorithmName;
+        final AlgorithmIdentifier protectionAlg =
+                SignHelperUtil.getSigningAlgIdFromKey(privateKey);
+
         final GeneralName senderName = new GeneralName(
                 X500Name.getInstance(certificate.getX509v3PKCert().getSubject()
                         .getEncoded(ASN1Encoding.DER)));
@@ -141,8 +130,8 @@ class TrustChainAndPrivateKey {
             @Override
             public DERBitString getProtectionFor(
                     final ProtectedPart protectedPart) throws Exception {
-                final Signature sig =
-                        Signature.getInstance(signatureAlgorithmName);
+                final Signature sig = Signature.getInstance(
+                        SignHelperUtil.getSigningAlgNameFromKey(privateKey));
                 sig.initSign(privateKey);
                 sig.update(protectedPart.getEncoded(ASN1Encoding.DER));
                 return new DERBitString(sig.sign());

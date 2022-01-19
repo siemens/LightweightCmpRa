@@ -31,6 +31,7 @@ import org.junit.runners.Parameterized.Parameters;
 import com.siemens.pki.lightweightcmpra.cryptoservices.BaseCredentialService;
 import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
 import com.siemens.pki.lightweightcmpra.cryptoservices.KeyAgreementEncryptor;
+import com.siemens.pki.lightweightcmpra.protection.SignatureBasedProtection;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 @RunWith(Parameterized.class)
@@ -139,7 +140,9 @@ public class TestCentralKeyGenerationWithKeyAgreement
     @Test
     public void testCrWithKeyAgreement() throws Exception {
         executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
+                PKIBody.TYPE_CERT_REP,
+                new SignatureBasedProtection("credentials/CMP_EE_Keystore.p12",
+                        TestUtils.PASSWORD_AS_CHAR_ARRAY),
                 TestUtils.createCmpClient("http://localhost:6011/ckgagree"),
                 keyAgreementDecryptor, verifier);
     }
