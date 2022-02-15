@@ -56,9 +56,10 @@ public class CmpTestcaseBase {
     public static void setUpBeforeClass() throws Exception {
         Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
         ConfigFileLoader.setConfigFileBase(CONFIG_DIRECTORY);
-        eeSignaturebasedProtectionProvider =
-                new SignatureBasedProtection("credentials/CMP_EE_Keystore.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
+        eeSignaturebasedProtectionProvider = new SignatureBasedProtection(
+                "credentials/CMP_EE_Keystore_EdDSA.p12",
+                //"credentials/CMP_EE_Keystore.p12",
+                TestUtils.PASSWORD_AS_CHAR_ARRAY);
     }
 
     private Function<PKIMessage, PKIMessage> eeSignatureBasedCmpClient;

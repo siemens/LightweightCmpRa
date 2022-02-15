@@ -37,6 +37,7 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.siemens.pki.lightweightcmpra.cryptoservices.SignHelperUtil;
 import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
 import com.siemens.pki.lightweightcmpra.util.MessageDumper;
@@ -107,13 +108,8 @@ public class OnlineEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
                 new JcaPKCS10CertificationRequestBuilder(
                         new X500Name("CN=Subject"), keyPair.getPublic());
         final PrivateKey privateKey = keyPair.getPrivate();
-        String algorithm = privateKey.getAlgorithm();
-        if (algorithm.startsWith("EC")) {
-            algorithm = "ECDSA";
-        }
-        final String signatureAlgorithm = "SHA256with" + algorithm;
-        final ContentSigner signer =
-                new JcaContentSignerBuilder(signatureAlgorithm)
+        final ContentSigner signer = new JcaContentSignerBuilder(
+                SignHelperUtil.getSigningAlgNameFromKey(privateKey))
                         .build(privateKey);
         final PKCS10CertificationRequest p10Request = p10Builder.build(signer);
         final PKIBody p10Body = new PKIBody(PKIBody.TYPE_P10_CERT_REQ,
