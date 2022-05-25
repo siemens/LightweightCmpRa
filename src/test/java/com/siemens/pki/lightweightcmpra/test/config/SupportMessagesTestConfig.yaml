@@ -1,0 +1,31 @@
+---
+
+DownstreamInterface:
+  HttpServer:
+    ServingUri: "http://localhost:6004/supportlra"
+
+SupportMessageHandlerInterface:
+  - GetCaCertificates:
+      cacertificates:
+        - "credentials/CaCerts.pem"
+
+  - GetCertificateRequestTemplate:
+      template: "credentials/CertTemplate.der"
+
+  - getrootcacertificateupdate:
+      newWithNew: "credentials/newWithNew.pem"
+      oldWithNew: "credentials/oldWithNew.pem"
+      newWithOld: "credentials/newWithOld.pem"
+
+  - CrlUpdateRetrieval:
+      crls:
+         - "credentials/CRL.der"
+
+DownstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_EE_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"

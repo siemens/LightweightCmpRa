@@ -6,9 +6,12 @@ SPDX-License-Identifier: Apache-2.0
 
 # Lightweight CMP RA
 
-This project provides a Proof of Concept (PoC) implementation of the
+This repository provides a CLI-based Registration Authority application
+for demonstration and test purposes that implements the
 [Lightweight CMP Profile](https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/)
 for CMP [[RFC 4210]](https://tools.ietf.org/html/rfc4210).
+As implementation of the core CMP Registration Authority (RA) functions the
+[generic CMP RA component](https://github.com/siemens/cmp-ra-component) is used.
 
 ## License
 
@@ -16,9 +19,8 @@ This software is licensed under the Apache License, Version 2.0.
 
 # Disclaimer
 
-This prototypical code explicitly does not have production quality
-but constructively proves that the Lightweight CMP Profile
-can be implemented and used.
+This prototypical code does not claim to have production quality
+but is meant for exploration and PoC use of the Lightweight CMP Profile.
 Some effort has been spent on software quality &mdash; for instance,
 static code analyzers (like SpotBugs), clean code concepts,
 and best practice recommendations in secure configuration are used.
@@ -33,8 +35,10 @@ and can only serve as an example for developers.
 
 ## Preconditions
 
+### Required build tools and environment
+
 * The *Java SE Development Kit (JDK)*.
-  The Lightweight CMP RA is now developed using JDK 11.\
+  The Lightweight CMP RA is now developed using JDK 11.
   It can be found at
   <https://www.oracle.com/java/technologies/downloads/#java11>.
 * The *Apache Maven tool*.
@@ -59,21 +63,34 @@ You can verify the selected version using
 java -version
 ```
 
-## Downloading the sources
+### Download and install the dependency: the generic CMP RA component
+
+This implementation uses the
+[generic CMP RA component](https://github.com/siemens/cmp-ra-component)
+for CMP-related functions cryptographic operations.
+The component needs to be installed into the local maven repository:
+
+```bash
+git clone https://github.com/siemens/cmp-ra-component.git
+cd cmp-ra-component
+mvn clean install -DskipTests=true
+cd ..
+```
+
+## Download the sources
 
 ```bash
 git clone https://github.com/siemens/LightweightCmpRa.git
 cd LightweightCmpRa
-git checkout master
 ```
 
-## Building the project
+## Build the Lightweight CMP RA
 
 ```bash
 mvn clean install
 ```
 
-This includes running unit test, which may also be invoked explicitly by
+This includes running unit tests, which may also be invoked explicitly by
 
 ```bash
 mvn test
@@ -81,35 +98,38 @@ mvn test
 
 ## Running the RA
 
-Example XML/YAML configuration files can be found at
+Example YAML configuration files can be found at
 [src/test/java/com/siemens/pki/lightweightcmpra/test/config](
  src/test/java/com/siemens/pki/lightweightcmpra/test/config)
 and after installation also at `target/test-classes`.
 
+The RA can be started with one or more *YAML configuration Files*
+as command line argument.
+Each *YAML configuration File* describes one RA instance to launch.
+
 ```bash
 cd target/test-classes
-java -jar ../LightweightCmpRa-1.0.0.jar <XML/YAML/JSON configuration File>
+java -jar ../LightweightCmpRa-2.0.0.jar <XML/YAML/JSON configuration File>
 ```
 
-For standalone start it is recommended  to export a "Runnable JAR file" and have 
-the required libraries in a subfolder.
-
-If the RA is started with a second command line argument this argument is used as filename for writing the
-loaded configuration in YAML format. This allows to convert existing XML configuration files to YAML.
-
+If you use your IDE (e.g. Eclipse) to generate a "Runnable JAR file" it is recommended to have
+the required libraries in a subfolder and not packed with the generate JAR file. 
 
 # Software architecture
 
 ## External components
 
-This implementation uses [BouncyCastle](https://www.bouncycastle.org/)
-for CMP-related basic functions and some cryptographic operations.
+This implementation uses the
+[generic CMP RA component](https://github.com/siemens/cmp-ra-component)
+for CMP-related functions cryptographic operations.
 
 The [Simple Logging Facade for Java (SLF4J)](http://www.slf4j.org/)
 serves as a simple facade or abstraction for various logging frameworks
 (e.g., `java.util.logging`, `logback`, `log4j`).
-If the [SimpleLogger](http://www.slf4j.org/apidocs/org/slf4j/impl/SimpleLogger.html) is used,
-full logging can be enabled by giving  `-Dorg.slf4j.simpleLogger.log.com.siemens=debug` as first command line option. 
+If the
+[SimpleLogger](http://www.slf4j.org/apidocs/org/slf4j/impl/SimpleLogger.html)
+is used, full logging can be enabled by giving
+`-Dorg.slf4j.simpleLogger.log.com.siemens=debug` as first command line option.
 
 The [Eclipse Californium](https://www.eclipse.org/californium/)
 is used for CoAP support.
@@ -119,34 +139,38 @@ is used for implementing some tests.
 
 ## Internal structure
 
-* In the Java package [`com.siemens.pki.lightweightcmpra.msggeneration`](
-               src/main/java/com/siemens/pki/lightweightcmpra/msggeneration/)
-  all functions related to message generation can be found.
-* The package [`com.siemens.pki.lightweightcmpra.msgvalidation`](
-       src/main/java/com/siemens/pki/lightweightcmpra/msgvalidation/)
-  provides classes and functions needed for CMP message validation.
-* CMP Message protection is done by the classes located in
-         [`com.siemens.pki.lightweightcmpra.protection`](
-  src/main/java/com/siemens/pki/lightweightcmpra/protection/).
-* The basic crypto functions and utilities for signing, encryption and key generation 
-         are located in 
-         [`com.siemens.pki.lightweightcmpra.cryptoservices`](
-  src/main/java/com/siemens/pki/lightweightcmpra/cryptoservices/).
-* Other utility functions are located in
+* The Java package [`com.siemens.pki.lightweightcmpra.configuration`](
+               src/main/java/com/siemens/pki/lightweightcmpra/configuration/)
+  holds all classes and functions needed for YAML configuration parsing.
+
+* The classes in [`com.siemens.pki.lightweightcmpra.downstream`](
+            src/main/java/com/siemens/pki/lightweightcmpra/server/)
+  and its sub packages implement downstream transport
+  protocol adapters towards the end entity (EE).
+* The package [`com.siemens.pki.lightweightcmpra.downstream.offline`](
+       src/main/java/com/siemens/pki/lightweightcmpra/downstream/offline)
+  holds all classes and functions needed to implement offline downstream
+  transport protocol adapters (e.g. to file system).
+* The package [`com.siemens.pki.lightweightcmpra.downstream.online`](
+       src/main/java/com/siemens/pki/lightweightcmpra/downstream/online)
+  holds all classes and functions needed to implement online downstream
+  transport protocol adapters (e.g. to CoAP and HTTP(s)).
+
+* The classes in [`com.siemens.pki.lightweightcmpra.upstream`](
+          src/main/java/com/siemens/pki/lightweightcmpra/upstream/)
+  and its sub-packages implement upstream transport protocol adapters
+  towards the certificate authority (CA).
+* The package [`com.siemens.pki.lightweightcmpra.upstream.offline`](
+       src/main/java/com/siemens/pki/lightweightcmpra/upstream/offline)
+  holds all classes and functions needed to implement offline upstream
+  transport protocol adapters (e.g. to file system).
+* The package [`com.siemens.pki.lightweightcmpra.upstream.online`](
+       src/main/java/com/siemens/pki/lightweightcmpra/upstream/online)
+  holds all classes and functions needed to implement online upstream transport
+  protocol adapters (e.g. to HTTP(s)).
+* Some utility functions are located in
          [`com.siemens.pki.lightweightcmpra.util`](
   src/main/java/com/siemens/pki/lightweightcmpra/util/).
-* The classes in [`com.siemens.pki.lightweightcmpra.client`](
-          src/main/java/com/siemens/pki/lightweightcmpra/client/)
-  and its sub-packages implement upstream interfaces
-  towards the certificate authority (CA).
-* The classes in [`com.siemens.pki.lightweightcmpra.server`](
-            src/main/java/com/siemens/pki/lightweightcmpra/server/)
-  and its sub packages implement downstream interfaces
-  towards the end entity (EE).
-* All packages described before are used by the classes in
-         [`com.siemens.pki.lightweightcmpra.msgprocessing`](
-  src/main/java/com/siemens/pki/lightweightcmpra/msgprocessing/)
-  to implement the CMP (L)RA functionality.
 * The package [`com.siemens.pki.lightweightcmpra.main`](
        src/main/java/com/siemens/pki/lightweightcmpra/main/)
   holds the startup code.
@@ -166,56 +190,8 @@ describes structure, purpose and use of the test credentials.
 
 ## Configuration
 
-A [README file](/src/main/schemes/README.md) and an 
-[annotated XML schema for the configuration](src/main/schemes/Configuration.xsd) are provided.
-The XML schema is also used to generate the annotated java classes located in
-`com.siemens.pki.lightweightcmpra.config.xmlparser` needed by the configuration file parser.
-
-## State of implementation
-
-### Supported PKI management operations
-
-This implementation provides only the (L)RA specific functional part
-and behavior of all PKI management operations described in
-[Lightweight CMP Profile](https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).
-
-All mandatory PKI management operations are supported:
-
-* Section 4 - End Entity focused PKI management operations
-  * Request a certificate from a new PKI with signature protection
-  * Request to update an existing certificate with signature protection
-  * Error reporting
-
-* Section 5 - LRA and RA focused PKI management operations
-  * Forward messages without changes
-  * Forward messages with replaced protection
-    and keeping the original proof-of-possession
-  * Forward messages with replaced protection and raVerified
-    as proof-of-possession
-  * Error reporting
-
-The Recommended PKI management operations mentioned below are also supported:
-
-* Section 4 - End Entity focused PKI management operations
-  * Request a certificate from a PKI with MAC protection
-  * Revoke an own certificate.
-
-* Section 5 - LRA and RA focused PKI management operations
-  * Revoke another's entities certificate.
-
-The Optional PKI management operations mentioned below are supported, too:
-
-* Section 4 - End Entity focused PKI management operations
-  * Request a certificate from a trusted PKI with signature protection
-  * Request a certificate from a legacy PKI using a PKCS#10
-    [[RFC 2986]](https://tools.ietf.org/html/rfc2986) request
-  * Generate the key pair centrally at the PKI management entity
-  * Handle delayed enrollment due to asynchronous message delivery
-  * Some additional support messages
-
-* Section 5 - LRA and RA focused PKI management operations
-  * Forward messages with additional protection
-  * Initiate delayed enrollment due to asynchronous message delivery
+A [README file](/doc/config/README.md)
+explains the YAML configuration file structure.
 
 ### CMP message transport variants
 
@@ -226,30 +202,6 @@ The Optional PKI management operations mentioned below are supported, too:
 
 Due to a lack of public available implementations the
 "HTTPS transport using shared secrets" is not implemented.
-
-If your would like to do "Piggybacking on other reliable transport"
-please have a look at the protocol implementations in
-       [`com.siemens.pki.lightweightcmpra.client`](
-src/main/java/com/siemens/pki/lightweightcmpra/client/) and
-       [`com.siemens.pki.lightweightcmpra.server`](
-src/main/java/com/siemens/pki/lightweightcmpra/server/).
-
-On downstream interface side
-your new protocol adapter has to call the message handler function of the
-[BasicDownstream](src/main/java/com/siemens/pki/lightweightcmpra/msgprocessing/BasicDownstream.java)
-instance for each incoming PKIMessage.
-The new protocol adapter should be configured and set up in the constructor
-of the BasicDownstream class.
-
-On upstream interface side your new protocol adapter must implement
-a message handler function.
-The new protocol adapter should be configured and registered
-in the constructor of the class
-[RaUpstream](src/main/java/com/siemens/pki/lightweightcmpra/msgprocessing/RaUpstream.java).
-If your new protocol adapter on upstream side is expected to support
-delayed enrollment
-it is recommended to inherit this function in some way from the base class
-[OfflineClient](src/main/java/com/siemens/pki/lightweightcmpra/client/offline/OfflineClient.java).
 
 ## Other resources
 
@@ -262,5 +214,13 @@ gives an overview of the functionality.
 
 ## Interoperability
 
-Details about with other CMP implementations and reference message flows can be found in the 
-[Interoperability document](/doc/interop/Interoperability.md) 
+Details about with other CMP implementations and reference message flows can be
+found in the [Interoperability document](/doc/interop/Interoperability.md)
+
+## Known issues
+
+With JDK 11, revocation checking has some issues:
+* A CRL provided as CRLDP extension is not always used in path validation
+  for CMP and TLS trust chains.
+* An OCSP AIA extension is not always used in path validation
+  for TLS trust chains.

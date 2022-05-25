@@ -1,0 +1,33 @@
+---
+# Upper RA
+
+DownstreamInterface:
+  OfflineFileServer:
+    inputDirectory: "./target/CmpTest/GenUpstream"
+    outputDirectory: "./target/CmpTest/GenDownstream"
+
+DownstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_LRA_UPSTREAM_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+
+SupportMessageHandlerInterface:
+  - GetCaCertificates:
+      cacertificates:
+        - "credentials/CaCerts.pem"
+
+  - GetCertificateRequestTemplate:
+      template: "credentials/CertTemplate.der"
+
+  - getrootcacertificateupdate:
+      newWithNew: "credentials/newWithNew.pem"
+      oldWithNew: "credentials/oldWithNew.pem"
+      newWithOld: "credentials/newWithOld.pem"
+
+  - CrlUpdateRetrieval:
+      crls:
+        - "credentials/CRL.der"

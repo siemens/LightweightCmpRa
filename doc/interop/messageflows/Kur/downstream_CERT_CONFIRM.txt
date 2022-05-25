@@ -1,66 +1,71 @@
 DER Sequence
     DER Sequence
         Integer(2)
-        Tagged [4]
+        DER Tagged [CONTEXT 4]
             DER Sequence
                 Set
                     Sequence
                         ObjectIdentifier(2.5.4.3)
                         PrintableString(Subject) 
-        Tagged [4]
+        DER Tagged [CONTEXT 4]
             DER Sequence
                 Set
                     Sequence
                         ObjectIdentifier(2.5.4.3)
                         UTF8String(CA-Mock) 
-        Tagged [0]
-            GeneralizedTime(20210729090619GMT+00:00) 
-        Tagged [1]
+        DER Tagged [CONTEXT 0]
+            GeneralizedTime(20220727085151GMT+00:00) 
+        DER Tagged [CONTEXT 1]
             DER Sequence
-                ObjectIdentifier(1.2.840.10045.4.3.2)
-        Tagged [2]
+                ObjectIdentifier(1.2.840.113549.1.1.11)
+                NULL
+        DER Tagged [CONTEXT 2]
             DER Octet String[20] 
-                2b204c1435c004a9620249404d9cc069df4d58e7                            + L5bI@MiMX
-        Tagged [4]
+                cdf190bc87d361e9d6210ae51d2d5605f9c2b11c                            a!-V
+        DER Tagged [CONTEXT 4]
             DER Octet String[16] 
-                dc0ef71f8ca17013eee46466feedb664                                    pdfd
-        Tagged [5]
+                b9d4493cdbbc5c861103fb7829be64ef                                    I<\x)d
+        DER Tagged [CONTEXT 5]
             DER Octet String[16] 
-                3e8a66aef01a812f03305e598b93733f                                    >f/0^Ys?
-        Tagged [6]
+                37fbef64747083a9a60612a100214876                                    7dtp!Hv
+        DER Tagged [CONTEXT 6]
             DER Octet String[16] 
-                68a46ab1fd2250fe7afaa186c9c2419d                                    hj"PzA
-    Tagged [24]
+                f7390e78e0536b7009afe417c8bfa0c6                                    9xSkp
+    DER Tagged [CONTEXT 24]
         Sequence
             Sequence
-                DER Octet String[48] 
-                    f60def9f6f60a2e4774b70b8aaec22901289a55792531e0f5908f8905e03cf54    o`wKp"WSY^T
-                    0b280de4e9036cda127df89f1979fe5b                                    (l}y[
+                DER Octet String[32] 
+                    cb5389fcde76fe99119c3143a4964339b97f14960522f6b1fdff2a881e569217    Sv1CC9"*V
                 Integer(0)
                 Sequence
                     Integer(0)
-    Tagged [0]
-        DER Bit String[71, 0] 
-            304502210085d02c2054b12c6243dcf6b002e783b58557ad8e96ce0acf8cc382    0E!, T,bCW
-            4cfb8c89d40220630aa922f852ad4c12e08cedc1048fd79abaec742fdee79e22    L c"RLt/"
-            1226ef73e4112e                                                      &s.
-    Tagged [1]
+    DER Tagged [CONTEXT 0]
+        DER Bit String[256, 0] 
+            54f50aedde0988a206a1febeb8f528f69bd6b243754a33ea204d968b028c3de5    T(CuJ3 M=
+            30a504b80d86a87cf3923970aab4d45065488deabf62eef15650fe11dca0fe14    0|9pPeHbVP
+            c52424489b88f9f232491efe24e39de6ca1e26f8b44559b8b1b4c133696b6fea    $$H2I$&EY3iko
+            65cb2017bbeb52e9488c11e8097c7df005931189e80f4d8cd4c140bc529620a7    e RH|}M@R 
+            71867b280dc493f17ed61ee8565b3460bc3ad59c05fab5a70c590bb791ea02af    q{(~V[4`:Y
+            53c3dc4d49cf57f1b6aed87d5f9a0631761c261be782caf3651f26fc7e0f11d9    SMIW}_1v&e&~
+            c6b7b07141e25c916e2c12c70130b0fe7845552d2bcba2c4c9632ff9a3fce2cb    qA\n,0xEU-+c/
+            aa18f8ee15d09a75c809d4eedfa724bca706a649f85e21f42c7b661f1669611e    u$I^!,{fia
+    DER Tagged [CONTEXT 1]
         Sequence
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
-                    Integer(1627549579099)
+                    Integer(1658911910314)
                     Sequence
-                        ObjectIdentifier(1.2.840.10045.4.3.3)
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
                                 UTF8String(Ca-ENROLLMENT-INTERMEDIATE-3) 
                     Sequence
-                        UTCTime(210729080619GMT+00:00) 
-                        UTCTime(210802130619GMT+00:00) 
+                        UTCTime(220727075150GMT+00:00) 
+                        UTCTime(220731125150GMT+00:00) 
                     Sequence
                         Set
                             Sequence
@@ -68,18 +73,24 @@ DER Sequence
                                 PrintableString(Subject) 
                     Sequence
                         Sequence
-                            ObjectIdentifier(1.2.840.10045.2.1)
-                            ObjectIdentifier(1.2.840.10045.3.1.7)
-                        DER Bit String[65, 0] 
-                            040eb131ff6ee8bfc2d30d406da9e95a813467743e0760317a5b7c86de25c2cb    1n@mZ4gt>`1z[|%
-                            04cc56ac2aed87d2b08a7417db2c7dba8ed9103e81337c5070da192ec39c48e9    V*t,}>3|Pp.H
-                            09                                                                  
-                    Tagged [3]
+                            ObjectIdentifier(1.2.840.113549.1.1.1)
+                            NULL
+                        DER Bit String[270, 0] 
+                            3082010a02820101009ffed33d13e8a1cf0fbf5cb50c5d4618df0b65269e8878    0=\]Fe&x
+                            0b4a691c9e77a5e1c54bd03420bf957e1f095ab669c6fa9008382d44836d1054    JiwK4 ~Zi8-DmT
+                            8d5132808048243ac10a203297c92492fb5c0ec4c6c9321efce847fd408b9806    Q2H$: 2$\2G@
+                            23ad75928a4e7c5ee5b65bb23e835a7b89dcaa400549f1207f192ffd849d08fa    #uN|^[>Z{@I /
+                            2d22c481be0f2ce8b0fdf6b2086107fcc972e432ff123dff15b05f0d2aea4bfa    -",ar2=_*K
+                            c815f394e52a3d4ca352b655297a392135beed5db18a955dcc94932ee5f08b61    *=LRU)z9!5]].a
+                            e013af4e4a23ba9f2d39053f6155f4aee17dfa863d72eb5efbabac41dcde2b0f    NJ#-9?aU}=r^A+
+                            060b6b5c7d06948615a9ceecb2ba0b9ff29d6e517aeed95dd0164898d23413bb    k\}nQz]H4
+                            b18204ec512ea7b4730203010001                                        Q.s
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
                                 DER Octet String[22] 
-                                    04142b204c1435c004a9620249404d9cc069df4d58e7                        + L5bI@MiMX
+                                    0414cdf190bc87d361e9d6210ae51d2d5605f9c2b11c                        a!-V
                             Sequence
                                 ObjectIdentifier(2.5.29.35)
                                 DER Octet String[77] 
@@ -92,14 +103,14 @@ DER Sequence
                                 DER Octet String[2] 
                                     3000                                                                0
                 Sequence
-                    ObjectIdentifier(1.2.840.10045.4.3.3)
-                DER Bit String[72, 0] 
-                    3046022100dd5bb0b9b72eba8d1c336884051897f4cfd2c576149840eb24e220    0F![.3hv@$ 
-                    ed2db0b3bb022100e1ad24a05324d401fa478ae38aaaf9afbd5e9dce42157a9b    -!$S$G^Bz
-                    be3deaaf1a34ce18                                                    =4
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    304502210087b25eb9633e84bc79076f50ac307e1cf72926775f5af41d9ec848    0E!^c>yoP0~)&w_ZH
+                    901ec76a19022027769651f1d4cc464865530405c3f13554bc8f1a20784de0d5    j 'vQFHeS5T xM
+                    a691b4ac8ccb6f                                                      o
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
                     Integer(1599122797485)
                     Sequence
@@ -125,7 +136,7 @@ DER Sequence
                             046097e69df0b6888eb18d46ab1cd398e536cd143f0c65575bd4fb333dd6deb8    `F6?eW[3=
                             6b3b8608847125888518dac05b253775e2b9b65e30fb4de675fcbee76fb67358    k;q%[%7u^0MuosX
                             54                                                                  T
-                    Tagged [3]
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
@@ -155,7 +166,7 @@ DER Sequence
                     022d84d0daa6e8                                                      -
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
                     Integer(1599122797476)
                     Sequence
@@ -181,7 +192,7 @@ DER Sequence
                             0453851214a43595a1c8893d610beca76b0a65185ac4aade7546ba0c28825c95    S5=akeZuF(\
                             5fb2f95f0f40800e0083080efa6ec660ec9cbaff2354193b9522f2965d5f7efd    __@n`#T;"]_~
                             17                                                                  
-                    Tagged [3]
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
@@ -211,7 +222,7 @@ DER Sequence
                     2a08b3a5e146a1f1                                                    *F
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
                     Integer(1599122797471)
                     Sequence
@@ -237,7 +248,7 @@ DER Sequence
                             047db9681f1d271015c07cecb6902af4853e19e03f884722c15d879718ee38b6    }h'|*>?G"]8
                             1d835fae4976b962ca25f3223854f4e9cd5bca9946cf28f48eef1558d5794de7    _Ivb%"8T[F(XyM
                             bb                                                                  
-                    Tagged [3]
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
@@ -265,3 +276,218 @@ DER Sequence
                     304402204572e43590172db842cb22f8eb5e03b929bef9f27dd00f493d4fee56    0D Er5-B"^)}I=OV
                     98afcfe3022069511bc17a7a253b65e28faff24e3750712d15c167223e3df89d     iQzz%;eN7Pq-g">=
                     8f4e99bdfbf1                                                        N
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CERT_CONFIRM message:
+Header/SenderNonce: #37fbef64747083a9a60612a100214876
+Header/MessageTime: Wed Jul 27 10:51:51 CEST 2022
+Header/Recipient: 4: CN=CA-Mock
+Header/ProtectionAlg/Parameters: NULL
+Header/ProtectionAlg/Algorithm: PKCS.sha256WithRSAEncryption (1.2.840.113549.1.1.11)
+Header/Sender: 4: CN=Subject
+Header/Pvno: 2
+Header/RecipNonce: #f7390e78e0536b7009afe417c8bfa0c6
+Header/SenderKID: #cdf190bc87d361e9d6210ae51d2d5605f9c2b11c
+Header/TransactionID: #b9d4493cdbbc5c861103fb7829be64ef
+Header/(GeneralInfo|FreeText|RecipKID):<null>
+Body/Type: 24
+Body/Content/CertStatus[0]/CertHash: #cb5389fcde76fe99119c3143a4964339b97f14960522f6b1fdff2a881e569217
+Body/Content/CertStatus[0]/StatusInfo/Status: 0
+Body/Content/CertStatus[0]/StatusInfo/(FailInfo|StatusString):<null>
+Body/Content/CertStatus[0]/CertReqId: 0
+Body/Content/CertStatus[0]/(HashAlg):<null>
+Protection: #038201010054F50AEDDE0988A206A1FEBEB8F528F69BD6B243754A33EA204D968B028C3DE530A504B80D86A87CF3923970AAB4D45065488DEABF62EEF15650FE11DCA0FE14C52424489B88F9F232491EFE24E39DE6CA1E26F8B44559B8B1B4C133696B6FEA65CB2017BBEB52E9488C11E8097C7DF005931189E80F4D8CD4C140BC529620A771867B280DC493F17ED61EE8565B3460BC3AD59C05FAB5A70C590BB791EA02AF53C3DC4D49CF57F1B6AED87D5F9A0631761C261BE782CAF3651F26FC7E0F11D9C6B7B07141E25C916E2C12C70130B0FE7845552D2BCBA2C4C9632FF9A3FCE2CBAA18F8EE15D09A75C809D4EEDFA724BCA706A649F85E21F42C7B661F1669611E
+ExtraCerts[0]/X509v3PKCert/Signature: #034800304502210087B25EB9633E84BC79076F50AC307E1CF72926775F5AF41D9EC848901EC76A19022027769651F1D4CC464865530405C3F13554BC8F1A20784DE0D5A691B4AC8CCB6F
+ExtraCerts[0]/X509v3PKCert/Version: 2
+ExtraCerts[0]/X509v3PKCert/SerialNumber: 1658911910314
+ExtraCerts[0]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+ExtraCerts[0]/X509v3PKCert/Subject: CN=Subject
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #cdf190bc87d361e9d6210ae51d2d5605f9c2b11c
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#a5d108c58b8fe3470775b7154ca46c4f9ff53c43
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-INTERMEDIATE-2]]]
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#0174532573ad
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SerialNumber: 1658911910314
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Subject: CN=Subject
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKey[0]: 20197549454798495857122493972063590736169703536226196875539247920176686955195606476419217435464750122086182733958117531504501590307562096314263331497387250384762392524354592961707768946841083525228181348676124494988433282951841492615142109880366863087175152436193738708598385941464163100589679248547412407710026470986398435842151008688928551253517769413464542733341400492801390040502338707602279221519110276112563739732270246857445774391152388821933801002082238256067644122669688621020520554542002884449529244116311157960382177600054380916932001976525838237039135961039484614046081345620538489274204675340496204706931
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKey[1]: 65537
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: NULL
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: NULL
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #0382010F003082010A02820101009FFED33D13E8A1CF0FBF5CB50C5D4618DF0B65269E88780B4A691C9E77A5E1C54BD03420BF957E1F095AB669C6FA9008382D44836D10548D5132808048243AC10A203297C92492FB5C0EC4C6C9321EFCE847FD408B980623AD75928A4E7C5EE5B65BB23E835A7B89DCAA400549F1207F192FFD849D08FA2D22C481BE0F2CE8B0FDF6B2086107FCC972E432FF123DFF15B05F0D2AEA4BFAC815F394E52A3D4CA352B655297A392135BEED5DB18A955DCC94932EE5F08B61E013AF4E4A23BA9F2D39053F6155F4AEE17DFA863D72EB5EFBABAC41DCDE2B0F060B6B5C7D06948615A9CEECB2BA0B9FF29D6E517AEED95DD0164898D23413BBB18204EC512EA7B4730203010001
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/EndDate/Time: 20220731125150GMT+00:00
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Jul 31 14:51:50 CEST 2022
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/StartDate/Time: 20220727075150GMT+00:00
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/StartDate/Date: Wed Jul 27 09:51:50 CEST 2022
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/PublicKey[0]: 20197549454798495857122493972063590736169703536226196875539247920176686955195606476419217435464750122086182733958117531504501590307562096314263331497387250384762392524354592961707768946841083525228181348676124494988433282951841492615142109880366863087175152436193738708598385941464163100589679248547412407710026470986398435842151008688928551253517769413464542733341400492801390040502338707602279221519110276112563739732270246857445774391152388821933801002082238256067644122669688621020520554542002884449529244116311157960382177600054380916932001976525838237039135961039484614046081345620538489274204675340496204706931
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/PublicKey[1]: 65537
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: NULL
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: NULL
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #0382010F003082010A02820101009FFED33D13E8A1CF0FBF5CB50C5D4618DF0B65269E88780B4A691C9E77A5E1C54BD03420BF957E1F095AB669C6FA9008382D44836D10548D5132808048243AC10A203297C92492FB5C0EC4C6C9321EFCE847FD408B980623AD75928A4E7C5EE5B65BB23E835A7B89DCAA400549F1207F192FFD849D08FA2D22C481BE0F2CE8B0FDF6B2086107FCC972E432FF123DFF15B05F0D2AEA4BFAC815F394E52A3D4CA352B655297A392135BEED5DB18A955DCC94932EE5F08B61E013AF4E4A23BA9F2D39053F6155F4AEE17DFA863D72EB5EFBABAC41DCDE2B0F060B6B5C7D06948615A9CEECB2BA0B9FF29D6E517AEED95DD0164898D23413BBB18204EC512EA7B4730203010001
+ExtraCerts[0]/X509v3PKCert/EndDate/Time: 20220731125150GMT+00:00
+ExtraCerts[0]/X509v3PKCert/EndDate/Date: Sun Jul 31 14:51:50 CEST 2022
+ExtraCerts[0]/X509v3PKCert/StartDate/Time: 20220727075150GMT+00:00
+ExtraCerts[0]/X509v3PKCert/StartDate/Date: Wed Jul 27 09:51:50 CEST 2022
+ExtraCerts[0]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[0]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[0]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[0]/OtherCertTag: 0
+ExtraCerts[0]/(OtherCert|X509v2AttrCert):<null>
+ExtraCerts[1]/X509v3PKCert/Signature: #0348003045022100988C83D5FB93B4C4EE27049C70E8368D1FBB1D7EBBC93C75A3364E3AB02C741002200A35E260EF658AC55247B7AFAF7AF748026E235411081B848C022D84D0DAA6E8
+ExtraCerts[1]/X509v3PKCert/Version: 2
+ExtraCerts[1]/X509v3PKCert/SerialNumber: 1599122797485
+ExtraCerts[1]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[1]/X509v3PKCert/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #a5d108c58b8fe3470775b7154ca46c4f9ff53c43
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#4df7136d2574a3a6706fe460d1fbec727dd1f7b5
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-INTERMEDIATE-1]]]
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#0174532573a4
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797485
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 96 >= 65: <could not parse, skipped> ==============
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #034200046097E69DF0B6888EB18D46AB1CD398E536CD143F0C65575BD4FB333DD6DEB86B3B8608847125888518DAC05B253775E2B9B65E30FB4DE675FCBEE76FB6735854
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 96 >= 65: <could not parse, skipped> ==============
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #034200046097E69DF0B6888EB18D46AB1CD398E536CD143F0C65575BD4FB333DD6DEB86B3B8608847125888518DAC05B253775E2B9B65E30FB4DE675FCBEE76FB6735854
+ExtraCerts[1]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[1]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[1]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[1]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[1]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[1]/OtherCertTag: 0
+ExtraCerts[1]/(OtherCert|X509v2AttrCert):<null>
+ExtraCerts[2]/X509v3PKCert/Signature: #0349003046022100BC17A1B12685BD5E20FC9BFAC41028A9267B54DE254DB2D1E431DCB1FF05AF1002210086F0DC875D2E6B7876DD5C7BEB30785CEB612B86307DCB552A08B3A5E146A1F1
+ExtraCerts[2]/X509v3PKCert/Version: 2
+ExtraCerts[2]/X509v3PKCert/SerialNumber: 1599122797476
+ExtraCerts[2]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[2]/X509v3PKCert/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #4df7136d2574a3a6706fe460d1fbec727dd1f7b5
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#1d20841497198c154de90b5c9b219c15aa74291d
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-ROOT]]]
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#01745325739f
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 3
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797476
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 83 >= 65: <could not parse, skipped> ==============
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #0342000453851214A43595A1C8893D610BECA76B0A65185AC4AADE7546BA0C28825C955FB2F95F0F40800E0083080EFA6EC660EC9CBAFF2354193B9522F2965D5F7EFD17
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 83 >= 65: <could not parse, skipped> ==============
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #0342000453851214A43595A1C8893D610BECA76B0A65185AC4AADE7546BA0C28825C955FB2F95F0F40800E0083080EFA6EC660EC9CBAFF2354193B9522F2965D5F7EFD17
+ExtraCerts[2]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[2]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[2]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[2]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[2]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[2]/OtherCertTag: 0
+ExtraCerts[2]/(OtherCert|X509v2AttrCert):<null>
+ExtraCerts[3]/X509v3PKCert/Signature: #034700304402204572E43590172DB842CB22F8EB5E03B929BEF9F27DD00F493D4FEE5698AFCFE3022069511BC17A7A253B65E28FAFF24E3750712D15C167223E3DF89D8F4E99BDFBF1
+ExtraCerts[3]/X509v3PKCert/Version: 2
+ExtraCerts[3]/X509v3PKCert/SerialNumber: 1599122797471
+ExtraCerts[3]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-ROOT
+ExtraCerts[3]/X509v3PKCert/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #1d20841497198c154de90b5c9b219c15aa74291d
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#9c6235a743e83fadc953623c29329b6811f7acdc
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-ROOT]]]
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#01745325739a
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 4
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797471
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-ROOT
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 125 >= 65: <could not parse, skipped> ==============
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #034200047DB9681F1D271015C07CECB6902AF4853E19E03F884722C15D879718EE38B61D835FAE4976B962CA25F3223854F4E9CD5BCA9946CF28F48EEF1558D5794DE7BB
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 125 >= 65: <could not parse, skipped> ==============
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #034200047DB9681F1D271015C07CECB6902AF4853E19E03F884722C15D879718EE38B61D835FAE4976B962CA25F3223854F4E9CD5BCA9946CF28F48EEF1558D5794DE7BB
+ExtraCerts[3]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[3]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[3]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[3]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[3]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[3]/OtherCertTag: 0
+ExtraCerts[3]/(OtherCert|X509v2AttrCert):<null>
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -20,7 +20,6 @@ package com.siemens.pki.lightweightcmpra.test;
 import static org.junit.Assert.assertEquals;
 
 import java.security.KeyPair;
-import java.util.function.Function;
 
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
@@ -35,22 +34,32 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.Certificate;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 
-public class TestKur extends OnlineEnrollmentHttpTestcaseBase {
+public class TestKur extends OnlineEnrollmentTestcaseBase {
 
     /**
-     * 5.1.3. Update an existing certificate with signature protection
+     * Update an existing certificate with signature protection
      *
      * @throws Exception
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(TestKur.class);
+
+    @Before
+    public void setUp() throws Exception {
+
+        initTestbed("http://localhost:6007/kur",
+                "KurConfigWithHttpAndSignature.yaml");
+    }
 
     @Test
     public void testKur() throws Exception {
@@ -58,15 +67,13 @@ public class TestKur extends OnlineEnrollmentHttpTestcaseBase {
                 executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
                         PKIBody.TYPE_CERT_REP,
                         getEeSignaturebasedProtectionProvider(),
-                        getEeSignatureBasedCmpClient());
-        final Function<PKIMessage, PKIMessage> eeRrKurClient =
-                TestUtils.createCmpClient("http://localhost:6001/rrkur");
+                        getEeCmpClient());
         final ProtectionProvider kurProtector = getEnrollmentCredentials()
-                .setEndEntityToProtect(certificateToUpdate.certificate,
-                        certificateToUpdate.privateKey);
+                .setEndEntityToProtect(certificateToUpdate.getCertificate(),
+                        certificateToUpdate.getPrivateKey());
         final KeyPair keyPair = getKeyGenerator().generateKeyPair();
         final Certificate x509v3pkCertToUpdate =
-                certificateToUpdate.certificate.getX509v3PKCert();
+                certificateToUpdate.getCertificate().getX509v3PKCert();
         final X500Name issuer = x509v3pkCertToUpdate.getIssuer();
         final CertTemplateBuilder ctb = new CertTemplateBuilder()
                 .setPublicKey(SubjectPublicKeyInfo
@@ -88,7 +95,7 @@ public class TestKur extends OnlineEnrollmentHttpTestcaseBase {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(kur));
         }
-        final PKIMessage kurResponse = eeRrKurClient.apply(kur);
+        final PKIMessage kurResponse = getEeCmpClient().apply(kur);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(kurResponse));
@@ -110,7 +117,7 @@ public class TestKur extends OnlineEnrollmentHttpTestcaseBase {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(certConf));
         }
-        final PKIMessage pkiConf = eeRrKurClient.apply(certConf);
+        final PKIMessage pkiConf = getEeCmpClient().apply(certConf);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(pkiConf));

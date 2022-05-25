@@ -18,11 +18,19 @@
 package com.siemens.pki.lightweightcmpra.test;
 
 import org.bouncycastle.asn1.cmp.PKIBody;
+import org.junit.Before;
 import org.junit.Test;
 
-public class TestCr extends OnlineEnrollmentHttpTestcaseBase {
+public class TestCr extends OnlineEnrollmentTestcaseBase {
+
+    @Before
+    public void setUp() throws Exception {
+        initTestbed("http://localhost:6000/onlinelra",
+                "EnrollmentConfigWithHttpAndSignature.yaml");
+    }
+
     /**
-     * 5.1.2 A certificate from a trusted PKI with signature protection
+     * certificate from a trusted PKI with signature protection
      *
      * @throws Exception
      */
@@ -30,6 +38,6 @@ public class TestCr extends OnlineEnrollmentHttpTestcaseBase {
     public void testCr() throws Exception {
         executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
-                getEeSignatureBasedCmpClient());
+                getEeCmpClient());
     }
 }

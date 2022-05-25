@@ -19,24 +19,31 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.function.Function;
-
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 
-public class TestRr extends OnlineEnrollmentHttpTestcaseBase {
+public class TestRr extends OnlineEnrollmentTestcaseBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestRr.class);
 
+    @Before
+    public void setUp() throws Exception {
+        initTestbed("http://localhost:6001/rr",
+                "RrConfigWithHttpAndSignature.yaml");
+    }
+
     /**
-     * 5.2. Revoking a certificate
+     * Revoking a certificate
      *
      * @throws Exception
      */
@@ -46,20 +53,19 @@ public class TestRr extends OnlineEnrollmentHttpTestcaseBase {
                 executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
                         PKIBody.TYPE_CERT_REP,
                         getEeSignaturebasedProtectionProvider(),
-                        getEeSignatureBasedCmpClient());
+                        getEeCmpClient());
         final ProtectionProvider rrProtector = getEnrollmentCredentials()
-                .setEndEntityToProtect(certificateToRevoke.certificate,
-                        certificateToRevoke.privateKey);
-        final Function<PKIMessage, PKIMessage> eeRrKurClient =
-                TestUtils.createCmpClient("http://localhost:6001/rrkur");
+                .setEndEntityToProtect(certificateToRevoke.getCertificate(),
+                        certificateToRevoke.getPrivateKey());
+
         final PKIMessage rr = PkiMessageGenerator.generateAndProtectMessage(
                 new HeaderProviderForTest(), rrProtector, PkiMessageGenerator
-                        .generateRrBody(certificateToRevoke.certificate));
+                        .generateRrBody(certificateToRevoke.getCertificate()));
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(rr));
         }
-        final PKIMessage rrResponse = eeRrKurClient.apply(rr);
+        final PKIMessage rrResponse = getEeCmpClient().apply(rr);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(rrResponse));

@@ -17,32 +17,13 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
-import java.io.File;
-
 import org.bouncycastle.asn1.cmp.PKIBody;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class TestCrWithPolling extends DelayedEnrollmentTescaseBase {
-    @Before
-    public void setUp() throws Exception {
-        new File("./target/CmpTest/Downstream").mkdirs();
-        new File("./target/CmpTest/Upstream").mkdirs();
-        initTestbed("DelayedEnrollmentTestConfig.xml",
-                "http://localhost:6003/delayedlra");
-    }
-
-    @After
-    public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase
-                .deleteDirectory(new File("./target/CmpTest/Downstream"));
-        DelayedDeliveryTestcaseBase
-                .deleteDirectory(new File("./target/CmpTest/Upstream"));
-    }
 
     /**
-     * 5.1.7 Delayed enrollment
+     * Delayed enrollment
      *
      * @throws Exception
      */
@@ -50,7 +31,7 @@ public class TestCrWithPolling extends DelayedEnrollmentTescaseBase {
     public void testCrWithPolling() throws Exception {
         executeDelayedCertificateRequest(PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
-                getEeSignatureBasedCmpClient());
+                getEeCmpClient());
     }
 
 }

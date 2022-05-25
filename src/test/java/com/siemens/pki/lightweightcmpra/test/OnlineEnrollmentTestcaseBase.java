@@ -37,10 +37,12 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.cryptoservices.SignHelperUtil;
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
+import com.siemens.pki.lightweightcmpra.test.framework.SignHelperUtil;
 
 public class OnlineEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
 

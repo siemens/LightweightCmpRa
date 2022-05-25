@@ -23,7 +23,7 @@ import org.junit.Test;
 public class TestCoapIrCr extends OnlineEnrollmentCoapTestcaseBase {
 
     /**
-     * 5.1.2 A certificate from a trusted PKI with signature protection
+     * A certificate from a trusted PKI with signature protection
      *
      * @throws Exception
      */
@@ -31,11 +31,11 @@ public class TestCoapIrCr extends OnlineEnrollmentCoapTestcaseBase {
     public void testCr() throws Exception {
         executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
-                getEeSignatureBasedCmpClient());
+                getEeCmpClient());
     }
 
     /**
-     * 5.1.1. A certificate from a new PKI with signature protection
+     * A certificate from a new PKI with signature protection
      *
      * @throws Exception
      */
@@ -43,6 +43,6 @@ public class TestCoapIrCr extends OnlineEnrollmentCoapTestcaseBase {
     public void testIr() throws Exception {
         executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,
                 PKIBody.TYPE_INIT_REP, getEeSignaturebasedProtectionProvider(),
-                getEeSignatureBasedCmpClient());
+                getEeCmpClient());
     }
 }

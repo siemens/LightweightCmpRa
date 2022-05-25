@@ -19,42 +19,24 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 
 public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(TestRrWithPolling.class);
 
-    @Before
-    public void setUp() throws Exception {
-        new File("./target/CmpTest/Downstream").mkdirs();
-        new File("./target/CmpTest/Upstream").mkdirs();
-        initTestbed("DelayedEnrollmentTestConfig.xml",
-                "http://localhost:6003/delayedlra");
-    }
-
-    @After
-    public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase
-                .deleteDirectory(new File("./target/CmpTest/Downstream"));
-        DelayedDeliveryTestcaseBase
-                .deleteDirectory(new File("./target/CmpTest/Upstream"));
-    }
-
     /**
-     * 5.2. Revoking a certificate
+     * Revoking a certificate
      *
      * @throws Exception
      */
@@ -64,11 +46,11 @@ public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
                 executeDelayedCertificateRequest(PKIBody.TYPE_CERT_REQ,
                         PKIBody.TYPE_CERT_REP,
                         getEeSignaturebasedProtectionProvider(),
-                        getEeSignatureBasedCmpClient());
+                        getEeCmpClient());
         final PKIMessage rr = PkiMessageGenerator.generateAndProtectMessage(
                 new HeaderProviderForTest(),
                 getEeSignaturebasedProtectionProvider(), PkiMessageGenerator
-                        .generateRrBody(certificateToRevoke.certificate));
+                        .generateRrBody(certificateToRevoke.getCertificate()));
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(rr));
@@ -77,7 +59,7 @@ public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
         final PKIMessage rrResponse = DelayedDeliveryTestcaseBase
                 .executeRequestWithPolling(PKIBody.TYPE_ERROR,
                         getEeSignaturebasedProtectionProvider(),
-                        getEeSignatureBasedCmpClient(), rr);
+                        getEeCmpClient(), rr);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(rrResponse));

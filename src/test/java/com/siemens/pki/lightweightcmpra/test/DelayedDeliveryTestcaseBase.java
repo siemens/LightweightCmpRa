@@ -33,9 +33,10 @@ import org.bouncycastle.asn1.cmp.PollRepContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 
 public class DelayedDeliveryTestcaseBase {
 

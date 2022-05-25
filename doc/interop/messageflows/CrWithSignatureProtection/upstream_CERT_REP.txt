@@ -1,0 +1,811 @@
+DER Sequence
+    DER Sequence
+        Integer(2)
+        DER Tagged [CONTEXT 4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(CMPCA-ENDENTITY) 
+        DER Tagged [CONTEXT 4]
+            DER Sequence
+                Set
+                    Sequence
+                        ObjectIdentifier(2.5.4.3)
+                        UTF8String(Upstream-CMP-ENDENTITY) 
+        DER Tagged [CONTEXT 0]
+            GeneralizedTime(20220727084716GMT+00:00) 
+        DER Tagged [CONTEXT 1]
+            DER Sequence
+                ObjectIdentifier(1.2.840.10045.4.3.2)
+        DER Tagged [CONTEXT 2]
+            DER Octet String[20] 
+                4e6eab66f1576b26d63a90aa0b899d061a78167d                            NnfWk&:x}
+        DER Tagged [CONTEXT 4]
+            DER Octet String[16] 
+                9e0e40ee43834de2f6709828f3a9d086                                    @CMp(
+        DER Tagged [CONTEXT 5]
+            DER Octet String[16] 
+                e8edfd8ae72a70229b7ebbe8bad62db7                                    *p"~-
+        DER Tagged [CONTEXT 6]
+            DER Octet String[16] 
+                6291a327d21b04f59b9cc29e7a19b225                                    b'z%
+        DER Tagged [CONTEXT 8]
+            Sequence
+                Sequence
+                    ObjectIdentifier(1.3.6.1.5.5.7.4.21)
+                    UTF8String(theCertProfileForOnlineEnrollment) 
+    DER Tagged [CONTEXT 3]
+        DER Sequence
+            Sequence
+                Sequence
+                    Integer(0)
+                    Sequence
+                        Integer(0)
+                    Sequence
+                        Tagged [CONTEXT 0]
+                            Sequence
+                                Sequence
+                                    Tagged [CONTEXT 0]
+                                        Integer(2)
+                                    Integer(1658911636630)
+                                    Sequence
+                                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                                    Sequence
+                                        Set
+                                            Sequence
+                                                ObjectIdentifier(2.5.4.3)
+                                                UTF8String(Ca-ENROLLMENT-INTERMEDIATE-3) 
+                                    Sequence
+                                        UTCTime(220727074716GMT+00:00) 
+                                        UTCTime(220731124716GMT+00:00) 
+                                    Sequence
+                                        Set
+                                            Sequence
+                                                ObjectIdentifier(2.5.4.3)
+                                                PrintableString(Subject) 
+                                    Sequence
+                                        Sequence
+                                            ObjectIdentifier(1.2.840.113549.1.1.1)
+                                            NULL
+                                        DER Bit String[270, 0] 
+                                            3082010a0282010100b674b56e81f35d2ac2d18b10a87fc2486c113c9d0a0c2e    0tn]*Hl<.
+                                            ac31ca06e912503b0e0924a547eeb47a0e2fa169a4b166d86eedc31a3195c442    1P;$Gz/ifn1B
+                                            d6f12ad516be3a88fe77409acb2512b188553978ca130e3ee3d8c9d2235ba06d    *:w@%U9x>#[m
+                                            a76409409df96950bd1b967249a8e477b4b0513876ce82d3f1f31860b780f919    d@iPrIwQ8v`
+                                            19f32b7a17a61ae7352d60654236b096da062326ce2a189997f23d630d7ef7d8    +z5-`eB6#&*=c~
+                                            f36d73fdcc12bbfb0b5a211b2ee0d588763f8ce9e883b9a08c8396ebaa73e0d6    msZ!.v?s
+                                            9107b6fed9a04fc2b626abd10f967e4e21a0e55676b1eb1bd73c573bcb43d727    O&~N!Vv<W;C'
+                                            ccaccf56fd5882973c81fec8b99852c75219f621934501f2afeddbd5a6f74dc7    VX<RR!EM
+                                            0a19ca89df165eed170203010001                                        ^
+                                    Tagged [CONTEXT 3]
+                                        Sequence
+                                            Sequence
+                                                ObjectIdentifier(2.5.29.14)
+                                                DER Octet String[22] 
+                                                    041490e40135955bd6e72fbd6379b950af50952d879e                        5[/cyPP-
+                                            Sequence
+                                                ObjectIdentifier(2.5.29.35)
+                                                DER Octet String[77] 
+                                                    304b8014a5d108c58b8fe3470775b7154ca46c4f9ff53c43a12ba42930273125    0KGuLlO<C+)0'1%
+                                                    302306035504030c1c43612d454e524f4c4c4d454e542d494e5445524d454449    0#UCa-ENROLLMENT-INTERMEDI
+                                                    4154452d3282060174532573ad                                          ATE-2tS%s
+                                            Sequence
+                                                ObjectIdentifier(2.5.29.19)
+                                                Boolean(true)
+                                                DER Octet String[2] 
+                                                    3000                                                                0
+                                Sequence
+                                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                                DER Bit String[70, 0] 
+                                    3044022026228b71187465c5eac16d904931dc67d02ee1f3efa5ca6efd987122    0D &"qtemI1g.nq"
+                                    8bda6167022069d31c7703799ca4bb7559866e041c3fb8abec2f234ebc580038    ag iwyuYn?/#NX8
+                                    78e59f54402d                                                        xT@-
+    DER Tagged [CONTEXT 0]
+        DER Bit String[71, 0] 
+            3045022057b2108a4ce373d61bafee630f73ec5ae3497d3f2a5284383d5e6bef    0E WLscsZI}?*R8=^k
+            79cec45c022100e29004c67696e21dcec80a9ed82b06eec8f430d116204dbfa5    y\!v+0 M
+            540be7a254066d                                                      TTm
+    DER Tagged [CONTEXT 1]
+        Sequence
+            Sequence
+                Sequence
+                    Tagged [CONTEXT 0]
+                        Integer(2)
+                    Integer(1599122797384)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-2) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-ENDENTITY) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            04ce60005b95f0fa1555a33978ee956d3629688151cfe84fbcd9f5d77695b115    `[U9xm6)hQOv
+                            d4ead0036b3b6a8cf8081d19b6f7dc7199e19357175f0e713874e61c35b1cec5    k;jqW_q8t5
+                            4a                                                                  J
+                    Tagged [CONTEXT 3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    04144e6eab66f1576b26d63a90aa0b899d061a78167d                        NnfWk&:x}
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[69] 
+                                    30438014fe32195304e251a12ca57fa24ffd37fe5098ff57a123a421301f311d    0C2SQ,O7PW#!01
+                                    301b06035504030c14434d5043412d494e5445524d4544494154452d31820601    0UCMPCA-INTERMEDIATE-1
+                                    7453257343                                                          tS%sC
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    0302028c                                                            
+                            Sequence
+                                ObjectIdentifier(2.5.29.37)
+                                Boolean(true)
+                                DER Octet String[22] 
+                                    301406082b0601050507032006082b0601050507031b                        0+ +
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[72, 0] 
+                    3046022100d337cb3303369b7f25bbc11eae0a4508ebcab22faf0e7cf8d043f4    0F!736%E/|C
+                    4ec7db8de802210089160e5be2cf64557fd342481f9ad9d7676bc212c4a69a10    N![dUBHgk
+                    a20a5cad8f3c9486                                                    \<
+            Sequence
+                Sequence
+                    Tagged [CONTEXT 0]
+                        Integer(2)
+                    Integer(1599122797379)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-1) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-2) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            04df9b8ec4734cff997ef6ee40af49b5a984acc048857d04ac0d65d435bdf256    sL~@IH}e5V
+                            fd20bd893b3b31ae8c5c7e4f2b1fa2923c84f4f21ff25c9b1682eda265fac97f     ;;1\~O+<\e
+                            2c                                                                  ,
+                    Tagged [CONTEXT 3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414fe32195304e251a12ca57fa24ffd37fe5098ff57                        2SQ,O7PW
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[75] 
+                                    30498014304bcaead6d64ffdc181a4f4e724e94d52d5f0d8a129a42730253123    0I0KO$MR)'0%1#
+                                    302106035504030c1a557073747265616d2d434d505045455254525553542d52    0!UUpstream-CMPPEERTRUST-R
+                                    4f4f548206017453257338                                              OOTtS%s8
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020102                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    3045022100c2a8c4afc8ba7abb0bc98f3d1cc13cc04cf0297c625eeea5c6506a    0E!z=<L)|b^Pj
+                    94bcb5c17a02207a9fc35be8bf19c13033668008f97bf73d7578f03684da08ad    z z[03f{=ux6
+                    53dd585dc6c3bd                                                      SX]
+            Sequence
+                Sequence
+                    Tagged [CONTEXT 0]
+                        Integer(2)
+                    Integer(1599122797368)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Upstream-CMPPEERTRUST-ROOT) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(CMPCA-INTERMEDIATE-1) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            0420c32355de10bfd8babdfe206b28fc1468fe742715d3d343f734d9edc0962d     #U k(ht'C4-
+                            ae5815af755bd2e01244443781231eee1329c2ba065766a341d0d2700c137817    Xu[DD7#)WfApx
+                            37                                                                  7
+                    Tagged [CONTEXT 3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414304bcaead6d64ffdc181a4f4e724e94d52d5f0d8                        0KO$MR
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[75] 
+                                    30498014ced4af510deed7c40b12b7972c6f8f6aedcfecb9a129a42730253123    0IQ,oj)'0%1#
+                                    302106035504030c1a557073747265616d2d434d505045455254525553542d52    0!UUpstream-CMPPEERTRUST-R
+                                    4f4f54820601745325728a                                              OOTtS%r
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020103                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[70, 0] 
+                    30440220499fe8f77fbb7073059e5481fb57da7093a326e5a12c2a4a7d8aff3a    0D IpsTWp&,*J}:
+                    913cb9d702206aeb11a2fbe59516963df7d294a5b12fe01fa2fa6798ea080b1c    < j=/g
+                    a363aca6f9f1                                                        c
+            Sequence
+                Sequence
+                    Tagged [CONTEXT 0]
+                        Integer(2)
+                    Integer(1599122797485)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Ca-ENROLLMENT-INTERMEDIATE-2) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Ca-ENROLLMENT-INTERMEDIATE-3) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            046097e69df0b6888eb18d46ab1cd398e536cd143f0c65575bd4fb333dd6deb8    `F6?eW[3=
+                            6b3b8608847125888518dac05b253775e2b9b65e30fb4de675fcbee76fb67358    k;q%[%7u^0MuosX
+                            54                                                                  T
+                    Tagged [CONTEXT 3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    0414a5d108c58b8fe3470775b7154ca46c4f9ff53c43                        GuLlO<C
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[77] 
+                                    304b80144df7136d2574a3a6706fe460d1fbec727dd1f7b5a12ba42930273125    0KMm%tpo`r}+)0'1%
+                                    302306035504030c1c43612d454e524f4c4c4d454e542d494e5445524d454449    0#UCa-ENROLLMENT-INTERMEDI
+                                    4154452d3182060174532573a4                                          ATE-1tS%s
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020102                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[71, 0] 
+                    3045022100988c83d5fb93b4c4ee27049c70e8368d1fbb1d7ebbc93c75a3364e    0E!'p6~<u6N
+                    3ab02c741002200a35e260ef658ac55247b7afaf7af748026e235411081b848c    :,t 5`eRGzHn#T
+                    022d84d0daa6e8                                                      -
+            Sequence
+                Sequence
+                    Tagged [CONTEXT 0]
+                        Integer(2)
+                    Integer(1599122797476)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Ca-ENROLLMENT-INTERMEDIATE-1) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Ca-ENROLLMENT-INTERMEDIATE-2) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            0453851214a43595a1c8893d610beca76b0a65185ac4aade7546ba0c28825c95    S5=akeZuF(\
+                            5fb2f95f0f40800e0083080efa6ec660ec9cbaff2354193b9522f2965d5f7efd    __@n`#T;"]_~
+                            17                                                                  
+                    Tagged [CONTEXT 3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    04144df7136d2574a3a6706fe460d1fbec727dd1f7b5                        Mm%tpo`r}
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[67] 
+                                    304180141d20841497198c154de90b5c9b219c15aa74291da121a41f301d311b    0A M\!t)!01
+                                    301906035504030c1243612d454e524f4c4c4d454e542d524f4f548206017453    0UCa-ENROLLMENT-ROOTtS
+                                    25739f                                                              %s
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020103                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[72, 0] 
+                    3046022100bc17a1b12685bd5e20fc9bfac41028a9267b54de254db2d1e431dc    0F!&^ (&{T%M1
+                    b1ff05af1002210086f0dc875d2e6b7876dd5c7beb30785ceb612b86307dcb55    !].kxv\{0x\a+0}U
+                    2a08b3a5e146a1f1                                                    *F
+            Sequence
+                Sequence
+                    Tagged [CONTEXT 0]
+                        Integer(2)
+                    Integer(1599122797471)
+                    Sequence
+                        ObjectIdentifier(1.2.840.10045.4.3.2)
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Ca-ENROLLMENT-ROOT) 
+                    Sequence
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
+                    Sequence
+                        Set
+                            Sequence
+                                ObjectIdentifier(2.5.4.3)
+                                UTF8String(Ca-ENROLLMENT-INTERMEDIATE-1) 
+                    Sequence
+                        Sequence
+                            ObjectIdentifier(1.2.840.10045.2.1)
+                            ObjectIdentifier(1.2.840.10045.3.1.7)
+                        DER Bit String[65, 0] 
+                            047db9681f1d271015c07cecb6902af4853e19e03f884722c15d879718ee38b6    }h'|*>?G"]8
+                            1d835fae4976b962ca25f3223854f4e9cd5bca9946cf28f48eef1558d5794de7    _Ivb%"8T[F(XyM
+                            bb                                                                  
+                    Tagged [CONTEXT 3]
+                        Sequence
+                            Sequence
+                                ObjectIdentifier(2.5.29.14)
+                                DER Octet String[22] 
+                                    04141d20841497198c154de90b5c9b219c15aa74291d                         M\!t)
+                            Sequence
+                                ObjectIdentifier(2.5.29.35)
+                                DER Octet String[67] 
+                                    304180149c6235a743e83fadc953623c29329b6811f7acdca121a41f301d311b    0Ab5C?Sb<)2h!01
+                                    301906035504030c1243612d454e524f4c4c4d454e542d524f4f548206017453    0UCa-ENROLLMENT-ROOTtS
+                                    25739a                                                              %s
+                            Sequence
+                                ObjectIdentifier(2.5.29.19)
+                                Boolean(true)
+                                DER Octet String[8] 
+                                    30060101ff020104                                                    0
+                            Sequence
+                                ObjectIdentifier(2.5.29.15)
+                                Boolean(true)
+                                DER Octet String[4] 
+                                    03020186                                                            
+                Sequence
+                    ObjectIdentifier(1.2.840.10045.4.3.2)
+                DER Bit String[70, 0] 
+                    304402204572e43590172db842cb22f8eb5e03b929bef9f27dd00f493d4fee56    0D Er5-B"^)}I=OV
+                    98afcfe3022069511bc17a7a253b65e28faff24e3750712d15c167223e3df89d     iQzz%;eN7Pq-g">=
+                    8f4e99bdfbf1                                                        N
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CERT_REP message:
+Header/MessageTime: Wed Jul 27 10:47:16 CEST 2022
+Header/Pvno: 2
+Header/GeneralInfo[0]/InfoType: CMP.id_it_certProfile (1.3.6.1.5.5.7.4.21)
+Header/GeneralInfo[0]/InfoValue: theCertProfileForOnlineEnrollment
+Header/RecipNonce: #6291a327d21b04f59b9cc29e7a19b225
+Header/Sender: 4: CN=CMPCA-ENDENTITY
+Header/TransactionID: #9e0e40ee43834de2f6709828f3a9d086
+Header/Recipient: 4: CN=Upstream-CMP-ENDENTITY
+Header/SenderNonce: #e8edfd8ae72a70229b7ebbe8bad62db7
+Header/SenderKID: #4e6eab66f1576b26d63a90aa0b899d061a78167d
+Header/ProtectionAlg/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+Header/ProtectionAlg/(Parameters):<null>
+Header/(FreeText|RecipKID):<null>
+Body/Type: 3
+Body/Content/Response[0]/Status/Status: 0
+Body/Content/Response[0]/Status/(StatusString|FailInfo):<null>
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/Signature: #0347003044022026228B71187465C5EAC16D904931DC67D02EE1F3EFA5CA6EFD9871228BDA6167022069D31C7703799CA4BB7559866E041C3FB8ABEC2F234EBC58003878E59F54402D
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/Version: 2
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SerialNumber: 1658911636630
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Version: 2
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #90e40135955bd6e72fbd6379b950af50952d879e
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#a5d108c58b8fe3470775b7154ca46c4f9ff53c43
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-INTERMEDIATE-2]]]
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#0174532573ad
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SerialNumber: 1658911636630
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Subject: CN=Subject
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKey[0]: 23032922717366510753701794178336560289805991595481312250795643842382357525756968677725872838010127747354626682645041027021944854825020439971517067013781999716264897410309724175720387117208501521948819841843107681694448183812378161105599265441575496825563271675650748514740252564266407125117388506499524381300970353544352740236311252235881678106644029837377500264945534821042117560536731113818474537935504598127149582574386483145123069164477839511315531667204150961747815576603178018843205602234279166974730040120792879761267813194669494666759099552223248215171804584927357124538998835072594172910021428209109182639383
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKey[1]: 65537
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: NULL
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: NULL
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #0382010F003082010A0282010100B674B56E81F35D2AC2D18B10A87FC2486C113C9D0A0C2EAC31CA06E912503B0E0924A547EEB47A0E2FA169A4B166D86EEDC31A3195C442D6F12AD516BE3A88FE77409ACB2512B188553978CA130E3EE3D8C9D2235BA06DA76409409DF96950BD1B967249A8E477B4B0513876CE82D3F1F31860B780F91919F32B7A17A61AE7352D60654236B096DA062326CE2A189997F23D630D7EF7D8F36D73FDCC12BBFB0B5A211B2EE0D588763F8CE9E883B9A08C8396EBAA73E0D69107B6FED9A04FC2B626ABD10F967E4E21A0E55676B1EB1BD73C573BCB43D727CCACCF56FD5882973C81FEC8B99852C75219F621934501F2AFEDDBD5A6F74DC70A19CA89DF165EED170203010001
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/VersionNumber: 3
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/StartDate/Time: 20220727074716GMT+00:00
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/StartDate/Date: Wed Jul 27 09:47:16 CEST 2022
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/EndDate/Time: 20220731124716GMT+00:00
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Jul 31 14:47:16 CEST 2022
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/Subject: CN=Subject
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/PublicKey[0]: 23032922717366510753701794178336560289805991595481312250795643842382357525756968677725872838010127747354626682645041027021944854825020439971517067013781999716264897410309724175720387117208501521948819841843107681694448183812378161105599265441575496825563271675650748514740252564266407125117388506499524381300970353544352740236311252235881678106644029837377500264945534821042117560536731113818474537935504598127149582574386483145123069164477839511315531667204150961747815576603178018843205602234279166974730040120792879761267813194669494666759099552223248215171804584927357124538998835072594172910021428209109182639383
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/PublicKey[1]: 65537
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: NULL
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: NULL
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: PKCS.rsaEncryption (1.2.840.113549.1.1.1)
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #0382010F003082010A0282010100B674B56E81F35D2AC2D18B10A87FC2486C113C9D0A0C2EAC31CA06E912503B0E0924A547EEB47A0E2FA169A4B166D86EEDC31A3195C442D6F12AD516BE3A88FE77409ACB2512B188553978CA130E3EE3D8C9D2235BA06DA76409409DF96950BD1B967249A8E477B4B0513876CE82D3F1F31860B780F91919F32B7A17A61AE7352D60654236B096DA062326CE2A189997F23D630D7EF7D8F36D73FDCC12BBFB0B5A211B2EE0D588763F8CE9E883B9A08C8396EBAA73E0D69107B6FED9A04FC2B626ABD10F967E4E21A0E55676B1EB1BD73C573BCB43D727CCACCF56FD5882973C81FEC8B99852C75219F621934501F2AFEDDBD5A6F74DC70A19CA89DF165EED170203010001
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/VersionNumber: 3
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/StartDate/Time: 20220727074716GMT+00:00
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/StartDate/Date: Wed Jul 27 09:47:16 CEST 2022
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/EndDate/Time: 20220731124716GMT+00:00
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/X509v3PKCert/EndDate/Date: Sun Jul 31 14:47:16 CEST 2022
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/OtherCertTag: 0
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/Certificate/(X509v2AttrCert|OtherCert):<null>
+Body/Content/Response[0]/CertifiedKeyPair/CertOrEncCert/(EncryptedCert):<null>
+Body/Content/Response[0]/CertifiedKeyPair/(PrivateKey|PublicationInfo):<null>
+Body/Content/Response[0]/CertReqId: 0
+Body/Content/(CaPubs):<null>
+Protection: #0348003045022057B2108A4CE373D61BAFEE630F73EC5AE3497D3F2A5284383D5E6BEF79CEC45C022100E29004C67696E21DCEC80A9ED82B06EEC8F430D116204DBFA5540BE7A254066D
+ExtraCerts[0]/X509v3PKCert/Signature: #0349003046022100D337CB3303369B7F25BBC11EAE0A4508EBCAB22FAF0E7CF8D043F44EC7DB8DE802210089160E5BE2CF64557FD342481F9AD9D7676BC212C4A69A10A20A5CAD8F3C9486
+ExtraCerts[0]/X509v3PKCert/Version: 2
+ExtraCerts[0]/X509v3PKCert/SerialNumber: 1599122797384
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #4e6eab66f1576b26d63a90aa0b899d061a78167d
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#fe32195304e251a12ca57fa24ffd37fe5098ff57
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, CMPCA-INTERMEDIATE-1]]]
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#017453257343
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[2]/Value: #0302028C
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.extendedKeyUsage (2.5.29.37)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[3]/Value[0]: null.<unknown> (1.3.6.1.5.5.7.3.32)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[3]/Value[1]: null.<unknown> (1.3.6.1.5.5.7.3.27)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797384
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Subject: CN=CMPCA-ENDENTITY
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Issuer: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #03420004CE60005B95F0FA1555A33978EE956D3629688151CFE84FBCD9F5D77695B115D4EAD0036B3B6A8CF8081D19B6F7DC7199E19357175F0E713874E61C35B1CEC54A
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[0]/X509v3PKCert/Subject: CN=CMPCA-ENDENTITY
+ExtraCerts[0]/X509v3PKCert/Issuer: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[0]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[0]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #03420004CE60005B95F0FA1555A33978EE956D3629688151CFE84FBCD9F5D77695B115D4EAD0036B3B6A8CF8081D19B6F7DC7199E19357175F0E713874E61C35B1CEC54A
+ExtraCerts[0]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[0]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[0]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[0]/OtherCertTag: 0
+ExtraCerts[0]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[1]/X509v3PKCert/Signature: #0348003045022100C2A8C4AFC8BA7ABB0BC98F3D1CC13CC04CF0297C625EEEA5C6506A94BCB5C17A02207A9FC35BE8BF19C13033668008F97BF73D7578F03684DA08AD53DD585DC6C3BD
+ExtraCerts[1]/X509v3PKCert/Version: 2
+ExtraCerts[1]/X509v3PKCert/SerialNumber: 1599122797379
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #fe32195304e251a12ca57fa24ffd37fe5098ff57
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#304bcaead6d64ffdc181a4f4e724e94d52d5f0d8
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Upstream-CMPPEERTRUST-ROOT]]]
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#017453257338
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797379
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Subject: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Issuer: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #03420004DF9B8EC4734CFF997EF6EE40AF49B5A984ACC048857D04AC0D65D435BDF256FD20BD893B3B31AE8C5C7E4F2B1FA2923C84F4F21FF25C9B1682EDA265FAC97F2C
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[1]/X509v3PKCert/Subject: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[1]/X509v3PKCert/Issuer: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[1]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[1]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #03420004DF9B8EC4734CFF997EF6EE40AF49B5A984ACC048857D04AC0D65D435BDF256FD20BD893B3B31AE8C5C7E4F2B1FA2923C84F4F21FF25C9B1682EDA265FAC97F2C
+ExtraCerts[1]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[1]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[1]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[1]/OtherCertTag: 0
+ExtraCerts[1]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[2]/X509v3PKCert/Signature: #03470030440220499FE8F77FBB7073059E5481FB57DA7093A326E5A12C2A4A7D8AFF3A913CB9D702206AEB11A2FBE59516963DF7D294A5B12FE01FA2FA6798EA080B1CA363ACA6F9F1
+ExtraCerts[2]/X509v3PKCert/Version: 2
+ExtraCerts[2]/X509v3PKCert/SerialNumber: 1599122797368
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #304bcaead6d64ffdc181a4f4e724e94d52d5f0d8
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#ced4af510deed7c40b12b7972c6f8f6aedcfecb9
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Upstream-CMPPEERTRUST-ROOT]]]
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#01745325728a
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 3
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797368
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Subject: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Issuer: CN=Upstream-CMPPEERTRUST-ROOT
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: Extra data detected in stream: <could not parse, skipped> ==============
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #0342000420C32355DE10BFD8BABDFE206B28FC1468FE742715D3D343F734D9EDC0962DAE5815AF755BD2E01244443781231EEE1329C2BA065766A341D0D2700C13781737
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[2]/X509v3PKCert/Subject: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[2]/X509v3PKCert/Issuer: CN=Upstream-CMPPEERTRUST-ROOT
+ExtraCerts[2]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[2]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: Extra data detected in stream: <could not parse, skipped> ==============
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #0342000420C32355DE10BFD8BABDFE206B28FC1468FE742715D3D343F734D9EDC0962DAE5815AF755BD2E01244443781231EEE1329C2BA065766A341D0D2700C13781737
+ExtraCerts[2]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[2]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[2]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[2]/OtherCertTag: 0
+ExtraCerts[2]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[3]/X509v3PKCert/Signature: #0348003045022100988C83D5FB93B4C4EE27049C70E8368D1FBB1D7EBBC93C75A3364E3AB02C741002200A35E260EF658AC55247B7AFAF7AF748026E235411081B848C022D84D0DAA6E8
+ExtraCerts[3]/X509v3PKCert/Version: 2
+ExtraCerts[3]/X509v3PKCert/SerialNumber: 1599122797485
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #a5d108c58b8fe3470775b7154ca46c4f9ff53c43
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#4df7136d2574a3a6706fe460d1fbec727dd1f7b5
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-INTERMEDIATE-1]]]
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#0174532573a4
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 2
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797485
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 96 >= 65: <could not parse, skipped> ==============
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #034200046097E69DF0B6888EB18D46AB1CD398E536CD143F0C65575BD4FB333DD6DEB86B3B8608847125888518DAC05B253775E2B9B65E30FB4DE675FCBEE76FB6735854
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[3]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[3]/X509v3PKCert/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-3
+ExtraCerts[3]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[3]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[3]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 96 >= 65: <could not parse, skipped> ==============
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[3]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #034200046097E69DF0B6888EB18D46AB1CD398E536CD143F0C65575BD4FB333DD6DEB86B3B8608847125888518DAC05B253775E2B9B65E30FB4DE675FCBEE76FB6735854
+ExtraCerts[3]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[3]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[3]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[3]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[3]/OtherCertTag: 0
+ExtraCerts[3]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[4]/X509v3PKCert/Signature: #0349003046022100BC17A1B12685BD5E20FC9BFAC41028A9267B54DE254DB2D1E431DCB1FF05AF1002210086F0DC875D2E6B7876DD5C7BEB30785CEB612B86307DCB552A08B3A5E146A1F1
+ExtraCerts[4]/X509v3PKCert/Version: 2
+ExtraCerts[4]/X509v3PKCert/SerialNumber: 1599122797476
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #4df7136d2574a3a6706fe460d1fbec727dd1f7b5
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#1d20841497198c154de90b5c9b219c15aa74291d
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-ROOT]]]
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#01745325739f
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 3
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797476
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 83 >= 65: <could not parse, skipped> ==============
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #0342000453851214A43595A1C8893D610BECA76B0A65185AC4AADE7546BA0C28825C955FB2F95F0F40800E0083080EFA6EC660EC9CBAFF2354193B9522F2965D5F7EFD17
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[4]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[4]/X509v3PKCert/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-2
+ExtraCerts[4]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[4]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[4]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[4]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 83 >= 65: <could not parse, skipped> ==============
+ExtraCerts[4]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[4]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[4]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[4]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[4]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #0342000453851214A43595A1C8893D610BECA76B0A65185AC4AADE7546BA0C28825C955FB2F95F0F40800E0083080EFA6EC660EC9CBAFF2354193B9522F2965D5F7EFD17
+ExtraCerts[4]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[4]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[4]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[4]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[4]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[4]/OtherCertTag: 0
+ExtraCerts[4]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[5]/X509v3PKCert/Signature: #034700304402204572E43590172DB842CB22F8EB5E03B929BEF9F27DD00F493D4FEE5698AFCFE3022069511BC17A7A253B65E28FAFF24E3750712D15C167223E3DF89D8F4E99BDFBF1
+ExtraCerts[5]/X509v3PKCert/Version: 2
+ExtraCerts[5]/X509v3PKCert/SerialNumber: 1599122797471
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #1d20841497198c154de90b5c9b219c15aa74291d
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#9c6235a743e83fadc953623c29329b6811f7acdc
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Ca-ENROLLMENT-ROOT]]]
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#01745325739a
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 4
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797471
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/Issuer: CN=Ca-ENROLLMENT-ROOT
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 125 >= 65: <could not parse, skipped> ==============
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #034200047DB9681F1D271015C07CECB6902AF4853E19E03F884722C15D879718EE38B61D835FAE4976B962CA25F3223854F4E9CD5BCA9946CF28F48EEF1558D5794DE7BB
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[5]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[5]/X509v3PKCert/Subject: CN=Ca-ENROLLMENT-INTERMEDIATE-1
+ExtraCerts[5]/X509v3PKCert/Issuer: CN=Ca-ENROLLMENT-ROOT
+ExtraCerts[5]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[5]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[5]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: corrupted stream - out of bounds length found: 125 >= 65: <could not parse, skipped> ==============
+ExtraCerts[5]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[5]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[5]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[5]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[5]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #034200047DB9681F1D271015C07CECB6902AF4853E19E03F884722C15D879718EE38B61D835FAE4976B962CA25F3223854F4E9CD5BCA9946CF28F48EEF1558D5794DE7BB
+ExtraCerts[5]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[5]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[5]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[5]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[5]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[5]/OtherCertTag: 0
+ExtraCerts[5]/(X509v2AttrCert|OtherCert):<null>
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

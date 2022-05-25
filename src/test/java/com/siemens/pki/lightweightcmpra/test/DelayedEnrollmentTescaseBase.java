@@ -19,6 +19,7 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.util.function.Function;
 
@@ -29,12 +30,16 @@ import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.junit.After;
+import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 
 public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
 
@@ -89,6 +94,23 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
                 pkiConf.getBody().getType());
 
         return new EnrollmentResult(enrolledCertificate, keyPair.getPrivate());
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        new File("./target/CmpTest/Downstream").mkdirs();
+        new File("./target/CmpTest/Upstream").mkdirs();
+        initTestbed("http://localhost:6003/delayedlra",
+                "DelayedEnrollmentRaTestConfig.yaml",
+                "DelayedEnrollmentLraTestConfig.yaml");
+    }
+
+    @After
+    public void shutDown() throws Exception {
+        DelayedDeliveryTestcaseBase
+                .deleteDirectory(new File("./target/CmpTest/Downstream"));
+        DelayedDeliveryTestcaseBase
+                .deleteDirectory(new File("./target/CmpTest/Upstream"));
     }
 
 }

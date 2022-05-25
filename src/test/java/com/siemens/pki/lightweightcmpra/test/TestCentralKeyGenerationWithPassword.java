@@ -17,106 +17,30 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.PKIBody;
-import org.bouncycastle.cms.CMSAlgorithm;
-import org.bouncycastle.cms.PasswordRecipient.PRF;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
-import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.cryptoservices.PasswordEncryptor;
-import com.siemens.pki.lightweightcmpra.protection.PasswordBasedMacProtection;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 
-@RunWith(Parameterized.class)
 public class TestCentralKeyGenerationWithPassword
         extends CkgOnlineEnrollmentTestcaseBase {
 
-    public static Object[][] inputList = new Object[][] {
-            //
-            {PasswordEncryptor.DEFAULT_PRF,
-                    PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PRF.HMacSHA1, PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PRF.HMacSHA224, PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PRF.HMacSHA256, PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PRF.HMacSHA384, PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PRF.HMacSHA512, PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PasswordEncryptor.DEFAULT_PRF, 1,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PasswordEncryptor.DEFAULT_PRF, 1000000,
-                    PasswordEncryptor.DEFAULT_KEK_ALG},
-            //
-            {PasswordEncryptor.DEFAULT_PRF,
-                    PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    CMSAlgorithm.AES128_CBC},
-            //
-            {PasswordEncryptor.DEFAULT_PRF,
-                    PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    CMSAlgorithm.AES192_CBC},
-            //
-            {PasswordEncryptor.DEFAULT_PRF,
-                    PasswordEncryptor.DEFAULT_ITERATIONCOUNT,
-                    CMSAlgorithm.AES256_CBC},
-            //
-    };
-
-    @Parameters(name = "{index}: prf=>{0}, iterationCount=>{1}, kek={2}")
-    public static List<Object[]> data() {
-        final List<Object[]> ret = new ArrayList<>(inputList.length);
-        for (final Object[] aktInput : inputList) {
-            final PRF prf = (PRF) aktInput[0];
-            final Object iterationCount = aktInput[1];
-            final Object kek = aktInput[2];
-            ret.add(new Object[] {prf.getName(),
-                    ((Integer) iterationCount).toString(),
-                    MessageDumper
-                            .getOidDescriptionForOid((ASN1ObjectIdentifier) kek)
-                            .toString(),
-                    prf, iterationCount, kek});
-        }
-        return ret;
-    }
-
-    public TestCentralKeyGenerationWithPassword(final String prfAsString,
-            final String iterationCountAsString,
-            final String kekAlgorithmOIDAsString, final PRF prf,
-            final int iterationCount,
-            final ASN1ObjectIdentifier kekAlgorithmOID) {
-        PasswordEncryptor.setPrf(prf);
-        PasswordEncryptor.setKekAlgorithmOID(kekAlgorithmOID);
-        PasswordEncryptor.setIterationCount(iterationCount);
+    @Before
+    public void setUp() throws Exception {
+        initTestbed("http://localhost:6012/ckgwithmac",
+                "EnrollmentConfigWithCKGPass.yaml");
     }
 
     @Test
     public void testCrWithPassword() throws Exception {
         final ProtectionProvider macBasedProvider =
-                new PasswordBasedMacProtection("keyIdentification",
-                        "myPresharedSecret", 6, 1234,
-                        PasswordBasedMacProtection.DEFAULT_OWF_OID,
-                        PasswordBasedMacProtection.DEFAULT_MAC_OID);
+                TestUtils.createPasswordBasedMacProtection("keyIdentification",
+                        "myPresharedSecret");
         executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, macBasedProvider,
-                TestUtils.createCmpClient("http://localhost:6012/ckgwithmac"),
+                PKIBody.TYPE_CERT_REP, macBasedProvider, getEeCmpClient(),
                 new CmsDecryptor(null, null, "myPresharedSecret".toCharArray()),
                 verifier);
     }

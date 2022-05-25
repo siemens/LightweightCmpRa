@@ -20,30 +20,42 @@ package com.siemens.pki.lightweightcmpra.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.security.cert.CRL;
+import java.security.cert.CertificateFactory;
+import java.util.Date;
 import java.util.function.Function;
 
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.cmp.CRLSource;
+import org.bouncycastle.asn1.cmp.CRLStatus;
 import org.bouncycastle.asn1.cmp.GenMsgContent;
 import org.bouncycastle.asn1.cmp.GenRepContent;
 import org.bouncycastle.asn1.cmp.InfoTypeAndValue;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
+import org.bouncycastle.asn1.cmp.RootCaKeyUpdateContent;
 import org.bouncycastle.asn1.crmf.AttributeTypeAndValue;
 import org.bouncycastle.asn1.crmf.CertTemplate;
 import org.bouncycastle.asn1.crmf.Controls;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.Time;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.msgprocessing.RootCaKeyUpdateContent;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 
 public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
@@ -54,8 +66,9 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     public void setUp() throws Exception {
         new File("./target/CmpTest/GenDownstream").mkdirs();
         new File("./target/CmpTest/GenUpstream").mkdirs();
-        initTestbed("DelayedSupportMessagesTestConfig.xml",
-                "http://localhost:6006/delayedsupportlra");
+        initTestbed("http://localhost:6006/delayedsupportlra",
+                "DelayedSupportMessagesRaTestConfig.yaml",
+                "DelayedSupportMessagesLraTestConfig.yaml");
     }
 
     @After
@@ -66,13 +79,63 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
                 .deleteDirectory(new File("./target/CmpTest/GenUpstream"));
     }
 
+    /**
+     * CRL Update Retrieval
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCrlUpdateRetrieval() throws Exception {
+        final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
+        final ASN1ObjectIdentifier statusListOid =
+                new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.22");
+        final ASN1ObjectIdentifier crlsOid =
+                new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.23");
+
+        final PKIBody genmBody = new PKIBody(PKIBody.TYPE_GEN_MSG,
+                new GenMsgContent(new InfoTypeAndValue(statusListOid,
+                        new DERSequence(new CRLStatus(new CRLSource(null,
+                                new GeneralNames(new GeneralName(
+                                        new X500Name("CN=distributionPoint")))),
+                                new Time(new Date()))))));
+        final PKIMessage genm = PkiMessageGenerator.generateAndProtectMessage(
+                new HeaderProviderForTest(),
+                getEeSignaturebasedProtectionProvider(), genmBody);
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
+            LOGGER.debug("send" + MessageDumper.dumpPkiMessage(genm));
+        }
+        final PKIMessage genr = DelayedDeliveryTestcaseBase
+                .executeRequestWithPolling(PKIBody.TYPE_ERROR,
+                        getEeSignaturebasedProtectionProvider(), eeCmpClient,
+                        genm);
+
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary string processing, if debug isn't enabled
+            LOGGER.debug("got" + MessageDumper.dumpPkiMessage(genr));
+        }
+        assertEquals("message type", PKIBody.TYPE_GEN_REP,
+                genr.getBody().getType());
+        final GenRepContent content =
+                (GenRepContent) genr.getBody().getContent();
+        final InfoTypeAndValue[] itav = content.toInfoTypeAndValueArray();
+        assertEquals("number of itavs", 1, itav.length);
+        assertEquals("crlsOid", crlsOid, itav[0].getInfoType());
+
+        final ASN1Sequence sequenceOfCrl =
+                (ASN1Sequence) itav[0].getInfoValue().toASN1Primitive();
+        final CRL crl = CertificateFactory.getInstance("X.509")
+                .generateCRL(new ByteArrayInputStream(sequenceOfCrl
+                        .getObjectAt(0).toASN1Primitive().getEncoded()));
+        assertNotNull("CRL", crl);
+    }
+
     /*
-     * 4.4.2. Get CA certificates
+     * Get CA certificates
      */
     @Test
     public void testGetCaCerts() throws Exception {
-        final Function<PKIMessage, PKIMessage> eeCmpClient =
-                getEeSignatureBasedCmpClient();
+        final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier getCaCertOid =
                 new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.17");
         final PKIBody genmBody = new PKIBody(PKIBody.TYPE_GEN_MSG,
@@ -108,12 +171,11 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     }
 
     /*
-     * 4.4.4. Get certificate request template
+     * Get certificate request template
      */
     @Test
     public void testGetCertificateRequestTemplate() throws Exception {
-        final Function<PKIMessage, PKIMessage> eeCmpClient =
-                getEeSignatureBasedCmpClient();
+        final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier getCaCertOid =
                 new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.19");
         final PKIBody genmBody = new PKIBody(PKIBody.TYPE_GEN_MSG,
@@ -165,14 +227,13 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     }
 
     /*
-     * 4.4.3. Get root CA certificate update
+     * Get root CA certificate update
      */
     @Test
     public void testGetRootCaKeyUpdateInfo() throws Exception {
-        final Function<PKIMessage, PKIMessage> eeCmpClient =
-                getEeSignatureBasedCmpClient();
+        final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier getCaCertOid =
-                new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.18");
+                new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.20");
         final PKIBody genmBody = new PKIBody(PKIBody.TYPE_GEN_MSG,
                 new GenMsgContent(new InfoTypeAndValue(getCaCertOid)));
         final PKIMessage genm = PkiMessageGenerator.generateAndProtectMessage(
@@ -195,8 +256,9 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
         final GenRepContent content =
                 (GenRepContent) genr.getBody().getContent();
         final InfoTypeAndValue[] itav = content.toInfoTypeAndValueArray();
-        assertEquals("number of itavs", 1, itav.length);
-        assertEquals("getCaCertOid", getCaCertOid, itav[0].getInfoType());
+        final ASN1ObjectIdentifier rootCaKeyUpdateId =
+                new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.18");
+        assertEquals("getCaCertOid", rootCaKeyUpdateId, itav[0].getInfoType());
         //        id-it-rootCaKeyUpdate OBJECT IDENTIFIER ::= {1 3 6 1 5 5 7 4 18}
         //        RootCaKeyUpdate ::= SEQUENCE {
         //            newWithNew       CMPCertificate

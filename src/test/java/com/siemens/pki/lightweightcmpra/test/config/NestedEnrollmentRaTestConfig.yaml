@@ -1,0 +1,46 @@
+---
+# Upper RA close to CA
+
+UpstreamInterface:
+  HttpClient:
+    ServingUri:  "http://localhost:7000/ca"
+
+DownstreamInterface:
+  HttpServer:
+    ServingUri:  "http://localhost:7001/ra"
+
+UpstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+
+DownstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_LRA_UPSTREAM_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+    NestedEndpointContext:
+      inputVerification:
+        trustedCertificates:
+         - "credentials/CMP_CA_Root.pem"
+      OutputCredentials:
+        Signature:
+          keystore: "credentials/CMP_EE_Keystore.p12"
+          Password: "Password"
+
+EnrollmentTrust:
+  - trustedCertificates:
+    - "credentials/ENROLL_Root.pem"
+
+RaVerifiedAcceptable:
+  - value: false
+
+ForceRaVerifyOnUpstream:
+  - value: false

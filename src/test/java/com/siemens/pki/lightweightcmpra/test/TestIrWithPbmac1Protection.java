@@ -19,30 +19,34 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.DERNull;
 import org.bouncycastle.asn1.cmp.PKIBody;
-import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.siemens.pki.lightweightcmpra.protection.PBMAC1Protection;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 
 @RunWith(Parameterized.class)
-public class TestIrWithPbmac1Protection
-        extends OnlineEnrollmentHttpTestcaseBase {
+public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
+
+    private static final AlgorithmIdentifier DEFAULT_PRF =
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA256,
+                    DERNull.INSTANCE);
+
+    private static final AlgorithmIdentifier DEFAULT_MAC = DEFAULT_PRF;
 
     public static Object[][] inputList = new Object[][] {
-            {PBMAC1Protection.DEFAULT_PRF, PBMAC1Protection.DEFAULT_MAC},
+            {DEFAULT_PRF, DEFAULT_MAC},
             //
             {
                     //
@@ -143,20 +147,24 @@ public class TestIrWithPbmac1Protection
         this.mac = mac;
     }
 
+    @Before
+    public void setUp() throws Exception {
+        initTestbed("http://localhost:6002/lrawithmacprotection",
+                "EnrollmentConfigWithHttpAndPassword.yaml");
+    }
+
     /**
-     * 5.1.4. Request a certificate from a PKI with PBMAC1 protection
+     * Request a certificate from a PKI with PBMAC1 protection
      *
      * @throws Exception
      */
     @Test
     public void testIrWithPbmac1Protection() throws Exception {
         final ProtectionProvider macBasedProvider =
-                new PBMAC1Protection("keyIdentification", "myPresharedSecret",
-                        16, 1234, 256, prf, mac);
-        final Function<PKIMessage, PKIMessage> cmpClient = TestUtils
-                .createCmpClient("http://localhost:6002/lrawithmacprotection");
+                TestUtils.createPBMAC1Protection("keyIdentification",
+                        "myPresharedSecret", prf, mac);
         executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,
-                PKIBody.TYPE_INIT_REP, macBasedProvider, cmpClient);
+                PKIBody.TYPE_INIT_REP, macBasedProvider, getEeCmpClient());
     }
 
 }

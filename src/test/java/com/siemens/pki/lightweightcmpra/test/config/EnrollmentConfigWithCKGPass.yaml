@@ -1,0 +1,49 @@
+---
+
+UpstreamInterface:
+  HttpClient:
+    ServingUri:  "http://localhost:7000/ca"
+
+DownstreamInterface:
+  HttpServer:
+    ServingUri: "http://localhost:6012/ckgwithmac"
+
+UpstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+
+DownstreamConfiguration:
+  - VerificationContext:
+      sharedSecret: "myPresharedSecret"
+    OutputCredentials:
+      SharedSecret:
+        SharedSecret: "myPresharedSecret"
+        prf: "SHA256"
+        macAlgorithm: "SHA256"
+
+EnrollmentTrust:
+  - trustedCertificates:
+    - "credentials/ENROLL_Root.pem"
+
+RaVerifiedAcceptable:
+  - value: true
+
+ForceRaVerifyOnUpstream:
+  - value: false
+
+CkgConfiguration:
+  - CkgPasswordContext:
+      KekAlg: AES256
+      EncryptionCredentials:
+        SharedSecret:
+          SharedSecret: "myPresharedSecret"
+          prf: "SHA256"
+          macAlgorithm: "SHA256"
+      SignatureCredentials:
+        keyStore: credentials/CMP_LRA_DOWNSTREAM_Keystore.p12
+        password:  Password

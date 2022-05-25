@@ -53,19 +53,20 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.config.xmlparser.TRUSTCREDENTIALS;
-import com.siemens.pki.lightweightcmpra.cryptoservices.BaseCredentialService;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CmsEncryptorBase;
-import com.siemens.pki.lightweightcmpra.cryptoservices.DataSignVerifier;
-import com.siemens.pki.lightweightcmpra.cryptoservices.DataSigner;
-import com.siemens.pki.lightweightcmpra.cryptoservices.KeyAgreementEncryptor;
-import com.siemens.pki.lightweightcmpra.cryptoservices.KeyPairGeneratorFactory;
-import com.siemens.pki.lightweightcmpra.cryptoservices.KeyTransportEncryptor;
-import com.siemens.pki.lightweightcmpra.cryptoservices.PasswordEncryptor;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.configuration.VerificationContextImpl;
+import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
+import com.siemens.pki.lightweightcmpra.test.framework.CertUtility;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsEncryptorBase;
+import com.siemens.pki.lightweightcmpra.test.framework.DataSignVerifier;
+import com.siemens.pki.lightweightcmpra.test.framework.DataSigner;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyAgreementEncryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyPairGeneratorFactory;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyTransportEncryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.PasswordEncryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
 
 public class TestCmsFunctions {
     static BaseCredentialService lraCredentials;
@@ -74,18 +75,74 @@ public class TestCmsFunctions {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(TestCmsFunctions.class);
+    static public final File CONFIG_DIRECTORY = new File(
+            "./src/test/java/com/siemens/pki/lightweightcmpra/test/config");
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
-        ConfigFileLoader.setConfigFileBase(new File(
-                "./src/test/java/com/siemens/pki/lightweightcmpra/test/config"));
+        ConfigFileLoader.setConfigFileBase(CONFIG_DIRECTORY);
         lraCredentials =
                 new BaseCredentialService("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
+                        TestUtils.getPasswordAsCharArray());
         eeCredentials =
                 new BaseCredentialService("credentials/CMP_EE_Keystore.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
+                        TestUtils.getPasswordAsCharArray());
+    }
+
+    @Test
+    public void testDataSigning() throws Exception {
+        final DataSigner signer =
+                new DataSigner("credentials/CMP_CA_Keystore.p12",
+                        TestUtils.getPasswordAsCharArray());
+        final byte[] msgToSign = "Hello Signer, I am the message".getBytes();
+        final SignedData signedData = signer.signData(msgToSign);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("CMSSignedData:\n"
+                    + MessageDumper.dumpAsn1Object(signedData));
+        }
+        final byte[] signedAndEncoded = signedData.getEncoded();
+        final VerificationContextImpl verifierConfig = TestUtils
+                .createVerificationContext("credentials/CMP_CA_Root.pem");
+        final DataSignVerifier verifier = new DataSignVerifier(verifierConfig);
+        Assert.assertArrayEquals(msgToSign,
+                verifier.verifySignatureAndTrust(signedAndEncoded));
+    }
+
+    @Test
+    public void testKeyagreementBasedKeyEncryptionEC() throws Exception {
+        final KeyPair kp = KeyPairGeneratorFactory
+                .getEcKeyPairGenerator("secp256r1").generateKeyPair();
+        testKeyagreementBasedKeyEncryption(kp);
+    }
+
+    @Test
+    public void testKeyagreementBasedKeyEncryptionRSA() throws Exception {
+        final KeyPair kp = KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048)
+                .generateKeyPair();
+        testKeyagreementBasedKeyEncryption(kp);
+    }
+
+    @Test
+    public void testKeytransportBasedDataEncryption() throws Exception {
+        final KeyPair keyPair = KeyPairGeneratorFactory
+                .getRsaKeyPairGenerator(2048).generateKeyPair();
+        final X509Certificate certificate =
+                createSelfsignedCertificate("CN=MySelf", keyPair);
+        final CmsEncryptorBase encryptor =
+                new KeyTransportEncryptor(certificate);
+        final CmsDecryptor decryptor =
+                new CmsDecryptor(certificate, keyPair.getPrivate(), null);
+        testDataEncryption(encryptor, decryptor);
+    }
+
+    @Test
+    public void testPasswordBasedDataEncryption() throws Exception {
+        final char[] passphrase = "VerySecretPassword".toCharArray();
+        final CmsEncryptorBase encryptor =
+                new PasswordEncryptor("VerySecretPassword");
+        final CmsDecryptor decryptor = new CmsDecryptor(null, null, passphrase);
+        testDataEncryption(encryptor, decryptor);
     }
 
     private X509Certificate createSelfsignedCertificate(final String subject,
@@ -132,35 +189,16 @@ public class TestCmsFunctions {
         Assert.assertArrayEquals(msgToEncrypt, decryptor.decrypt(encrypted));
     }
 
-    @Test
-    public void testDataSigning() throws Exception {
-        final DataSigner signer =
-                new DataSigner("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
-        final byte[] msgToSign = "Hello Signer, I am the message".getBytes();
-        final SignedData signedData = signer.signData(msgToSign);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("CMSSignedData:\n"
-                    + MessageDumper.dumpAsn1Object(signedData));
-        }
-        final byte[] signedAndEncoded = signedData.getEncoded();
-        final TRUSTCREDENTIALS verifierConfig = new TRUSTCREDENTIALS();
-        verifierConfig.setTrustStorePath("credentials/CMP_CA_Root.pem");
-        final DataSignVerifier verifier = new DataSignVerifier(verifierConfig);
-        Assert.assertArrayEquals(msgToSign,
-                verifier.verifySignatureAndTrust(signedAndEncoded));
-    }
-
     private void testKeyagreementBasedKeyEncryption(final KeyPair kp)
             throws GeneralSecurityException, Exception, CMSException,
             IOException, KeyStoreException, CertificateException,
             NoSuchAlgorithmException {
         final CmsEncryptorBase encryptor =
                 new KeyAgreementEncryptor("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.PASSWORD, "credentials/CMP_EE_Cert.pem");
+                        TestUtils.getPassword(), "credentials/CMP_EE_Cert.pem");
         final DataSigner signer =
                 new DataSigner("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
+                        TestUtils.getPasswordAsCharArray());
         final EnvelopedData encryptedKey =
                 encryptor.encrypt(signer.signPrivateKey(kp.getPrivate()));
 
@@ -168,8 +206,8 @@ public class TestCmsFunctions {
             LOGGER.debug("EnvelopedData;\n"
                     + MessageDumper.dumpAsn1Object(encryptedKey));
         }
-        final TRUSTCREDENTIALS verifierConfig = new TRUSTCREDENTIALS();
-        verifierConfig.setTrustStorePath("credentials/CMP_CA_Root.pem");
+        final VerificationContextImpl verifierConfig = TestUtils
+                .createVerificationContext("credentials/CMP_CA_Root.pem");
         final DataSignVerifier verifier = new DataSignVerifier(verifierConfig);
         final CmsDecryptor decryptor =
                 new CmsDecryptor(eeCredentials.getEndCertificate(),
@@ -177,42 +215,6 @@ public class TestCmsFunctions {
         final PrivateKey recoveredKey =
                 verifier.verifySignedKey(decryptor.decrypt(encryptedKey));
         Assert.assertEquals(recoveredKey, kp.getPrivate());
-    }
-
-    @Test
-    public void testKeyagreementBasedKeyEncryptionEC() throws Exception {
-        final KeyPair kp = KeyPairGeneratorFactory
-                .getEcKeyPairGenerator("secp256r1").generateKeyPair();
-        testKeyagreementBasedKeyEncryption(kp);
-    }
-
-    @Test
-    public void testKeyagreementBasedKeyEncryptionRSA() throws Exception {
-        final KeyPair kp = KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048)
-                .generateKeyPair();
-        testKeyagreementBasedKeyEncryption(kp);
-    }
-
-    @Test
-    public void testKeytransportBasedDataEncryption() throws Exception {
-        final KeyPair keyPair = KeyPairGeneratorFactory
-                .getRsaKeyPairGenerator(2048).generateKeyPair();
-        final X509Certificate certificate =
-                createSelfsignedCertificate("CN=MySelf", keyPair);
-        final CmsEncryptorBase encryptor =
-                new KeyTransportEncryptor(certificate);
-        final CmsDecryptor decryptor =
-                new CmsDecryptor(certificate, keyPair.getPrivate(), null);
-        testDataEncryption(encryptor, decryptor);
-    }
-
-    @Test
-    public void testPasswordBasedDataEncryption() throws Exception {
-        final char[] passphrase = "VerySecretPassword".toCharArray();
-        final CmsEncryptorBase encryptor =
-                new PasswordEncryptor("VerySecretPassword");
-        final CmsDecryptor decryptor = new CmsDecryptor(null, null, passphrase);
-        testDataEncryption(encryptor, decryptor);
     }
 
 }

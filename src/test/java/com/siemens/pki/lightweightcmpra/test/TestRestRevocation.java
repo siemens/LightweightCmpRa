@@ -22,19 +22,21 @@ import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestRestRevocation extends EnrollmentTestcaseBase {
     @Before
     public void setUp() throws Exception {
-        initTestbed("RestTestConfig.xml", null);
+        initTestbed(null, "RestTestConfig.xml");
     }
 
     /**
-     * 5.2. Revoking certificates on behalf of another's entities
+     * Revoking certificates on behalf of another's entities
      *
      * @throws Exception
      */
+    @Ignore("not implemented anymore")
     @Test
     public void testRevocationOnBehalfOfAnotherEntity() throws Exception {
         final URL clientURL = new URL(

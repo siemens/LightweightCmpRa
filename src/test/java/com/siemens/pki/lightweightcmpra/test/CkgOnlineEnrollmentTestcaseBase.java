@@ -36,24 +36,35 @@ import org.bouncycastle.asn1.crmf.CertTemplate;
 import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.config.xmlparser.TRUSTCREDENTIALS;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.cryptoservices.DataSignVerifier;
-import com.siemens.pki.lightweightcmpra.cryptoservices.DataSigner;
-import com.siemens.pki.lightweightcmpra.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.util.MessageDumper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.CertUtility;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.DataSignVerifier;
+import com.siemens.pki.lightweightcmpra.test.framework.DataSigner;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 
 public class CkgOnlineEnrollmentTestcaseBase
         extends OnlineEnrollmentTestcaseBase {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CkgOnlineEnrollmentTestcaseBase.class);
+
+    static protected DataSignVerifier verifier;
+    static {
+        try {
+            verifier = new DataSignVerifier(TestUtils.createVerificationContext(
+                    "credentials/CMP_LRA_DOWNSTREAM_Root.pem"));
+        } catch (final Exception e) {
+            LOGGER.error("could not create CKG verifier", e);
+        }
+    }
 
     static public EnrollmentResult executeCrmfCertificateRequestWithoutKey(
             final int requestMesssageType,
@@ -127,18 +138,4 @@ public class CkgOnlineEnrollmentTestcaseBase
 
         return new EnrollmentResult(enrolledCertificate, keyPair.getPrivate());
     }
-
-    protected DataSignVerifier verifier;
-
-    @Before
-    public void setUp() throws Exception {
-
-        initTestbed("OnlineEnrollmentTestConfigWithCentralKeyGeneration.xml",
-                null);
-        final TRUSTCREDENTIALS verifierConfig = new TRUSTCREDENTIALS();
-        verifierConfig
-                .setTrustStorePath("credentials/CMP_LRA_DOWNSTREAM_Root.pem");
-        verifier = new DataSignVerifier(verifierConfig);
-    }
-
 }

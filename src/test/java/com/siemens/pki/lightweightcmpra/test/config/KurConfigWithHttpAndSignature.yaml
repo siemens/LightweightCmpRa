@@ -1,0 +1,56 @@
+---
+
+UpstreamInterface:
+  HttpClient:
+    ServingUri:  "http://localhost:7000/ca"
+
+DownstreamInterface:
+  HttpServer:
+    ServingUri: "http://localhost:6007/kur"
+
+UpstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+
+DownstreamConfiguration:
+  - bodyType: KUR
+    VerificationContext:
+      trustedCertificates:
+        - "credentials/ENROLL_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"
+  - bodyType: certConf
+    VerificationContext:
+      trustedCertificates:
+      # for confirmation of inital CR
+        - "credentials/CMP_EE_Root.pem"
+      # for confirmation KUR
+        - "credentials/ENROLL_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_EE_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"
+
+EnrollmentTrust:
+  - trustedCertificates:
+    - "credentials/ENROLL_Root.pem"
+
+RaVerifiedAcceptable:
+  - value: false
+
+ForceRaVerifyOnUpstream:
+  - value: false

@@ -25,8 +25,8 @@ public class OnlineEnrollmentCoapTestcaseBase
     @Before
     public void setUp() throws Exception {
 
-        initTestbed("OnlineEnrollmentTestConfigWithCoap.xml",
-                "coap://localhost/onlinelra");
-
+        initTestbed("coap://localhost/onlinelra",
+                "EnrollmentConfigWithCoapAndSignature.yaml");
     }
+
 }

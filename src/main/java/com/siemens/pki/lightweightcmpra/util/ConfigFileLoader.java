@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 /**
  * load configuration files in different runtime environments
@@ -28,7 +29,8 @@ import java.io.InputStream;
  */
 public class ConfigFileLoader {
 
-    private static File fileBase = null;
+    private static URI uriBase =
+            new File(System.getProperty("user.dir")).toURI();
 
     public static InputStream getConfigFileAsStream(
             final String nameOfConfigFile) throws IOException {
@@ -36,11 +38,21 @@ public class ConfigFileLoader {
         if (configFile.isAbsolute()) {
             return new FileInputStream(configFile);
         }
-        return new FileInputStream(new File(fileBase, nameOfConfigFile));
+        return new FileInputStream(
+                new File(new File(uriBase), nameOfConfigFile));
+    }
+
+    public static URI getConfigFileAsUri(final String nameOfConfigFile) {
+        return uriBase.resolve(nameOfConfigFile);
+    }
+
+    public static InputStream getConfigUriAsStream(final URI nameOfConfigUri)
+            throws IOException {
+        return uriBase.resolve(nameOfConfigUri).toURL().openStream();
     }
 
     public static void setConfigFileBase(final File fileBase) {
-        ConfigFileLoader.fileBase = fileBase;
+        ConfigFileLoader.uriBase = fileBase.toURI();
     }
 
     // utility class

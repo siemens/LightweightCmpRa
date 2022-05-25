@@ -23,7 +23,10 @@ import java.security.KeyPairGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.cryptoservices.KeyPairGeneratorFactory;
+import com.siemens.pki.lightweightcmpra.test.framework.CmpCaMock;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyPairGeneratorFactory;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
+import com.siemens.pki.lightweightcmpra.test.framework.TrustChainAndPrivateKey;
 
 public class EnrollmentTestcaseBase extends CmpTestcaseBase {
 
@@ -48,14 +51,14 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
     }
 
     @Override
-    protected void initTestbed(final String nameOfRaConfigFile,
-            final String cmpClientUrl)
+    protected void initTestbed(final String cmpClientUrl,
+            final String... namesOfRaConfigFile)
             throws Exception, GeneralSecurityException, InterruptedException {
-        super.initTestbed(nameOfRaConfigFile, cmpClientUrl);
+        super.initTestbed(cmpClientUrl, namesOfRaConfigFile);
         if (enrollmentCredentials == null) {
             enrollmentCredentials = new TrustChainAndPrivateKey(
                     "credentials/ENROLL_Keystore.p12",
-                    TestUtils.PASSWORD_AS_CHAR_ARRAY);
+                    TestUtils.getPasswordAsCharArray());
         }
         if (keyGenerator == null) {
             keyGenerator =

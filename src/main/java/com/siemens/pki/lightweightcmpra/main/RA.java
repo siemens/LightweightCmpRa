@@ -17,32 +17,18 @@
  */
 package com.siemens.pki.lightweightcmpra.main;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.Security;
+import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
 
-import javax.xml.bind.JAXB;
+import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration;
-import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration.RaConfiguration;
-import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration.RestService;
-import com.siemens.pki.lightweightcmpra.config.xmlparser.Configuration.ServiceConfiguration;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CertUtility;
-import com.siemens.pki.lightweightcmpra.msgprocessing.RaImplementation;
-import com.siemens.pki.lightweightcmpra.msgprocessing.RestServiceImplementation;
-import com.siemens.pki.lightweightcmpra.msgprocessing.ServiceImplementation;
-import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
+import com.siemens.pki.cmpracomponent.main.CmpRaComponent;
+import com.siemens.pki.cmpracomponent.main.CmpRaComponent.CmpRaInterface;
+import com.siemens.pki.lightweightcmpra.configuration.ConfigurationImpl;
+import com.siemens.pki.lightweightcmpra.configuration.YamlConfigLoader;
+import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
+import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterfaceFactory;
+import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterface;
+import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterfaceFactory;
 
 /**
  * main class
@@ -50,103 +36,61 @@ import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
  */
 public class RA {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RA.class);
-    private static final ObjectMapper JACKSON_OBJECT_MAPPER =
-            new ObjectMapper(new YAMLFactory())
-                    .registerModules(new JaxbAnnotationModule())
-                    .setSerializationInclusion(Include.NON_EMPTY);
-
-    /**
-     * @param configStream
-     *            XML/JSON/YAML configuration as stream
-     * @return the loaded configuration tree
-     * @throws Exception
-     *             in case of errors while loading the configuration
-     */
-    public static Configuration init(final InputStream configStream)
-            throws Exception {
-        Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
-        final InputStream bufConfigStream;
-        if (!configStream.markSupported()) {
-            bufConfigStream = new BufferedInputStream(configStream);
-        } else {
-            bufConfigStream = configStream;
-        }
-        bufConfigStream.mark(1000);
-        boolean isXmlInput = false;
-        final BufferedReader br =
-                new BufferedReader(new InputStreamReader(bufConfigStream));
-        for (String line; (line = br.readLine()) != null;) {
-            if (line.trim().startsWith("<")) {
-                isXmlInput = true;
-                break;
-            }
-            if (!line.isBlank()) {
-                break;
-            }
-        }
-        bufConfigStream.reset();
-        final Configuration configuration;
-        if (isXmlInput) {
-            configuration =
-                    JAXB.unmarshal(bufConfigStream, Configuration.class);
-        } else {
-            configuration = JACKSON_OBJECT_MAPPER.readValue(bufConfigStream,
-                    Configuration.class);
-        }
-
-        for (final RaConfiguration aktRaConfig : configuration
-                .getRaConfiguration()) {
-            new RaImplementation(aktRaConfig);
-        }
-        for (final ServiceConfiguration aktServiceConfig : configuration
-                .getServiceConfiguration()) {
-            new ServiceImplementation(aktServiceConfig);
-        }
-        for (final RestService aktRestService : configuration
-                .getRestService()) {
-            new RestServiceImplementation(aktRestService);
-        }
-        LOGGER.info("RA up and running");
-        return configuration;
-    }
-
-    /**
-     * @param nameOfConfigFile
-     *            XMl configuration file
-     * @return the loaded configuration tree
-     */
-    public static Configuration init(final String nameOfConfigFile) {
-        try (InputStream configStream =
-                ConfigFileLoader.getConfigFileAsStream(nameOfConfigFile)) {
-            return init(configStream);
-        } catch (final Exception ex) {
-            LOGGER.error("could not load configuration", ex);
-            return null;
-        }
-    }
-
     /**
      * @param args
      *            command line arguments. Call with &lt;name of XML/YAML/JSON
-     *            config file&gt;, [&lt;name of config file converted to
-     *            YAML&gt;]
+     *            config file&gt;,
+     * @throws Exception
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws Exception {
         if (args == null || args.length < 1) {
-            System.err.println(
-                    "call with <name of XML/YAML/JSON config file> [<name of config file converted to YAML>]");
+            System.err.println("call with <name of YAML/JSON config file>");
             return;
         }
-        final Configuration configuration = init(args[0]);
-        if (configuration != null && args.length >= 2) {
-            try {
-                JACKSON_OBJECT_MAPPER.writerWithDefaultPrettyPrinter()
-                        .writeValue(new File(args[1]), configuration);
-            } catch (final IOException e) {
-                LOGGER.warn("could not write converted YAML file", e);
-            }
+        final ArrayList<Thread> threadList = new ArrayList<>(args.length);
+        // start RAs
+        for (final String actConfigFile : args) {
+            threadList.add(startOneRa(actConfigFile));
         }
+        // wait for complete initialization
+        for (final Thread aktThread : threadList) {
+            aktThread.join();
+        }
+    }
+
+    private static Thread startOneRa(final String actConfigFile) {
+        final String threadName = "RA->" + actConfigFile;
+        final ThreadGroup tg = new ThreadGroup(
+                Thread.currentThread().getThreadGroup(), threadName);
+        final Thread raThread = new Thread(tg, () -> {
+            try {
+                final ConfigurationImpl configuration =
+                        YamlConfigLoader.loadConfig(actConfigFile);
+                final UpstreamInterface upstreamInterface =
+                        ifNotNull(configuration.getUpstreamInterface(),
+                                UpstreamInterfaceFactory::create);
+                final CmpRaInterface raComponent =
+                        CmpRaComponent.instantiateCmpRaComponent(configuration,
+                                upstreamInterface);
+                if (upstreamInterface != null) {
+                    upstreamInterface.setDelayedResponseHandler(
+                            raComponent::gotResponseAtUpstream);
+                }
+                @SuppressWarnings("unused")
+                final DownstreamInterface downstreamInterface =
+                        DownstreamInterfaceFactory.create(
+                                configuration.getDownstreamInterface(),
+                                raComponent::processRequest);
+                System.out.println("RA configured with " + actConfigFile
+                        + " is up and running");
+            } catch (final Exception ex) {
+                System.err.println("start of RA configured with "
+                        + actConfigFile + " failed");
+                ex.printStackTrace();
+            }
+        }, threadName);
+        raThread.start();
+        return raThread;
     }
 
 }

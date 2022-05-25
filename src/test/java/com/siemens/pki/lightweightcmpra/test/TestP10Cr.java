@@ -17,17 +17,19 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-public class TestP10Cr extends OnlineEnrollmentHttpTestcaseBase {
+public class TestP10Cr extends OnlineEnrollmentTestcaseBase {
     /**
      * A certificate from a legacy PKI using PKCS#10 request
      *
      * @throws Exception
      */
     @Test(timeout = 100000L)
+    @Ignore("PKCS#10 CSR not supported anymore")
     public void testP10Cr() throws Exception {
         executeP10CertificateRequest(getEeSignaturebasedProtectionProvider(),
-                getEeSignatureBasedCmpClient());
+                getEeCmpClient());
     }
 }

@@ -21,52 +21,35 @@ import org.bouncycastle.asn1.cmp.PKIBody;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.siemens.pki.lightweightcmpra.cryptoservices.BaseCredentialService;
-import com.siemens.pki.lightweightcmpra.cryptoservices.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.protection.PasswordBasedMacProtection;
-import com.siemens.pki.lightweightcmpra.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.protection.SignatureBasedProtection;
+import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 
 public class TestCentralKeyGenerationWithKeyTransport
         extends CkgOnlineEnrollmentTestcaseBase {
 
     private CmsDecryptor keyTransportDecryptor;
 
-    @Override
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         final BaseCredentialService eeRsaCredentials =
                 new BaseCredentialService("credentials/CMP_EE_Keystore_RSA.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY);
+                        TestUtils.getPasswordAsCharArray());
         keyTransportDecryptor =
                 new CmsDecryptor(eeRsaCredentials.getEndCertificate(),
                         eeRsaCredentials.getPrivateKey(), null);
+        initTestbed("http://localhost:6010/ckgtrans",
+                "EnrollmentConfigWithCKGTrans.yaml");
     }
 
     @Test
     public void testCrWithKeyTransport() throws Exception {
         executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP,
-                new SignatureBasedProtection(
+                TestUtils.createSignatureBasedProtection(
                         "credentials/CMP_EE_Keystore_RSA.p12",
-                        TestUtils.PASSWORD_AS_CHAR_ARRAY),
-                TestUtils.createCmpClient("http://localhost:6010/ckgtrans"),
-                keyTransportDecryptor, verifier);
-    }
-
-    @Test
-    public void testCrWithPassword() throws Exception {
-        final ProtectionProvider macBasedProvider =
-                new PasswordBasedMacProtection("keyIdentification",
-                        "myPresharedSecret", 6, 1234,
-                        PasswordBasedMacProtection.DEFAULT_OWF_OID,
-                        PasswordBasedMacProtection.DEFAULT_MAC_OID);
-        executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, macBasedProvider,
-                TestUtils.createCmpClient("http://localhost:6012/ckgwithmac"),
-                new CmsDecryptor(null, null, "myPresharedSecret".toCharArray()),
-                verifier);
+                        TestUtils.getPasswordAsCharArray()),
+                getEeCmpClient(), keyTransportDecryptor, verifier);
     }
 
 }

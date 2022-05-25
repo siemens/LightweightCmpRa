@@ -1,6 +1,6 @@
 # Interoperability with other CMP implementations
 
-The Lightweight CMP RA was tested for interoperability with the implementations mentioned below:
+The Lightweight CMP RA 1.0 was tested for interoperability with the implementations mentioned below:
 
 - [OpenSSL 3.0](https://www.openssl.org/source/)
     - OpenSSL 3.0 is the next major version of OpenSSL. It contains a mature CMP library implementation in *C*.
@@ -62,12 +62,11 @@ For message files the naming convention below is used:
     
     e.g. downstream_CERT_CONFIRM.pem
     
-- The **<interfacename>** describes the RA interface used to send or receive the message. 
-The interface towards the End Entity is usually named as *downstream*. The HTTP(S) client 
-interface towards the CA is named as *HTTP_client*.
-- The **<messagetype>** describes the abbreviated type of the PKI Message Body. 
+- The **interfacename** describes the RA interface used to send or receive the message. 
+The interface towards the End Entity is usually as *downstream*.
+- The **messagetype** describes the abbreviated type of the PKI Message Body. 
 It could be for example *INIT_REQ*, *REVOCATION_REP* or *CERT_CONFIRM*.
-- The **<messageformat>** file extension describes the data format used to store the message:
+- The **messageformat** file extension describes the data format used to store the message:
 
     - The *PKI* file extension is used, if the file holds a binary DER encoded message.
     - The *pem* file extension is used, if the file holds a PEM encoded message.

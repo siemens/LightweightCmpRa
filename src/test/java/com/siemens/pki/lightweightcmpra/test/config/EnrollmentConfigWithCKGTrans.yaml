@@ -1,0 +1,43 @@
+---
+
+UpstreamInterface:
+  HttpClient:
+    ServingUri:  "http://localhost:7000/ca"
+
+DownstreamInterface:
+  HttpServer:
+    ServingUri: "http://localhost:6010/ckgtrans"
+
+UpstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+
+DownstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_EE_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"
+
+EnrollmentTrust:
+  - trustedCertificates:
+    - "credentials/ENROLL_Root.pem"
+
+RaVerifiedAcceptable:
+  - value: true
+
+ForceRaVerifyOnUpstream:
+  - value: false
+
+CkgConfiguration:
+  - CkgKeyTransportContext:
+      SignatureCredentials:
+        keyStore: credentials/CMP_LRA_DOWNSTREAM_Keystore.p12
+        password: "Password"

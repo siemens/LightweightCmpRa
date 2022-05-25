@@ -1,87 +1,92 @@
 DER Sequence
     DER Sequence
         Integer(2)
-        Tagged [4]
+        DER Tagged [CONTEXT 4]
             DER Sequence
                 Set
                     Sequence
                         ObjectIdentifier(2.5.4.3)
-                        UTF8String(Downstream-CMP-ENDENTITY) 
-        Tagged [4]
+                        UTF8String(CMPCA-ENDENTITY) 
+        DER Tagged [CONTEXT 4]
             DER Sequence
                 Set
                     Sequence
                         ObjectIdentifier(2.5.4.3)
                         UTF8String(Upstream-CMP-ENDENTITY) 
-        Tagged [0]
-            GeneralizedTime(20210729094623GMT+00:00) 
-        Tagged [1]
+        DER Tagged [CONTEXT 0]
+            GeneralizedTime(20220727085307GMT+00:00) 
+        DER Tagged [CONTEXT 1]
             DER Sequence
                 ObjectIdentifier(1.2.840.10045.4.3.2)
-        Tagged [2]
+        DER Tagged [CONTEXT 2]
             DER Octet String[20] 
-                bdeff1d4799233683e1b94082018c4aed2005a60                            y3h> Z`
-        Tagged [4]
+                4e6eab66f1576b26d63a90aa0b899d061a78167d                            NnfWk&:x}
+        DER Tagged [CONTEXT 4]
             DER Octet String[16] 
-                117d8e9fb57a54853eb43890360d81a8                                    }zT>86
-        Tagged [5]
+                39c69563e9de207f4ee7b5eca33bfa2e                                    9c N;.
+        DER Tagged [CONTEXT 5]
             DER Octet String[16] 
-                055851be72eed6edfbbf7934f60ad645                                    XQry4E
-        Tagged [6]
+                5da96040acbb5bbac1bf8c3b7426c4e4                                    ]`@[;t&
+        DER Tagged [CONTEXT 6]
             DER Octet String[16] 
-                f9f696bad4d5d45d2c643c50d2a3bc1b                                    ],d<P
-    Tagged [12]
+                7f105b690a4fb2d21e719184f16096cf                                    [iOq`
+        DER Tagged [CONTEXT 8]
+            Sequence
+                Sequence
+                    ObjectIdentifier(1.3.6.1.5.5.7.4.21)
+                    UTF8String(certProfileForRr) 
+    DER Tagged [CONTEXT 12]
         DER Sequence
             Sequence
                 Sequence
                     Integer(0)
-    Tagged [0]
-        DER Bit String[70, 0] 
-            304402205f3bd999144cf928449343c2a51b135b73af91872844d538dc10eb33    0D _;L(DC[s(D83
-            b8ee3ffa02203d67d392f2350b38b6c80097b5526161125c6a2f130b86a77552    ? =g58Raa\j/uR
-            eb726770a7f7                                                        rgp
-    Tagged [1]
+    DER Tagged [CONTEXT 0]
+        DER Bit String[72, 0] 
+            304602210096febef9f5fa5a7c1116c297090635d8a5f3e53402ec2973914a0f    0F!Z|54)sJ
+            12ed59c23f022100849a34414ebff544f9c4f94fbebfe034f65f67e782550d7e    Y?!4ANDO4_gU~
+            c542611cce8c095e                                                    Ba^
+    DER Tagged [CONTEXT 1]
         DER Sequence
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
-                    Integer(1599122796782)
+                    Integer(1599122797384)
                     Sequence
                         ObjectIdentifier(1.2.840.10045.4.3.2)
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
-                                UTF8String(Downstream-CMP-INTERMEDIATE-2) 
+                                UTF8String(CMPCA-INTERMEDIATE-2) 
                     Sequence
-                        UTCTime(200903084536GMT+00:00) 
-                        UTCTime(300901084536GMT+00:00) 
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
-                                UTF8String(Downstream-CMP-ENDENTITY) 
+                                UTF8String(CMPCA-ENDENTITY) 
                     Sequence
                         Sequence
                             ObjectIdentifier(1.2.840.10045.2.1)
                             ObjectIdentifier(1.2.840.10045.3.1.7)
                         DER Bit String[65, 0] 
-                            0437fe605d6dea8e2a062e3c037ab3684ac9006c9073473f076ccb8f9bb0c36e    7`]m*.<zhJlsG?ln
-                            4a63077e57a68e376585b88b01169b42fe5f66bd0b1465f435a936660874d3cb    Jc~W7eB_fe56ft
-                            ec                                                                  
-                    Tagged [3]
+                            04ce60005b95f0fa1555a33978ee956d3629688151cfe84fbcd9f5d77695b115    `[U9xm6)hQOv
+                            d4ead0036b3b6a8cf8081d19b6f7dc7199e19357175f0e713874e61c35b1cec5    k;jqW_q8t5
+                            4a                                                                  J
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
                                 DER Octet String[22] 
-                                    0414bdeff1d4799233683e1b94082018c4aed2005a60                        y3h> Z`
+                                    04144e6eab66f1576b26d63a90aa0b899d061a78167d                        NnfWk&:x}
                             Sequence
                                 ObjectIdentifier(2.5.29.35)
-                                DER Octet String[78] 
-                                    304c8014d2a92386f40b263ef41e12895815eb0f44e4436aa12ca42a30283126    0L#&>XDCj,*0(1&
-                                    302406035504030c1d446f776e73747265616d2d434d502d494e5445524d4544    0$UDownstream-CMP-INTERMED
-                                    494154452d3182060174532570e4                                        IATE-1tS%p
+                                DER Octet String[69] 
+                                    30438014fe32195304e251a12ca57fa24ffd37fe5098ff57a123a421301f311d    0C2SQ,O7PW#!01
+                                    301b06035504030c14434d5043412d494e5445524d4544494154452d31820601    0UCMPCA-INTERMEDIATE-1
+                                    7453257343                                                          tS%sC
                             Sequence
                                 ObjectIdentifier(2.5.29.15)
                                 Boolean(true)
@@ -94,50 +99,50 @@ DER Sequence
                                     301406082b0601050507032006082b0601050507031b                        0+ +
                 Sequence
                     ObjectIdentifier(1.2.840.10045.4.3.2)
-                DER Bit String[71, 0] 
-                    3045022100d8f2593db0272108afe07ff1fe8334c5b30a79510cb043196714b1    0E!Y='!4yQCg
-                    e5e0a6e6e102202ac9899768eb6c077c626fcda3a23aae977c81e0acd8425813     *hl|bo:|BX
-                    28690096db6e92                                                      (in
+                DER Bit String[72, 0] 
+                    3046022100d337cb3303369b7f25bbc11eae0a4508ebcab22faf0e7cf8d043f4    0F!736%E/|C
+                    4ec7db8de802210089160e5be2cf64557fd342481f9ad9d7676bc212c4a69a10    N![dUBHgk
+                    a20a5cad8f3c9486                                                    \<
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
-                    Integer(1599122796772)
+                    Integer(1599122797379)
                     Sequence
                         ObjectIdentifier(1.2.840.10045.4.3.2)
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
-                                UTF8String(Downstream-CMP-INTERMEDIATE-1) 
+                                UTF8String(CMPCA-INTERMEDIATE-1) 
                     Sequence
-                        UTCTime(200903084536GMT+00:00) 
-                        UTCTime(300901084536GMT+00:00) 
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
-                                UTF8String(Downstream-CMP-INTERMEDIATE-2) 
+                                UTF8String(CMPCA-INTERMEDIATE-2) 
                     Sequence
                         Sequence
                             ObjectIdentifier(1.2.840.10045.2.1)
                             ObjectIdentifier(1.2.840.10045.3.1.7)
                         DER Bit String[65, 0] 
-                            042bfce2edeb2b38e933a099b2d41248ee7ca9f6edc481e1132822d1a470d615    ++83H|("p
-                            d98a98cc6467e43223dbbbbc526316960fa383cbf9993c6e3f504e6fbd8cf791    dg2#Rc<n?PNo
-                            8e                                                                  
-                    Tagged [3]
+                            04df9b8ec4734cff997ef6ee40af49b5a984acc048857d04ac0d65d435bdf256    sL~@IH}e5V
+                            fd20bd893b3b31ae8c5c7e4f2b1fa2923c84f4f21ff25c9b1682eda265fac97f     ;;1\~O+<\e
+                            2c                                                                  ,
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
                                 DER Octet String[22] 
-                                    0414d2a92386f40b263ef41e12895815eb0f44e4436a                        #&>XDCj
+                                    0414fe32195304e251a12ca57fa24ffd37fe5098ff57                        2SQ,O7PW
                             Sequence
                                 ObjectIdentifier(2.5.29.35)
-                                DER Octet String[68] 
-                                    30428014d78ecd58d2d5705acc0e590ff8d8bbf7ec1c32fba122a420301e311c    0BXpZY2" 01
-                                    301a06035504030c13446f776e73747265616d2d434d502d524f4f5482060174    0UDownstream-CMP-ROOTt
-                                    532570d8                                                            S%p
+                                DER Octet String[75] 
+                                    30498014304bcaead6d64ffdc181a4f4e724e94d52d5f0d8a129a42730253123    0I0KO$MR)'0%1#
+                                    302106035504030c1a557073747265616d2d434d505045455254525553542d52    0!UUpstream-CMPPEERTRUST-R
+                                    4f4f548206017453257338                                              OOTtS%s8
                             Sequence
                                 ObjectIdentifier(2.5.29.19)
                                 Boolean(true)
@@ -151,49 +156,49 @@ DER Sequence
                 Sequence
                     ObjectIdentifier(1.2.840.10045.4.3.2)
                 DER Bit String[71, 0] 
-                    30450221009aee0e900226b77aafe3711099ade626872ee6f1bb1e0034bc2058    0E!&zq&.4 X
-                    2cb1a93cfb02206219d6e5436a288df6fb1dead5bbc679f4f436ff9aa072b496    ,< bCj(y6r
-                    72215136a5cbb9                                                      r!Q6
+                    3045022100c2a8c4afc8ba7abb0bc98f3d1cc13cc04cf0297c625eeea5c6506a    0E!z=<L)|b^Pj
+                    94bcb5c17a02207a9fc35be8bf19c13033668008f97bf73d7578f03684da08ad    z z[03f{=ux6
+                    53dd585dc6c3bd                                                      SX]
             Sequence
                 Sequence
-                    Tagged [0]
+                    Tagged [CONTEXT 0]
                         Integer(2)
-                    Integer(1599122796760)
+                    Integer(1599122797368)
                     Sequence
                         ObjectIdentifier(1.2.840.10045.4.3.2)
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
-                                UTF8String(Downstream-CMP-ROOT) 
+                                UTF8String(Upstream-CMPPEERTRUST-ROOT) 
                     Sequence
-                        UTCTime(200903084536GMT+00:00) 
-                        UTCTime(300901084536GMT+00:00) 
+                        UTCTime(200903084537GMT+00:00) 
+                        UTCTime(300901084537GMT+00:00) 
                     Sequence
                         Set
                             Sequence
                                 ObjectIdentifier(2.5.4.3)
-                                UTF8String(Downstream-CMP-INTERMEDIATE-1) 
+                                UTF8String(CMPCA-INTERMEDIATE-1) 
                     Sequence
                         Sequence
                             ObjectIdentifier(1.2.840.10045.2.1)
                             ObjectIdentifier(1.2.840.10045.3.1.7)
                         DER Bit String[65, 0] 
-                            0494e2dc4e22da8876c8848de09bfaba951c0909988a1205d228b4087a2a9180    N"v(z*
-                            c722b22c81d2dd99c3dbd825934bde51c1028e47fa3a81dc689161059f9dc9c6    ",%KQG:ha
-                            48                                                                  H
-                    Tagged [3]
+                            0420c32355de10bfd8babdfe206b28fc1468fe742715d3d343f734d9edc0962d     #U k(ht'C4-
+                            ae5815af755bd2e01244443781231eee1329c2ba065766a341d0d2700c137817    Xu[DD7#)WfApx
+                            37                                                                  7
+                    Tagged [CONTEXT 3]
                         Sequence
                             Sequence
                                 ObjectIdentifier(2.5.29.14)
                                 DER Octet String[22] 
-                                    0414d78ecd58d2d5705acc0e590ff8d8bbf7ec1c32fb                        XpZY2
+                                    0414304bcaead6d64ffdc181a4f4e724e94d52d5f0d8                        0KO$MR
                             Sequence
                                 ObjectIdentifier(2.5.29.35)
-                                DER Octet String[68] 
-                                    30428014770f125bb055ad304b1b783ef4ca16d4a0e98054a122a420301e311c    0Bw[U0Kx>T" 01
-                                    301a06035504030c13446f776e73747265616d2d434d502d524f4f5482060174    0UDownstream-CMP-ROOTt
-                                    53256ff2                                                            S%o
+                                DER Octet String[75] 
+                                    30498014ced4af510deed7c40b12b7972c6f8f6aedcfecb9a129a42730253123    0IQ,oj)'0%1#
+                                    302106035504030c1a557073747265616d2d434d505045455254525553542d52    0!UUpstream-CMPPEERTRUST-R
+                                    4f4f54820601745325728a                                              OOTtS%r
                             Sequence
                                 ObjectIdentifier(2.5.29.19)
                                 Boolean(true)
@@ -206,7 +211,175 @@ DER Sequence
                                     03020186                                                            
                 Sequence
                     ObjectIdentifier(1.2.840.10045.4.3.2)
-                DER Bit String[71, 0] 
-                    304502204ca5d913c510e688d7ea9eb33a939cd0ccec306765977c01c55379e7    0E L:0ge|Sy
-                    3e7154bb022100f74127923d9ae7b21843fad6af0ce9749e5d7a4af99f77d7e1    >qT!A'=Ct]zJw
-                    ca02e6aa29b233                                                      )3
+                DER Bit String[70, 0] 
+                    30440220499fe8f77fbb7073059e5481fb57da7093a326e5a12c2a4a7d8aff3a    0D IpsTWp&,*J}:
+                    913cb9d702206aeb11a2fbe59516963df7d294a5b12fe01fa2fa6798ea080b1c    < j=/g
+                    a363aca6f9f1                                                        c
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REVOCATION_REP message:
+Header/Sender: 4: CN=CMPCA-ENDENTITY
+Header/GeneralInfo[0]/InfoType: CMP.id_it_certProfile (1.3.6.1.5.5.7.4.21)
+Header/GeneralInfo[0]/InfoValue: certProfileForRr
+Header/SenderNonce: #5da96040acbb5bbac1bf8c3b7426c4e4
+Header/TransactionID: #39c69563e9de207f4ee7b5eca33bfa2e
+Header/MessageTime: Wed Jul 27 10:53:07 CEST 2022
+Header/Recipient: 4: CN=Upstream-CMP-ENDENTITY
+Header/ProtectionAlg/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+Header/ProtectionAlg/(Parameters):<null>
+Header/RecipNonce: #7f105b690a4fb2d21e719184f16096cf
+Header/SenderKID: #4e6eab66f1576b26d63a90aa0b899d061a78167d
+Header/Pvno: 2
+Header/(RecipKID|FreeText):<null>
+Body/Type: 12
+Body/Content/Status[0]/Status: 0
+Body/Content/Status[0]/(FailInfo|StatusString):<null>
+Body/Content/(Crls|RevCerts):<null>
+Protection: #034900304602210096FEBEF9F5FA5A7C1116C297090635D8A5F3E53402EC2973914A0F12ED59C23F022100849A34414EBFF544F9C4F94FBEBFE034F65F67E782550D7EC542611CCE8C095E
+ExtraCerts[0]/X509v3PKCert/Signature: #0349003046022100D337CB3303369B7F25BBC11EAE0A4508EBCAB22FAF0E7CF8D043F44EC7DB8DE802210089160E5BE2CF64557FD342481F9AD9D7676BC212C4A69A10A20A5CAD8F3C9486
+ExtraCerts[0]/X509v3PKCert/Version: 2
+ExtraCerts[0]/X509v3PKCert/Issuer: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[0]/X509v3PKCert/SerialNumber: 1599122797384
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #4e6eab66f1576b26d63a90aa0b899d061a78167d
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#fe32195304e251a12ca57fa24ffd37fe5098ff57
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, CMPCA-INTERMEDIATE-1]]]
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#017453257343
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[2]/Value: #0302028C
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.extendedKeyUsage (2.5.29.37)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[3]/Value[0]: null.<unknown> (1.3.6.1.5.5.7.3.32)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Extensions[3]/Value[1]: null.<unknown> (1.3.6.1.5.5.7.3.27)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Issuer: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797384
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #03420004CE60005B95F0FA1555A33978EE956D3629688151CFE84FBCD9F5D77695B115D4EAD0036B3B6A8CF8081D19B6F7DC7199E19357175F0E713874E61C35B1CEC54A
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/Subject: CN=CMPCA-ENDENTITY
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[0]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[0]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #03420004CE60005B95F0FA1555A33978EE956D3629688151CFE84FBCD9F5D77695B115D4EAD0036B3B6A8CF8081D19B6F7DC7199E19357175F0E713874E61C35B1CEC54A
+ExtraCerts[0]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[0]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[0]/X509v3PKCert/Subject: CN=CMPCA-ENDENTITY
+ExtraCerts[0]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[0]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[0]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[0]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[0]/OtherCertTag: 0
+ExtraCerts[0]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[1]/X509v3PKCert/Signature: #0348003045022100C2A8C4AFC8BA7ABB0BC98F3D1CC13CC04CF0297C625EEEA5C6506A94BCB5C17A02207A9FC35BE8BF19C13033668008F97BF73D7578F03684DA08AD53DD585DC6C3BD
+ExtraCerts[1]/X509v3PKCert/Version: 2
+ExtraCerts[1]/X509v3PKCert/Issuer: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[1]/X509v3PKCert/SerialNumber: 1599122797379
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #fe32195304e251a12ca57fa24ffd37fe5098ff57
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#304bcaead6d64ffdc181a4f4e724e94d52d5f0d8
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Upstream-CMPPEERTRUST-ROOT]]]
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#017453257338
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Issuer: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797379
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #03420004DF9B8EC4734CFF997EF6EE40AF49B5A984ACC048857D04AC0D65D435BDF256FD20BD893B3B31AE8C5C7E4F2B1FA2923C84F4F21FF25C9B1682EDA265FAC97F2C
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/Subject: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[1]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: long form definite-length more than 31 bits: <could not parse, skipped> ==============
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[1]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #03420004DF9B8EC4734CFF997EF6EE40AF49B5A984ACC048857D04AC0D65D435BDF256FD20BD893B3B31AE8C5C7E4F2B1FA2923C84F4F21FF25C9B1682EDA265FAC97F2C
+ExtraCerts[1]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[1]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[1]/X509v3PKCert/Subject: CN=CMPCA-INTERMEDIATE-2
+ExtraCerts[1]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[1]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[1]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[1]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[1]/OtherCertTag: 0
+ExtraCerts[1]/(X509v2AttrCert|OtherCert):<null>
+ExtraCerts[2]/X509v3PKCert/Signature: #03470030440220499FE8F77FBB7073059E5481FB57DA7093A326E5A12C2A4A7D8AFF3A913CB9D702206AEB11A2FBE59516963DF7D294A5B12FE01FA2FA6798EA080B1CA363ACA6F9F1
+ExtraCerts[2]/X509v3PKCert/Version: 2
+ExtraCerts[2]/X509v3PKCert/Issuer: CN=Upstream-CMPPEERTRUST-ROOT
+ExtraCerts[2]/X509v3PKCert/SerialNumber: 1599122797368
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Signature/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Signature/(Parameters):<null>
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Version: 2
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[0]/Id: Extension.subjectKeyIdentifier (2.5.29.14)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[0]/Value: #304bcaead6d64ffdc181a4f4e724e94d52d5f0d8
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Id: Extension.authorityKeyIdentifier (2.5.29.35)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[0]: [CONTEXT 0]#ced4af510deed7c40b12b7972c6f8f6aedcfecb9
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[1]: [CONTEXT 1][CONTEXT 4][[[2.5.4.3, Upstream-CMPPEERTRUST-ROOT]]]
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[1]/Value[2]: [CONTEXT 2]#01745325728a
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Id(critical): Extension.basicConstraints (2.5.29.19)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[0]: TRUE
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[2]/Value[1]: 3
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[3]/Id(critical): Extension.keyUsage (2.5.29.15)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Extensions[3]/Value: #03020186
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Issuer: CN=Upstream-CMPPEERTRUST-ROOT
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SerialNumber: 1599122797368
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/getPublicKey: Extra data detected in stream: <could not parse, skipped> ==============
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/SubjectPublicKeyInfo/PublicKeyData: #0342000420C32355DE10BFD8BABDFE206B28FC1468FE742715D3D343F734D9EDC0962DAE5815AF755BD2E01244443781231EEE1329C2BA065766A341D0D2700C13781737
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/Subject: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/VersionNumber: 3
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[2]/X509v3PKCert/TBSCertificate/(SubjectUniqueId|IssuerUniqueId):<null>
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/getPublicKey: Extra data detected in stream: <could not parse, skipped> ==============
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/Algorithm/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Parameters: X9.prime256v1 (1.2.840.10045.3.1.7)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/AlgorithmId/Algorithm: X9.id_ecPublicKey (1.2.840.10045.2.1)
+ExtraCerts[2]/X509v3PKCert/SubjectPublicKeyInfo/PublicKeyData: #0342000420C32355DE10BFD8BABDFE206B28FC1468FE742715D3D343F734D9EDC0962DAE5815AF755BD2E01244443781231EEE1329C2BA065766A341D0D2700C13781737
+ExtraCerts[2]/X509v3PKCert/SignatureAlgorithm/Algorithm: X9.ecdsa_with_SHA256 (1.2.840.10045.4.3.2)
+ExtraCerts[2]/X509v3PKCert/SignatureAlgorithm/(Parameters):<null>
+ExtraCerts[2]/X509v3PKCert/Subject: CN=CMPCA-INTERMEDIATE-1
+ExtraCerts[2]/X509v3PKCert/EndDate/Time: 20300901084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/EndDate/Date: Sun Sep 01 10:45:37 CEST 2030
+ExtraCerts[2]/X509v3PKCert/VersionNumber: 3
+ExtraCerts[2]/X509v3PKCert/StartDate/Time: 20200903084537GMT+00:00
+ExtraCerts[2]/X509v3PKCert/StartDate/Date: Thu Sep 03 10:45:37 CEST 2020
+ExtraCerts[2]/OtherCertTag: 0
+ExtraCerts[2]/(X509v2AttrCert|OtherCert):<null>
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
