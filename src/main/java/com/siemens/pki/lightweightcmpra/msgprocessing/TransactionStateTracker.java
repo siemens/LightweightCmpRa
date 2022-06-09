@@ -389,10 +389,7 @@ public class TransactionStateTracker {
                 handleCertResponse(msg);
                 return;
             case CERTIFICATE_POLLING:
-                if (isPollRequest(msg)) {
-                    return;
-                }
-                if (isPollResponse(msg)) {
+                if (isPollRequest(msg) || isPollResponse(msg)) {
                     return;
                 }
                 if (!isCertResponse(msg)) {

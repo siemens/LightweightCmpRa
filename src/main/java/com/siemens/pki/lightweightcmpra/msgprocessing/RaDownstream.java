@@ -75,7 +75,7 @@ class RaDownstream extends BasicDownstream {
     /**
      * a result tuple
      */
-    private class HandleCertificateRequestResult {
+    private static class HandleCertificateRequestResult {
         PKIMessage handledMessage;
         PrivateKey newGeneratedPrivateKey;
 
@@ -163,8 +163,10 @@ class RaDownstream extends BasicDownstream {
             final CertTemplate certTemplate = certRequest.getCertTemplate();
             final SubjectPublicKeyInfo subjectPublicKeyInfo =
                     certTemplate.getPublicKey();
-            if (subjectPublicKeyInfo == null || subjectPublicKeyInfo
-                    .getPublicKeyData().getBytes().length == 0) {
+            if (subjectPublicKeyInfo == null
+                    || subjectPublicKeyInfo.getPublicKeyData() == null
+                    || subjectPublicKeyInfo.getPublicKeyData()
+                            .getBytes().length == 0) {
                 // central key generation requested
                 if (keySigner == null) {
                     throw new CmpEnrollmentException(incomingCertificateRequest,
@@ -172,7 +174,8 @@ class RaDownstream extends BasicDownstream {
                             "no credentials for key signing available");
                 }
                 final KeyPairGenerator kpgen;
-                if (subjectPublicKeyInfo != null) {
+                if (subjectPublicKeyInfo != null
+                        && subjectPublicKeyInfo.getAlgorithm() != null) {
                     // end entity has a preference on the key type to be generated
                     final ASN1ObjectIdentifier algorithm =
                             subjectPublicKeyInfo.getAlgorithm().getAlgorithm();
