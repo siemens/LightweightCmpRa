@@ -63,6 +63,13 @@ public class RootCaKeyUpdateContent extends ASN1Object {
 
     private final CMPCertificate newWithNew;
 
+    public RootCaKeyUpdateContent(final CMPCertificate newWithNew,
+            final CMPCertificate newWithOld, final CMPCertificate oldWithNew) {
+        this.newWithNew = newWithNew;
+        this.newWithOld = newWithOld;
+        this.oldWithNew = oldWithNew;
+    }
+
     private RootCaKeyUpdateContent(final ASN1Sequence seq) {
         final Enumeration<?> en = seq.getObjects();
 
@@ -74,29 +81,15 @@ public class RootCaKeyUpdateContent extends ASN1Object {
 
             switch (tObj.getTagNo()) {
             case 0:
-                newWithOld = CMPCertificate.getInstance(tObj.getObject());
+                newWithOld = CMPCertificate.getInstance(tObj.getBaseObject());
                 break;
             case 1:
-                oldWithNew = CMPCertificate.getInstance(tObj.getObject());
+                oldWithNew = CMPCertificate.getInstance(tObj.getBaseObject());
                 break;
             default:
                 throw new IllegalArgumentException(
                         "unknown tag number: " + tObj.getTagNo());
             }
-        }
-    }
-
-    public RootCaKeyUpdateContent(final CMPCertificate newWithNew,
-            final CMPCertificate newWithOld, final CMPCertificate oldWithNew) {
-        this.newWithNew = newWithNew;
-        this.newWithOld = newWithOld;
-        this.oldWithNew = oldWithNew;
-    }
-
-    private void addOptional(final ASN1EncodableVector v, final int tagNo,
-            final ASN1Encodable obj) {
-        if (obj != null) {
-            v.add(new DERTaggedObject(true, tagNo, obj));
         }
     }
 
@@ -122,5 +115,12 @@ public class RootCaKeyUpdateContent extends ASN1Object {
         addOptional(v, 1, oldWithNew);
 
         return new DERSequence(v);
+    }
+
+    private void addOptional(final ASN1EncodableVector v, final int tagNo,
+            final ASN1Encodable obj) {
+        if (obj != null) {
+            v.add(new DERTaggedObject(true, tagNo, obj));
+        }
     }
 }

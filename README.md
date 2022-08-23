@@ -88,7 +88,7 @@ and after installation also at `target/test-classes`.
 
 ```bash
 cd target/test-classes
-java -jar ../LightweightCmpRa-0.1.0.jar <XML/YAML/JSON configuration File>
+java -jar ../LightweightCmpRa-1.0.0.jar <XML/YAML/JSON configuration File>
 ```
 
 For standalone start it is recommended  to export a "Runnable JAR file" and have 

@@ -173,62 +173,6 @@ public class MessageDumper {
 
     private static Map<ASN1ObjectIdentifier, OidDescription> oidToKeyMap;
 
-    private static void dump(final String indent, final ASN1Object object,
-            final StringBuilder ret) {
-        final List<String> nullMemberList = new ArrayList<>();
-        for (final Method method : object.getClass().getMethods()) {
-            if ((method.getModifiers() & Modifier.STATIC) != 0) {
-                continue;
-            }
-            if (method.getParameterCount() != 0) {
-                continue;
-            }
-            final Class<?> declaringClass = method.getDeclaringClass();
-            if (declaringClass.equals(Object.class)
-                    || declaringClass.equals(ASN1Object.class)) {
-                continue;
-            }
-            final String methodName = method.getName();
-            try {
-                final boolean isGetter = methodName.startsWith("get");
-                final boolean isArray = methodName.startsWith("to")
-                        && methodName.endsWith("Array");
-                if (!isGetter && !isArray) {
-                    continue;
-                }
-                String memberName;
-                if (isGetter) {
-                    memberName = methodName.substring(3);
-                } else {
-                    memberName = methodName.substring(2).replace("Array", "");
-                }
-                final Object callRet = method.invoke(object);
-                if (callRet == null) {
-                    nullMemberList.add(memberName);
-                    continue;
-                }
-                dumpSingleValue(indent + memberName, callRet, ret);
-            } catch (final InvocationTargetException ex) {
-                ret.append(indent + methodName + ": "
-                        + ex.getTargetException().getMessage()
-                        + ": <could not parse, skipped> ==============\n");
-            } catch (final Exception ex) {
-                ret.append(indent + methodName + ":" + ex.getMessage()
-                        + ": <could not parse, skipped> ==============\n");
-            }
-        }
-        if (!nullMemberList.isEmpty()) {
-            ret.append(indent);
-            ret.append('(');
-            for (final String akt : nullMemberList) {
-                ret.append(akt);
-                ret.append('|');
-            }
-            ret.deleteCharAt(ret.length() - 1);
-            ret.append("):<null>\n");
-        }
-    }
-
     /**
      * Dump an ASN1Object as string
      *
@@ -287,6 +231,199 @@ public class MessageDumper {
         return ret.toString();
     }
 
+    /**
+     * Extract Relative Distinguished Names (RDNs) of a given type from a X500
+     * Name
+     * e.g. certificate subject.
+     *
+     * @param x500Name
+     *            X.500 Name e.g. certificate subject.
+     * @param rdnType
+     *            RDN Type to be extracted e.g. CN
+     *
+     * @return RDNs of the requested type found in the X.500 name
+     */
+    public static final List<String> extractRdnAsStringArray(
+            final X500Name x500Name, final ASN1ObjectIdentifier rdnType) {
+        if (x500Name == null) {
+            return null;
+        }
+        final List<String> ret = new ArrayList<>(1);
+        for (final RDN aktRdn : x500Name.getRDNs(rdnType)) {
+            for (final AttributeTypeAndValue aktTv : aktRdn
+                    .getTypesAndValues()) {
+                ret.add(String.valueOf(aktTv.getValue()));
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Get OID Description for a given OID (ASN.1 representation)
+     *
+     * @param oid
+     *            OID (ASN.1 representation)
+     *
+     * @return OID Description for a given OID (ASN.1 representation)
+     */
+    public static OidDescription getOidDescriptionForOid(
+            final ASN1ObjectIdentifier oid) {
+        initNameOidMaps();
+        final OidDescription ret = oidToKeyMap.get(oid);
+        if (ret == null) {
+            return new OidDescription("<unknown>", "<unknown>", oid);
+        }
+        return ret;
+    }
+
+    /**
+     * Dumping PKI message to a string in a short form.
+     *
+     * @param msg
+     *            PKI message to be dumped
+     *
+     * @return string short representation of the PKI message
+     */
+    public static String msgAsShortString(final PKIMessage msg) {
+        if (msg == null) {
+            return "<null>";
+        }
+        return msgTypeAsString(msg.getBody()) + " ["
+                + msg.getHeader().getSender() + " => "
+                + msg.getHeader().getRecipient() + "]";
+    }
+
+    /**
+     * Get message type from a PKI message body as string
+     *
+     * @param msgType
+     *            PKI message type
+     *
+     * @return message type as string
+     */
+    public static String msgTypeAsString(final int msgType) {
+        return TYPE_MAP.get(msgType);
+    }
+
+    /**
+     * Get message type from a PKI message body as string
+     *
+     * @param body
+     *            PKI message body
+     *
+     * @return message type as string
+     */
+    public static String msgTypeAsString(final PKIBody body) {
+        return TYPE_MAP.get(body.getType());
+    }
+
+    /**
+     * Get message type from a PKI message as string
+     *
+     * @param msg
+     *            PKI message
+     *
+     * @return message type as string
+     */
+    public static String msgTypeAsString(final PKIMessage msg) {
+        if (msg == null) {
+            return null;
+        }
+        return msgTypeAsString(msg.getBody());
+    }
+
+    public static String pkiStatus2String(final PKIStatusInfo status) {
+        if (status == null) {
+            return "<null>";
+        }
+        final StringBuilder statStringBuf = new StringBuilder();
+        final PKIFreeText statusString = status.getStatusString();
+        if (statusString != null) {
+            final int size = statusString.size();
+            if (size > 0) {
+                statStringBuf.append('(');
+                for (int i = 0; i < size; i++) {
+                    statStringBuf.append(statusString.getStringAtUTF8(i));
+                    statStringBuf.append(' ');
+                }
+                statStringBuf.append(')');
+            }
+        }
+        switch (status.getStatus().intValue()) {
+        case PKIStatus.GRANTED:
+            return "GRANTED" + statStringBuf;
+        case PKIStatus.GRANTED_WITH_MODS:
+            return "GRANTED_WITH_MODS" + statStringBuf;
+        case PKIStatus.REJECTION:
+            return "REJECTION" + statStringBuf;
+        case PKIStatus.WAITING:
+            return "WAITING" + statStringBuf;
+        case PKIStatus.REVOCATION_WARNING:
+            return "REVOCATION_WARNING" + statStringBuf;
+        case PKIStatus.REVOCATION_NOTIFICATION:
+            return "REVOCATION_NOTIFICATION" + statStringBuf;
+        case PKIStatus.KEY_UPDATE_WARNING:
+            return "KEY_UPDATE_WARNING" + statStringBuf;
+        default:
+            return "<INVALID>" + statStringBuf;
+
+        }
+    }
+
+    private static void dump(final String indent, final ASN1Object object,
+            final StringBuilder ret) {
+        final List<String> nullMemberList = new ArrayList<>();
+        for (final Method method : object.getClass().getMethods()) {
+            if ((method.getModifiers() & Modifier.STATIC) != 0
+                    || method.getParameterCount() != 0) {
+                continue;
+            }
+            final Class<?> declaringClass = method.getDeclaringClass();
+            if (declaringClass.equals(Object.class)
+                    || declaringClass.equals(ASN1Object.class)) {
+                continue;
+            }
+            final String methodName = method.getName();
+            try {
+                final boolean isGetter = methodName.startsWith("get");
+                final boolean isArray = methodName.startsWith("to")
+                        && methodName.endsWith("Array");
+                if (!isGetter && !isArray) {
+                    continue;
+                }
+                String memberName;
+                if (isGetter) {
+                    memberName = methodName.substring(3);
+                } else {
+                    memberName = methodName.substring(2).replace("Array", "");
+                }
+                final Object callRet = method.invoke(object);
+                if (callRet == null) {
+                    nullMemberList.add(memberName);
+                    continue;
+                }
+                dumpSingleValue(indent + memberName, callRet, ret);
+            } catch (final InvocationTargetException ex) {
+                ret.append(indent + methodName + ": "
+                        + ex.getTargetException().getMessage()
+                        + ": <could not parse, skipped> ==============\n");
+            } catch (final Exception ex) {
+                ret.append(indent + methodName + ":" + ex.getMessage()
+                        + ": <could not parse, skipped> ==============\n");
+            }
+        }
+        if (!nullMemberList.isEmpty()) {
+            ret.append(indent);
+            ret.append('(');
+            for (final String akt : nullMemberList) {
+                ret.append(akt);
+                ret.append('|');
+            }
+            ret.deleteCharAt(ret.length() - 1);
+            ret.append("):<null>\n");
+        }
+    }
+
     private static void dumpSingleValue(final String indent,
             final Object callRet, final StringBuilder ret)
             throws ParseException {
@@ -343,8 +480,8 @@ public class MessageDumper {
                 return;
             }
             for (int i = 0; i < size; i++) {
-                ret.append(
-                        indent + "[" + i + "] : " + val.getStringAt(i) + "\n");
+                ret.append(indent + "[" + i + "] : " + val.getStringAtUTF8(i)
+                        + "\n");
             }
             return;
         }
@@ -407,51 +544,6 @@ public class MessageDumper {
     }
 
     /**
-     * Extract Relative Distinguished Names (RDNs) of a given type from a X500
-     * Name
-     * e.g. certificate subject.
-     *
-     * @param x500Name
-     *            X.500 Name e.g. certificate subject.
-     * @param rdnType
-     *            RDN Type to be extracted e.g. CN
-     *
-     * @return RDNs of the requested type found in the X.500 name
-     */
-    public static final List<String> extractRdnAsStringArray(
-            final X500Name x500Name, final ASN1ObjectIdentifier rdnType) {
-        if (x500Name == null) {
-            return null;
-        }
-        final List<String> ret = new ArrayList<>(1);
-        for (final RDN aktRdn : x500Name.getRDNs(rdnType)) {
-            for (final AttributeTypeAndValue aktTv : aktRdn
-                    .getTypesAndValues()) {
-                ret.add(String.valueOf(aktTv.getValue()));
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * Get OID Description for a given OID (ASN.1 representation)
-     *
-     * @param oid
-     *            OID (ASN.1 representation)
-     *
-     * @return OID Description for a given OID (ASN.1 representation)
-     */
-    public static OidDescription getOidDescriptionForOid(
-            final ASN1ObjectIdentifier oid) {
-        initNameOidMaps();
-        final OidDescription ret = oidToKeyMap.get(oid);
-        if (ret == null) {
-            return new OidDescription("<unknown>", "<unknown>", oid);
-        }
-        return ret;
-    }
-
-    /**
      * // load ObjectIdentifiers defined somewhere in BouncyCastle
      */
     private synchronized static void initNameOidMaps() {
@@ -508,101 +600,7 @@ public class MessageDumper {
         }
     }
 
-    /**
-     * Dumping PKI message to a string in a short form.
-     *
-     * @param msg
-     *            PKI message to be dumped
-     *
-     * @return string short representation of the PKI message
-     */
-    public static String msgAsShortString(final PKIMessage msg) {
-        if (msg == null) {
-            return "<null>";
-        }
-        return msgTypeAsString(msg.getBody()) + " ["
-                + msg.getHeader().getSender() + " => "
-                + msg.getHeader().getRecipient() + "]";
-    }
-
-    /**
-     * Get message type from a PKI message body as string
-     *
-     * @param msgType
-     *            PKI message type
-     *
-     * @return message type as string
-     */
-    public static String msgTypeAsString(final int msgType) {
-        return TYPE_MAP.get(msgType);
-    }
-
-    /**
-     * Get message type from a PKI message body as string
-     *
-     * @param body
-     *            PKI message body
-     *
-     * @return message type as string
-     */
-    public static String msgTypeAsString(final PKIBody body) {
-        return TYPE_MAP.get(body.getType());
-    }
-
-    /**
-     * Get message type from a PKI message as string
-     *
-     * @param msg
-     *            PKI message
-     *
-     * @return message type as string
-     */
-    public static String msgTypeAsString(final PKIMessage msg) {
-        if (msg == null) {
-            return null;
-        }
-        return msgTypeAsString(msg.getBody());
-    }
-
     private static String nameAsKey(final String name) {
         return name.toLowerCase(Locale.getDefault()).replaceAll("_", "");
-    }
-
-    public static String pkiStatus2String(final PKIStatusInfo status) {
-        if (status == null) {
-            return "<null>";
-        }
-        final StringBuilder statStringBuf = new StringBuilder();
-        final PKIFreeText statusString = status.getStatusString();
-        if (statusString != null) {
-            final int size = statusString.size();
-            if (size > 0) {
-                statStringBuf.append('(');
-                for (int i = 0; i < size; i++) {
-                    statStringBuf.append(statusString.getStringAt(i));
-                    statStringBuf.append(' ');
-                }
-                statStringBuf.append(')');
-            }
-        }
-        switch (status.getStatus().intValue()) {
-        case PKIStatus.GRANTED:
-            return "GRANTED" + statStringBuf;
-        case PKIStatus.GRANTED_WITH_MODS:
-            return "GRANTED_WITH_MODS" + statStringBuf;
-        case PKIStatus.REJECTION:
-            return "REJECTION" + statStringBuf;
-        case PKIStatus.WAITING:
-            return "WAITING" + statStringBuf;
-        case PKIStatus.REVOCATION_WARNING:
-            return "REVOCATION_WARNING" + statStringBuf;
-        case PKIStatus.REVOCATION_NOTIFICATION:
-            return "REVOCATION_NOTIFICATION" + statStringBuf;
-        case PKIStatus.KEY_UPDATE_WARNING:
-            return "KEY_UPDATE_WARNING" + statStringBuf;
-        default:
-            return "<INVALID>" + statStringBuf;
-
-        }
     }
 }
