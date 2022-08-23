@@ -31,12 +31,12 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
 
+import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.cmp.CertConfirmContent;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.CertResponse;
@@ -111,6 +111,74 @@ public class MessageValidator implements ValidatorIF {
         this.acceptRaVerified = acceptRaVerified;
         this.allowedTimeDeviationInSeconds = allowedTimeDeviationInSeconds;
 
+    }
+
+    /**
+     * Validates the given <code>message</code> to ensure that it conforms to
+     * the
+     * CMP profile.
+     *
+     * @param message
+     *            the CMP message to validate
+     * @throws CmpValidationException
+     *             if validation failed
+     */
+    @Override
+    public void validate(final PKIMessage message) {
+
+        assertNotNull(message, PKIFailureInfo.badDataFormat,
+                "did not get a valid message, message is null");
+
+        validateHeader(message.getHeader());
+
+        final PKIBody body = message.getBody();
+        switch (body.getType()) {
+        case PKIBody.TYPE_INIT_REQ:
+        case PKIBody.TYPE_CERT_REQ:
+        case PKIBody.TYPE_KEY_UPDATE_REQ:
+            validateCrmfCertReq(message);
+            break;
+        case PKIBody.TYPE_P10_CERT_REQ:
+            validateP10CertReq(message);
+            break;
+        case PKIBody.TYPE_CERT_REP:
+        case PKIBody.TYPE_INIT_REP:
+        case PKIBody.TYPE_KEY_UPDATE_REP:
+            validateInitCertRep(message);
+            break;
+        case PKIBody.TYPE_REVOCATION_REQ:
+            validateRevReq(message);
+            break;
+        case PKIBody.TYPE_REVOCATION_REP:
+            validateRevRep(message);
+            break;
+        case PKIBody.TYPE_CERT_CONFIRM:
+            validateCertConfirm(message);
+            break;
+        case PKIBody.TYPE_CONFIRM:
+            validateConfirm(message);
+            break;
+        case PKIBody.TYPE_POLL_REQ:
+            validatePollReq(message);
+            break;
+        case PKIBody.TYPE_POLL_REP:
+            validatePollRep(message);
+            break;
+        case PKIBody.TYPE_GEN_MSG:
+            validateGenMessage(message);
+            break;
+        case PKIBody.TYPE_GEN_REP:
+            validateGenRep(message);
+            break;
+        case PKIBody.TYPE_ERROR:
+        case PKIBody.TYPE_NESTED:
+            break;
+        default:
+            throw new CmpValidationException(interfaceName,
+                    PKIFailureInfo.badMessageCheck,
+                    MessageDumper.msgTypeAsString(message.getBody())
+                            + " not supported");
+        }
     }
 
     /**
@@ -236,74 +304,6 @@ public class MessageValidator implements ValidatorIF {
             throw new CmpValidationException(interfaceName,
                     PKIFailureInfo.badRequest,
                     "used " + fieldName + " too short");
-        }
-    }
-
-    /**
-     * Validates the given <code>message</code> to ensure that it conforms to
-     * the
-     * CMP profile.
-     *
-     * @param message
-     *            the CMP message to validate
-     * @throws CmpValidationException
-     *             if validation failed
-     */
-    @Override
-    public void validate(final PKIMessage message) {
-
-        assertNotNull(message, PKIFailureInfo.badDataFormat,
-                "did not get a valid message, message is null");
-
-        validateHeader(message.getHeader());
-
-        final PKIBody body = message.getBody();
-        switch (body.getType()) {
-        case PKIBody.TYPE_INIT_REQ:
-        case PKIBody.TYPE_CERT_REQ:
-        case PKIBody.TYPE_KEY_UPDATE_REQ:
-            validateCrmfCertReq(message);
-            break;
-        case PKIBody.TYPE_P10_CERT_REQ:
-            validateP10CertReq(message);
-            break;
-        case PKIBody.TYPE_CERT_REP:
-        case PKIBody.TYPE_INIT_REP:
-        case PKIBody.TYPE_KEY_UPDATE_REP:
-            validateInitCertRep(message);
-            break;
-        case PKIBody.TYPE_REVOCATION_REQ:
-            validateRevReq(message);
-            break;
-        case PKIBody.TYPE_REVOCATION_REP:
-            validateRevRep(message);
-            break;
-        case PKIBody.TYPE_CERT_CONFIRM:
-            validateCertConfirm(message);
-            break;
-        case PKIBody.TYPE_CONFIRM:
-            validateConfirm(message);
-            break;
-        case PKIBody.TYPE_POLL_REQ:
-            validatePollReq(message);
-            break;
-        case PKIBody.TYPE_POLL_REP:
-            validatePollRep(message);
-            break;
-        case PKIBody.TYPE_GEN_MSG:
-            validateGenMessage(message);
-            break;
-        case PKIBody.TYPE_GEN_REP:
-            validateGenRep(message);
-            break;
-        case PKIBody.TYPE_ERROR:
-        case PKIBody.TYPE_NESTED:
-            break;
-        default:
-            throw new CmpValidationException(interfaceName,
-                    PKIFailureInfo.badMessageCheck,
-                    MessageDumper.msgTypeAsString(message.getBody())
-                            + " not supported");
         }
     }
 
@@ -453,17 +453,17 @@ public class MessageValidator implements ValidatorIF {
     /**
      * Validates PKIFailureInfo field value, whether it is a valid value.
      *
-     * @param failInfo
+     * @param asn1BitString
      *            the value of the failInfo field to validate
      * @throws CmpValidationException
      *             if the given <code>failInfo</code> is not a valid value for
      *             this
      *             field.
      */
-    private void validateFailInfo(final DERBitString failInfo) {
-        assertNotNull(failInfo, PKIFailureInfo.badDataFormat,
+    private void validateFailInfo(final ASN1BitString asn1BitString) {
+        assertNotNull(asn1BitString, PKIFailureInfo.badDataFormat,
                 "fail info is null");
-        final int info = failInfo.intValue();
+        final int info = asn1BitString.intValue();
         // test if a positive integer n is a power of 2
         if ((info & info - 1) != 0) {
             throw new CmpValidationException(interfaceName,
@@ -485,8 +485,7 @@ public class MessageValidator implements ValidatorIF {
     private void validateGenRep(final PKIMessage message) {
         final GenRepContent genRepContent =
                 (GenRepContent) message.getBody().getContent();
-        final InfoTypeAndValue[] itav =
-                genRepContent.toInfoTypeAndValueArray();
+        final InfoTypeAndValue[] itav = genRepContent.toInfoTypeAndValueArray();
         assertExactlyOneElement(itav, PKIFailureInfo.badMessageCheck,
                 "one InfoTypeAndValue is required");
         assertNotNull(itav[0].getInfoType(), PKIFailureInfo.badMessageCheck,

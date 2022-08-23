@@ -19,7 +19,7 @@ package com.siemens.pki.lightweightcmpra.msgvalidation;
 
 import javax.xml.bind.JAXB;
 
-import org.bouncycastle.asn1.DERBitString;
+import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
@@ -97,7 +97,7 @@ public class ProtectionValidator implements ValidatorIF {
     @Override
     public void validate(final PKIMessage message)
             throws CmpProcessingException {
-        final DERBitString protection = message.getProtection();
+        final ASN1BitString protection = message.getProtection();
         final AlgorithmIdentifier protectionAlg =
                 message.getHeader().getProtectionAlg();
         if (protectionAlg != null) {
