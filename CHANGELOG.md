@@ -11,3 +11,7 @@ new design, use cmp-ra-component library
 ### 2.0.1 (Aug 31 2022)
 
 use CmpRaComponent 1.0.3
+
+### 2.0.2 (Sep 1 2022)
+
+use CmpRaComponent 1.0.4
