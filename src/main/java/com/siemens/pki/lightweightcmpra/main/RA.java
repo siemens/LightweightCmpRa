@@ -17,9 +17,11 @@
  */
 package com.siemens.pki.lightweightcmpra.main;
 
-import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent;
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent.CmpRaInterface;
@@ -35,6 +37,20 @@ import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterfaceFactory;
  *
  */
 public class RA {
+
+    static class DeferredSupplier<T> implements Supplier<T> {
+        T val;
+
+        @Override
+        public T get() {
+            return val;
+        }
+
+        void set(final T val) {
+            this.val = val;
+        }
+
+    }
 
     /**
      * @param args
@@ -66,16 +82,30 @@ public class RA {
             try {
                 final ConfigurationImpl configuration =
                         YamlConfigLoader.loadConfig(actConfigFile);
-                final UpstreamInterface upstreamInterface =
-                        ifNotNull(configuration.getUpstreamInterface(),
-                                UpstreamInterfaceFactory::create);
+                final DeferredSupplier<CmpRaInterface> raHolder = new DeferredSupplier<>();
+                final Map<String, UpstreamInterface> upstreamInterfaceMap =
+                        new HashMap<>();
+                final BiFunction<byte[], String, byte[]> upstreamExchange =
+                        (request, certProfile) -> {
+                            UpstreamInterface upstreamInterface =
+                                    upstreamInterfaceMap.get(certProfile);
+                            if (upstreamInterface == null) {
+                                upstreamInterface = UpstreamInterfaceFactory
+                                        .create(configuration
+                                                .getUpstreamInterface(
+                                                        certProfile));
+                                upstreamInterface.setDelayedResponseHandler(
+                                        raHolder.get()::gotResponseAtUpstream);
+                                upstreamInterfaceMap.put(certProfile,
+                                        upstreamInterface);
+                            }
+                            return upstreamInterface.apply(request,
+                                    certProfile);
+                        };
                 final CmpRaInterface raComponent =
                         CmpRaComponent.instantiateCmpRaComponent(configuration,
-                                upstreamInterface);
-                if (upstreamInterface != null) {
-                    upstreamInterface.setDelayedResponseHandler(
-                            raComponent::gotResponseAtUpstream);
-                }
+                                upstreamExchange);
+                raHolder.set(raComponent);
                 @SuppressWarnings("unused")
                 final DownstreamInterface downstreamInterface =
                         DownstreamInterfaceFactory.create(

@@ -2,8 +2,8 @@
 # Upper RA close to CA
 
 UpstreamInterface:
-  HttpClient:
-    ServingUri:  "http://localhost:7000/ca"
+  - HttpClient:
+      ServingUri:  "http://localhost:7000/ca"
 
 DownstreamInterface:
   OfflineFileServer:

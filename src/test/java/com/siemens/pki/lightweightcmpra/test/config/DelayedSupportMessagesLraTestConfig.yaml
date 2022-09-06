@@ -6,9 +6,9 @@ DownstreamInterface:
     ServingUri:  "http://localhost:6006/delayedsupportlra"
 
 UpstreamInterface:
-  OfflineFileClient:
-    inputDirectory: "./target/CmpTest/GenDownstream"
-    outputDirectory: "./target/CmpTest/GenUpstream"
+  - OfflineFileClient:
+      inputDirectory: "./target/CmpTest/GenDownstream"
+      outputDirectory: "./target/CmpTest/GenUpstream"
 
 UpstreamConfiguration:
   - VerificationContext:

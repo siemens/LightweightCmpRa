@@ -88,29 +88,30 @@ It may contain declarations of the object types listed below in any order:
 | mandatory if GENM shall be processed locally | [`SupportMessageHandlerInterface` object](#the-supportmessagehandlerinterface-object)|
 | mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object) |
 
-All objects except for `UpstreamInterface` and `DownstreamInterface`
-have array values.
-If an object type is not mandatory,
-an empty array may given or the whole key may be absent.
+All objects except `DownstreamInterface` have array values.
+If an object type is not mandatory, an empty array may given or the whole key may be absent.
+
+For `UpstreamInterface`, `DownstreamConfiguration`, `RaVerifiedAcceptable`, `RetryAfterTimeInSeconds`,
+`UpstreamConfiguration`, `ForceRaVerifyOnUpstream`, `EnrollmentTrust`, `CkgConfiguration`, and `InventoryInterface`
+each array entry may have a **certProfile** value included. The value of a **certProfile** is a string.
+An absent **certProfile** matches CMP messages with any (or no) certProfile.
 
 For `DownstreamConfiguration`, `RaVerifiedAcceptable`, `RetryAfterTimeInSeconds`,
 `UpstreamConfiguration`, `ForceRaVerifyOnUpstream`,
 `EnrollmentTrust`, `CkgConfiguration`, and `InventoryInterface`
-each array entry may have a **certProfile** value and/or a **bodyType** included.
-The value of a **certProfile** is a string.
-An absent **certProfile** matches CMP messages with any (or no) certProfile.
+each array entry may have a **bodyType** included.
+
 The value of the **bodyType** is a number (0..26) or a string (`"ir"`..`"pollRep"`).
 An absent **bodyType** matches CMP messages of any type.
 
 While processing a CMP message (which may be a request or response, including
 an error message), its bodyType (see
 [RFC4210](https://datatracker.ietf.org/doc/html/rfc4210),
-section PKI Message Body)
-and any certProfile optionally given in the message header (see
+section PKI Message Body) and any certProfile optionally given in the message header (see
 [CMP updates](https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cmp-updates),
 section certProfile)
 are extracted from the message and matched against the array entries
-until a matching entry was found. This first matching entry is then used
+until a fully matching entry was found. This first matching entry is then used
 and controls the further processing of the message.
 
 For the `SupportMessageHandlerInterface` object value each array entry
@@ -202,18 +203,20 @@ It should contain the key/value pairs described below in any order:
 
 ## The `UpstreamInterface` object
 
-The **`UpstreamInterface` object** describes the transport layer
+The **`UpstreamInterface` object** describes the transport layers
 of the upstream interface to which the component may send/forward CMP requests.
 It may be omitted if all CMP messages can be handled locally
 (e.g., support messages only that are not forwarded to an upstream server).
 
-It must contain exactly one of the objects described below:
 
-|object type |
-|:------------|
-| [`HttpClient` object](#the-httpclient-object) |
-| [`HttpsClient` object](#the-httpclient-object) |
-| [`OfflineFileClient` object](#the-offlinefileclient-object) |
+The value array contains
+
+| requested cardinality | object type |
+|-------------------------|-------------|
+|0..n| [`HttpClient` object](#the-httpclient-object) |
+|0..n| [`HttpsClient` object](#the-httpclient-object) |
+|0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
+
 
 ### The `HttpClient` object
 

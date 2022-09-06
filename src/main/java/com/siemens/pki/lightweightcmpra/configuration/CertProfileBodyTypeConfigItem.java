@@ -22,17 +22,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-abstract public class CertProfileBodyTypeConfigItem {
+public abstract class CertProfileBodyTypeConfigItem
+        extends CertProfileConfigItem {
 
-    private String certProfile;
     private Integer bodyType;
 
     public Integer getBodyType() {
         return bodyType;
-    }
-
-    public String getCertProfile() {
-        return certProfile;
     }
 
     @XmlJavaTypeAdapter(XmlPkiMessageTypeToIntAdapter.class)
@@ -40,17 +36,11 @@ abstract public class CertProfileBodyTypeConfigItem {
         this.bodyType = bodyType;
     }
 
-    public void setCertProfile(final String certProfile) {
-        this.certProfile = certProfile;
-    }
-
     boolean matchesScope(final String certProfile, final int bodyType) {
-        if (this.bodyType != null && !this.bodyType.equals(bodyType)
-                || this.certProfile != null
-                        && !this.certProfile.equals(certProfile)) {
+        if (!super.matchesScope(certProfile)) {
             return false;
         }
-        return true;
+        return this.bodyType == null || this.bodyType.equals(bodyType);
     }
 
 }

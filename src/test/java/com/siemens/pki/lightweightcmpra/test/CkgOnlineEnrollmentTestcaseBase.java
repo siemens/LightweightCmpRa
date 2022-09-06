@@ -30,6 +30,7 @@ import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.CertifiedKeyPair;
 import org.bouncycastle.asn1.cmp.PKIBody;
+import org.bouncycastle.asn1.cmp.PKIHeader;
 import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.cms.EnvelopedData;
 import org.bouncycastle.asn1.crmf.CertTemplate;
@@ -89,7 +90,8 @@ public class CkgOnlineEnrollmentTestcaseBase
                 .generateIrCrKurBody(requestMesssageType, template, null, null);
 
         final PKIMessage cr = PkiMessageGenerator.generateAndProtectMessage(
-                new HeaderProviderForTest(3), protectionProvider, crBody);
+                new HeaderProviderForTest(PKIHeader.CMP_2021),
+                protectionProvider, crBody);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(cr));
         }

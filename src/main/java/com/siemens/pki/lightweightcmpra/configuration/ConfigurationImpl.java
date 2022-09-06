@@ -91,6 +91,32 @@ public class ConfigurationImpl implements Configuration {
         }
     }
 
+    static class CertProfileScopedList<T extends CertProfileConfigItem>
+            extends ArrayList<T> {
+
+        private static final long serialVersionUID = 1L;
+
+        T getMatchingConfig(final String certProfile) {
+            for (final T aktItem : this) {
+                if (aktItem.matchesScope(certProfile)) {
+                    return aktItem;
+                }
+            }
+            return null;
+        }
+
+        T getMatchingConfig(final String certProfile, final String itemName) {
+            final T ret = getMatchingConfig(certProfile);
+            if (ret != null) {
+                return ret;
+            }
+            LOGGER.error("no matching " + itemName
+                    + " entry found for certProfile: " + certProfile);
+            return null;
+        }
+
+    }
+
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ConfigurationImpl.class);
 
@@ -101,7 +127,8 @@ public class ConfigurationImpl implements Configuration {
             @XmlElement(name = "OfflineFileClient", type = OfflineFileClientConfig.class, required = false),
             @XmlElement(name = "HttpClient", type = HttpClientConfig.class, required = false),
             @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false)})
-    private AbstractUpstreamInterfaceConfig UpstreamInterface;
+    private final CertProfileScopedList<AbstractUpstreamInterfaceConfig> UpstreamInterface =
+            new CertProfileScopedList<>();
 
     @XmlElements({
             @XmlElement(name = "OfflineFileServer", type = OfflineFileServerConfig.class, required = false),
@@ -231,8 +258,10 @@ public class ConfigurationImpl implements Configuration {
                 "UpstreamConfiguration");
     }
 
-    public AbstractUpstreamInterfaceConfig getUpstreamInterface() {
-        return UpstreamInterface;
+    public AbstractUpstreamInterfaceConfig getUpstreamInterface(
+            final String certProfile) {
+        return UpstreamInterface.getMatchingConfig(certProfile,
+                "UpstreamInterface");
     }
 
     @Override

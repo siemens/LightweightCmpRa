@@ -37,50 +37,52 @@ import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 
 public class CmpTestcaseBase {
 
-	static public final File CONFIG_DIRECTORY = new File(
-			"./src/test/java/com/siemens/pki/lightweightcmpra/test/config");
-	private static ThreadGroup lraThreadGroup = new ThreadGroup("LRA Thread Group");
-	private static ProtectionProvider eeSignaturebasedProtectionProvider;
+    static public final File CONFIG_DIRECTORY = new File(
+            "./src/test/java/com/siemens/pki/lightweightcmpra/test/config");
+    private static ProtectionProvider eeSignaturebasedProtectionProvider;
 
-	private static Set<String> startedRAs = new HashSet<>();
+    private static Set<String> startedRAs = new HashSet<>();
 
-	private static Map<String, Function<PKIMessage, PKIMessage>> startedEeClients = new HashMap<>();
+    private static Map<String, Function<PKIMessage, PKIMessage>> startedEeClients =
+            new HashMap<>();
 
-	protected static ProtectionProvider getEeSignaturebasedProtectionProvider() {
-		return eeSignaturebasedProtectionProvider;
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+        ConfigFileLoader.setConfigFileBase(CONFIG_DIRECTORY);
+        eeSignaturebasedProtectionProvider =
+                TestUtils.createSignatureBasedProtection(
+                        "credentials/CMP_EE_Keystore_EdDSA.p12",
+                        // "credentials/CMP_EE_Keystore.p12",
+                        TestUtils.getPasswordAsCharArray());
+    }
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
-		ConfigFileLoader.setConfigFileBase(CONFIG_DIRECTORY);
-		eeSignaturebasedProtectionProvider = TestUtils.createSignatureBasedProtection(
-				"credentials/CMP_EE_Keystore_EdDSA.p12",
-				// "credentials/CMP_EE_Keystore.p12",
-				TestUtils.getPasswordAsCharArray());
-	}
+    protected static ProtectionProvider getEeSignaturebasedProtectionProvider() {
+        return eeSignaturebasedProtectionProvider;
+    }
 
-	private Function<PKIMessage, PKIMessage> eeCmpClient;
+    private Function<PKIMessage, PKIMessage> eeCmpClient;
 
-	protected Function<PKIMessage, PKIMessage> getEeCmpClient() {
-		return eeCmpClient;
-	}
+    protected Function<PKIMessage, PKIMessage> getEeCmpClient() {
+        return eeCmpClient;
+    }
 
-	protected void initTestbed(final String cmpClientUrl, final String... namesOfRaConfigFile)
-			throws Exception, GeneralSecurityException, InterruptedException {
-		if (cmpClientUrl != null) {
-			eeCmpClient = startedEeClients.get(cmpClientUrl);
-			if (eeCmpClient == null) {
-				eeCmpClient = TestUtils.createCmpClient(cmpClientUrl);
-				startedEeClients.put(cmpClientUrl, eeCmpClient);
-			}
-		}
-		for (final String nameOfRaConfigFile : namesOfRaConfigFile) {
-			if (!startedRAs.contains(nameOfRaConfigFile)) {
-				RA.main(new String[] { nameOfRaConfigFile });
-				startedRAs.add(nameOfRaConfigFile);
-			}
-		}
-	}
+    protected void initTestbed(final String cmpClientUrl,
+            final String... namesOfRaConfigFile)
+            throws Exception, GeneralSecurityException, InterruptedException {
+        if (cmpClientUrl != null) {
+            eeCmpClient = startedEeClients.get(cmpClientUrl);
+            if (eeCmpClient == null) {
+                eeCmpClient = TestUtils.createCmpClient(cmpClientUrl);
+                startedEeClients.put(cmpClientUrl, eeCmpClient);
+            }
+        }
+        for (final String nameOfRaConfigFile : namesOfRaConfigFile) {
+            if (!startedRAs.contains(nameOfRaConfigFile)) {
+                RA.main(new String[] {nameOfRaConfigFile});
+                startedRAs.add(nameOfRaConfigFile);
+            }
+        }
+    }
 
 }

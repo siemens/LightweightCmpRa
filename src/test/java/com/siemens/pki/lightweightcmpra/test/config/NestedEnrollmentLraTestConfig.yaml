@@ -6,8 +6,8 @@ DownstreamInterface:
     ServingUri:  "http://localhost:6005/nestedlra"
 
 UpstreamInterface:
-  HttpClient:
-    ServingUri:  "http://localhost:7001/ra"
+  - HttpClient:
+      ServingUri:  "http://localhost:7001/ra"
 
 UpstreamConfiguration:
   - VerificationContext:

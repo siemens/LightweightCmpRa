@@ -6,9 +6,10 @@ DownstreamInterface:
     ServingUri:  "http://localhost:6003/delayedlra"
 
 UpstreamInterface:
-  OfflineFileClient:
-    inputDirectory: "./target/CmpTest/Downstream"
-    outputDirectory: "./target/CmpTest/Upstream"
+  - OfflineFileClient:
+      certProfile: ~
+      inputDirectory: "./target/CmpTest/Downstream"
+      outputDirectory: "./target/CmpTest/Upstream"
 
 UpstreamConfiguration:
   - VerificationContext:

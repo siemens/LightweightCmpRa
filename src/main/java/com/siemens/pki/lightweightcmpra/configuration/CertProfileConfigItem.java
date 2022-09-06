@@ -21,28 +21,15 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public abstract class CertProfileInfoTypeConfigItem
-        extends CertProfileConfigItem {
+public class CertProfileConfigItem {
+    private String certProfile;
 
-    private String infoTypeOid;
-
-    protected CertProfileInfoTypeConfigItem(final String infoTypeOid) {
-        setInfoTypeOid(infoTypeOid);
+    public String getCertProfile() {
+        return certProfile;
     }
 
-    public String getInfoTypeOid() {
-        return infoTypeOid;
-    }
-
-    public void setInfoTypeOid(final String infoTypeOid) {
-        this.infoTypeOid = infoTypeOid;
-    }
-
-    boolean matchesScope(final String certProfile, final String infoTypeOid) {
-        if (!super.matchesScope(certProfile)) {
-            return false;
-        }
-        return this.infoTypeOid == null || this.infoTypeOid.equals(infoTypeOid);
+    boolean matchesScope(final String certProfile) {
+        return this.certProfile == null || this.certProfile.equals(certProfile);
     }
 
 }
