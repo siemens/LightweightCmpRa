@@ -8,7 +8,7 @@ A configuration file must be written in [YAML](https://yaml.org/spec/).
 Embedding [JSON](http://json-schema.org/) in YAML is also supported.
 A configuration file is structured in hierarchical sections holding
 
-* key/value pairs. This scalar value is a numeric, string, boolean or binary constant.
+* key/value pairs. This scalar value is a numeric, string, Boolean or binary constant.
 * key/array pairs. The value, also called list, tuple, vector, sequence holds multiple values.
 * Key/object pairs. The subordinate objects may have scalar, array or object values.
 
@@ -56,7 +56,7 @@ or
 
 Each configuration file must contain a configuration for exactly one RA.
 In productive use, configuration files should be integrity protected
-because they contain critial data such as trust anchors.
+because they contain critical data such as trust anchors.
 
 Example configuration files can be found in the
 [Test Configuration](/src/test/java/com/siemens/pki/lightweightcmpra/test/config).
@@ -74,34 +74,37 @@ The format and syntax of an URI is specified in
 The **Top-level Structure** determines the overall behavior of an RA instance.
 It may contain declarations of the object types listed below in any order:
 
-| mandatory/optional| object type |
-|-------------------------|:------------|
-| mandatory| [`DownstreamInterface` object](#the-downstreaminterface-object) |
-| mandatory if messages need to be sent upstream | [`UpstreamInterface` object](#the-upstreaminterface-object) |
-| mandatory| [`DownstreamConfiguration` object](#the-downstreamconfiguration-object) |
-| mandatory if incoming IR, CR or KUR shall be processed | [`RaVerifiedAcceptable` object](#the-raverifiedacceptable-object)|
-| mandatory if delayed delivery shall be supported | [`RetryAfterTimeInSeconds` object](#the-retryaftertimeinseconds-object) |
-| mandatory if messages need to be sent upstream | [`UpstreamConfiguration` object](#the-upstreamconfiguration-object) |
-| mandatory if IR, CR or KUR needs to be sent upstream | [`ForceRaVerifyOnUpstream` object](#the-forceraverifyonupstream-object) |
-| mandatory if IP, CP or KUP shall be processed | [`EnrollmentTrust` object](#the-enrollmenttrust-object) |
-| mandatory if central key generation shall be supported | [`CkgConfiguration` object](#the-ckgconfiguration-object) |
-| mandatory if GENM shall be processed locally | [`SupportMessageHandlerInterface` object](#the-supportmessagehandlerinterface-object)|
-| mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object) |
+| mandatory/optional| object type |certProfile|bodyType
+|-------------------------|:------------|:---|:---|
+| mandatory                                              | [`DownstreamInterface` object](#the-downstreaminterface-object)         |   |   |
+| mandatory if messages need to be sent upstream         | [`UpstreamInterface` object](#the-upstreaminterface-object)             | x | x |
+| mandatory                                              | [`DownstreamConfiguration` object](#the-downstreamconfiguration-object) | x | x |
+| mandatory if incoming IR, CR or KUR shall be processed | [`RaVerifiedAcceptable` object](#the-raverifiedacceptable-object)       | x | x |
+| mandatory if delayed delivery shall be supported       | [`RetryAfterTimeInSeconds` object](#the-retryaftertimeinseconds-object) | x | x |
+| mandatory if messages need to be sent upstream         | [`UpstreamConfiguration` object](#the-upstreamconfiguration-object)     | x | x |
+| mandatory if IR, CR or KUR needs to be sent upstream   | [`ForceRaVerifyOnUpstream` object](#the-forceraverifyonupstream-object) | x | x |
+| mandatory if IP, CP or KUP shall be processed          | [`EnrollmentTrust` object](#the-enrollmenttrust-object)                 | x | x |
+| mandatory if central key generation shall be supported | [`CkgConfiguration` object](#the-ckgconfiguration-object)               | x | x |
+| mandatory if GENM shall be processed locally           | [`SupportMessageHandlerInterface` object](#the-supportmessagehandlerinterface-object)| x |   |
+| mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object)           | x | x |
 
-All objects except `DownstreamInterface` have array values.
-If an object type is not mandatory, an empty array may given or the whole key may be absent.
+All objects except for `DownstreamInterface` have array values.
+If an object type is not mandatory,
+an empty array may given or the whole key may be absent.
 
-For `UpstreamInterface`, `DownstreamConfiguration`, `RaVerifiedAcceptable`, `RetryAfterTimeInSeconds`,
-`UpstreamConfiguration`, `ForceRaVerifyOnUpstream`, `EnrollmentTrust`, `CkgConfiguration`, and `InventoryInterface`
-each array entry may have a **certProfile** value included. The value of a **certProfile** is a string.
-An absent **certProfile** matches CMP messages with any (or no) certProfile.
+As indicated in the above table, each array entry (for objects other than
+`DownstreamInterface`) may have a **certProfile** included.
+The value of a **certProfile** is a string.
+An absent **certProfile** matches
+CMP messages with any (or absent) `certProfile` header field.
 
-For `DownstreamConfiguration`, `RaVerifiedAcceptable`, `RetryAfterTimeInSeconds`,
-`UpstreamConfiguration`, `ForceRaVerifyOnUpstream`,
-`EnrollmentTrust`, `CkgConfiguration`, and `InventoryInterface`
-each array entry may have a **bodyType** included.
-
-The value of the **bodyType** is a number (0..26) or a string (`"ir"`..`"pollRep"`).
+As indicated in the above table, each array entry for objects other than
+`DownstreamInterface` and `SupportMessageHandlerInterface`
+may have a **bodyType** included.
+The value of the **bodyType** is
+a number (0..26) or an equivalent string (`"ir"`..`"pollRep"`),
+while for `UpstreamInterface` only the numbers 0, 2, 7, 11, and 21 or the
+equivalent strings `"ir"`, `"cr"`, `"kur"`, `"rr"`, and `"genm"` are allowed.
 An absent **bodyType** matches CMP messages of any type.
 
 While processing a CMP message (which may be a request or response, including
@@ -110,18 +113,13 @@ an error message), its bodyType (see
 section PKI Message Body) and any certProfile optionally given in the message header (see
 [CMP updates](https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cmp-updates),
 section certProfile)
-are extracted from the message and matched against the array entries
-until a fully matching entry was found. This first matching entry is then used
-and controls the further processing of the message.
+are matched against the array entries until a fully matching entry is found.
+This entry is then used to control the further processing of this message.
 
-For `UpstreamInterface` also each array entry may have a **bodyType** included. 
-
-The value of the **bodyType** is a number (0, 2, 7, 11, 21) or a string (`"ir"`, `"cr"`, `"kur"`, `"rr"`, `"genm"`).
-
-While processing the CMP messages of a transaction, the bodyType of the first 
-request starting the transaction and a certProfile optionally given in the message 
-header are matched against the array entries until a fully matching entry was found. 
-This first matching entry is then used and controls the further processing of the message.
+For `UpstreamInterface` the matching just described is not done for each
+message but only for the first (request) message of a transaction.
+The array entry determined this way is used to control the routing of not only the
+first message but also of all further upstream messages in the same transaction.
 
 For the `SupportMessageHandlerInterface` object value each array entry
 the implicit bodyType is `"genm"` and it may have a **certProfile**
@@ -285,7 +283,7 @@ The value array contains
 
 | requested cardinality | key | value type| value description |
 |-------------------------|-------------|----|----|
-|0..n| value |boolean|true if `RaVerified` for incoming IR, CR, KUR is acceptable.|
+|0..n| value |Boolean|true if `RaVerified` for incoming IR, CR, KUR is acceptable.|
 
 
 ## The `RetryAfterTimeInSeconds` object
@@ -321,7 +319,7 @@ The value array contains
 
 | requested cardinality | key | value type| value description |
 |-------------------------|-------------|-------|------|
-|0..n| value |boolean| if set to "true", the POPO is set to RaVerified for outgoing upstream IR, CR and KUR.
+|0..n| value |Boolean| if set to "true", the POPO is set to RaVerified for outgoing upstream IR, CR and KUR.
 
 
 ### The `CmpMessageInterface` value
@@ -338,8 +336,8 @@ It may contain the key/value pairs described below in any order:
 | optional|no special processing of nested messages |`NestedEndpointContext`| [`NestedEndpointContext` object](#the-nestedendpointcontext-object) |determines processing of nested messages
 | optional|**reprotect** |ReprotectMode|enum { **reprotect, strip, keep** } |protection mode for outgoing message|
 | optional|3600 seconds| AllowedMessageTimeDeviation|integer value | the maximum acceptable age in seconds of an incoming message according to its messageTime |
-| optional|false | CacheExtraCerts| boolean| whether received extra certificates should be cached |
-| optional|false | SuppressRedundantExtraCerts|boolean| whether to prevent repeated inclusion of certificates in the extraCerts field of outgoing messages within a transaction.|
+| optional|false | CacheExtraCerts| Boolean| whether received extra certificates should be cached |
+| optional|false | SuppressRedundantExtraCerts|Boolean| whether to prevent repeated inclusion of certificates in the extraCerts field of outgoing messages within a transaction.|
 
 #### The `VerificationContext` object
 
@@ -354,9 +352,9 @@ It contains all of the key/value pairs described below in any order:
 |mandatory for signature-based validation||TrustedCertificates|array of URI|location of all trusted certificates. This and the following key/value pairs are relevant only if signature-based validation should be supported.|
 |optional|absent|AdditionalCerts|array of URI|location of additional intermediate certificates that can be used for certificate chain building|
 |optional|absent|CRLs|array of URI|location of additional Certificate Revocation Lists that can be used for cert status checks|
-|optional|false|CDPsEnabled|boolean|whether CRL Distribution Point (CDP) certificate extensions should be used for cert status checks|
+|optional|false|CDPsEnabled|Boolean|whether CRL Distribution Point (CDP) certificate extensions should be used for cert status checks|
 |optional|absent|OCSPResponder|URI|location of an OCSP responder that can be used for cert status checks|
-|optional|false|AIAsEnabled|boolean|whether Authority Information Access (AIA) certificate extensions should be used for cert status checks|
+|optional|false|AIAsEnabled|Boolean|whether Authority Information Access (AIA) certificate extensions should be used for cert status checks|
 |optional|empty|PKIXRevocationCheckerOptions|array of enum { **ONLY_END_ENTITY, PREFER_CRLS, NO_FALLBACK, SOFT_FAIL** }|options to control the cert status checks. For details see [Java RevocationChecker](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/cert/PKIXRevocationChecker.html) and [Options](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/cert/PKIXRevocationChecker.Option.html)|
 
 Note:
@@ -385,7 +383,7 @@ It contains all of the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-|mandatory||KeyStore|URI|location of a keystore holding certificate, private key and certificate chain|
+|mandatory||KeyStore|URI|location of a key store holding certificate, private key and certificate chain|
 |mandatory||Password|array of byte|password for the KeyStore|
 |optional|derived from signing key|SignatureAlgorithmName|string|name or OID of signature algorithm|
 
@@ -450,7 +448,7 @@ It contains all of the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-|mandatory||KeyStore|URI|location of a keystore holding certificate, private key and certificate chain for key agreement|
+|mandatory||KeyStore|URI|location of a key store holding certificate, private key and certificate chain for key agreement|
 |mandatory||Password|array of byte|password for the KeyStore|
 |optional|"1.2.840.113549.1.9.16.3.5", must be consistent with type of key agreement key|KeyAgreementAlg|string|the algorithm (Name or OID) used for key agreement, see <a href="https://tools.ietf.org/wg/lamps/draft-ietf-lamps-cmp-algorithms"> Certificate Management Protocol (CMP) Algorithms</a>, section "Key Agreement Algorithms"
 |optional|"2.16.840.1.101.3.4.1.5"|KeyEncryptionAlg|string|the symmetric algorithm (Name or OID) used for key encryption, see <a href="https://tools.ietf.org/wg/lamps/draft-ietf-lamps-cmp-algorithms"> Certificate Management Protocol (CMP) Algorithms </a>, section "Key Management Algorithms"
@@ -558,7 +556,7 @@ The string value holds the qualified name of a Java class implementing the
 [com.siemens.pki.cmpracomponent.configuration.InventoryInterface](https://github.com/siemens/cmp-ra-component/blob/main/src/main/java/com/siemens/pki/cmpracomponent/configuration/InventoryInterface.java) interface.
 On first match of the `InventoryInterface` value array entry
 an instance of the given Java class is created
-using the parameterless default constructor.
+using the parameter-less default constructor.
 This instance is then used to execute the appropriate methods
 of com.siemens.pki.cmpracomponent.configuration.InventoryInterface
 when an IR, CR, KUR, IP, CP or KUP message is processed.
