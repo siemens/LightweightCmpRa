@@ -114,6 +114,15 @@ are extracted from the message and matched against the array entries
 until a fully matching entry was found. This first matching entry is then used
 and controls the further processing of the message.
 
+For `UpstreamInterface` also each array entry may have a **bodyType** included. 
+
+The value of the **bodyType** is a number (0, 2, 7, 11, 21) or a string (`"ir"`, `"cr"`, `"kur"`, `"rr"`, `"genm"`).
+
+While processing the CMP messages of a transaction, the bodyType of the first 
+request starting the transaction and a certProfile optionally given in the message 
+header are matched against the array entries until a fully matching entry was found. 
+This first matching entry is then used and controls the further processing of the message.
+
 For the `SupportMessageHandlerInterface` object value each array entry
 the implicit bodyType is `"genm"` and it may have a **certProfile**
 and/or an **InfoTypeOid** included.

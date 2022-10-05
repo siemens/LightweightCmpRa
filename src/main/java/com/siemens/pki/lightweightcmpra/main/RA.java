@@ -20,11 +20,12 @@ package com.siemens.pki.lightweightcmpra.main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent;
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent.CmpRaInterface;
+import com.siemens.pki.cmpracomponent.main.CmpRaComponent.UpstreamExchange;
 import com.siemens.pki.lightweightcmpra.configuration.ConfigurationImpl;
 import com.siemens.pki.lightweightcmpra.configuration.YamlConfigLoader;
 import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
@@ -38,6 +39,36 @@ import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterfaceFactory;
  */
 public class RA {
 
+    private static class CertProfileBodyTypeTupel {
+        private final String certProfile;
+        private final int bodyType;
+
+        CertProfileBodyTypeTupel(final String certProfile, final int bodyType) {
+            this.certProfile = certProfile;
+            this.bodyType = bodyType;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            final CertProfileBodyTypeTupel other =
+                    (CertProfileBodyTypeTupel) obj;
+            return bodyType == other.bodyType
+                    && Objects.equals(certProfile, other.certProfile);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(bodyType, certProfile);
+        }
+
+    }
+
     static class DeferredSupplier<T> implements Supplier<T> {
         T val;
 
@@ -49,7 +80,6 @@ public class RA {
         void set(final T val) {
             this.val = val;
         }
-
     }
 
     /**
@@ -82,21 +112,26 @@ public class RA {
             try {
                 final ConfigurationImpl configuration =
                         YamlConfigLoader.loadConfig(actConfigFile);
-                final DeferredSupplier<CmpRaInterface> raHolder = new DeferredSupplier<>();
-                final Map<String, UpstreamInterface> upstreamInterfaceMap =
+                final DeferredSupplier<CmpRaInterface> raHolder =
+                        new DeferredSupplier<>();
+                final Map<CertProfileBodyTypeTupel, UpstreamInterface> upstreamInterfaceMap =
                         new HashMap<>();
-                final BiFunction<byte[], String, byte[]> upstreamExchange =
-                        (request, certProfile) -> {
+                final UpstreamExchange upstreamExchange =
+                        (request, certProfile, bodyTypeOfFirstRequest) -> {
+                            final CertProfileBodyTypeTupel key =
+                                    new CertProfileBodyTypeTupel(certProfile,
+                                            bodyTypeOfFirstRequest);
                             UpstreamInterface upstreamInterface =
-                                    upstreamInterfaceMap.get(certProfile);
+                                    upstreamInterfaceMap.get(key);
                             if (upstreamInterface == null) {
                                 upstreamInterface = UpstreamInterfaceFactory
                                         .create(configuration
                                                 .getUpstreamInterface(
-                                                        certProfile));
+                                                        certProfile,
+                                                        bodyTypeOfFirstRequest));
                                 upstreamInterface.setDelayedResponseHandler(
                                         raHolder.get()::gotResponseAtUpstream);
-                                upstreamInterfaceMap.put(certProfile,
+                                upstreamInterfaceMap.put(key,
                                         upstreamInterface);
                             }
                             return upstreamInterface.apply(request,

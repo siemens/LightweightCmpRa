@@ -3,6 +3,11 @@
 UpstreamInterface:
   - HttpClient:
       ServingUri:  "http://localhost:7000/ca"
+      bodyType: "rr"
+
+  - HttpClient:
+      ServingUri:  "http://localhost:7000/ca"
+      bodyType: "cr"      
 
 DownstreamInterface:
   HttpServer:

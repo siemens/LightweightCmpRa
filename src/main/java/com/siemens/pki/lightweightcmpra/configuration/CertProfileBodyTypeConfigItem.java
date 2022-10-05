@@ -22,8 +22,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public abstract class CertProfileBodyTypeConfigItem
-        extends CertProfileConfigItem {
+public class CertProfileBodyTypeConfigItem extends CertProfileConfigItem {
 
     private Integer bodyType;
 

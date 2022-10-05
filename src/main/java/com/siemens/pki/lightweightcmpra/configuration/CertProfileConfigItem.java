@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CertProfileConfigItem {
+class CertProfileConfigItem {
     private String certProfile;
 
     public String getCertProfile() {
