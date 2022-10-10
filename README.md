@@ -109,9 +109,9 @@ Each *YAML configuration File* describes one RA instance to launch.
 
 ```bash
 cd target/test-classes
-java -jar ../LightweightCmpRa-2.x.y.jar <XML/YAML/JSON configuration File>
+java -jar ../LightweightCmpRa-x.y.z.jar <XML/YAML/JSON configuration File>
 ```
-`x` and `y` depends on the current version number.
+`x`, `y`, and `z` are the three parts of the version number.
 
 If you use your IDE (e.g. Eclipse) to generate a "Runnable JAR file" it is recommended to have
 the required libraries in a subfolder and not packed with the generate JAR file. 
