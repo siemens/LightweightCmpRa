@@ -26,8 +26,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
+
 import com.siemens.pki.cmpracomponent.configuration.CrlUpdateRetrievalHandler;
-import com.siemens.pki.cmpracomponent.msgprocessing.cmpextension.NewCMPObjectIdentifiers;
 import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -40,7 +41,7 @@ public class CrlUpdateRetrievalHandlerImpl
     private List<X509CRL> x509Crls = null;
 
     public CrlUpdateRetrievalHandlerImpl() {
-        super(NewCMPObjectIdentifiers.id_it_crlStatusList.getId());
+        super(CMPObjectIdentifiers.id_it_crlStatusList.getId());
     }
 
     public List<URI> getCrls() {
