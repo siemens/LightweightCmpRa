@@ -121,9 +121,9 @@ message but only for the first (request) message of a transaction.
 The array entry determined this way is used to control the routing of not only the
 first message but also of all further upstream messages in the same transaction.
 
-For the `SupportMessageHandlerInterface` object value each array entry
-the implicit bodyType is `"genm"` and it may have a **certProfile**
-and/or an **InfoTypeOid** included.
+For the `SupportMessageHandlerInterface` object,
+each array entry has the implicit bodyType `"genm"`
+and may have a **certProfile** and/or an **InfoTypeOid** included.
 The **certProfile** handling is the same as described above.
 The value of a **InfoTypeOid** is a OID string (e.g., `"1.3.5.6.7.99"`).
 This **InfoTypeOid** is matched against the OID in the first InfoType of a GenMsg.
@@ -364,7 +364,8 @@ or `UpstreamConfiguration` is to use more than one **certProfile**.
 
 #### The `OutputCredentials` object
 
-The **`OutputCredentials` object** describes protection for outgoing messages.
+The **`OutputCredentials` object** describes protection for outgoing messages
+(for the upstream or downstream CMP interface, depending on the context).
 
 It contains exactly one of the key/value pairs described below:
 
@@ -372,6 +373,14 @@ It contains exactly one of the key/value pairs described below:
 |-----|-----------|------------------|
 |Signature|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|if protection shall be signature-based|
 |SharedSecret|[`SharedSecretCredentialContext`](#the-sharedsecretcredentialcontext-object)|if protection shall be based on a shared secret|
+
+Note: The configuration does not support specifying both signature-based and
+MAC-based protection. Consequently, the RA will always protect as configured,
+even if the (downstream) client uses a different way of protecting its requests.
+As the Lightweight CMP profile forbids mixing signature-based and MAC-based
+protection within the same transaction, care needs to be taken such that
+the EE and RA configurations are consistent for all types of requests.
+To this end it can be helpful to differentiate via certificate profiles.
 
 ##### The `SignatureCredentialContext` object
 
@@ -494,6 +503,10 @@ The value array contains
 |0..n| `GetCertificateRequestTemplate`| [`GetCertificateRequestTemplate` objects](#the-getcertificaterequesttemplate-object) |
 |0..n| `CrlUpdateRetrieval`| [`CrlUpdateRetrieval` objects](#the-crlupdateretrieval-object) |
 
+For each type of support message, multiple array entries may be given
+in order to differentiate between certificate profiles.
+If no matching array entry is found, the request is forwared upstream.
+
 ### The `GetCaCertificates` object
 
 The **`GetCaCertificates` object** controls
@@ -514,9 +527,9 @@ It contains all of the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-| mandatory || newWithNew|URI| location of new root certificate to return|
-| mandatory|| newWithOld|URI| location of forward transition certificate to return|
-| optional|absent | oldWithNew|URI| location of backward transition certificate to return|
+|mandatory|      |newWithNew|URI| location of new root certificate to return|
+|optional |absent|newWithOld|URI| location of forward transition certificate to return|
+|optional |absent|oldWithNew|URI| location of backward transition certificate to return|
 
 ### The `CrlUpdateRetrieval` object
 
