@@ -37,13 +37,13 @@ ForceRaVerifyOnUpstream:
   - value: false
 
 CkgConfiguration:
-  - CkgPasswordContext:
+  - PasswordContext:
       KekAlg: AES256
       EncryptionCredentials:
         SharedSecret:
           SharedSecret: "myPresharedSecret"
           prf: "SHA256"
           macAlgorithm: "SHA256"
-      SignatureCredentials:
-        keyStore: credentials/CMP_LRA_DOWNSTREAM_Keystore.p12
-        password:  Password
+    SignatureCredentials:
+      keyStore: credentials/CMP_LRA_DOWNSTREAM_Keystore.p12
+      password:  Password

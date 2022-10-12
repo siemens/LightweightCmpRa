@@ -19,3 +19,7 @@ use CmpRaComponent 1.0.4
 ### 2.1.0 (Oct 5 2022)
 
 use CmpRaComponent 2.0.0, let upstreamExchange depend on bodyType
+
+### 2.2.0 (Oct 10 2022)
+
+use CmpRaComponent 2.1.0, election of central key generation variant should be dynamically
