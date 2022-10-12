@@ -436,16 +436,17 @@ Any given SharedSecret key/value is ignored here.
 
 ## The `CkgConfiguration` object
 
-The **`CkgConfiguration` object** describes the handling of
+The **`CkgConfiguration` object** provides all values for the handling of
 central key generation in the RA.
+It should contain all needed key/value pairs described below in any order:
 
-The value array contains all of the objects below in any order:
-
-| requested cardinality | object type |
-|---|--|
-|0..n| [`CkgKeyAgreementContext` objects](#the-ckgkeyagreementcontext-object) |
-|0..n| [`CkgKeyTransportContext` objects](#the-ckgkeytransportcontext-object) |
-|0..n| [`CkgPasswordContext` objects](#the-ckgpasswordcontext-object) |
+| mandatory/optional|default | key | value type| value description|
+|--|--|--|--|:--|
+|optional|"2.16.840.1.101.3.4.1.2"|ContentEncryptionAlg|string|symmetric content encryption algorithm (Name or OID) to build CMS EnvelopedData|
+|mandatory||SigningCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|credentials to sign the centrally generated private key. |
+|optional|unsupported|KeyAgreementContext|[`CkgKeyAgreementContext` ](#the-ckgkeyagreementcontext-object) |required values for for key agreement |
+|optional|unsupported|KeyTransportContext| [`CkgKeyTransportContext` ](#the-ckgkeytransportcontext-object) |required values for for key transport |
+|optional|unsupported|PasswordContext| [`CkgPasswordContext` ](#the-ckgpasswordcontext-object)|required values for for password based encryption |
 
 
 ## The `CkgKeyAgreementContext` object
@@ -461,20 +462,14 @@ It contains all of the key/value pairs described below in any order:
 |mandatory||Password|array of byte|password for the KeyStore|
 |optional|"1.2.840.113549.1.9.16.3.5", must be consistent with type of key agreement key|KeyAgreementAlg|string|the algorithm (Name or OID) used for key agreement, see <a href="https://tools.ietf.org/wg/lamps/draft-ietf-lamps-cmp-algorithms"> Certificate Management Protocol (CMP) Algorithms</a>, section "Key Agreement Algorithms"
 |optional|"2.16.840.1.101.3.4.1.5"|KeyEncryptionAlg|string|the symmetric algorithm (Name or OID) used for key encryption, see <a href="https://tools.ietf.org/wg/lamps/draft-ietf-lamps-cmp-algorithms"> Certificate Management Protocol (CMP) Algorithms </a>, section "Key Management Algorithms"
-|optional|"2.16.840.1.101.3.4.1.2"|ContentEncryptionAlg|string|symmetric content encryption algorithm (Name or OID) to build CMS EnvelopedData|
-|mandatory||SigningCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|credentials to sign the centrally generated private key. |
 
 ### The `CkgKeyTransportContext` object
 
-The **`CkgKeyTransportContext` object** provides all values required
-for performing key transport in context of central key generation.
-
-It contains all of the key/value pairs described below in any order:
-
-| mandatory/optional|default | key | value type| value description|
-|--|--|--|--|:--|
-|optional|"2.16.840.1.101.3.4.1.2"|ContentEncryptionAlg|string|symmetric content encryption algorithm (Name or OID) to build CMS EnvelopedData|
-|mandatory||SigningCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|credentials to sign the centrally generated private key. |
+The **`CkgKeyTransportContext` object** marks the support for performing key transport in context of central key generation. It is empty, e.g. 
+```
+KeyTransportContext: {}
+```
+.
 
 ### The `CkgPasswordContext` object
 
@@ -486,8 +481,7 @@ It contains all of the key/value pairs described below in any order:
 |--|--|--|--|:--|
 |mandatory||EncryptionCredentials|[`SharedSecretCredentialContext`](#the-sharedsecretcredentialcontext-object)|credentials to encrypt the central generated private key|
 |optional|"2.16.840.1.101.3.4.1.2"|KekAlg|string|the KEK algorithm (Name or OID) to use|
-|optional|"2.16.840.1.101.3.4.1.2"|ContentEncryptionAlg|string|symmetric content encryption algorithm (Name or OID) to build CMS EnvelopedData|
-|mandatory||SigningCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|credentials to sign the centrally generated private key. |
+
 
 ## The `SupportMessageHandlerInterface` object
 

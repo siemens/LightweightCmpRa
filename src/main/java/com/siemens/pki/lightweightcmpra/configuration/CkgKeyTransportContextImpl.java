@@ -19,7 +19,8 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import com.siemens.pki.cmpracomponent.configuration.CkgKeyTransportContext;
 
-public class CkgKeyTransportContextImpl extends CkgContextImpl
-        implements CkgKeyTransportContext {
+public class CkgKeyTransportContextImpl implements CkgKeyTransportContext {
+    CkgKeyTransportContextImpl() {
 
+    }
 }

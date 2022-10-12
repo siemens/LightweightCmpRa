@@ -42,8 +42,7 @@ import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
 import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CkgKeyAgreementContextImpl extends CkgContextImpl
-        implements CkgKeyAgreementContext {
+public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(CkgKeyAgreementContextImpl.class);

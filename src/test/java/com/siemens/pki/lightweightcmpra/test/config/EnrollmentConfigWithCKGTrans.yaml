@@ -37,7 +37,7 @@ ForceRaVerifyOnUpstream:
   - value: false
 
 CkgConfiguration:
-  - CkgKeyTransportContext:
-      SignatureCredentials:
-        keyStore: credentials/CMP_LRA_DOWNSTREAM_Keystore.p12
-        password: "Password"
+  - KeyTransportContext: {}
+    SignatureCredentials:
+      keyStore: credentials/CMP_LRA_DOWNSTREAM_Keystore.p12
+      password: "Password"

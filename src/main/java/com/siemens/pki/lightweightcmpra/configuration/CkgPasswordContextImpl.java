@@ -28,8 +28,7 @@ import com.siemens.pki.cmpracomponent.configuration.CkgPasswordContext;
 import com.siemens.pki.cmpracomponent.configuration.SharedSecretCredentialContext;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CkgPasswordContextImpl extends CkgContextImpl
-        implements CkgPasswordContext {
+public class CkgPasswordContextImpl implements CkgPasswordContext {
 
     private SharedSecretCredentialContextImpl EncryptionCredentials;
 

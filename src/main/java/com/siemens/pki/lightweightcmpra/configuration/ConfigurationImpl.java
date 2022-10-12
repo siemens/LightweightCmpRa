@@ -111,10 +111,7 @@ public class ConfigurationImpl implements Configuration {
             @XmlElement(name = "HttpsServer", type = HttpsServerConfig.class, required = false)})
     private AbstractDownstreamInterfaceConfig DownstreamInterface;
 
-    @XmlElements({
-            @XmlElement(name = "CkgKeyAgreementContext", type = CkgKeyAgreementContextImpl.class, required = false),
-            @XmlElement(name = "CkgKeyTransportContext", type = CkgKeyTransportContextImpl.class, required = false),
-            @XmlElement(name = "CkgPasswordContext", type = CkgPasswordContextImpl.class, required = false)})
+    @XmlElement(required = false)
     private final CertProfileBodyTypeScopedList<CkgContextImpl> CkgConfiguration =
             new CertProfileBodyTypeScopedList<>();
 
