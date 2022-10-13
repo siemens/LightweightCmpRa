@@ -23,7 +23,6 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.xml.bind.JAXB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +45,10 @@ public class HttpsSession extends HttpSession {
      * Constructor for the TLS Session handling.
      *
      * @param config
-     *            servers HTTP URL to connect to
-     * @param tlsConfig
-     *            {@link JAXB} TLS configuration subtree
+     *            TLS configuration
+     * 
+     * @param remoteUrl
+     *            servers HTTPS URL to connect to
      * @throws Exception
      *             in case of error
      */

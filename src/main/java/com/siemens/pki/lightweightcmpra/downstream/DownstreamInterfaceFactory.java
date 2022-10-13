@@ -44,7 +44,7 @@ public class DownstreamInterfaceFactory {
      *            downstream interface configuration
      * @param requestHandler
      *            RA handling incoming requests
-     * @return
+     * @return a {@link DownstreamInterface} instance
      */
     public static DownstreamInterface create(
             final AbstractDownstreamInterfaceConfig configuration,

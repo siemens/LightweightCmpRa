@@ -87,6 +87,7 @@ public class RA {
      *            command line arguments. Call with &lt;name of XML/YAML/JSON
      *            config file&gt;,
      * @throws Exception
+     *             if startup of at least one RA instance failed
      */
     public static void main(final String[] args) throws Exception {
         if (args == null || args.length < 1) {

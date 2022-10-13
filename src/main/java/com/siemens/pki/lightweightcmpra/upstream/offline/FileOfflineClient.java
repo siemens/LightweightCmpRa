@@ -28,8 +28,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.xml.bind.JAXB;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,12 +53,8 @@ public class FileOfflineClient implements UpstreamInterface {
     /**
      *
      * @param config
-     *            {@link JAXB} configuration subtree from XML configuration file
-     * @param localResponseProtector
-     *            protector used to protect locally generated errors and
-     *            responses
-     * @param nestingFunction
-     *            function used for adding protection (nesting)
+     *            configuration from configuration file
+     * 
      * @throws IOException
      *             in case of error
      */
