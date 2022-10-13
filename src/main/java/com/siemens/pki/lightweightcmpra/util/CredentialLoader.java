@@ -81,7 +81,9 @@ public class CredentialLoader {
                 }
 
             } catch (final IOException | CertificateException e) {
-                LOGGER.error("error loading Certificate from " + aktUri, e);
+                final String msg = "error loading Certificate from " + aktUri;
+                LOGGER.error(msg, e);
+                throw new RuntimeException(msg, e);
             }
         }
         return ret;
@@ -107,7 +109,9 @@ public class CredentialLoader {
                 }
 
             } catch (final IOException | CRLException e) {
-                LOGGER.error("error loading CRL from " + aktUri, e);
+                final String message = "error loading CRL from " + aktUri;
+                LOGGER.error(message, e);
+                throw new RuntimeException(message, e);
             }
         }
         return ret;
@@ -133,11 +137,14 @@ public class CredentialLoader {
                     is.reset();
                 }
             }
-            LOGGER.warn("error loading KeyStore from " + uri, lastException);
+            final String msg = "error loading KeyStore from " + uri;
+            LOGGER.error(msg, lastException);
+            throw new RuntimeException(msg, lastException);
         } catch (final IOException e) {
-            LOGGER.warn("error loading KeyStore from " + uri, e);
+            final String msg = "error loading KeyStore from " + uri;
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
         }
-        return null;
     }
 
     // utility class

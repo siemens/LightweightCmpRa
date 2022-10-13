@@ -1,8 +1,9 @@
 # Configuration of the Lightweight CMP RA
 
 The **Lightweight CMP RA** behavior is specified in configuration files.
-On startup,
-the path name of each configuration file is given as a command line parameter.
+The path name of each configuration file is given as a command line parameter.
+On startup all configuration files are loaded and parsed. URIs given in
+configuration files are loaded once at first use. 
 
 A configuration file must be written in [YAML](https://yaml.org/spec/).
 Embedding [JSON](http://json-schema.org/) in YAML is also supported.
@@ -30,6 +31,7 @@ toplevelobject:
     subobject2:
       key5: value5
       key6: "Value 6"
+    emptyobject: {}
 ```
 
 or
@@ -50,6 +52,7 @@ or
 	     "key5" : "value5",
 	     "key6" : "Value 6"
 	}
+	"emptyobject" : {}
 }
 ```
 
@@ -407,11 +410,11 @@ as far as needed depending on the chosen MAC algorithm.
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 |mandatory||SharedSecret|string|shared secret usable for MAC-based protection|
-|optional|"PBMAC1"|PasswordBasedMacAlgorithm|string|"PBMAC1", "PASSWORDBASEDMAC" or OID as string|
+|optional|"PBMAC1"|PasswordBasedMacAlgorithm|string|"PBMAC1", "PASSWORDBASEDMAC", short "PBM" or OID as string|
 |optional|10000|IterationCount|integer|iteration count to use|
 |optional|4096|KeyLength|integer|intended key length to be produced|
 |optional|"1.2.840.113549.2.9"|MacAlgorithm|string|MAC algorithm name or OID as string|
-|optional|HMacSHA256|Prf|string|name of pseudo-random function or one way function to use|
+|optional|"SHA256"|Prf|string|name of pseudo-random function or one way function to use|
 |optional|randomly generated 20 bytes|Salt|array of byte|input salt|
 |optional|absent|SenderKID|string|sender key identifier to be used for the CMP message protection, which can be for instance a user name|
 
@@ -512,6 +515,8 @@ It contains
 |-------------------------|-------------|----|--|
 |0..n|CaCertificates|array of URI|locations of the certificates to return|
 
+An empty list should be specified as `CaCertificates: []`.
+
 ### The `GetRootCaCertificateUpdate` object
 
 The **`GetRootCaCertificateUpdate` object** controls
@@ -525,6 +530,8 @@ It contains all of the key/value pairs described below in any order:
 |optional |absent|newWithOld|URI| location of forward transition certificate to return|
 |optional |absent|oldWithNew|URI| location of backward transition certificate to return|
 
+An empty infoValue should be specified as `GetRootCaCertificateUpdate: {}`.
+
 ### The `CrlUpdateRetrieval` object
 
 The **`CrlUpdateRetrieval` object** controls
@@ -536,6 +543,8 @@ It contains
 |-------------------------|-------------|----|--|
 |0..n|crls|array of URI|locations of the CRLs to return|
 
+An empty list should be specified as `CrlUpdateRetrieval: []`.
+
 ### The `GetCertificateRequestTemplate` object
 
 The **`GetCertificateRequestTemplate` object** controls
@@ -546,6 +555,8 @@ It contains
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 |mandatory||Template|URI|location of the template, which must be ASN.1 DER-encoded|
+
+An empty infoValue should be specified as `GetCertificateRequestTemplate: {}`.
 
 
 ## The `InventoryInterface` object
