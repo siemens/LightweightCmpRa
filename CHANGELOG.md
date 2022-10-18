@@ -27,3 +27,7 @@ use CmpRaComponent 2.1.0, election of central key generation variant should be d
 ### 2.2.1 (Oct 13 2022)
 
 fix: some minor issues
+
+### 2.2.1 (Oct 18 2022)
+
+use CmpRaComponent 2.1.2
