@@ -410,11 +410,11 @@ as far as needed depending on the chosen MAC algorithm.
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 |mandatory||SharedSecret|string|shared secret usable for MAC-based protection|
-|optional|"PBMAC1"|PasswordBasedMacAlgorithm|string|"PBMAC1", "PASSWORDBASEDMAC", short "PBM" or OID as string|
+|optional|"PBMAC1"|PasswordBasedMacAlgorithm|string|"PBMAC1", "PASSWORDBASEDMAC"or short "PBM", or an OID as a string|
 |optional|10000|IterationCount|integer|iteration count to use|
-|optional|4096|KeyLength|integer|intended key length to be produced|
+|optional|4096|KeyLength|integer|intended key length to be produced, relevant for PBMAC1|
 |optional|"1.2.840.113549.2.9" (hmacWithSHA256)|MacAlgorithm|string|MAC algorithm name or OID as string, relevant only for message protection based on a shared secret|
-|optional|"SHA256"|Prf|string|name of pseudo-random function or one way function to use|
+|optional|"HMacSHA256" for PBMAC1 and "SHA256" for PBM|Prf|string|name of pseudo-random function (PRF) or one-way function (OWF) to use|
 |optional|randomly generated 20 bytes|Salt|array of byte|input salt|
 |optional|absent|SenderKID|string|sender key identifier to be used for the CMP message protection, which can be for instance a user name|
 
