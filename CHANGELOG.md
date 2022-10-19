@@ -30,9 +30,13 @@ fix: some minor issues
 
 ### 2.2.1 (Oct 18 2022)
 
-	use CmpRaComponent 2.1.2
+use CmpRaComponent 2.1.2
 
 ### 2.2.2 (Oct 18 2022)
 
 fix: use CmpRaComponent 2.1.3 - ECDH_SHA224KDF as default KeyAgreementAlg
      Minor fixes in doc/config/README.md
+
+### 2.2.3 (Oct 18 2022)
+
+use CmpRaComponent 2.1.4: misleading error message
