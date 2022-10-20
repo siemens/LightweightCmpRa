@@ -50,12 +50,14 @@ public class GetCertificateRequestTemplateHandlerImpl
 
     @Override
     public byte[] getCertificateRequestTemplate() {
-        if (templateBytes == null) {
+        if (templateBytes == null && template != null) {
             try (InputStream urlStream =
                     ConfigFileLoader.getConfigUriAsStream(template)) {
                 templateBytes = urlStream.readAllBytes();
             } catch (final IOException e1) {
-                LOGGER.error("error loading template from " + template, e1);
+                final String msg = "error loading template from " + template;
+                LOGGER.error(msg, e1);
+                throw new RuntimeException(msg, e1);
             }
         }
         return templateBytes;

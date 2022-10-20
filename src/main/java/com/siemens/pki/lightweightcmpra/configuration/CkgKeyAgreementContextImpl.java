@@ -114,6 +114,7 @@ public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
         if (ks == null) {
             return;
         }
+        final String msg = "could not extract keyStore from " + keyStore;
         try {
             for (final String aktAlias : Collections.list(ks.aliases())) {
                 try {
@@ -128,12 +129,12 @@ public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
                     }
                 } catch (UnrecoverableKeyException | KeyStoreException
                         | NoSuchAlgorithmException e) {
-                    LOGGER.warn("could not extract keyStore from " + keyStore,
-                            e);
+                    LOGGER.warn(msg, e);
                 }
             }
         } catch (final KeyStoreException e) {
-            LOGGER.error("could not extract keyStore from " + keyStore, e);
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
         }
 
     }

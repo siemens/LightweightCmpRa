@@ -40,3 +40,7 @@ fix: use CmpRaComponent 2.1.3 - ECDH_SHA224KDF as default KeyAgreementAlg
 ### 2.2.3 (Oct 18 2022)
 
 use CmpRaComponent 2.1.4: misleading error message
+
+### 2.2.4 (Oct 20 2022)
+
+fix: improve configuration file handling and error propagation

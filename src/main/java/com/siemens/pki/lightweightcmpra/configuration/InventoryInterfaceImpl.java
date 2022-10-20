@@ -92,8 +92,10 @@ public class InventoryInterfaceImpl extends CertProfileBodyTypeConfigItem
                 | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException
                 | ClassNotFoundException e) {
-            LOGGER.error("could not instanciate Inventory " + implementingClass,
-                    e);
+            final String msg =
+                    "could not instanciate Inventory " + implementingClass;
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
         }
     }
 
