@@ -44,3 +44,8 @@ use CmpRaComponent 2.1.4: misleading error message
 ### 2.2.4 (Oct 20 2022)
 
 fix: improve configuration file handling and error propagation
+
+### 2.2.5 (Oct 25 2022)
+
+fix: update dependencies
+
