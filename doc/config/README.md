@@ -358,12 +358,19 @@ It contains all of the key/value pairs described below in any order:
 |optional|false|CDPsEnabled|Boolean|whether CRL Distribution Point (CDP) certificate extensions should be used for cert status checks|
 |optional|absent|OCSPResponder|URI|location of an OCSP responder that can be used for cert status checks|
 |optional|false|AIAsEnabled|Boolean|whether Authority Information Access (AIA) certificate extensions should be used for cert status checks|
-|optional|empty|PKIXRevocationCheckerOptions|array of enum { **ONLY_END_ENTITY, PREFER_CRLS, NO_FALLBACK, SOFT_FAIL** }|options to control the cert status checks. For details see [Java RevocationChecker](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/cert/PKIXRevocationChecker.html) and [Options](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/cert/PKIXRevocationChecker.Option.html)|
+|optional|empty|PKIXRevocationCheckerOptions|set of enum { **ONLY_END_ENTITY, PREFER_CRLS, NO_FALLBACK, SOFT_FAIL** }|options to control the cert status checks. For details see [Java RevocationChecker](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/cert/PKIXRevocationChecker.html) and [Options](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/cert/PKIXRevocationChecker.Option.html)|
 
-Note:
+Notes:
+
 The current implementation supports only one SharedSecret per `VerificationContext`.
 So the only way to specify more than one shared secret per `DownstreamConfiguration`
 or `UpstreamConfiguration` is to use more than one **certProfile**.
+
+An empty array of certificate URIs or CRL URIs may be given as `[]`.
+
+Whend providing a `set of enum`, it must be given using `[` and `]`,
+e.g., `[ONLY_END_ENTITY, NO_FALLBACK]`.
+
 
 #### The `OutputCredentials` object
 
