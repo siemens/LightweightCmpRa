@@ -342,6 +342,9 @@ It may contain the key/value pairs described below in any order:
 | optional|false | CacheExtraCerts| Boolean| whether received extra certificates should be cached |
 | optional|false | SuppressRedundantExtraCerts|Boolean| whether to prevent repeated inclusion of certificates in the extraCerts field of outgoing messages within a transaction.|
 
+On the upstream interface,
+for certficate update (`KUR`) requests the reprotection mode is always **keep**.
+
 #### The `VerificationContext` object
 
 The **`VerificationContext` object** describes all values needed to authenticate peers or signed messages. If the `VerificationContext` is optional
