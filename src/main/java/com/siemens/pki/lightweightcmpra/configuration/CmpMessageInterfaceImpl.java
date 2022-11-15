@@ -38,7 +38,7 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem
     private CredentialContextImpl OutputCredentials;
 
     private ReprotectMode ReprotectMode =
-            CmpMessageInterface.ReprotectMode.reprotect;
+            CmpMessageInterface.ReprotectMode.keep;
 
     private boolean SuppressRedundantExtraCerts;
 

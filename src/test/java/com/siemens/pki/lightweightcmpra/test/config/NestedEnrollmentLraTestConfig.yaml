@@ -13,6 +13,7 @@ UpstreamConfiguration:
   - VerificationContext:
       trustedCertificates:
         - "credentials/CMP_LRA_UPSTREAM_Root.pem"
+    reprotectMode: reprotect
     outputCredentials:
       Signature:
         keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"

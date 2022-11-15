@@ -49,3 +49,7 @@ fix: improve configuration file handling and error propagation
 
 fix: update dependencies
 
+### 2.2.5 (Nov 15 2022)
+
+feat: change default reprotect mode to 'keep'
+
