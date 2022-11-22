@@ -53,3 +53,7 @@ fix: update dependencies
 
 feat: change default reprotect mode to 'keep'
 
+### 2.2.7 (Nov 22 2022)
+
+fix: use CmpRaComponent 2.1.6: change default provider to BC provider for content verification
+
