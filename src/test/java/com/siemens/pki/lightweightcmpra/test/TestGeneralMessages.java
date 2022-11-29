@@ -35,6 +35,7 @@ import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 import org.bouncycastle.asn1.cmp.CRLSource;
 import org.bouncycastle.asn1.cmp.CRLStatus;
 import org.bouncycastle.asn1.cmp.GenMsgContent;
@@ -74,7 +75,7 @@ public class TestGeneralMessages extends CmpTestcaseBase {
             final CertTemplateBuilder ctb = new CertTemplateBuilder();
             ctb.setSubject(new X500Name("CN=test"));
             final Controls controls = new Controls(new AttributeTypeAndValue(
-                    new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.11"),
+                    CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
                     new ASN1Integer(2048)));
             final ASN1Sequence certReqTemplateContent = new DERSequence(
                     new ASN1Encodable[] {ctb.build(), controls});
@@ -218,7 +219,7 @@ public class TestGeneralMessages extends CmpTestcaseBase {
         final AttributeTypeAndValue[] controls = Controls
                 .getInstance(optionalControls).toAttributeTypeAndValueArray();
 
-        assertEquals(new ASN1ObjectIdentifier("1.3.6.1.5.5.7.5.1.11"),
+        assertEquals(CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
                 controls[0].getType());
 
         assertNotNull("parse INTEGER",

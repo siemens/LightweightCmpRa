@@ -57,3 +57,7 @@ feat: change default reprotect mode to 'keep'
 
 fix: use CmpRaComponent 2.1.6: change default provider to BC provider for content verification
 
+### 2.2.8 (Nov 29 2022)
+
+fix: wrong OID for rsaKeyLen
+
