@@ -62,12 +62,18 @@ public class HttpSession implements UpstreamInterface {
         httpConnection.connect();
         try (final OutputStream outputStream =
                 httpConnection.getOutputStream()) {
+            LOGGER.debug(
+                    "send " + message.length + " bytes to " + httpConnection);
             outputStream.write(message);
         }
         final int lastResponseCode = httpConnection.getResponseCode();
 
         if (lastResponseCode == HttpURLConnection.HTTP_OK) {
-            return httpConnection.getInputStream().readAllBytes();
+            final byte[] response =
+                    httpConnection.getInputStream().readAllBytes();
+            LOGGER.debug(
+                    "got " + response.length + " bytes from " + httpConnection);
+            return response;
         }
         final String errorString =
                 "got response '" + httpConnection.getResponseMessage() + "("
