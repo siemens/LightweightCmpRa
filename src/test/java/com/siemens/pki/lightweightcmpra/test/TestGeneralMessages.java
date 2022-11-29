@@ -22,15 +22,12 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.security.cert.CRL;
 import java.security.cert.CertificateFactory;
 import java.util.Date;
 import java.util.function.Function;
 
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -46,7 +43,6 @@ import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.cmp.RootCaKeyUpdateContent;
 import org.bouncycastle.asn1.crmf.AttributeTypeAndValue;
 import org.bouncycastle.asn1.crmf.CertTemplate;
-import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.crmf.Controls;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.GeneralName;
@@ -68,20 +64,10 @@ public class TestGeneralMessages extends CmpTestcaseBase {
 
     @Test
     @Ignore("only used for generation of a new CertReqTemplateContent")
-    public void generateCertReqTemplateContent() throws IOException {
-        try (FileOutputStream out =
-                new FileOutputStream(new File(CmpTestcaseBase.CONFIG_DIRECTORY,
-                        "credentials/CertTemplate.der"))) {
-            final CertTemplateBuilder ctb = new CertTemplateBuilder();
-            ctb.setSubject(new X500Name("CN=test"));
-            final Controls controls = new Controls(new AttributeTypeAndValue(
-                    CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
-                    new ASN1Integer(2048)));
-            final ASN1Sequence certReqTemplateContent = new DERSequence(
-                    new ASN1Encodable[] {ctb.build(), controls});
-            out.write(certReqTemplateContent.getEncoded(ASN1Encoding.DER));
-        }
-
+    public void generateCertReqTemplateContent() throws Exception {
+        CertReqTemplateValueWriter.writeCertReqTemplateValue(
+                new File(CmpTestcaseBase.CONFIG_DIRECTORY,
+                        "credentials/CertTemplate.der"));
     }
 
     @Before
@@ -219,11 +205,14 @@ public class TestGeneralMessages extends CmpTestcaseBase {
         final AttributeTypeAndValue[] controls = Controls
                 .getInstance(optionalControls).toAttributeTypeAndValueArray();
 
-        assertEquals(CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
+        assertEquals(CMPObjectIdentifiers.id_regCtrl_algId,
                 controls[0].getType());
 
+        assertEquals(CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
+                controls[1].getType());
+
         assertNotNull("parse INTEGER",
-                ASN1Integer.getInstance(controls[0].getValue()));
+                ASN1Integer.getInstance(controls[1].getValue()));
     }
 
     /*

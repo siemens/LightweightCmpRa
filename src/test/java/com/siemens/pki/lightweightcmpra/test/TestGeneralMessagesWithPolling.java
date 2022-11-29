@@ -220,11 +220,14 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
         final AttributeTypeAndValue[] controls = Controls
                 .getInstance(optionalControls).toAttributeTypeAndValueArray();
 
-        assertEquals(CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
+        assertEquals(CMPObjectIdentifiers.id_regCtrl_algId,
                 controls[0].getType());
 
+        assertEquals(CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
+                controls[1].getType());
+
         assertNotNull("parse INTEGER",
-                ASN1Integer.getInstance(controls[0].getValue()));
+                ASN1Integer.getInstance(controls[1].getValue()));
     }
 
     /*
