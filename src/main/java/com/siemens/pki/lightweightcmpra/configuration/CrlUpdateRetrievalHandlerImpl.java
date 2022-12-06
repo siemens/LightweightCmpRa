@@ -49,8 +49,8 @@ public class CrlUpdateRetrievalHandlerImpl
     }
 
     @Override
-    public List<X509CRL> getCrls(final String dpn, final String[] issuer,
-            final Date thisUpdate) {
+    public List<X509CRL> getCrls(final String[] dpnFullName, String dpnNameRelativeToCRLIssuer,
+            final String[] issuer, final Date thisUpdate) {
 
         if (x509Crls == null && crls != null) {
             x509Crls = CredentialLoader.loadCRLs(crls.toArray(new URI[0]));

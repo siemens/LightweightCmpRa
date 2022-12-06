@@ -541,8 +541,7 @@ An empty infoValue should be specified as `GetRootCaCertificateUpdate: {}`.
 
 ### The `CrlUpdateRetrieval` object
 
-The **`CrlUpdateRetrieval` object** controls
-the handling of a CRL Update Retrieval genm request.
+The **`CrlUpdateRetrieval` object** controls the handling of a CRL Update Retrieval genm request. 
 
 It contains
 
@@ -550,7 +549,9 @@ It contains
 |-------------------------|-------------|----|--|
 |0..n|crls|array of URI|locations of the CRLs to return|
 
+`source` and `thisUpdate` of `CRLStatus` are ignored.
 An empty list should be specified as `CrlUpdateRetrieval: []`.
+
 
 ### The `GetCertificateRequestTemplate` object
 

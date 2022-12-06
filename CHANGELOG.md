@@ -61,3 +61,9 @@ fix: use CmpRaComponent 2.1.6: change default provider to BC provider for conten
 
 fix: wrong OID for rsaKeyLen
 
+### 2.3.0 (Dec 06 2022)
+
+feat: use CmpRaComponent 2.2.0
+
+
+
