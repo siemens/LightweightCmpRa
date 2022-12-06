@@ -119,6 +119,9 @@ section certProfile)
 are matched against the array entries until a fully matching entry is found.
 This entry is then used to control the further processing of this message.
 
+Note: Authorization of clients to request certificate enrollment
+can be checked via the `InventoryInterface`.
+
 For `UpstreamInterface` the matching just described is not done for each
 message but only for the first (request) message of a transaction.
 The array entry determined this way is used to control the routing of not only the
@@ -461,6 +464,8 @@ It should contain all needed key/value pairs described below in any order:
 |optional|unsupported|KeyTransportContext| [`CkgKeyTransportContext` ](#the-ckgkeytransportcontext-object) |required values for for key transport |
 |optional|unsupported|PasswordContext| [`CkgPasswordContext` ](#the-ckgpasswordcontext-object)|required values for for password-based encryption |
 
+Note: Authorization of clients to request central key generation (including
+the option to specifiy a key type) can be checked via the `InventoryInterface`.
 
 ## The `CkgKeyAgreementContext` object
 
@@ -511,6 +516,7 @@ For each type of support message, multiple array entries may be given
 in order to differentiate between certificate profiles.
 If no matching array entry is found, the request is forwared upstream.
 
+
 ### The `GetCaCertificates` object
 
 The **`GetCaCertificates` object** controls
@@ -522,7 +528,8 @@ It contains
 |-------------------------|-------------|----|--|
 |0..n|CaCertificates|array of URI|locations of the certificates to return|
 
-An empty list should be specified as `CaCertificates: []`.
+An empty list can be specified as `GetCaCertificates: {}`.
+
 
 ### The `GetRootCaCertificateUpdate` object
 
@@ -537,11 +544,14 @@ It contains all of the key/value pairs described below in any order:
 |optional |absent|newWithOld|URI| location of forward transition certificate to return|
 |optional |absent|oldWithNew|URI| location of backward transition certificate to return|
 
-An empty infoValue should be specified as `GetRootCaCertificateUpdate: {}`.
+So far, the `RootCaCertValue` value input is ignored.
+An empty infoValue can be specified as `GetRootCaCertificateUpdate: {}`.
+
 
 ### The `CrlUpdateRetrieval` object
 
-The **`CrlUpdateRetrieval` object** controls the handling of a CRL Update Retrieval genm request. 
+The **`CrlUpdateRetrieval` object** controls
+the handling of a CRL Update Retrieval genm request.
 
 It contains
 
@@ -549,8 +559,8 @@ It contains
 |-------------------------|-------------|----|--|
 |0..n|crls|array of URI|locations of the CRLs to return|
 
-`source` and `thisUpdate` of `CRLStatus` are ignored.
-An empty list should be specified as `CrlUpdateRetrieval: []`.
+So far, the `source` and `thisUpdate` fields of `CRLStatus` are ignored.
+An empty list can be specified as `CrlUpdateRetrieval: {}`.
 
 
 ### The `GetCertificateRequestTemplate` object
@@ -564,7 +574,7 @@ It contains
 |--|--|--|--|:--|
 |mandatory||Template|URI|location of the template, which must be ASN.1 DER-encoded|
 
-An empty infoValue should be specified as `GetCertificateRequestTemplate: {}`.
+An empty infoValue can be specified as `GetCertificateRequestTemplate: {}`.
 
 
 ## The `InventoryInterface` object
@@ -585,4 +595,4 @@ an instance of the given Java class is created
 using the parameter-less default constructor.
 This instance is then used to execute the appropriate methods
 of com.siemens.pki.cmpracomponent.configuration.InventoryInterface
-when an IR, CR, KUR, IP, CP or KUP message is processed.
+when an IR, CR, P10CR, KUR, IP, CP or KUP message is processed.
