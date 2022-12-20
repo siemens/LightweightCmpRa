@@ -65,5 +65,8 @@ fix: wrong OID for rsaKeyLen
 
 feat: use CmpRaComponent 2.2.0
 
+### 2.3.1 (Dec 20 2022)
+
+feat: use CmpRaComponent 2.2.1
 
 
