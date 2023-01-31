@@ -257,7 +257,8 @@ It should contain the key/value pairs described below in any order:
 
 ### The `OfflineFileClient` object
 
-The **`OfflineFileClient` object** describes the instantiation of the upstream interface to a file system interface.
+The **`OfflineFileClient` object** describes the instantiation of the upstream interface to a file system interface. 
+If an **`OfflineFileClient` object** is configured delayed delivery (polling) according to the CMP profile will be utilized.  
 
 It should contain the key/value pairs described below in any order:
 
@@ -316,7 +317,7 @@ The value array contains
 |0..n| [`CmpMessageInterface` values](#the-cmpmessageinterface-value).|
 
 
-## The **`ForceRaVerifyOnUpstream` object
+## The `ForceRaVerifyOnUpstream` object
 
 The **`ForceRaVerifyOnUpstream` object** controls if
 for outgoing upstream IR, CR, KUR the POPO is set to RaVerified.
