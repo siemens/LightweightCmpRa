@@ -209,9 +209,14 @@ It should contain the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-| mandatory||inputDirectory| string| the relative or absolute path to a directory that is scanned repeatedly for files containing a DER-encoded CMP request messages. Such messages are processed in the same way as other incoming messages.|
-| mandatory| | outputDirectory| string| the relative or absolute path to a directory used to write outgoing-DER encoded CMP messages. |
-| optional|10s| inputDirectoryPollcycle|integer| the input directory polling cycle in seconds.|
+| mandatory||inputDirectory| string| the relative or absolute path
+to a directory to scan repeatedly for files containing a DER-encoded
+CMP request messages. Such files are deleted after reading them and the messages
+they contained are processed in the same way as other incoming messages.|
+| optional|10s| inputDirectoryPollcycle|integer|
+the number of seconds to elapse between scans of the input directory|
+| mandatory| | outputDirectory| string| the relative or absolute path
+to a directory to write outgoing-DER encoded CMP response messages to|
 
 
 ## The `UpstreamInterface` object
@@ -257,16 +262,23 @@ It should contain the key/value pairs described below in any order:
 
 ### The `OfflineFileClient` object
 
-The **`OfflineFileClient` object** describes the instantiation of the upstream interface to a file system interface. 
-If an **`OfflineFileClient` object** is configured delayed delivery (polling) according to the CMP profile will be utilized.  
+The **`OfflineFileClient` object** describes
+the instantiation of the upstream interface to a file system interface.
+If an **`OfflineFileClient` object** is configured, this RA instance will
+initiate delayed delivery (polling) when it needs to send messages upstream.
 
 It should contain the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-| mandatory| | outputDirectory|string|the relative or absolute path to a directory used to write outgoing DER-encoded CMP request messages |
-| mandatory| | inputDirectory|string|the relative or absolute path to a directory which is scanned repeatedly for files containing a DER-encoded CMP response messages. Such messages are processed in the same way as other incoming messages. |
-| optional|10 s|inputDirectoryPollcycle|integer|the number of seconds between input directory polls|
+| mandatory| | outputDirectory|string|the relative or absolute path to
+a directory to write outgoing DER-encoded CMP request messages to|
+| mandatory| | inputDirectory|string|the relative or absolute path to a
+directory to scan repeatedly for files containing a DER-encoded CMP
+response messages. Such files are deleted after reading them and the messages
+they contained are processed in the same way as other incoming requests.|
+| optional|10 s|inputDirectoryPollcycle|integer|
+the number of seconds to elapse between scans of the input directory|
 
 
 ## The `DownstreamConfiguration` object
