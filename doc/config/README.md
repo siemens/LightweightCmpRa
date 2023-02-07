@@ -91,6 +91,8 @@ It may contain declarations of the object types listed below in any order:
 | mandatory if GENM shall be processed locally           | [`SupportMessageHandlerInterface` object](#the-supportmessagehandlerinterface-object)| x |   |
 | mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object)           | x | x |
 
+<!-- TODO add one configuration item for downstream (request) timeout, to use for any type of downstream interface -->  
+
 All objects except for `DownstreamInterface` have array values.
 If an object type is not mandatory,
 an empty array may given or the whole key may be absent.
@@ -138,8 +140,6 @@ If the InfoTypeOid was not specified, the OIDs defined in
 section Root CA Certificate Update, Certificate Request Template, and
 CRL Update Retrieval depending on the specific handler are used for matching.
 If under some conditions such array is not mandatory, the whole key might be absent or the array might be empty.
-
-<!-- TODO is there a transaction timeout? -->   
 
 ## The `DownstreamInterface` object
 
@@ -236,8 +236,9 @@ The value array contains
 |0..n| [`HttpsClient` object](#the-httpclient-object) |
 |0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
 
-So far, the HTTP(S) client uses fixed timeout limits.
+So far, the HTTP(S) client uses fixed timeout limit.s
 An upstream HTTP(S) connection times out after 30 seconds.
+<!-- TODO remove this preliminary text-->  
 
 ### The `HttpClient` object
 
@@ -249,6 +250,8 @@ It must contain the key/value pair described below:
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 | mandatory| | ServingUri|URI|server URL to connect to |
+
+<!-- TODO add configuration item for upstream (response) timeout, which should use the existing HTTP timeout mechanism -->  
 
 ### The `HttpsClient` object
 
@@ -262,6 +265,8 @@ It should contain the key/value pairs described below in any order:
 | mandatory || ServingUri|URI|server URL to connect to |
 |optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust|
 |optional||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
+
+<!-- TODO add configuration item for upstream (response) timeout, which should use the existing HTTP timeout mechanism -->  
 
 ### The `OfflineFileClient` object
 
@@ -282,6 +287,8 @@ response messages. Such files are deleted after reading them and the messages
 they contained are processed in the same way as other incoming requests.|
 | optional|10 s|inputDirectoryPollcycle|integer|
 the number of seconds to elapse between scans of the input directory|
+
+<!-- TODO add configuration item for upstream (response) timeout getting offline file -->  
 
 
 ## The `DownstreamConfiguration` object
