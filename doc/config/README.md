@@ -139,6 +139,7 @@ section Root CA Certificate Update, Certificate Request Template, and
 CRL Update Retrieval depending on the specific handler are used for matching.
 If under some conditions such array is not mandatory, the whole key might be absent or the array might be empty.
 
+<!-- TODO is there a transaction timeout? -->   
 
 ## The `DownstreamInterface` object
 
@@ -235,6 +236,8 @@ The value array contains
 |0..n| [`HttpsClient` object](#the-httpclient-object) |
 |0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
 
+So far, the HTTP(S) client uses fixed timeout limits.
+An upstream HTTP(S) connection times out after 30 seconds.
 
 ### The `HttpClient` object
 
