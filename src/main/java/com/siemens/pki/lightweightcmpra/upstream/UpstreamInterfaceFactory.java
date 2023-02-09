@@ -56,11 +56,13 @@ public class UpstreamInterfaceFactory {
                 final URI ServingUri = httpConfig.getServingUri();
                 final String scheme = ServingUri.getScheme();
                 if ("http".equalsIgnoreCase(scheme)) {
-                    return new HttpSession(ServingUri.toURL());
+                    return new HttpSession(ServingUri.toURL(),
+                            httpConfig.getTimeout());
                 }
                 if ("https".equalsIgnoreCase(scheme)
                         && httpConfig instanceof HttpsClientConfig) {
                     return new HttpsSession(ServingUri.toURL(),
+                            httpConfig.getTimeout(),
                             (HttpsClientConfig) httpConfig);
                 }
             }

@@ -3,6 +3,7 @@
 UpstreamInterface:
   - HttpClient:
       ServingUri:  "http://localhost:7000/ca"
+      Timeout: 44
 
 DownstreamInterface:
   HttpServer:

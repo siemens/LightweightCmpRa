@@ -69,4 +69,8 @@ feat: use CmpRaComponent 2.2.0
 
 feat: use CmpRaComponent 2.2.1
 
+### 2.4.0 (Feb 09 2023)
+
+feat: add HTTP(S) timeout, use use CmpRaComponent 2.2.2
+
 

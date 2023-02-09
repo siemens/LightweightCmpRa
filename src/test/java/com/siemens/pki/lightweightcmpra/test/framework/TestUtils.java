@@ -50,103 +50,120 @@ import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
  */
 public class TestUtils {
 
-	private static final String PASSWORD = "Password";
+    private static final String PASSWORD = "Password";
 
-	static final SecureRandom RANDOM = new SecureRandom();
+    static final SecureRandom RANDOM = new SecureRandom();
 
-	private static final char[] PASSWORD_AS_CHAR_ARRAY = getPassword().toCharArray();
+    private static final char[] PASSWORD_AS_CHAR_ARRAY =
+            getPassword().toCharArray();
 
-	/**
-	 * create a HTTP CMP client
-	 *
-	 * @param serverPath server URL to contact
-	 * @return
-	 * @throws Exception
-	 */
-	public static Function<PKIMessage, PKIMessage> createCmpClient(final String serverPath) throws Exception {
-		if (serverPath.toLowerCase().startsWith("http")) {
-			final HttpSession httpSession = new HttpSession(new URL(serverPath));
-			return request -> {
-				try {
-					return ifNotNull(httpSession.apply(request.getEncoded(), "http client"), PKIMessage::getInstance);
-				} catch (RuntimeException | IOException e) {
-					fail(e.getMessage());
-					return null;
-				}
-			};
-		}
-		if (serverPath.toLowerCase().startsWith("coap")) {
-			final CoapClient client = new CoapClient(serverPath);
-			return msg -> {
-				try {
-					return ifNotNull(
-							client.post(msg.getEncoded(), MediaTypeRegistry.APPLICATION_OCTET_STREAM).getPayload(),
-							PKIMessage::getInstance);
-				} catch (RuntimeException | ConnectorException | IOException e) {
-					fail(e.toString());
-					return null;
-				}
-			};
+    /**
+     * create a HTTP CMP client
+     *
+     * @param serverPath
+     *            server URL to contact
+     * @return
+     * @throws Exception
+     */
+    public static Function<PKIMessage, PKIMessage> createCmpClient(
+            final String serverPath) throws Exception {
+        if (serverPath.toLowerCase().startsWith("http")) {
+            final HttpSession httpSession =
+                    new HttpSession(new URL(serverPath), 30);
+            return request -> {
+                try {
+                    return ifNotNull(httpSession.apply(request.getEncoded(),
+                            "http client"), PKIMessage::getInstance);
+                } catch (RuntimeException | IOException e) {
+                    fail(e.getMessage());
+                    return null;
+                }
+            };
+        }
+        if (serverPath.toLowerCase().startsWith("coap")) {
+            final CoapClient client = new CoapClient(serverPath);
+            return msg -> {
+                try {
+                    return ifNotNull(client
+                            .post(msg.getEncoded(),
+                                    MediaTypeRegistry.APPLICATION_OCTET_STREAM)
+                            .getPayload(), PKIMessage::getInstance);
+                } catch (RuntimeException | ConnectorException
+                        | IOException e) {
+                    fail(e.toString());
+                    return null;
+                }
+            };
 
-		}
-		throw new IllegalArgumentException("invalid server path: " + serverPath);
-	}
+        }
+        throw new IllegalArgumentException(
+                "invalid server path: " + serverPath);
+    }
 
-	public static PasswordBasedMacProtection createPasswordBasedMacProtection(final String keyId,
-			final String sharedSecret) throws Exception {
-		final SharedSecretCredentialContextImpl config = new SharedSecretCredentialContextImpl();
-		config.setSenderKID(keyId.getBytes());
-		config.setSharedSecret(sharedSecret.getBytes());
-		config.setPrf("SHA256");
-		config.setMacAlgorithm("SHA256");
-		return new PasswordBasedMacProtection(config);
-	}
+    public static PasswordBasedMacProtection createPasswordBasedMacProtection(
+            final String keyId, final String sharedSecret) throws Exception {
+        final SharedSecretCredentialContextImpl config =
+                new SharedSecretCredentialContextImpl();
+        config.setSenderKID(keyId.getBytes());
+        config.setSharedSecret(sharedSecret.getBytes());
+        config.setPrf("SHA256");
+        config.setMacAlgorithm("SHA256");
+        return new PasswordBasedMacProtection(config);
+    }
 
-	public static ProtectionProvider createPasswordBasedMacProtection(final String keyId, final String sharedSecret,
-			final ASN1ObjectIdentifier owf, final ASN1ObjectIdentifier mac) throws Exception {
-		final SharedSecretCredentialContextImpl config = new SharedSecretCredentialContextImpl();
-		config.setSenderKID(keyId.getBytes());
-		config.setSharedSecret(sharedSecret.getBytes());
-		config.setPrf(owf.getId());
-		config.setMacAlgorithm(mac.getId());
-		return new PasswordBasedMacProtection(config);
-	}
+    public static ProtectionProvider createPasswordBasedMacProtection(
+            final String keyId, final String sharedSecret,
+            final ASN1ObjectIdentifier owf, final ASN1ObjectIdentifier mac)
+            throws Exception {
+        final SharedSecretCredentialContextImpl config =
+                new SharedSecretCredentialContextImpl();
+        config.setSenderKID(keyId.getBytes());
+        config.setSharedSecret(sharedSecret.getBytes());
+        config.setPrf(owf.getId());
+        config.setMacAlgorithm(mac.getId());
+        return new PasswordBasedMacProtection(config);
+    }
 
-	public static ProtectionProvider createPBMAC1Protection(final String keyId, final String sharedSecret,
-			final AlgorithmIdentifier prf, final AlgorithmIdentifier mac) throws Exception {
-		final SharedSecretCredentialContextImpl config = new SharedSecretCredentialContextImpl();
-		config.setSenderKID(keyId.getBytes());
-		config.setSharedSecret(sharedSecret.getBytes());
-		config.setPrf(prf.getAlgorithm().getId());
-		config.setMacAlgorithm(mac.getAlgorithm().getId());
-		return new PBMAC1Protection(config);
-	}
+    public static ProtectionProvider createPBMAC1Protection(final String keyId,
+            final String sharedSecret, final AlgorithmIdentifier prf,
+            final AlgorithmIdentifier mac) throws Exception {
+        final SharedSecretCredentialContextImpl config =
+                new SharedSecretCredentialContextImpl();
+        config.setSenderKID(keyId.getBytes());
+        config.setSharedSecret(sharedSecret.getBytes());
+        config.setPrf(prf.getAlgorithm().getId());
+        config.setMacAlgorithm(mac.getAlgorithm().getId());
+        return new PBMAC1Protection(config);
+    }
 
-	static public SignatureBasedProtection createSignatureBasedProtection(final String fileName,
-			final char[] password) {
-		final SignatureCredentialContextImpl config = new SignatureCredentialContextImpl();
-		config.setKeyStore(ConfigFileLoader.getConfigFileAsUri(fileName));
-		config.setPassword(new String(password).getBytes());
-		return new SignatureBasedProtection(config);
-	}
+    static public SignatureBasedProtection createSignatureBasedProtection(
+            final String fileName, final char[] password) {
+        final SignatureCredentialContextImpl config =
+                new SignatureCredentialContextImpl();
+        config.setKeyStore(ConfigFileLoader.getConfigFileAsUri(fileName));
+        config.setPassword(new String(password).getBytes());
+        return new SignatureBasedProtection(config);
+    }
 
-	public static VerificationContextImpl createVerificationContext(final String fileName) throws URISyntaxException {
-		final VerificationContextImpl verifierConfig = new VerificationContextImpl();
-		verifierConfig.setTrustedCertificates(new URI[] { new URI(fileName) });
-		return verifierConfig;
-	}
+    public static VerificationContextImpl createVerificationContext(
+            final String fileName) throws URISyntaxException {
+        final VerificationContextImpl verifierConfig =
+                new VerificationContextImpl();
+        verifierConfig.setTrustedCertificates(new URI[] {new URI(fileName)});
+        return verifierConfig;
+    }
 
-	public static String getPassword() {
-		return PASSWORD;
-	}
+    public static String getPassword() {
+        return PASSWORD;
+    }
 
-	public static char[] getPasswordAsCharArray() {
-		return PASSWORD_AS_CHAR_ARRAY;
-	}
+    public static char[] getPasswordAsCharArray() {
+        return PASSWORD_AS_CHAR_ARRAY;
+    }
 
-	// utility class, never create an instance
-	private TestUtils() {
+    // utility class, never create an instance
+    private TestUtils() {
 
-	}
+    }
 
 }

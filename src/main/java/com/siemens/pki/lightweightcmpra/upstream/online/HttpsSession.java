@@ -44,17 +44,19 @@ public class HttpsSession extends HttpSession {
     /**
      * Constructor for the TLS Session handling.
      *
-     * @param config
-     *            TLS configuration
-     * 
      * @param remoteUrl
      *            servers HTTPS URL to connect to
+     * @param timeoutInSeconds
+     *            connection and read timeout
+     * @param config
+     *            TLS configuration
+     *
      * @throws Exception
      *             in case of error
      */
-    public HttpsSession(final URL remoteUrl, final HttpsClientConfig config)
-            throws Exception {
-        super(remoteUrl);
+    public HttpsSession(final URL remoteUrl, final int timeoutInSeconds,
+            final HttpsClientConfig config) throws Exception {
+        super(remoteUrl, timeoutInSeconds);
         final SignatureCredentialContextImpl clientCredentials =
                 config.getClientCredentials();
         sslContext = SslContextFactory.createSslContext(config.getClientTrust(),
@@ -73,7 +75,8 @@ public class HttpsSession extends HttpSession {
             final HttpsURLConnection httpsConnection =
                     (HttpsURLConnection) remoteUrl.openConnection();
             httpsConnection.setSSLSocketFactory(sslContext.getSocketFactory());
-            return sendReceivePkiMessageIntern(message, httpsConnection);
+            return sendReceivePkiMessageIntern(message, httpsConnection,
+                    timeoutInSeconds);
         } catch (final Exception ex) {
             LOGGER.warn("client connection to " + remoteUrl, ex);
             throw new RuntimeException("client connection to " + remoteUrl, ex);

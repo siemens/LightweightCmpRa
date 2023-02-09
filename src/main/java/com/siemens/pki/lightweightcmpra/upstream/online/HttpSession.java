@@ -50,12 +50,13 @@ public class HttpSession implements UpstreamInterface {
      *             if something went wrong in message encoding or CMP message
      *             transfer
      */
-    static protected byte[] sendReceivePkiMessageIntern(final byte[] message,
-            final HttpURLConnection httpConnection) throws Exception {
+    protected static byte[] sendReceivePkiMessageIntern(final byte[] message,
+            final HttpURLConnection httpConnection, final int timeoutInSeconds)
+            throws Exception {
         httpConnection.setDoInput(true);
         httpConnection.setDoOutput(true);
-        httpConnection.setConnectTimeout(30000);
-        httpConnection.setReadTimeout(30000);
+        httpConnection.setConnectTimeout(timeoutInSeconds * 1000);
+        httpConnection.setReadTimeout(timeoutInSeconds * 1000);
         httpConnection.setRequestMethod("POST");
         httpConnection.setRequestProperty("Content-type",
                 "application/pkixcmp");
@@ -83,16 +84,21 @@ public class HttpSession implements UpstreamInterface {
     }
 
     protected final URL remoteUrl;
+    protected final int timeoutInSeconds;
 
     /**
      *
      * @param remoteUrl
      *            servers HTTP URL to connect to
+     * @param timeoutInSeconds
+     *            connection and read timeout
      * @throws Exception
      *             in case of error
      */
-    public HttpSession(final URL remoteUrl) throws Exception {
+    public HttpSession(final URL remoteUrl, final int timeoutInSeconds)
+            throws Exception {
         this.remoteUrl = remoteUrl;
+        this.timeoutInSeconds = timeoutInSeconds;
     }
 
     /**
@@ -103,7 +109,8 @@ public class HttpSession implements UpstreamInterface {
         try {
             final HttpURLConnection httpConnection =
                     (HttpURLConnection) remoteUrl.openConnection();
-            return sendReceivePkiMessageIntern(message, httpConnection);
+            return sendReceivePkiMessageIntern(message, httpConnection,
+                    timeoutInSeconds);
         } catch (final Exception e) {
             throw new RuntimeException("client connection to " + remoteUrl, e);
         }

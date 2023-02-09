@@ -27,14 +27,24 @@ import javax.xml.bind.annotation.XmlElement;
 public class HttpClientConfig extends AbstractUpstreamInterfaceConfig {
 
     private URI ServingUri;
+    private int timeoutinseconds = 30;
 
     public URI getServingUri() {
         return ServingUri;
     }
 
+    public int getTimeout() {
+        return timeoutinseconds;
+    }
+
     @XmlElement(required = true)
     public void setServingUri(final URI ServingUri) {
         this.ServingUri = ServingUri;
+    }
+
+    @XmlElement
+    public void setTimeout(final int timeoutinseconds) {
+        this.timeoutinseconds = timeoutinseconds;
     }
 
 }

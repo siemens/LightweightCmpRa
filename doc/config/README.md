@@ -250,6 +250,7 @@ It must contain the key/value pair described below:
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 | mandatory| | ServingUri|URI|server URL to connect to |
+| optional| 30 | Timeout|integer|HTTP connect and read timeout in seconds |
 
 <!-- TODO add configuration item for upstream (response) timeout, which should use the existing HTTP timeout mechanism -->  
 
@@ -263,8 +264,9 @@ It should contain the key/value pairs described below in any order:
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 | mandatory || ServingUri|URI|server URL to connect to |
+| optional| 30 | Timeout|integer|HTTPS connect and read timeout in seconds |
 |optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust|
-|optional||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
+|mandatory||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
 
 <!-- TODO add configuration item for upstream (response) timeout, which should use the existing HTTP timeout mechanism -->  
 
