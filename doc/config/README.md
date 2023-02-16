@@ -236,9 +236,6 @@ The value array contains
 |0..n| [`HttpsClient` object](#the-httpclient-object) |
 |0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
 
-So far, the HTTP(S) client uses fixed timeout limit.s
-An upstream HTTP(S) connection times out after 30 seconds.
-<!-- TODO remove this preliminary text-->  
 
 ### The `HttpClient` object
 
@@ -252,7 +249,6 @@ It must contain the key/value pair described below:
 | mandatory| | ServingUri|URI|server URL to connect to |
 | optional| 30 | Timeout|integer|HTTP connect and read timeout in seconds |
 
-<!-- TODO add configuration item for upstream (response) timeout, which should use the existing HTTP timeout mechanism -->  
 
 ### The `HttpsClient` object
 
@@ -268,7 +264,6 @@ It should contain the key/value pairs described below in any order:
 |optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust|
 |mandatory||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
 
-<!-- TODO add configuration item for upstream (response) timeout, which should use the existing HTTP timeout mechanism -->  
 
 ### The `OfflineFileClient` object
 
