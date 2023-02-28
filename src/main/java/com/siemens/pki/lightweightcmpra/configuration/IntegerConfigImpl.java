@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class RetryAfterTimeInSecondsImpl extends CertProfileBodyTypeConfigItem
+public class IntegerConfigImpl extends CertProfileBodyTypeConfigItem
         implements IntSupplier {
 
     @XmlElement(required = true)

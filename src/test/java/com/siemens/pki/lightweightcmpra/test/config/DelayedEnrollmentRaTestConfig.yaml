@@ -38,3 +38,6 @@ RaVerifiedAcceptable:
 
 ForceRaVerifyOnUpstream:
   - value: false
+  
+DownstreamExpirationTime:
+  - value: 20

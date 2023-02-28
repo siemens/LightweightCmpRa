@@ -41,3 +41,6 @@ ForceRaVerifyOnUpstream:
 
 RetryAfterTimeInSeconds:
   - value: 1
+  
+DownstreamExpirationTime:
+  - value: 20

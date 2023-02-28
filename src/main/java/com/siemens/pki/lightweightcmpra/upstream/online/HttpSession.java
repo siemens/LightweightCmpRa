@@ -52,11 +52,15 @@ public class HttpSession implements UpstreamInterface {
      */
     protected static byte[] sendReceivePkiMessageIntern(final byte[] message,
             final HttpURLConnection httpConnection, final int timeoutInSeconds)
-            throws Exception {
+                    throws Exception {
         httpConnection.setDoInput(true);
         httpConnection.setDoOutput(true);
-        httpConnection.setConnectTimeout(timeoutInSeconds * 1000);
-        httpConnection.setReadTimeout(timeoutInSeconds * 1000);
+        httpConnection.setConnectTimeout(
+                timeoutInSeconds > 0 ? timeoutInSeconds * 1000
+                        : Integer.MAX_VALUE);
+        httpConnection
+        .setReadTimeout(timeoutInSeconds > 0 ? timeoutInSeconds * 1000
+                : Integer.MAX_VALUE);
         httpConnection.setRequestMethod("POST");
         httpConnection.setRequestProperty("Content-type",
                 "application/pkixcmp");

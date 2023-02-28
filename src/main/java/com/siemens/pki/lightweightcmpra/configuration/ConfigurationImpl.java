@@ -20,10 +20,6 @@ package com.siemens.pki.lightweightcmpra.configuration;
 import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -41,6 +37,7 @@ import com.siemens.pki.cmpracomponent.configuration.InventoryInterface;
 import com.siemens.pki.cmpracomponent.configuration.PersistencyInterface;
 import com.siemens.pki.cmpracomponent.configuration.SupportMessageHandlerInterface;
 import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
+import com.siemens.pki.cmpracomponent.persistency.DefaultPersistencyImplementation;
 
 @XmlRootElement
 // {@link java.util.List} sub classing works only with {@link XmlAccessType}.FIELD
@@ -48,7 +45,7 @@ import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 public class ConfigurationImpl implements Configuration {
 
     static class CertProfileBodyTypeScopedList<T extends CertProfileBodyTypeConfigItem>
-            extends ArrayList<T> {
+    extends ArrayList<T> {
 
         private static final long serialVersionUID = 1L;
 
@@ -76,7 +73,7 @@ public class ConfigurationImpl implements Configuration {
     }
 
     static class CertProfileInfoTypeScopedList<T extends CertProfileInfoTypeConfigItem>
-            extends ArrayList<T> {
+    extends ArrayList<T> {
 
         private static final long serialVersionUID = 1L;
 
@@ -94,30 +91,30 @@ public class ConfigurationImpl implements Configuration {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ConfigurationImpl.class);
 
-    private final Map<byte[], byte[]> persistencyMap =
-            Collections.synchronizedSortedMap(new TreeMap<>(Arrays::compare));
+    private final PersistencyInterface persistency =
+            new DefaultPersistencyImplementation(600);
 
     @XmlElements({
-            @XmlElement(name = "OfflineFileClient", type = OfflineFileClientConfig.class, required = false),
-            @XmlElement(name = "HttpClient", type = HttpClientConfig.class, required = false),
-            @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false)})
+        @XmlElement(name = "OfflineFileClient", type = OfflineFileClientConfig.class, required = false),
+        @XmlElement(name = "HttpClient", type = HttpClientConfig.class, required = false),
+        @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false)})
     private final CertProfileBodyTypeScopedList<AbstractUpstreamInterfaceConfig> UpstreamInterface =
-            new CertProfileBodyTypeScopedList<>();
+    new CertProfileBodyTypeScopedList<>();
 
     @XmlElements({
-            @XmlElement(name = "OfflineFileServer", type = OfflineFileServerConfig.class, required = false),
-            @XmlElement(name = "CoapServer", type = CoapServerConfig.class, required = false),
-            @XmlElement(name = "HttpServer", type = HttpServerConfig.class, required = false),
-            @XmlElement(name = "HttpsServer", type = HttpsServerConfig.class, required = false)})
+        @XmlElement(name = "OfflineFileServer", type = OfflineFileServerConfig.class, required = false),
+        @XmlElement(name = "CoapServer", type = CoapServerConfig.class, required = false),
+        @XmlElement(name = "HttpServer", type = HttpServerConfig.class, required = false),
+        @XmlElement(name = "HttpsServer", type = HttpsServerConfig.class, required = false)})
     private AbstractDownstreamInterfaceConfig DownstreamInterface;
 
     @XmlElement(required = false)
     private final CertProfileBodyTypeScopedList<CkgContextImpl> CkgConfiguration =
-            new CertProfileBodyTypeScopedList<>();
+    new CertProfileBodyTypeScopedList<>();
 
     @XmlElement(required = true)
     private final CertProfileBodyTypeScopedList<CmpMessageInterfaceImpl> DownstreamConfiguration =
-            new CertProfileBodyTypeScopedList<>();
+    new CertProfileBodyTypeScopedList<>();
 
     private final CertProfileBodyTypeScopedList<CmpMessageInterfaceImpl> UpstreamConfiguration =
             new CertProfileBodyTypeScopedList<>();
@@ -134,16 +131,19 @@ public class ConfigurationImpl implements Configuration {
     private final CertProfileBodyTypeScopedList<InventoryInterfaceImpl> InventoryInterface =
             new CertProfileBodyTypeScopedList<>();
 
-    private final CertProfileBodyTypeScopedList<RetryAfterTimeInSecondsImpl> RetryAfterTimeInSeconds =
+    private final CertProfileBodyTypeScopedList<IntegerConfigImpl> RetryAfterTimeInSeconds =
+            new CertProfileBodyTypeScopedList<>();
+
+    private final CertProfileBodyTypeScopedList<IntegerConfigImpl> DownstreamExpirationTime =
             new CertProfileBodyTypeScopedList<>();
 
     @XmlElements({
-            @XmlElement(name = "CrlUpdateRetrieval", type = CrlUpdateRetrievalHandlerImpl.class, required = false),
-            @XmlElement(name = "GetCaCertificates", type = GetCaCertificatesHandlerImpl.class, required = false),
-            @XmlElement(name = "GetCertificateRequestTemplate", type = GetCertificateRequestTemplateHandlerImpl.class, required = false),
-            @XmlElement(name = "GetRootCaCertificateUpdate", type = GetRootCaCertificateUpdateHandlerImpl.class, required = false)})
+        @XmlElement(name = "CrlUpdateRetrieval", type = CrlUpdateRetrievalHandlerImpl.class, required = false),
+        @XmlElement(name = "GetCaCertificates", type = GetCaCertificatesHandlerImpl.class, required = false),
+        @XmlElement(name = "GetCertificateRequestTemplate", type = GetCertificateRequestTemplateHandlerImpl.class, required = false),
+        @XmlElement(name = "GetRootCaCertificateUpdate", type = GetRootCaCertificateUpdateHandlerImpl.class, required = false)})
     private final CertProfileInfoTypeScopedList<SupportMessageHandlerInterfaceImpl> SupportMessageHandlerInterface =
-            new CertProfileInfoTypeScopedList<>();
+    new CertProfileInfoTypeScopedList<>();
 
     @Override
     public CkgContext getCkgConfiguration(final String certProfile,
@@ -156,6 +156,21 @@ public class ConfigurationImpl implements Configuration {
             final String certProfile, final int bodyType) {
         return DownstreamConfiguration.getMatchingConfig(certProfile, bodyType,
                 "DownstreamConfiguration");
+    }
+
+    @Override
+    public int getDownstreamExpirationTime(final String certProfile,
+            final int bodyType) {
+        final IntegerConfigImpl matchingConfig = DownstreamExpirationTime
+                .getMatchingConfig(certProfile, bodyType);
+        if (matchingConfig == null) {
+            return Integer.MAX_VALUE / 2;
+        }
+        final int asInt = matchingConfig.getAsInt();
+        if (asInt <= 0) {
+            return Integer.MAX_VALUE / 2;
+        }
+        return asInt;
     }
 
     public AbstractDownstreamInterfaceConfig getDownstreamInterface() {
@@ -187,25 +202,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public PersistencyInterface getPersistency() {
-        // if we have multiple RA(LRA instances in on Java-VM we could not use one global Map from the default implementation
-        return new PersistencyInterface() {
-            @Override
-            public void clearLastSavedMessage(final byte[] transactionId) {
-                ConfigurationImpl.this.persistencyMap.remove(transactionId);
-            }
-
-            @Override
-            public byte[] getLastSavedMessage(final byte[] transactionId) {
-                return ConfigurationImpl.this.persistencyMap.get(transactionId);
-            }
-
-            @Override
-            public void saveLastMessage(final byte[] transactionId,
-                    final byte[] message) {
-                ConfigurationImpl.this.persistencyMap.put(transactionId,
-                        message);
-            }
-        };
+        return persistency;
     }
 
     @Override

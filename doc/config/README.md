@@ -79,19 +79,18 @@ It may contain declarations of the object types listed below in any order:
 
 | mandatory/optional| object type |certProfile|bodyType
 |-------------------------|:------------|:---|:---|
-| mandatory                                              | [`DownstreamInterface` object](#the-downstreaminterface-object)         |   |   |
-| mandatory if messages need to be sent upstream         | [`UpstreamInterface` object](#the-upstreaminterface-object)             | x | x |
-| mandatory                                              | [`DownstreamConfiguration` object](#the-downstreamconfiguration-object) | x | x |
-| mandatory if incoming IR, CR or KUR shall be processed | [`RaVerifiedAcceptable` object](#the-raverifiedacceptable-object)       | x | x |
-| mandatory if delayed delivery shall be supported       | [`RetryAfterTimeInSeconds` object](#the-retryaftertimeinseconds-object) | x | x |
-| mandatory if messages need to be sent upstream         | [`UpstreamConfiguration` object](#the-upstreamconfiguration-object)     | x | x |
-| mandatory if IR, CR or KUR needs to be sent upstream   | [`ForceRaVerifyOnUpstream` object](#the-forceraverifyonupstream-object) | x | x |
-| mandatory if IP, CP or KUP shall be processed          | [`EnrollmentTrust` object](#the-enrollmenttrust-object)                 | x | x |
-| mandatory if central key generation shall be supported | [`CkgConfiguration` object](#the-ckgconfiguration-object)               | x | x |
+| mandatory                                              | [`DownstreamInterface` object](#the-downstreaminterface-object)           |   |   |
+| mandatory if messages need to be sent upstream         | [`UpstreamInterface` object](#the-upstreaminterface-object)               | x | x |
+| mandatory                                              | [`DownstreamConfiguration` object](#the-downstreamconfiguration-object)   | x | x |
+| mandatory if incoming IR, CR or KUR shall be processed | [`RaVerifiedAcceptable` object](#the-raverifiedacceptable-object)         | x | x |
+| mandatory if delayed delivery shall be supported       | [`RetryAfterTimeInSeconds` object](#the-retryaftertimeinseconds-object)   | x | x |
+| mandatory if transactions should expire                | [`DownstreamExpirationTime` object](#the-downstreamexpirationtime-object) | x | x |
+| mandatory if messages need to be sent upstream         | [`UpstreamConfiguration` object](#the-upstreamconfiguration-object)       | x | x |
+| mandatory if IR, CR or KUR needs to be sent upstream   | [`ForceRaVerifyOnUpstream` object](#the-forceraverifyonupstream-object)   | x | x |
+| mandatory if IP, CP or KUP shall be processed          | [`EnrollmentTrust` object](#the-enrollmenttrust-object)                   | x | x |
+| mandatory if central key generation shall be supported | [`CkgConfiguration` object](#the-ckgconfiguration-object)                 | x | x |
 | mandatory if GENM shall be processed locally           | [`SupportMessageHandlerInterface` object](#the-supportmessagehandlerinterface-object)| x |   |
-| mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object)           | x | x |
-
-<!-- TODO add one configuration item for downstream (request) timeout, to use for any type of downstream interface -->  
+| mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object)             | x | x |
 
 All objects except for `DownstreamInterface` have array values.
 If an object type is not mandatory,
@@ -285,8 +284,6 @@ they contained are processed in the same way as other incoming requests.|
 | optional|10 s|inputDirectoryPollcycle|integer|
 the number of seconds to elapse between scans of the input directory|
 
-<!-- TODO add configuration item for upstream (response) timeout getting offline file -->  
-
 
 ## The `DownstreamConfiguration` object
 
@@ -323,6 +320,26 @@ The value array contains
 |-------------------------|-------------|----|----|
 |0..n| value |integer|retryAfter time in seconds|
 
+
+## The `DownstreamExpirationTime` object
+
+The **`DownstreamExpirationTime` object** specifies the maximum persistency time
+of a transaction in seconds. The Lightweight CPM RA persists the state
+of each transaction for each message exchange until regular or erroneous termination. 
+But due to lost messages or crashing end entities the end of a transaction might
+not be recognized by the RA. In this case the RA may forget the whole transaction
+after the given amount of time. If the value is 0 or a matching value is not found
+the transaction state is only removed at regular or erroneous termination.
+ 
+
+The value array contains
+
+| requested cardinality | key | value type| value description |
+|-------------------------|-------------|----|----|
+|0..n| value |integer|maximum lifetime in seconds|
+
+
+DownstreamExpirationTime
 
 ## The `UpstreamConfiguration` object
 

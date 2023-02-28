@@ -32,3 +32,6 @@ SupportMessageHandlerInterface:
   - CrlUpdateRetrieval:
       crls:
         - "credentials/CRL.der"
+
+DownstreamExpirationTime:
+  - value: 20

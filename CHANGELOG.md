@@ -73,4 +73,6 @@ feat: use CmpRaComponent 2.2.1
 
 feat: add HTTP(S) timeout, use use CmpRaComponent 2.2.2
 
+### 2.4.0 (Feb 28 2023)
 
+feat: implement transaction expiration
