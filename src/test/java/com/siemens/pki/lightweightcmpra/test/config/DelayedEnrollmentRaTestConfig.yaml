@@ -39,5 +39,5 @@ RaVerifiedAcceptable:
 ForceRaVerifyOnUpstream:
   - value: false
   
-DownstreamExpirationTime:
+TransactionMaxLifetime:
   - value: 20

@@ -76,3 +76,7 @@ feat: add HTTP(S) timeout, use use CmpRaComponent 2.2.2
 ### 2.4.0 (Feb 28 2023)
 
 feat: implement transaction expiration
+
+### 2.5.0 (Mar 14 2023)
+
+fix: rename DownstreamExpirationTime to TransactionMaxLifetime

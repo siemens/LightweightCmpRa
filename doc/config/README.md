@@ -84,7 +84,7 @@ It may contain declarations of the object types listed below in any order:
 | mandatory                                              | [`DownstreamConfiguration` object](#the-downstreamconfiguration-object)   | x | x |
 | mandatory if incoming IR, CR or KUR shall be processed | [`RaVerifiedAcceptable` object](#the-raverifiedacceptable-object)         | x | x |
 | mandatory if delayed delivery shall be supported       | [`RetryAfterTimeInSeconds` object](#the-retryaftertimeinseconds-object)   | x | x |
-| mandatory if transactions should expire                | [`DownstreamExpirationTime` object](#the-downstreamexpirationtime-object) | x | x |
+| mandatory if transactions should expire                | [`TransactionMaxLifetime` object](#the-transactionmaxlifetime-object)     | x | x |
 | mandatory if messages need to be sent upstream         | [`UpstreamConfiguration` object](#the-upstreamconfiguration-object)       | x | x |
 | mandatory if IR, CR or KUR needs to be sent upstream   | [`ForceRaVerifyOnUpstream` object](#the-forceraverifyonupstream-object)   | x | x |
 | mandatory if IP, CP or KUP shall be processed          | [`EnrollmentTrust` object](#the-enrollmenttrust-object)                   | x | x |
@@ -321,15 +321,17 @@ The value array contains
 |0..n| value |integer|retryAfter time in seconds|
 
 
-## The `DownstreamExpirationTime` object
+## The `TransactionMaxLifetime` object
 
-The **`DownstreamExpirationTime` object** specifies the maximum persistency time
-of a transaction in seconds. The Lightweight CPM RA persists the state
-of each transaction for each message exchange until regular or erroneous termination. 
-But due to lost messages or crashing end entities the end of a transaction might
-not be recognized by the RA. In this case the RA may forget the whole transaction
-after the given amount of time. If the value is 0 or a matching value is not found
-the transaction state is only removed at regular or erroneous termination.
+The **`TransactionMaxLifetime` object**
+optionally specifies the maximum lifetime of CMP transactions.
+The Lightweight CPM RA persists the message exchange state of each transaction
+until its regular or erroneous termination or until its age reaches the
+given number of seconds.
+By default, or if the value 0 is given, transaction lifetime is not restricted.
+Restricting transaction lifetime avoids blocking RA resources indefinitely
+for instance when an expected subsequent request message by the client is lost
+or the client terminates during a transaction without the RA knowing.
  
 
 The value array contains
@@ -338,8 +340,6 @@ The value array contains
 |-------------------------|-------------|----|----|
 |0..n| value |integer|maximum lifetime in seconds|
 
-
-DownstreamExpirationTime
 
 ## The `UpstreamConfiguration` object
 
