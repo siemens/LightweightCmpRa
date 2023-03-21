@@ -134,7 +134,7 @@ public class ConfigurationImpl implements Configuration {
     private final CertProfileBodyTypeScopedList<IntegerConfigImpl> RetryAfterTimeInSeconds =
             new CertProfileBodyTypeScopedList<>();
 
-    private final CertProfileBodyTypeScopedList<IntegerConfigImpl> TransactionMaxLifetime =
+    private final CertProfileBodyTypeScopedList<IntegerConfigImpl> DownstreamTimeout =
             new CertProfileBodyTypeScopedList<>();
 
     @XmlElements({
@@ -159,17 +159,14 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public int getTransactionMaxLifetime(final String certProfile,
+    public int getDownstreamTimeout(final String certProfile,
             final int bodyType) {
-        final IntegerConfigImpl matchingConfig = TransactionMaxLifetime
+        final IntegerConfigImpl matchingConfig = DownstreamTimeout
                 .getMatchingConfig(certProfile, bodyType);
         if (matchingConfig == null) {
-            return Integer.MAX_VALUE / 2;
+            return 0;
         }
         final int asInt = matchingConfig.getAsInt();
-        if (asInt <= 0) {
-            return Integer.MAX_VALUE / 2;
-        }
         return asInt;
     }
 

@@ -33,5 +33,5 @@ SupportMessageHandlerInterface:
       crls:
         - "credentials/CRL.der"
 
-TransactionMaxLifetime:
+DownstreamTimeout:
   - value: 20

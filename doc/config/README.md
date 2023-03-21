@@ -84,7 +84,7 @@ It may contain declarations of the object types listed below in any order:
 | mandatory                                              | [`DownstreamConfiguration` object](#the-downstreamconfiguration-object)   | x | x |
 | mandatory if incoming IR, CR or KUR shall be processed | [`RaVerifiedAcceptable` object](#the-raverifiedacceptable-object)         | x | x |
 | mandatory if delayed delivery shall be supported       | [`RetryAfterTimeInSeconds` object](#the-retryaftertimeinseconds-object)   | x | x |
-| mandatory if transactions should expire                | [`TransactionMaxLifetime` object](#the-transactionmaxlifetime-object)     | x | x |
+| mandatory if transactions should expire                | [`DownstreamTimeout` object](#the-downstreamtimeout-object)               | x | x |
 | mandatory if messages need to be sent upstream         | [`UpstreamConfiguration` object](#the-upstreamconfiguration-object)       | x | x |
 | mandatory if IR, CR or KUR needs to be sent upstream   | [`ForceRaVerifyOnUpstream` object](#the-forceraverifyonupstream-object)   | x | x |
 | mandatory if IP, CP or KUP shall be processed          | [`EnrollmentTrust` object](#the-enrollmenttrust-object)                   | x | x |
@@ -321,24 +321,26 @@ The value array contains
 |0..n| value |integer|retryAfter time in seconds|
 
 
-## The `TransactionMaxLifetime` object
+## The `DownstreamTimeout` object
 
-The **`TransactionMaxLifetime` object**
-optionally specifies the maximum lifetime of CMP transactions.
-The Lightweight CPM RA persists the message exchange state of each transaction
-until its regular or erroneous termination or until its age reaches the
-given number of seconds.
-By default, or if the value 0 is given, transaction lifetime is not restricted.
-Restricting transaction lifetime avoids blocking RA resources indefinitely
+The **`DownstreamTimeout` object**
+optionally specifies the maximum allowed reaction time of the downstream entity
+apart from any applicable `retryAfter` period.
+That is, the RA will keep a transaction open while awaiting a further request
+form the client side until it receives the expected request or the configured
+number of seconds, plus any `retryAfter` time given in its last response, has elapsed.
+In the latter case the RA cleans up and forgets the transaction.<br>
+By default, or if the value 0 is given, no restriction is placed,
+such that a transaction may idle indefinitely. It is recommended to specify
+a nonzero timeout value in order to prevent blocking RA resources indefinitely,
 for instance when an expected subsequent request message by the client is lost
 or the client terminates during a transaction without the RA knowing.
- 
 
 The value array contains
 
 | requested cardinality | key | value type| value description |
 |-------------------------|-------------|----|----|
-|0..n| value |integer|maximum lifetime in seconds|
+|0..n| value |integer|maximum timeout in seconds|
 
 
 ## The `UpstreamConfiguration` object

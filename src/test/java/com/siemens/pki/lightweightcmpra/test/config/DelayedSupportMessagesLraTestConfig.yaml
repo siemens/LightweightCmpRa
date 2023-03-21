@@ -42,5 +42,5 @@ ForceRaVerifyOnUpstream:
 RetryAfterTimeInSeconds:
   - value: 1
   
-TransactionMaxLifetime:
+DownstreamTimeout:
   - value: 20
