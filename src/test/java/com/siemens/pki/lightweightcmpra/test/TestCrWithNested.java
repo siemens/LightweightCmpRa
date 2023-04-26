@@ -18,12 +18,12 @@
 package com.siemens.pki.lightweightcmpra.test;
 
 import org.bouncycastle.asn1.cmp.PKIBody;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestCrWithNested extends OnlineEnrollmentTestcaseBase {
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUpRas() throws Exception {
         initTestbed(
                 "http://localhost:6005/nestedlra",
                 "NestedEnrollmentRaTestConfig.yaml",

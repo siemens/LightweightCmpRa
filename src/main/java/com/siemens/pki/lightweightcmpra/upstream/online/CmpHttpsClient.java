@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation of a CMP over HTTPS/TLS client.
  */
-public class HttpsSession extends HttpSession {
+public class CmpHttpsClient extends CmpHttpClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpsSession.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmpHttpsClient.class);
 
     private final SSLContext sslContext;
 
@@ -50,7 +50,7 @@ public class HttpsSession extends HttpSession {
      *
      * @throws Exception in case of error
      */
-    public HttpsSession(final URL remoteUrl, final int timeoutInSeconds, final HttpsClientConfig config)
+    public CmpHttpsClient(final URL remoteUrl, final int timeoutInSeconds, final HttpsClientConfig config)
             throws Exception {
         super(remoteUrl, timeoutInSeconds);
         final SignatureCredentialContextImpl clientCredentials = config.getClientCredentials();

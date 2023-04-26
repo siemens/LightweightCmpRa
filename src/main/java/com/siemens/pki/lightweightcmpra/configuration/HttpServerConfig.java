@@ -21,13 +21,13 @@ import java.net.URI;
 
 public class HttpServerConfig extends AbstractDownstreamInterfaceConfig {
 
-    private URI ServingUri;
+    private URI UpstreamURI;
 
-    public URI getServingUri() {
-        return ServingUri;
+    public URI getUpstreamURI() {
+        return UpstreamURI;
     }
 
-    public void setServingUri(final URI ServingUri) {
-        this.ServingUri = ServingUri;
+    public void setUpstreamURI(final URI UpstreamURI) {
+        this.UpstreamURI = UpstreamURI;
     }
 }

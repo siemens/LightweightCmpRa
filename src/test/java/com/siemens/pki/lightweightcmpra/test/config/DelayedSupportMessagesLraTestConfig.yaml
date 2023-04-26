@@ -3,7 +3,7 @@
 
 DownstreamInterface:
   HttpServer:
-    ServingUri:  "http://localhost:6006/delayedsupportlra"
+    UpstreamURI:  "http://localhost:6006/delayedsupportlra"
 
 UpstreamInterface:
   - OfflineFileClient:

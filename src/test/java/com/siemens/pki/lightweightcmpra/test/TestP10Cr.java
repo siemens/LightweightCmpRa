@@ -27,7 +27,7 @@ public class TestP10Cr extends OnlineEnrollmentTestcaseBase {
      * @throws Exception
      */
     @Test(timeout = 100000L)
-    @Ignore("PKCS#10 CSR not supported anymore")
+    @Ignore("PKCS#10 CSR not supported by CMP RA Component")
     public void testP10Cr() throws Exception {
         executeP10CertificateRequest(getEeSignaturebasedProtectionProvider(), getEeCmpClient());
     }

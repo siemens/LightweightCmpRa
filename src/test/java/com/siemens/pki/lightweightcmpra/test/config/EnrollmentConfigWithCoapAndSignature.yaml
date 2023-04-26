@@ -2,7 +2,7 @@
 
 UpstreamInterface:
   - HttpClient:
-      ServingUri:  "http://localhost:7000/ca"
+      UpstreamURI:  "http://localhost:7000/ca"
 
 DownstreamInterface:
   CoapServer:

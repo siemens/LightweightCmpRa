@@ -50,7 +50,7 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.Time;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -59,16 +59,16 @@ import org.slf4j.LoggerFactory;
 public class TestGeneralMessages extends CmpTestcaseBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestGeneralMessages.class);
 
+    @BeforeClass
+    public static void setUpRas() throws Exception {
+        initTestbed("http://localhost:6004/supportlra", "SupportMessagesTestConfig.yaml");
+    }
+
     @Test
     @Ignore("only used for generation of a new CertReqTemplateContent")
     public void generateCertReqTemplateContent() throws Exception {
         CertReqTemplateValueWriter.writeCertReqTemplateValue(
                 new File(CmpTestcaseBase.CONFIG_DIRECTORY, "credentials/CertTemplate.der"));
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        initTestbed("http://localhost:6004/supportlra", "SupportMessagesTestConfig.yaml");
     }
 
     /**

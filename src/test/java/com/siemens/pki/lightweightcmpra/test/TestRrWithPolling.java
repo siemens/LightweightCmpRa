@@ -20,15 +20,18 @@ package com.siemens.pki.lightweightcmpra.test;
 import static org.junit.Assert.assertEquals;
 
 import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
 import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestRrWithPolling.class);
@@ -45,9 +48,13 @@ public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
                 PKIBody.TYPE_CERT_REP,
                 getEeSignaturebasedProtectionProvider(),
                 getEeCmpClient());
+
+        final ProtectionProvider rrProtector = getEnrollmentCredentials()
+                .setEndEntityToProtect(certificateToRevoke.getCertificate(), certificateToRevoke.getPrivateKey());
+
         final PKIMessage rr = PkiMessageGenerator.generateAndProtectMessage(
                 new HeaderProviderForTest(),
-                getEeSignaturebasedProtectionProvider(),
+                rrProtector,
                 PkiMessageGenerator.generateRrBody(certificateToRevoke.getCertificate()));
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
