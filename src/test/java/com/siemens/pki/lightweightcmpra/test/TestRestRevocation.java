@@ -19,7 +19,6 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,10 +38,9 @@ public class TestRestRevocation extends EnrollmentTestcaseBase {
     @Ignore("not implemented anymore")
     @Test
     public void testRevocationOnBehalfOfAnotherEntity() throws Exception {
-        final URL clientURL = new URL(
-                "http://localhost:6015/revocation?issuer=CN=MyEndEntityId,C=DE&serial=0xABCDEF1234567890");
-        final HttpURLConnection httpConnection =
-                (HttpURLConnection) clientURL.openConnection();
+        final URL clientURL =
+                new URL("http://localhost:6015/revocation?issuer=CN=MyEndEntityId,C=DE&serial=0xABCDEF1234567890");
+        final HttpURLConnection httpConnection = (HttpURLConnection) clientURL.openConnection();
         httpConnection.setDoInput(true);
         httpConnection.setDoOutput(true);
         httpConnection.setConnectTimeout(30000);
@@ -50,8 +48,6 @@ public class TestRestRevocation extends EnrollmentTestcaseBase {
         httpConnection.setRequestMethod("DELETE");
         httpConnection.connect();
         final int lastResponseCode = httpConnection.getResponseCode();
-        Assert.assertEquals("HTTP status", HttpURLConnection.HTTP_OK,
-                lastResponseCode);
+        Assert.assertEquals("HTTP status", HttpURLConnection.HTTP_OK, lastResponseCode);
     }
-
 }

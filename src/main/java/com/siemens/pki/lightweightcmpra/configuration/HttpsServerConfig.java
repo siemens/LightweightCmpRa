@@ -40,8 +40,7 @@ public class HttpsServerConfig extends HttpServerConfig {
     }
 
     @XmlElement(required = true)
-    public void setServerCredentials(
-            final SignatureCredentialContextImpl serverCredentials) {
+    public void setServerCredentials(final SignatureCredentialContextImpl serverCredentials) {
         this.serverCredentials = serverCredentials;
     }
 
@@ -49,5 +48,4 @@ public class HttpsServerConfig extends HttpServerConfig {
     public void setServerTrust(final VerificationContextImpl serverTrust) {
         this.serverTrust = serverTrust;
     }
-
 }

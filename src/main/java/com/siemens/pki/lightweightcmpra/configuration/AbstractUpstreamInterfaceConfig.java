@@ -22,7 +22,4 @@ package com.siemens.pki.lightweightcmpra.configuration;
  * base class for all upstream interface configurations
  *
  */
-public abstract class AbstractUpstreamInterfaceConfig
-        extends CertProfileBodyTypeConfigItem {
-
-}
+public abstract class AbstractUpstreamInterfaceConfig extends CertProfileBodyTypeConfigItem {}

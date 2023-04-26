@@ -19,17 +19,6 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
 
-import java.util.ArrayList;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.siemens.pki.cmpracomponent.configuration.CkgContext;
 import com.siemens.pki.cmpracomponent.configuration.CmpMessageInterface;
 import com.siemens.pki.cmpracomponent.configuration.Configuration;
@@ -38,14 +27,21 @@ import com.siemens.pki.cmpracomponent.configuration.PersistencyInterface;
 import com.siemens.pki.cmpracomponent.configuration.SupportMessageHandlerInterface;
 import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 import com.siemens.pki.cmpracomponent.persistency.DefaultPersistencyImplementation;
+import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @XmlRootElement
 // {@link java.util.List} sub classing works only with {@link XmlAccessType}.FIELD
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ConfigurationImpl implements Configuration {
 
-    static class CertProfileBodyTypeScopedList<T extends CertProfileBodyTypeConfigItem>
-    extends ArrayList<T> {
+    static class CertProfileBodyTypeScopedList<T extends CertProfileBodyTypeConfigItem> extends ArrayList<T> {
 
         private static final long serialVersionUID = 1L;
 
@@ -58,27 +54,22 @@ public class ConfigurationImpl implements Configuration {
             return null;
         }
 
-        T getMatchingConfig(final String certProfile, final int bodyType,
-                final String itemName) {
+        T getMatchingConfig(final String certProfile, final int bodyType, final String itemName) {
             final T ret = getMatchingConfig(certProfile, bodyType);
             if (ret != null) {
                 return ret;
             }
-            LOGGER.error(
-                    "no matching " + itemName + " entry found for certProfile: "
-                            + certProfile + ", bodyType: " + bodyType);
+            LOGGER.error("no matching " + itemName + " entry found for certProfile: " + certProfile + ", bodyType: "
+                    + bodyType);
             return null;
         }
-
     }
 
-    static class CertProfileInfoTypeScopedList<T extends CertProfileInfoTypeConfigItem>
-    extends ArrayList<T> {
+    static class CertProfileInfoTypeScopedList<T extends CertProfileInfoTypeConfigItem> extends ArrayList<T> {
 
         private static final long serialVersionUID = 1L;
 
-        T getMatchingConfig(final String certProfile,
-                final String infoTypeOid) {
+        T getMatchingConfig(final String certProfile, final String infoTypeOid) {
             for (final T aktItem : this) {
                 if (aktItem.matchesScope(certProfile, infoTypeOid)) {
                     return aktItem;
@@ -88,33 +79,33 @@ public class ConfigurationImpl implements Configuration {
         }
     }
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(ConfigurationImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationImpl.class);
 
-    private final PersistencyInterface persistency =
-            new DefaultPersistencyImplementation(600);
+    private final PersistencyInterface persistency = new DefaultPersistencyImplementation(600);
 
     @XmlElements({
         @XmlElement(name = "OfflineFileClient", type = OfflineFileClientConfig.class, required = false),
         @XmlElement(name = "HttpClient", type = HttpClientConfig.class, required = false),
-        @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false)})
+        @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false)
+    })
     private final CertProfileBodyTypeScopedList<AbstractUpstreamInterfaceConfig> UpstreamInterface =
-    new CertProfileBodyTypeScopedList<>();
+            new CertProfileBodyTypeScopedList<>();
 
     @XmlElements({
         @XmlElement(name = "OfflineFileServer", type = OfflineFileServerConfig.class, required = false),
         @XmlElement(name = "CoapServer", type = CoapServerConfig.class, required = false),
         @XmlElement(name = "HttpServer", type = HttpServerConfig.class, required = false),
-        @XmlElement(name = "HttpsServer", type = HttpsServerConfig.class, required = false)})
+        @XmlElement(name = "HttpsServer", type = HttpsServerConfig.class, required = false)
+    })
     private AbstractDownstreamInterfaceConfig DownstreamInterface;
 
     @XmlElement(required = false)
     private final CertProfileBodyTypeScopedList<CkgContextImpl> CkgConfiguration =
-    new CertProfileBodyTypeScopedList<>();
+            new CertProfileBodyTypeScopedList<>();
 
     @XmlElement(required = true)
     private final CertProfileBodyTypeScopedList<CmpMessageInterfaceImpl> DownstreamConfiguration =
-    new CertProfileBodyTypeScopedList<>();
+            new CertProfileBodyTypeScopedList<>();
 
     private final CertProfileBodyTypeScopedList<CmpMessageInterfaceImpl> UpstreamConfiguration =
             new CertProfileBodyTypeScopedList<>();
@@ -140,29 +131,31 @@ public class ConfigurationImpl implements Configuration {
     @XmlElements({
         @XmlElement(name = "CrlUpdateRetrieval", type = CrlUpdateRetrievalHandlerImpl.class, required = false),
         @XmlElement(name = "GetCaCertificates", type = GetCaCertificatesHandlerImpl.class, required = false),
-        @XmlElement(name = "GetCertificateRequestTemplate", type = GetCertificateRequestTemplateHandlerImpl.class, required = false),
-        @XmlElement(name = "GetRootCaCertificateUpdate", type = GetRootCaCertificateUpdateHandlerImpl.class, required = false)})
+        @XmlElement(
+                name = "GetCertificateRequestTemplate",
+                type = GetCertificateRequestTemplateHandlerImpl.class,
+                required = false),
+        @XmlElement(
+                name = "GetRootCaCertificateUpdate",
+                type = GetRootCaCertificateUpdateHandlerImpl.class,
+                required = false)
+    })
     private final CertProfileInfoTypeScopedList<SupportMessageHandlerInterfaceImpl> SupportMessageHandlerInterface =
-    new CertProfileInfoTypeScopedList<>();
+            new CertProfileInfoTypeScopedList<>();
 
     @Override
-    public CkgContext getCkgConfiguration(final String certProfile,
-            final int bodyType) {
+    public CkgContext getCkgConfiguration(final String certProfile, final int bodyType) {
         return CkgConfiguration.getMatchingConfig(certProfile, bodyType);
     }
 
     @Override
-    public CmpMessageInterface getDownstreamConfiguration(
-            final String certProfile, final int bodyType) {
-        return DownstreamConfiguration.getMatchingConfig(certProfile, bodyType,
-                "DownstreamConfiguration");
+    public CmpMessageInterface getDownstreamConfiguration(final String certProfile, final int bodyType) {
+        return DownstreamConfiguration.getMatchingConfig(certProfile, bodyType, "DownstreamConfiguration");
     }
 
     @Override
-    public int getDownstreamTimeout(final String certProfile,
-            final int bodyType) {
-        final IntegerConfigImpl matchingConfig = DownstreamTimeout
-                .getMatchingConfig(certProfile, bodyType);
+    public int getDownstreamTimeout(final String certProfile, final int bodyType) {
+        final IntegerConfigImpl matchingConfig = DownstreamTimeout.getMatchingConfig(certProfile, bodyType);
         if (matchingConfig == null) {
             return 0;
         }
@@ -175,25 +168,20 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public VerificationContext getEnrollmentTrust(final String certProfile,
-            final int bodyType) {
+    public VerificationContext getEnrollmentTrust(final String certProfile, final int bodyType) {
         return ifNotNull(
-                EnrollmentTrust.getMatchingConfig(certProfile, bodyType,
-                        "EnrollmentTrust"),
+                EnrollmentTrust.getMatchingConfig(certProfile, bodyType, "EnrollmentTrust"),
                 EnrollmentTrustImpl::getVerificationContext);
-
     }
 
     @Override
-    public boolean getForceRaVerifyOnUpstream(final String certProfile,
-            final int bodyType) {
-        return ForceRaVerifyOnUpstream.getMatchingConfig(certProfile, bodyType,
-                "ForceRaVerifyOnUpstream").getAsBoolean();
+    public boolean getForceRaVerifyOnUpstream(final String certProfile, final int bodyType) {
+        return ForceRaVerifyOnUpstream.getMatchingConfig(certProfile, bodyType, "ForceRaVerifyOnUpstream")
+                .getAsBoolean();
     }
 
     @Override
-    public InventoryInterface getInventory(final String certProfile,
-            final int bodyType) {
+    public InventoryInterface getInventory(final String certProfile, final int bodyType) {
         return InventoryInterface.getMatchingConfig(certProfile, bodyType);
     }
 
@@ -203,37 +191,28 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public int getRetryAfterTimeInSeconds(final String certProfile,
-            final int bodyType) {
-        return RetryAfterTimeInSeconds.getMatchingConfig(certProfile, bodyType,
-                "RetryAfterTimeInSeconds").getAsInt();
+    public int getRetryAfterTimeInSeconds(final String certProfile, final int bodyType) {
+        return RetryAfterTimeInSeconds.getMatchingConfig(certProfile, bodyType, "RetryAfterTimeInSeconds")
+                .getAsInt();
     }
 
     @Override
-    public SupportMessageHandlerInterface getSupportMessageHandler(
-            final String certProfile, final String infoTypeOid) {
-        return SupportMessageHandlerInterface.getMatchingConfig(certProfile,
-                infoTypeOid);
+    public SupportMessageHandlerInterface getSupportMessageHandler(final String certProfile, final String infoTypeOid) {
+        return SupportMessageHandlerInterface.getMatchingConfig(certProfile, infoTypeOid);
     }
 
     @Override
-    public CmpMessageInterface getUpstreamConfiguration(
-            final String certProfile, final int bodyType) {
-        return UpstreamConfiguration.getMatchingConfig(certProfile, bodyType,
-                "UpstreamConfiguration");
+    public CmpMessageInterface getUpstreamConfiguration(final String certProfile, final int bodyType) {
+        return UpstreamConfiguration.getMatchingConfig(certProfile, bodyType, "UpstreamConfiguration");
     }
 
-    public AbstractUpstreamInterfaceConfig getUpstreamInterface(
-            final String certProfile, final int bodyType) {
-        return UpstreamInterface.getMatchingConfig(certProfile, bodyType,
-                "UpstreamInterface");
+    public AbstractUpstreamInterfaceConfig getUpstreamInterface(final String certProfile, final int bodyType) {
+        return UpstreamInterface.getMatchingConfig(certProfile, bodyType, "UpstreamInterface");
     }
 
     @Override
-    public boolean isRaVerifiedAcceptable(final String certProfile,
-            final int bodyType) {
-        return RaVerifiedAcceptable.getMatchingConfig(certProfile, bodyType,
-                "RaVerifiedAcceptable").getAsBoolean();
+    public boolean isRaVerifiedAcceptable(final String certProfile, final int bodyType) {
+        return RaVerifiedAcceptable.getMatchingConfig(certProfile, bodyType, "RaVerifiedAcceptable")
+                .getAsBoolean();
     }
-
 }

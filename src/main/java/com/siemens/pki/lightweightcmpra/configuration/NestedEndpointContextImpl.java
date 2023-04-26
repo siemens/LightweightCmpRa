@@ -17,16 +17,14 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
+import com.siemens.pki.cmpracomponent.configuration.CredentialContext;
+import com.siemens.pki.cmpracomponent.configuration.NestedEndpointContext;
+import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 import java.util.regex.Pattern;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
-
-import com.siemens.pki.cmpracomponent.configuration.CredentialContext;
-import com.siemens.pki.cmpracomponent.configuration.NestedEndpointContext;
-import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class NestedEndpointContextImpl implements NestedEndpointContext {
@@ -64,21 +62,19 @@ public class NestedEndpointContextImpl implements NestedEndpointContext {
         return recipientPatternAsPattern.matcher(recipient).matches();
     }
 
-    public void setInputVerification(
-            final VerificationContextImpl inputVerification) {
+    public void setInputVerification(final VerificationContextImpl inputVerification) {
         InputVerification = inputVerification;
     }
 
     @XmlElements({
-            @XmlElement(name = "SharedSecret", type = SharedSecretCredentialContextImpl.class, required = false),
-            @XmlElement(name = "Signature", type = SignatureCredentialContextImpl.class, required = false)})
-    public void setOutputCredentials(
-            final CredentialContextImpl outputCredentials) {
+        @XmlElement(name = "SharedSecret", type = SharedSecretCredentialContextImpl.class, required = false),
+        @XmlElement(name = "Signature", type = SignatureCredentialContextImpl.class, required = false)
+    })
+    public void setOutputCredentials(final CredentialContextImpl outputCredentials) {
         OutputCredentials = outputCredentials;
     }
 
     public void setRecipientPattern(final String recipientPattern) {
         this.recipientPattern = recipientPattern;
     }
-
 }

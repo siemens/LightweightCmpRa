@@ -22,7 +22,6 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cms.jcajce.JceKeyTransRecipientInfoGenerator;
 
@@ -39,18 +38,17 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
      * @throws NoSuchAlgorithmException
      *             if some predefined algorithms are not supported
      */
-    public KeyTransportEncryptor(
-            final Collection<X509Certificate> encryptionCerts)
-            throws NoSuchAlgorithmException {
+    public KeyTransportEncryptor(final Collection<X509Certificate> encryptionCerts) throws NoSuchAlgorithmException {
 
-        final JcaX509ExtensionUtils jcaX509ExtensionUtils =
-                new JcaX509ExtensionUtils();
+        final JcaX509ExtensionUtils jcaX509ExtensionUtils = new JcaX509ExtensionUtils();
         for (final X509Certificate encryptionCert : encryptionCerts) {
             final PublicKey publicKey = encryptionCert.getPublicKey();
             addRecipientInfoGenerator(new JceKeyTransRecipientInfoGenerator(
-                    jcaX509ExtensionUtils.createSubjectKeyIdentifier(publicKey)
-                            .getKeyIdentifier(),
-                    publicKey).setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER));
+                            jcaX509ExtensionUtils
+                                    .createSubjectKeyIdentifier(publicKey)
+                                    .getKeyIdentifier(),
+                            publicKey)
+                    .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER));
         }
     }
 
@@ -62,8 +60,7 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
      * @throws NoSuchAlgorithmException
      *             if an algorithm is not supported
      */
-    public KeyTransportEncryptor(final String pathOfCertificateFile)
-            throws Exception {
+    public KeyTransportEncryptor(final String pathOfCertificateFile) throws Exception {
         this(CertUtility.loadCertificatesFromFile(pathOfCertificateFile));
     }
 
@@ -74,9 +71,7 @@ public class KeyTransportEncryptor extends CmsEncryptorBase {
      * @throws NoSuchAlgorithmException
      *             if some predefined algorithms are not supported
      */
-    public KeyTransportEncryptor(final X509Certificate... encryptionCerts)
-            throws NoSuchAlgorithmException {
+    public KeyTransportEncryptor(final X509Certificate... encryptionCerts) throws NoSuchAlgorithmException {
         this(Arrays.asList(encryptionCerts));
     }
-
 }

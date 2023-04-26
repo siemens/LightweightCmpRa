@@ -17,9 +17,11 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.iana.IANAObjectIdentifiers;
@@ -31,30 +33,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
-
 @RunWith(Parameterized.class)
-public class TestIrWithPasswordBasedMacProtection
-        extends OnlineEnrollmentTestcaseBase {
+public class TestIrWithPasswordBasedMacProtection extends OnlineEnrollmentTestcaseBase {
 
     public static Object[][] inputList = new Object[][] {
-            //
-            {OIWObjectIdentifiers.idSHA1,
-                    PKCSObjectIdentifiers.id_hmacWithSHA224},
-            {OIWObjectIdentifiers.idSHA1,
-                    PKCSObjectIdentifiers.id_hmacWithSHA512},
-            {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.1"),
-                    PKCSObjectIdentifiers.id_hmacWithSHA224},
-            {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.2"),
-                    PKCSObjectIdentifiers.id_hmacWithSHA384},
-            {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.3"),
-                    PKCSObjectIdentifiers.id_hmacWithSHA256},
-            {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.4"),
-                    IANAObjectIdentifiers.hmacSHA1},
-            {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.1"),
-                    IANAObjectIdentifiers.hmacSHA1}};
+        //
+        {OIWObjectIdentifiers.idSHA1, PKCSObjectIdentifiers.id_hmacWithSHA224},
+        {OIWObjectIdentifiers.idSHA1, PKCSObjectIdentifiers.id_hmacWithSHA512},
+        {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.1"), PKCSObjectIdentifiers.id_hmacWithSHA224},
+        {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.2"), PKCSObjectIdentifiers.id_hmacWithSHA384},
+        {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.3"), PKCSObjectIdentifiers.id_hmacWithSHA256},
+        {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.4"), IANAObjectIdentifiers.hmacSHA1},
+        {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.1"), IANAObjectIdentifiers.hmacSHA1}
+    };
     //
 
     @Parameters(name = "{index}: owf=>{0}, mac=>{1}")
@@ -64,13 +55,13 @@ public class TestIrWithPasswordBasedMacProtection
             final Object owf = aktInput[0];
             final Object mac = aktInput[1];
             ret.add(new Object[] {
-                    MessageDumper
-                            .getOidDescriptionForOid((ASN1ObjectIdentifier) owf)
-                            .toString(),
-                    MessageDumper
-                            .getOidDescriptionForOid((ASN1ObjectIdentifier) mac)
-                            .toString(),
-                    owf, mac});
+                MessageDumper.getOidDescriptionForOid((ASN1ObjectIdentifier) owf)
+                        .toString(),
+                MessageDumper.getOidDescriptionForOid((ASN1ObjectIdentifier) mac)
+                        .toString(),
+                owf,
+                mac
+            });
         }
         return ret;
     }
@@ -79,8 +70,10 @@ public class TestIrWithPasswordBasedMacProtection
 
     private final ASN1ObjectIdentifier mac;
 
-    public TestIrWithPasswordBasedMacProtection(final String owfAsString,
-            final String macAsString, final ASN1ObjectIdentifier owf,
+    public TestIrWithPasswordBasedMacProtection(
+            final String owfAsString,
+            final String macAsString,
+            final ASN1ObjectIdentifier owf,
             final ASN1ObjectIdentifier mac) {
         this.owf = owf;
         this.mac = mac;
@@ -88,8 +81,7 @@ public class TestIrWithPasswordBasedMacProtection
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6002/lrawithmacprotection",
-                "EnrollmentConfigWithHttpAndPassword.yaml");
+        initTestbed("http://localhost:6002/lrawithmacprotection", "EnrollmentConfigWithHttpAndPassword.yaml");
     }
 
     /**
@@ -100,10 +92,7 @@ public class TestIrWithPasswordBasedMacProtection
     @Test
     public void testIrWithPasswordBasedMacProtection() throws Exception {
         final ProtectionProvider macBasedProvider =
-                TestUtils.createPasswordBasedMacProtection("keyIdentification",
-                        "myPresharedSecret", owf, mac);
-        executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,
-                PKIBody.TYPE_INIT_REP, macBasedProvider, getEeCmpClient());
+                TestUtils.createPasswordBasedMacProtection("keyIdentification", "myPresharedSecret", owf, mac);
+        executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ, PKIBody.TYPE_INIT_REP, macBasedProvider, getEeCmpClient());
     }
-
 }

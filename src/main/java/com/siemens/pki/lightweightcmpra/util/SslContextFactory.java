@@ -19,6 +19,9 @@ package com.siemens.pki.lightweightcmpra.util;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
 
+import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
+import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
+import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 import java.net.URI;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyManagementException;
@@ -42,18 +45,12 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
-import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
-import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 
 /**
  * factory for {@link SSLContext}
@@ -61,64 +58,51 @@ import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
  */
 public class SslContextFactory {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(SslContextFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SslContextFactory.class);
 
     public static SSLContext createSslContext(
-            final VerificationContext verificationContext,
-            final URI ownKeyStoreUri, final byte[] ownKeyStorePassword)
-            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-            KeyManagementException, UnrecoverableKeyException,
-            KeyStoreException {
+            final VerificationContext verificationContext, final URI ownKeyStoreUri, final byte[] ownKeyStorePassword)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, KeyManagementException,
+                    UnrecoverableKeyException, KeyStoreException {
 
-        final TrustManagerFactory tmf =
-                createTrustManagerFactory(verificationContext);
+        final TrustManagerFactory tmf = createTrustManagerFactory(verificationContext);
 
-        final KeyManagerFactory kmf =
-                createKeyManagerFactory(ownKeyStoreUri, ownKeyStorePassword);
+        final KeyManagerFactory kmf = createKeyManagerFactory(ownKeyStoreUri, ownKeyStorePassword);
 
-        //Supports RFC 8446: TLS version 1.3; may support other SSL/TLS versions
+        // Supports RFC 8446: TLS version 1.3; may support other SSL/TLS versions
         final SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
 
-        sslContext.init(ifNotNull(kmf, KeyManagerFactory::getKeyManagers),
+        sslContext.init(
+                ifNotNull(kmf, KeyManagerFactory::getKeyManagers),
                 ifNotNull(tmf, TrustManagerFactory::getTrustManagers),
                 new SecureRandom());
         return sslContext;
-
     }
 
     protected static KeyManagerFactory createKeyManagerFactory(
             final URI ownKeyStoreUri, final byte[] ownKeyStorePassword)
-            throws NoSuchAlgorithmException, KeyStoreException,
-            UnrecoverableKeyException {
+            throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException {
         KeyManagerFactory kmf = null;
         if (ownKeyStorePassword != null && ownKeyStoreUri != null) {
-            final char[] passwordAsChars = AlgorithmHelper
-                    .convertSharedSecretToPassword(ownKeyStorePassword);
-            final KeyStore ownKeyStore = CredentialLoader
-                    .loadKeyStore(ownKeyStoreUri, passwordAsChars);
+            final char[] passwordAsChars = AlgorithmHelper.convertSharedSecretToPassword(ownKeyStorePassword);
+            final KeyStore ownKeyStore = CredentialLoader.loadKeyStore(ownKeyStoreUri, passwordAsChars);
 
-            kmf = KeyManagerFactory
-                    .getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(ownKeyStore, passwordAsChars);
         }
         return kmf;
     }
 
-    protected static TrustManagerFactory createTrustManagerFactory(
-            final VerificationContext verificationContext)
-            throws NoSuchAlgorithmException,
-            InvalidAlgorithmParameterException {
+    protected static TrustManagerFactory createTrustManagerFactory(final VerificationContext verificationContext)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         TrustManagerFactory tmf = null;
-        if (verificationContext != null
-                && verificationContext.getTrustedCertificates() != null) {
+        if (verificationContext != null && verificationContext.getTrustedCertificates() != null) {
 
-            final Collection<X509Certificate> trustedCertificates =
-                    verificationContext.getTrustedCertificates();
+            final Collection<X509Certificate> trustedCertificates = verificationContext.getTrustedCertificates();
             if (LOGGER.isDebugEnabled()) {
                 for (final X509Certificate aktCert : trustedCertificates) {
-                    LOGGER.debug("trust: " + aktCert.getSubjectX500Principal()
-                            + ", I: " + aktCert.getIssuerX500Principal());
+                    LOGGER.debug(
+                            "trust: " + aktCert.getSubjectX500Principal() + ", I: " + aktCert.getIssuerX500Principal());
                 }
             }
 
@@ -129,11 +113,9 @@ public class SslContextFactory {
             if (verificationContext.isAIAsEnabled()) {
                 revocationEnabled = true;
                 java.security.Security.setProperty("ocsp.enable", "true");
-                System.setProperty("com.sun.security.enableAIAcaIssuers",
-                        "true");
+                System.setProperty("com.sun.security.enableAIAcaIssuers", "true");
             } else {
-                System.setProperty("com.sun.security.enableAIAcaIssuers",
-                        "false");
+                System.setProperty("com.sun.security.enableAIAcaIssuers", "false");
             }
 
             if (verificationContext.isCDPsEnabled()) {
@@ -153,29 +135,23 @@ public class SslContextFactory {
                 lstCertCrlStores.add(crls);
             }
 
-            final CollectionCertStoreParameters ccsp =
-                    new CollectionCertStoreParameters(lstCertCrlStores);
+            final CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(lstCertCrlStores);
 
-            final CertStore store = CertStore.getInstance("Collection", ccsp,
-                    CertUtility.getBouncyCastleProvider());
+            final CertStore store = CertStore.getInstance("Collection", ccsp, CertUtility.getBouncyCastleProvider());
 
             final Set<TrustAnchor> trust = trustedCertificates.stream()
                     .map(trustedCert -> new TrustAnchor(trustedCert, null))
                     .collect(Collectors.toSet());
 
-            final PKIXBuilderParameters params =
-                    new PKIXBuilderParameters(trust, new X509CertSelector());
+            final PKIXBuilderParameters params = new PKIXBuilderParameters(trust, new X509CertSelector());
 
             params.addCertStore(store);
 
-            final CertPathBuilder cpb = CertPathBuilder.getInstance("PKIX",
-                    CertUtility.getBouncyCastleProvider());
+            final CertPathBuilder cpb = CertPathBuilder.getInstance("PKIX", CertUtility.getBouncyCastleProvider());
 
-            final PKIXRevocationChecker revChecker =
-                    (PKIXRevocationChecker) cpb.getRevocationChecker();
+            final PKIXRevocationChecker revChecker = (PKIXRevocationChecker) cpb.getRevocationChecker();
 
-            final EnumSet<Option> pkixRevocationCheckerOptions =
-                    verificationContext.getPKIXRevocationCheckerOptions();
+            final EnumSet<Option> pkixRevocationCheckerOptions = verificationContext.getPKIXRevocationCheckerOptions();
             if (pkixRevocationCheckerOptions != null) {
                 revChecker.setOptions(pkixRevocationCheckerOptions);
             }
@@ -191,16 +167,12 @@ public class SslContextFactory {
             }
             params.setRevocationEnabled(revocationEnabled);
 
-            tmf = TrustManagerFactory
-                    .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 
             tmf.init(new CertPathTrustManagerParameters(params));
         }
         return tmf;
     }
 
-    private SslContextFactory() {
-
-    }
-
+    private SslContextFactory() {}
 }

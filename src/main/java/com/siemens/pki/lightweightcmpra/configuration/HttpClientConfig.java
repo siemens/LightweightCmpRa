@@ -18,7 +18,6 @@
 package com.siemens.pki.lightweightcmpra.configuration;
 
 import java.net.URI;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -46,5 +45,4 @@ public class HttpClientConfig extends AbstractUpstreamInterfaceConfig {
     public void setTimeout(final int timeoutinseconds) {
         this.timeoutinseconds = timeoutinseconds;
     }
-
 }

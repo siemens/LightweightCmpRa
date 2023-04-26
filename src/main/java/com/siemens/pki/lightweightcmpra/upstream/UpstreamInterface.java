@@ -36,5 +36,4 @@ public interface UpstreamInterface extends BiFunction<byte[], String, byte[]> {
      *            the callback
      */
     void setDelayedResponseHandler(AsyncResponseHandler asyncResponseHandler);
-
 }

@@ -19,12 +19,10 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import com.siemens.pki.cmpracomponent.configuration.SupportMessageHandlerInterface;
 
-public abstract class SupportMessageHandlerInterfaceImpl
-        extends CertProfileInfoTypeConfigItem
+public abstract class SupportMessageHandlerInterfaceImpl extends CertProfileInfoTypeConfigItem
         implements SupportMessageHandlerInterface {
 
     protected SupportMessageHandlerInterfaceImpl(final String infoTypeOid) {
         super(infoTypeOid);
     }
-
 }

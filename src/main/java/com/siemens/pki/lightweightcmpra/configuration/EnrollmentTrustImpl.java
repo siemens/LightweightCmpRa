@@ -20,15 +20,13 @@ package com.siemens.pki.lightweightcmpra.configuration;
 import java.net.URI;
 import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.EnumSet;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class EnrollmentTrustImpl extends CertProfileBodyTypeConfigItem {
 
-    private final VerificationContextImpl verificationContext =
-            new VerificationContextImpl();
+    private final VerificationContextImpl verificationContext = new VerificationContextImpl();
 
     public VerificationContextImpl getVerificationContext() {
         return verificationContext;
@@ -54,14 +52,11 @@ public class EnrollmentTrustImpl extends CertProfileBodyTypeConfigItem {
         verificationContext.setOCSPResponder(oCSPResponder);
     }
 
-    public void setPKIXRevocationCheckerOptions(
-            final EnumSet<Option> pKIXRevocationCheckerOptions) {
-        verificationContext
-                .setPKIXRevocationCheckerOptions(pKIXRevocationCheckerOptions);
+    public void setPKIXRevocationCheckerOptions(final EnumSet<Option> pKIXRevocationCheckerOptions) {
+        verificationContext.setPKIXRevocationCheckerOptions(pKIXRevocationCheckerOptions);
     }
 
     public void setTrustedCertificates(final URI[] trustedCertificates) {
         verificationContext.setTrustedCertificates(trustedCertificates);
     }
-
 }

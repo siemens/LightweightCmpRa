@@ -19,6 +19,4 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import com.siemens.pki.cmpracomponent.configuration.CredentialContext;
 
-abstract public class CredentialContextImpl implements CredentialContext {
-
-}
+public abstract class CredentialContextImpl implements CredentialContext {}

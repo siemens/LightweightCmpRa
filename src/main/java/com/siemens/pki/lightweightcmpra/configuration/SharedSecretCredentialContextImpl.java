@@ -19,27 +19,23 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.computeDefaultIfNull;
 
+import com.siemens.pki.cmpracomponent.configuration.SharedSecretCredentialContext;
+import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
-import com.siemens.pki.cmpracomponent.configuration.SharedSecretCredentialContext;
-import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
-
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class SharedSecretCredentialContextImpl extends CredentialContextImpl
-        implements SharedSecretCredentialContext {
+public class SharedSecretCredentialContextImpl extends CredentialContextImpl implements SharedSecretCredentialContext {
 
     private String MacAlgorithm;
     private String Prf;
     private byte[] Salt;
     private byte[] SenderKID;
     private byte[] SharedSecret;
-    protected int IterationCount =
-            SharedSecretCredentialContext.super.getIterationCount();
+    protected int IterationCount = SharedSecretCredentialContext.super.getIterationCount();
 
-    protected int keyLength =
-            SharedSecretCredentialContext.super.getkeyLength();
+    protected int keyLength = SharedSecretCredentialContext.super.getkeyLength();
 
     protected String PasswordBasedMacAlgorithm;
 
@@ -56,32 +52,28 @@ public class SharedSecretCredentialContextImpl extends CredentialContextImpl
     @XmlElement(required = true)
     @Override
     public String getMacAlgorithm() {
-        return computeDefaultIfNull(MacAlgorithm,
-                SharedSecretCredentialContext.super::getMacAlgorithm);
+        return computeDefaultIfNull(MacAlgorithm, SharedSecretCredentialContext.super::getMacAlgorithm);
     }
 
     @Override
     public String getPasswordBasedMacAlgorithm() {
-        return computeDefaultIfNull(PasswordBasedMacAlgorithm,
-                SharedSecretCredentialContext.super::getPasswordBasedMacAlgorithm);
+        return computeDefaultIfNull(
+                PasswordBasedMacAlgorithm, SharedSecretCredentialContext.super::getPasswordBasedMacAlgorithm);
     }
 
     @Override
     public String getPrf() {
-        return computeDefaultIfNull(Prf,
-                SharedSecretCredentialContext.super::getPrf);
+        return computeDefaultIfNull(Prf, SharedSecretCredentialContext.super::getPrf);
     }
 
     @Override
     public byte[] getSalt() {
-        return computeDefaultIfNull(Salt,
-                () -> CertUtility.generateRandomBytes(20));
+        return computeDefaultIfNull(Salt, () -> CertUtility.generateRandomBytes(20));
     }
 
     @Override
     public byte[] getSenderKID() {
-        return computeDefaultIfNull(SenderKID,
-                SharedSecretCredentialContext.super::getSenderKID);
+        return computeDefaultIfNull(SenderKID, SharedSecretCredentialContext.super::getSenderKID);
     }
 
     @Override
@@ -101,8 +93,7 @@ public class SharedSecretCredentialContextImpl extends CredentialContextImpl
         MacAlgorithm = macAlgorithm;
     }
 
-    public void setPasswordBasedMacAlgorithm(
-            final String passwordBasedMacAlgorithm) {
+    public void setPasswordBasedMacAlgorithm(final String passwordBasedMacAlgorithm) {
         PasswordBasedMacAlgorithm = passwordBasedMacAlgorithm;
     }
 

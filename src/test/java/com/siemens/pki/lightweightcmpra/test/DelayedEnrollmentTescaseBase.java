@@ -19,10 +19,14 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 import java.io.File;
 import java.security.KeyPair;
 import java.util.function.Function;
-
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.PKIBody;
@@ -35,50 +39,44 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
-import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
-
 public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(DelayedEnrollmentTescaseBase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DelayedEnrollmentTescaseBase.class);
 
-    static protected EnrollmentResult executeDelayedCertificateRequest(
+    protected static EnrollmentResult executeDelayedCertificateRequest(
             final int requestMesssageType,
             final int expectedWaitingResponseMessageType,
             final ProtectionProvider protectionProvider,
-            final Function<PKIMessage, PKIMessage> cmpClient) throws Exception {
+            final Function<PKIMessage, PKIMessage> cmpClient)
+            throws Exception {
         final KeyPair keyPair = getKeyGenerator().generateKeyPair();
         final CertTemplateBuilder ctb = new CertTemplateBuilder()
-                .setPublicKey(SubjectPublicKeyInfo
-                        .getInstance(keyPair.getPublic().getEncoded()))
+                .setPublicKey(
+                        SubjectPublicKeyInfo.getInstance(keyPair.getPublic().getEncoded()))
                 .setSubject(new X500Name("CN=Subject"));
 
-        final PKIBody crBody = PkiMessageGenerator.generateIrCrKurBody(
-                requestMesssageType, ctb.build(), null, keyPair.getPrivate());
+        final PKIBody crBody =
+                PkiMessageGenerator.generateIrCrKurBody(requestMesssageType, ctb.build(), null, keyPair.getPrivate());
 
-        final PKIMessage cr = PkiMessageGenerator.generateAndProtectMessage(
-                new HeaderProviderForTest(), protectionProvider, crBody);
+        final PKIMessage cr =
+                PkiMessageGenerator.generateAndProtectMessage(new HeaderProviderForTest(), protectionProvider, crBody);
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(cr));
         }
-        final PKIMessage crResponse = DelayedDeliveryTestcaseBase
-                .executeRequestWithPolling(expectedWaitingResponseMessageType,
-                        protectionProvider, cmpClient, cr);
-        final CMPCertificate enrolledCertificate =
-                ((CertRepMessage) crResponse.getBody().getContent())
-                        .getResponse()[0].getCertifiedKeyPair()
-                                .getCertOrEncCert().getCertificate();
+        final PKIMessage crResponse = DelayedDeliveryTestcaseBase.executeRequestWithPolling(
+                expectedWaitingResponseMessageType, protectionProvider, cmpClient, cr);
+        final CMPCertificate enrolledCertificate = ((CertRepMessage)
+                        crResponse.getBody().getContent())
+                .getResponse()[0]
+                .getCertifiedKeyPair()
+                .getCertOrEncCert()
+                .getCertificate();
 
-        final PKIMessage certConf =
-                PkiMessageGenerator.generateAndProtectMessage(
-                        new HeaderProviderForTest(crResponse.getHeader()),
-                        protectionProvider, PkiMessageGenerator
-                                .generateCertConfBody(enrolledCertificate));
+        final PKIMessage certConf = PkiMessageGenerator.generateAndProtectMessage(
+                new HeaderProviderForTest(crResponse.getHeader()),
+                protectionProvider,
+                PkiMessageGenerator.generateCertConfBody(enrolledCertificate));
 
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
@@ -90,8 +88,7 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(pkiConf));
         }
-        assertEquals("message type", PKIBody.TYPE_CONFIRM,
-                pkiConf.getBody().getType());
+        assertEquals("message type", PKIBody.TYPE_CONFIRM, pkiConf.getBody().getType());
 
         return new EnrollmentResult(enrolledCertificate, keyPair.getPrivate());
     }
@@ -100,17 +97,15 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
     public void setUp() throws Exception {
         new File("./target/CmpTest/Downstream").mkdirs();
         new File("./target/CmpTest/Upstream").mkdirs();
-        initTestbed("http://localhost:6003/delayedlra",
+        initTestbed(
+                "http://localhost:6003/delayedlra",
                 "DelayedEnrollmentRaTestConfig.yaml",
                 "DelayedEnrollmentLraTestConfig.yaml");
     }
 
     @After
     public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase
-                .deleteDirectory(new File("./target/CmpTest/Downstream"));
-        DelayedDeliveryTestcaseBase
-                .deleteDirectory(new File("./target/CmpTest/Upstream"));
+        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/Downstream"));
+        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/Upstream"));
     }
-
 }

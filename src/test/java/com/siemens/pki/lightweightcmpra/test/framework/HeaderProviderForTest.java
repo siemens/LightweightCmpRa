@@ -17,8 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import com.siemens.pki.cmpracomponent.msggeneration.HeaderProvider;
 import java.util.Date;
-
 import org.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DERGeneralizedTime;
@@ -28,14 +28,11 @@ import org.bouncycastle.asn1.cmp.PKIHeader;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.GeneralName;
 
-import com.siemens.pki.cmpracomponent.msggeneration.HeaderProvider;
-
 public class HeaderProviderForTest implements HeaderProvider {
     final ASN1OctetString transactionId;
     final byte[] senderNonce = CertUtility.generateRandomBytes(16);
 
-    private final ASN1GeneralizedTime messageTime =
-            new DERGeneralizedTime(new Date());
+    private final ASN1GeneralizedTime messageTime = new DERGeneralizedTime(new Date());
     private final byte[] recipientNonce;
     private final int pvno;
 
@@ -45,8 +42,7 @@ public class HeaderProviderForTest implements HeaderProvider {
 
     public HeaderProviderForTest(final int pvno) {
         this.recipientNonce = null;
-        this.transactionId =
-                new DEROctetString(CertUtility.generateRandomBytes(16));
+        this.transactionId = new DEROctetString(CertUtility.generateRandomBytes(16));
         this.pvno = pvno;
     }
 
@@ -54,7 +50,6 @@ public class HeaderProviderForTest implements HeaderProvider {
         this.transactionId = lastHeader.getTransactionID();
         this.recipientNonce = lastHeader.getSenderNonce().getOctets();
         this.pvno = lastHeader.getPvno().intValueExact();
-
     }
 
     @Override

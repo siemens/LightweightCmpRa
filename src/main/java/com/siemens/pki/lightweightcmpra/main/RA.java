@@ -17,12 +17,6 @@
  */
 package com.siemens.pki.lightweightcmpra.main;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Supplier;
-
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent;
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent.CmpRaInterface;
 import com.siemens.pki.cmpracomponent.main.CmpRaComponent.UpstreamExchange;
@@ -32,6 +26,11 @@ import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
 import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterfaceFactory;
 import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterface;
 import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterfaceFactory;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * main class
@@ -56,17 +55,14 @@ public class RA {
             if (obj == null || getClass() != obj.getClass()) {
                 return false;
             }
-            final CertProfileBodyTypeTupel other =
-                    (CertProfileBodyTypeTupel) obj;
-            return bodyType == other.bodyType
-                    && Objects.equals(certProfile, other.certProfile);
+            final CertProfileBodyTypeTupel other = (CertProfileBodyTypeTupel) obj;
+            return bodyType == other.bodyType && Objects.equals(certProfile, other.certProfile);
         }
 
         @Override
         public int hashCode() {
             return Objects.hash(bodyType, certProfile);
         }
-
     }
 
     static class DeferredSupplier<T> implements Supplier<T> {
@@ -107,56 +103,40 @@ public class RA {
 
     private static Thread startOneRa(final String actConfigFile) {
         final String threadName = "RA->" + actConfigFile;
-        final ThreadGroup tg = new ThreadGroup(
-                Thread.currentThread().getThreadGroup(), threadName);
-        final Thread raThread = new Thread(tg, () -> {
-            try {
-                final ConfigurationImpl configuration =
-                        YamlConfigLoader.loadConfig(actConfigFile);
-                final DeferredSupplier<CmpRaInterface> raHolder =
-                        new DeferredSupplier<>();
-                final Map<CertProfileBodyTypeTupel, UpstreamInterface> upstreamInterfaceMap =
-                        new HashMap<>();
-                final UpstreamExchange upstreamExchange =
-                        (request, certProfile, bodyTypeOfFirstRequest) -> {
+        final ThreadGroup tg = new ThreadGroup(Thread.currentThread().getThreadGroup(), threadName);
+        final Thread raThread = new Thread(
+                tg,
+                () -> {
+                    try {
+                        final ConfigurationImpl configuration = YamlConfigLoader.loadConfig(actConfigFile);
+                        final DeferredSupplier<CmpRaInterface> raHolder = new DeferredSupplier<>();
+                        final Map<CertProfileBodyTypeTupel, UpstreamInterface> upstreamInterfaceMap = new HashMap<>();
+                        final UpstreamExchange upstreamExchange = (request, certProfile, bodyTypeOfFirstRequest) -> {
                             final CertProfileBodyTypeTupel key =
-                                    new CertProfileBodyTypeTupel(certProfile,
-                                            bodyTypeOfFirstRequest);
-                            UpstreamInterface upstreamInterface =
-                                    upstreamInterfaceMap.get(key);
+                                    new CertProfileBodyTypeTupel(certProfile, bodyTypeOfFirstRequest);
+                            UpstreamInterface upstreamInterface = upstreamInterfaceMap.get(key);
                             if (upstreamInterface == null) {
-                                upstreamInterface = UpstreamInterfaceFactory
-                                        .create(configuration
-                                                .getUpstreamInterface(
-                                                        certProfile,
-                                                        bodyTypeOfFirstRequest));
-                                upstreamInterface.setDelayedResponseHandler(
-                                        raHolder.get()::gotResponseAtUpstream);
-                                upstreamInterfaceMap.put(key,
-                                        upstreamInterface);
+                                upstreamInterface = UpstreamInterfaceFactory.create(
+                                        configuration.getUpstreamInterface(certProfile, bodyTypeOfFirstRequest));
+                                upstreamInterface.setDelayedResponseHandler(raHolder.get()::gotResponseAtUpstream);
+                                upstreamInterfaceMap.put(key, upstreamInterface);
                             }
-                            return upstreamInterface.apply(request,
-                                    certProfile);
+                            return upstreamInterface.apply(request, certProfile);
                         };
-                final CmpRaInterface raComponent =
-                        CmpRaComponent.instantiateCmpRaComponent(configuration,
-                                upstreamExchange);
-                raHolder.set(raComponent);
-                @SuppressWarnings("unused")
-                final DownstreamInterface downstreamInterface =
-                        DownstreamInterfaceFactory.create(
-                                configuration.getDownstreamInterface(),
-                                raComponent::processRequest);
-                System.out.println("RA configured with " + actConfigFile
-                        + " is up and running");
-            } catch (final Exception ex) {
-                System.err.println("start of RA configured with "
-                        + actConfigFile + " failed");
-                ex.printStackTrace();
-            }
-        }, threadName);
+                        final CmpRaInterface raComponent =
+                                CmpRaComponent.instantiateCmpRaComponent(configuration, upstreamExchange);
+                        raHolder.set(raComponent);
+                        @SuppressWarnings("unused")
+                        final DownstreamInterface downstreamInterface = DownstreamInterfaceFactory.create(
+                                configuration.getDownstreamInterface(), raComponent::processRequest);
+                        System.out.println("RA configured with " + actConfigFile + " is up and running");
+                    } catch (final Exception ex) {
+                        System.err.println("start of RA configured with " + actConfigFile + " failed");
+                        ex.printStackTrace();
+                    }
+                },
+                threadName);
         raThread.start();
         return raThread;
     }
-
 }

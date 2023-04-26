@@ -17,6 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -26,7 +27,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.DEROctetString;
@@ -36,8 +36,6 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.GeneralName;
 
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-
 public class TrustChainAndPrivateKey {
 
     // chain starting with end certificate ending with root certificate
@@ -45,14 +43,11 @@ public class TrustChainAndPrivateKey {
 
     private PrivateKey privateKeyOfEndCertififcate = null;
 
-    public TrustChainAndPrivateKey(final String keyStoreFileName,
-            final char[] password) throws Exception {
-        this(CertUtility.loadKeystoreFromFile(keyStoreFileName, password),
-                password);
+    public TrustChainAndPrivateKey(final String keyStoreFileName, final char[] password) throws Exception {
+        this(CertUtility.loadKeystoreFromFile(keyStoreFileName, password), password);
     }
 
-    TrustChainAndPrivateKey(final KeyStore keyStore, final char[] password)
-            throws Exception {
+    TrustChainAndPrivateKey(final KeyStore keyStore, final char[] password) throws Exception {
         for (final String aktAlias : Collections.list(keyStore.aliases())) {
             final Key privKey = keyStore.getKey(aktAlias, password);
             if (!(privKey instanceof PrivateKey)) {
@@ -62,8 +57,7 @@ public class TrustChainAndPrivateKey {
             if (!(certificate instanceof X509Certificate)) {
                 continue;
             }
-            final Certificate[] foundChain =
-                    keyStore.getCertificateChain(aktAlias);
+            final Certificate[] foundChain = keyStore.getCertificateChain(aktAlias);
             for (final Certificate aktCert : foundChain) {
                 trustChain.add((X509Certificate) aktCert);
             }
@@ -77,24 +71,18 @@ public class TrustChainAndPrivateKey {
         return privateKeyOfEndCertififcate;
     }
 
-    public ProtectionProvider setEndEntityToProtect(
-            final CMPCertificate certificate, final PrivateKey privateKey)
+    public ProtectionProvider setEndEntityToProtect(final CMPCertificate certificate, final PrivateKey privateKey)
             throws Exception {
-        final AlgorithmIdentifier protectionAlg =
-                SignHelperUtil.getSigningAlgIdFromKey(privateKey);
+        final AlgorithmIdentifier protectionAlg = SignHelperUtil.getSigningAlgIdFromKey(privateKey);
 
         final GeneralName senderName = new GeneralName(
-                X500Name.getInstance(certificate.getX509v3PKCert().getSubject()
-                        .getEncoded(ASN1Encoding.DER)));
+                X500Name.getInstance(certificate.getX509v3PKCert().getSubject().getEncoded(ASN1Encoding.DER)));
         final DEROctetString senderKid =
-                CertUtility.extractSubjectKeyIdentifierFromCert(
-                        CertUtility.certificateFromCmpCertificate(certificate));
+                CertUtility.extractSubjectKeyIdentifierFromCert(CertUtility.certificateFromCmpCertificate(certificate));
         return new ProtectionProvider() {
             @Override
-            public List<CMPCertificate> getProtectingExtraCerts()
-                    throws Exception {
-                final List<CMPCertificate> ret =
-                        new ArrayList<>(trustChain.size());
+            public List<CMPCertificate> getProtectingExtraCerts() throws Exception {
+                final List<CMPCertificate> ret = new ArrayList<>(trustChain.size());
                 ret.add(certificate);
                 for (final X509Certificate aktCert : trustChain) {
                     if (CertUtility.isSelfSigned(aktCert)) {
@@ -112,10 +100,8 @@ public class TrustChainAndPrivateKey {
             }
 
             @Override
-            public DERBitString getProtectionFor(
-                    final ProtectedPart protectedPart) throws Exception {
-                final Signature sig = Signature.getInstance(
-                        SignHelperUtil.getSigningAlgNameFromKey(privateKey));
+            public DERBitString getProtectionFor(final ProtectedPart protectedPart) throws Exception {
+                final Signature sig = Signature.getInstance(SignHelperUtil.getSigningAlgNameFromKey(privateKey));
                 sig.initSign(privateKey);
                 sig.update(protectedPart.getEncoded(ASN1Encoding.DER));
                 return new DERBitString(sig.sign());
@@ -131,11 +117,9 @@ public class TrustChainAndPrivateKey {
                 return senderKid;
             }
         };
-
     }
 
     List<X509Certificate> getTrustChain() {
         return new ArrayList<>(trustChain);
     }
-
 }

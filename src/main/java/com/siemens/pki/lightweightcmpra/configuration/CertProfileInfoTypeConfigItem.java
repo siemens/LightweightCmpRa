@@ -21,8 +21,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public abstract class CertProfileInfoTypeConfigItem
-        extends CertProfileConfigItem {
+public abstract class CertProfileInfoTypeConfigItem extends CertProfileConfigItem {
 
     private String infoTypeOid;
 
@@ -44,5 +43,4 @@ public abstract class CertProfileInfoTypeConfigItem
         }
         return this.infoTypeOid == null || this.infoTypeOid.equals(infoTypeOid);
     }
-
 }

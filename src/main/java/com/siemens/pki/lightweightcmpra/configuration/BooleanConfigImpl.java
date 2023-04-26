@@ -18,7 +18,6 @@
 package com.siemens.pki.lightweightcmpra.configuration;
 
 import java.util.function.BooleanSupplier;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -26,8 +25,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
  * boolean configuration items
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class BooleanConfigImpl extends CertProfileBodyTypeConfigItem
-        implements BooleanSupplier {
+public class BooleanConfigImpl extends CertProfileBodyTypeConfigItem implements BooleanSupplier {
 
     private Boolean value = false;
 

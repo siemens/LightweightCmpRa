@@ -17,6 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +36,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DEROctetString;
@@ -44,21 +44,17 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
-
 /**
  * A utility class for certificate handling
  */
 public class CertUtility {
 
-    static private CertificateFactory certificateFactory;
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(CertUtility.class);
+    private static CertificateFactory certificateFactory;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CertUtility.class);
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    public static final BouncyCastleProvider BOUNCY_CASTLE_PROVIDER =
-            new BouncyCastleProvider();
+    public static final BouncyCastleProvider BOUNCY_CASTLE_PROVIDER = new BouncyCastleProvider();
 
     /**
      * conversion function from CMPCertificate to X509 certificate
@@ -71,8 +67,7 @@ public class CertUtility {
      * @throws CertificateException
      *             if certificate could not be converted from CMP Certificate
      */
-    static public X509Certificate certificateFromCmpCertificate(
-            final CMPCertificate cert) throws Exception {
+    public static X509Certificate certificateFromCmpCertificate(final CMPCertificate cert) throws Exception {
         try {
             return certificateFromEncoded(cert.getEncoded(ASN1Encoding.DER));
         } catch (final IOException excpt) {
@@ -91,10 +86,8 @@ public class CertUtility {
      * @throws CertificateException
      *             if certificate could not be converted from encoded
      */
-    public static X509Certificate certificateFromEncoded(final byte[] encoded)
-            throws Exception {
-        return (X509Certificate) getCertificateFactory()
-                .generateCertificate(new ByteArrayInputStream(encoded));
+    public static X509Certificate certificateFromEncoded(final byte[] encoded) throws Exception {
+        return (X509Certificate) getCertificateFactory().generateCertificate(new ByteArrayInputStream(encoded));
     }
 
     /**
@@ -108,8 +101,7 @@ public class CertUtility {
      * @throws CertificateException
      *             if certificate could not be converted from CMP Certificate
      */
-    static public CMPCertificate cmpCertificateFromCertificate(
-            final Certificate cert) throws CertificateException {
+    public static CMPCertificate cmpCertificateFromCertificate(final Certificate cert) throws CertificateException {
         return CMPCertificate.getInstance(cert.getEncoded());
     }
 
@@ -121,21 +113,16 @@ public class CertUtility {
      *
      * @return the SubjectKeyIdentifier encoded as DEROctetString
      */
-    public static DEROctetString extractSubjectKeyIdentifierFromCert(
-            final X509Certificate cert) {
+    public static DEROctetString extractSubjectKeyIdentifierFromCert(final X509Certificate cert) {
         final byte[] extensionValueAsDerEncodedOctetString =
-                cert.getExtensionValue(
-                        org.bouncycastle.asn1.x509.Extension.subjectKeyIdentifier
-                                .getId());
+                cert.getExtensionValue(org.bouncycastle.asn1.x509.Extension.subjectKeyIdentifier.getId());
         if (extensionValueAsDerEncodedOctetString == null) {
             return null;
         }
-        final ASN1OctetString extensionValueAsOctetString = ASN1OctetString
-                .getInstance(extensionValueAsDerEncodedOctetString);
-        return new DEROctetString(ASN1OctetString
-                .getInstance(extensionValueAsOctetString.getOctets())
+        final ASN1OctetString extensionValueAsOctetString =
+                ASN1OctetString.getInstance(extensionValueAsDerEncodedOctetString);
+        return new DEROctetString(ASN1OctetString.getInstance(extensionValueAsOctetString.getOctets())
                 .getOctets());
-
     }
 
     /**
@@ -161,11 +148,9 @@ public class CertUtility {
      * @throws Exception
      *             in case of an error
      */
-    public static synchronized CertificateFactory getCertificateFactory()
-            throws Exception {
+    public static synchronized CertificateFactory getCertificateFactory() throws Exception {
         if (certificateFactory == null) {
-            certificateFactory = CertificateFactory.getInstance("X.509",
-                    BOUNCY_CASTLE_PROVIDER);
+            certificateFactory = CertificateFactory.getInstance("X.509", BOUNCY_CASTLE_PROVIDER);
         }
         return certificateFactory;
     }
@@ -186,8 +171,7 @@ public class CertUtility {
      *             if the public key could not be extracted from the certificate
      */
     public static boolean isSelfSigned(final X509Certificate cert)
-            throws CertificateException, NoSuchAlgorithmException,
-            NoSuchProviderException {
+            throws CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
         try {
             // Try to verify certificate signature with its own public key
             final PublicKey key = cert.getPublicKey();
@@ -212,10 +196,8 @@ public class CertUtility {
      * @throws Exception
      *             if the certificate file could not be loaded
      */
-    public static synchronized List<X509Certificate> loadCertificatesFromFile(
-            final String filename) throws Exception {
-        try (InputStream is =
-                ConfigFileLoader.getConfigFileAsStream(filename)) {
+    public static synchronized List<X509Certificate> loadCertificatesFromFile(final String filename) throws Exception {
+        try (InputStream is = ConfigFileLoader.getConfigFileAsStream(filename)) {
             final List<X509Certificate> ret = new ArrayList<>();
             final CertificateFactory cf = getCertificateFactory();
             for (final Certificate aktCert : cf.generateCertificates(is)) {
@@ -241,36 +223,29 @@ public class CertUtility {
      * @throws KeyStoreException
      *             if key store could not be loaded from file
      */
-    public static KeyStore loadKeystoreFromFile(final String filename,
-            final char[] password) throws KeyStoreException {
+    public static KeyStore loadKeystoreFromFile(final String filename, final char[] password) throws KeyStoreException {
         KeyStore ks;
         try {
             // guessing type of keystore
             if (filename.toLowerCase(Locale.getDefault()).endsWith(".p12")) {
-                try (InputStream in =
-                        ConfigFileLoader.getConfigFileAsStream(filename)) {
+                try (InputStream in = ConfigFileLoader.getConfigFileAsStream(filename)) {
                     ks = loadKeystoreFromStream("PKCS12", in, password);
                 } catch (final KeyStoreException ex) {
-                    try (InputStream in =
-                            ConfigFileLoader.getConfigFileAsStream(filename)) {
+                    try (InputStream in = ConfigFileLoader.getConfigFileAsStream(filename)) {
                         ks = loadKeystoreFromStream("JKS", in, password);
                     }
                 }
             } else {
-                try (InputStream in =
-                        ConfigFileLoader.getConfigFileAsStream(filename)) {
+                try (InputStream in = ConfigFileLoader.getConfigFileAsStream(filename)) {
                     ks = loadKeystoreFromStream("JKS", in, password);
                 } catch (final KeyStoreException ex) {
-                    try (InputStream in =
-                            ConfigFileLoader.getConfigFileAsStream(filename)) {
+                    try (InputStream in = ConfigFileLoader.getConfigFileAsStream(filename)) {
                         ks = loadKeystoreFromStream("PKCS12", in, password);
                     }
                 }
             }
             return ks;
-        } catch (
-
-        final IOException excpt) {
+        } catch (final IOException excpt) {
             throw new KeyStoreException(excpt);
         }
     }
@@ -290,17 +265,14 @@ public class CertUtility {
      * @throws KeyStoreException
      *             if key store could not be loaded from file
      */
-    private static KeyStore loadKeystoreFromStream(final String keyStoreType,
-            final InputStream is, final char[] password)
-            throws KeyStoreException {
+    private static KeyStore loadKeystoreFromStream(
+            final String keyStoreType, final InputStream is, final char[] password) throws KeyStoreException {
         try {
             final KeyStore ks = KeyStore.getInstance(keyStoreType);
             ks.load(is, password);
             return ks;
-        } catch (IOException | CertificateException
-                | NoSuchAlgorithmException excpt) {
+        } catch (IOException | CertificateException | NoSuchAlgorithmException excpt) {
             throw new KeyStoreException(excpt);
         }
     }
-
 }

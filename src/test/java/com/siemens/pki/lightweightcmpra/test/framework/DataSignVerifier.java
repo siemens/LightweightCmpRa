@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
+import com.siemens.pki.cmpracomponent.cryptoservices.TrustCredentialAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.KeyFactory;
@@ -31,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-
 import org.bouncycastle.asn1.cms.CMSObjectIdentifiers;
 import org.bouncycastle.asn1.cms.ContentInfo;
 import org.bouncycastle.asn1.cms.SignedData;
@@ -44,9 +45,6 @@ import org.bouncycastle.cms.SignerInformationStore;
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
 import org.bouncycastle.util.Store;
 
-import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
-import com.siemens.pki.cmpracomponent.cryptoservices.TrustCredentialAdapter;
-
 /**
  * a verifier for CMS signed data
  *
@@ -55,40 +53,33 @@ import com.siemens.pki.cmpracomponent.cryptoservices.TrustCredentialAdapter;
 public class DataSignVerifier extends TrustCredentialAdapter {
 
     private static JcaSimpleSignerInfoVerifierBuilder builder =
-            new JcaSimpleSignerInfoVerifierBuilder()
-                    .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+            new JcaSimpleSignerInfoVerifierBuilder().setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
 
-    public static byte[] verifySignature(final byte[] encodedSignedData)
-            throws CMSException, Exception, IOException {
-        return verifySignature(encodedSignedData,
-                (cert, additionalCerts) -> true);
+    public static byte[] verifySignature(final byte[] encodedSignedData) throws CMSException, Exception, IOException {
+        return verifySignature(encodedSignedData, (cert, additionalCerts) -> true);
     }
 
-    private static byte[] verifySignature(final byte[] encodedSignedData,
+    private static byte[] verifySignature(
+            final byte[] encodedSignedData,
             final BiFunction<X509CertificateHolder, List<X509Certificate>, Boolean> trustValidator)
             throws CMSException, Exception, IOException {
 
         final CMSSignedData signedData = new CMSSignedData(
-                new ContentInfo(CMSObjectIdentifiers.signedData,
-                        SignedData.getInstance(encodedSignedData)));
+                new ContentInfo(CMSObjectIdentifiers.signedData, SignedData.getInstance(encodedSignedData)));
         final SignerInformationStore signers = signedData.getSignerInfos();
         final Store<X509CertificateHolder> certs = signedData.getCertificates();
         final List<X509Certificate> allCerts = new ArrayList<>();
         for (final X509CertificateHolder aktCert : certs.getMatches(null)) {
-            allCerts.add(
-                    CertUtility.certificateFromEncoded(aktCert.getEncoded()));
+            allCerts.add(CertUtility.certificateFromEncoded(aktCert.getEncoded()));
         }
         for (final SignerInformation signerInfo : signers) {
             @SuppressWarnings("unchecked")
-            final Collection<X509CertificateHolder> certCollection =
-                    certs.getMatches(signerInfo.getSID());
+            final Collection<X509CertificateHolder> certCollection = certs.getMatches(signerInfo.getSID());
             final X509CertificateHolder cert = certCollection.iterator().next();
             try {
-                if (signerInfo.verify(builder.build(cert))
-                        && trustValidator.apply(cert, allCerts)) {
+                if (signerInfo.verify(builder.build(cert)) && trustValidator.apply(cert, allCerts)) {
                     final CMSTypedData cmsData = signedData.getSignedContent();
-                    final ByteArrayOutputStream bOut =
-                            new ByteArrayOutputStream();
+                    final ByteArrayOutputStream bOut = new ByteArrayOutputStream();
                     cmsData.write(bOut);
                     return bOut.toByteArray();
                 }
@@ -100,8 +91,7 @@ public class DataSignVerifier extends TrustCredentialAdapter {
     }
 
     public DataSignVerifier(final VerificationContext config)
-            throws KeyStoreException, CertificateException,
-            NoSuchAlgorithmException, Exception {
+            throws KeyStoreException, CertificateException, NoSuchAlgorithmException, Exception {
         super(config);
     }
 
@@ -119,43 +109,32 @@ public class DataSignVerifier extends TrustCredentialAdapter {
      * @throws CMSException
      *             in case of error in CMS processing
      */
-    public byte[] verifySignatureAndTrust(final byte[] encodedSignedData)
-            throws CMSException, IOException, Exception {
-        return verifySignature(encodedSignedData,
-                (cert, additionalIntermediateCerts) -> {
-                    try {
-                        return validate(cert, additionalIntermediateCerts);
-                    } catch (final Exception e) {
-                        return false;
-                    }
-                });
+    public byte[] verifySignatureAndTrust(final byte[] encodedSignedData) throws CMSException, IOException, Exception {
+        return verifySignature(encodedSignedData, (cert, additionalIntermediateCerts) -> {
+            try {
+                return validate(cert, additionalIntermediateCerts);
+            } catch (final Exception e) {
+                return false;
+            }
+        });
     }
 
-    public PrivateKey verifySignedKey(final byte[] encodedSignedData)
-            throws Exception {
-        final byte[] verifiedContent =
-                verifySignatureAndTrust(encodedSignedData);
+    public PrivateKey verifySignedKey(final byte[] encodedSignedData) throws Exception {
+        final byte[] verifiedContent = verifySignatureAndTrust(encodedSignedData);
         if (verifiedContent == null) {
             return null;
         }
-        final PKCS8EncodedKeySpec pkcs8EncKeySpec =
-                new PKCS8EncodedKeySpec(verifiedContent);
+        final PKCS8EncodedKeySpec pkcs8EncKeySpec = new PKCS8EncodedKeySpec(verifiedContent);
         PrivateKey prvKey;
         try {
-            prvKey = KeyFactory.getInstance("RSA")
-                    .generatePrivate(pkcs8EncKeySpec);
+            prvKey = KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncKeySpec);
         } catch (final InvalidKeySpecException excpt) {
-            prvKey = KeyFactory.getInstance("EC")
-                    .generatePrivate(pkcs8EncKeySpec);
+            prvKey = KeyFactory.getInstance("EC").generatePrivate(pkcs8EncKeySpec);
         }
         return prvKey;
     }
 
-    private boolean validate(final X509CertificateHolder cert,
-            final List<X509Certificate> allCerts) throws Exception {
-        return validateCertAgainstTrust(
-                CertUtility.certificateFromEncoded(cert.getEncoded()),
-                allCerts) != null;
+    private boolean validate(final X509CertificateHolder cert, final List<X509Certificate> allCerts) throws Exception {
+        return validateCertAgainstTrust(CertUtility.certificateFromEncoded(cert.getEncoded()), allCerts) != null;
     }
-
 }

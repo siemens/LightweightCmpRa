@@ -19,19 +19,17 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.computeDefaultIfNull;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-
 import com.siemens.pki.cmpracomponent.configuration.CkgContext;
 import com.siemens.pki.cmpracomponent.configuration.CkgKeyAgreementContext;
 import com.siemens.pki.cmpracomponent.configuration.CkgKeyTransportContext;
 import com.siemens.pki.cmpracomponent.configuration.CkgPasswordContext;
 import com.siemens.pki.cmpracomponent.configuration.SignatureCredentialContext;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CkgContextImpl extends CertProfileBodyTypeConfigItem
-        implements CkgContext {
+public class CkgContextImpl extends CertProfileBodyTypeConfigItem implements CkgContext {
 
     private SignatureCredentialContextImpl SigningCredentials;
     private String contentEncryptionAlg;
@@ -41,8 +39,7 @@ public class CkgContextImpl extends CertProfileBodyTypeConfigItem
 
     @Override
     public String getContentEncryptionAlg() {
-        return computeDefaultIfNull(contentEncryptionAlg,
-                CkgContext.super::getContentEncryptionAlg);
+        return computeDefaultIfNull(contentEncryptionAlg, CkgContext.super::getContentEncryptionAlg);
     }
 
     @Override
@@ -69,25 +66,20 @@ public class CkgContextImpl extends CertProfileBodyTypeConfigItem
         this.contentEncryptionAlg = contentEncryptionAlg;
     }
 
-    public void setKeyAgreementContext(
-            final CkgKeyAgreementContextImpl keyAgreementContext) {
+    public void setKeyAgreementContext(final CkgKeyAgreementContextImpl keyAgreementContext) {
         KeyAgreementContext = keyAgreementContext;
     }
 
-    public void setKeyTransportContext(
-            final CkgKeyTransportContextImpl keyTransportContext) {
+    public void setKeyTransportContext(final CkgKeyTransportContextImpl keyTransportContext) {
         KeyTransportContext = keyTransportContext;
     }
 
-    public void setPasswordContext(
-            final CkgPasswordContextImpl passwordContext) {
+    public void setPasswordContext(final CkgPasswordContextImpl passwordContext) {
         PasswordContext = passwordContext;
     }
 
     @XmlElement(name = "SignatureCredentials", required = true)
-    public void setSigningCredentials(
-            final SignatureCredentialContextImpl signingCredentials) {
+    public void setSigningCredentials(final SignatureCredentialContextImpl signingCredentials) {
         SigningCredentials = signingCredentials;
     }
-
 }

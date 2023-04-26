@@ -31,5 +31,4 @@ class CertProfileConfigItem {
     boolean matchesScope(final String certProfile) {
         return this.certProfile == null || this.certProfile.equals(certProfile);
     }
-
 }

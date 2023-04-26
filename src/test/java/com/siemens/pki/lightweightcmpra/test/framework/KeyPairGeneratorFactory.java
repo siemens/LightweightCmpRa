@@ -22,7 +22,6 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
-
 import org.bouncycastle.asn1.x9.X9ECParameters;
 import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.jce.spec.ECParameterSpec;
@@ -45,18 +44,16 @@ public class KeyPairGeneratorFactory {
      * @throws GeneralSecurityException
      *             if key pair generator generation failed
      */
-    public static KeyPairGenerator getEcKeyPairGenerator(final String curve)
-            throws GeneralSecurityException {
-        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC",
-                CertUtility.BOUNCY_CASTLE_PROVIDER);
+    public static KeyPairGenerator getEcKeyPairGenerator(final String curve) throws GeneralSecurityException {
+        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC", CertUtility.BOUNCY_CASTLE_PROVIDER);
         try {
             final ECGenParameterSpec ecSpec = new ECGenParameterSpec(curve);
             keyGen.initialize(ecSpec, RANDOM);
         } catch (final IllegalArgumentException exception) {
             // we try to get the EC parameters by name
             final X9ECParameters ecP = CustomNamedCurves.getByName(curve);
-            final ECParameterSpec ecSpec = new ECParameterSpec(ecP.getCurve(),
-                    ecP.getG(), ecP.getN(), ecP.getH(), ecP.getSeed());
+            final ECParameterSpec ecSpec =
+                    new ECParameterSpec(ecP.getCurve(), ecP.getG(), ecP.getN(), ecP.getH(), ecP.getSeed());
             keyGen.initialize(ecSpec, RANDOM);
         }
         return keyGen;
@@ -71,15 +68,11 @@ public class KeyPairGeneratorFactory {
      * @throws NoSuchAlgorithmException
      *             if RSA is not supported
      */
-    public static KeyPairGenerator getRsaKeyPairGenerator(final int keyLength)
-            throws NoSuchAlgorithmException {
+    public static KeyPairGenerator getRsaKeyPairGenerator(final int keyLength) throws NoSuchAlgorithmException {
         final KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
         keygen.initialize(keyLength);
         return keygen;
     }
 
-    private KeyPairGeneratorFactory() {
-
-    }
-
+    private KeyPairGeneratorFactory() {}
 }

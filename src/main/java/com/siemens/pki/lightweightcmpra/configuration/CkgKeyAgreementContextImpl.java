@@ -19,6 +19,9 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.computeDefaultIfNull;
 
+import com.siemens.pki.cmpracomponent.configuration.CkgKeyAgreementContext;
+import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
+import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.net.URI;
 import java.security.Key;
 import java.security.KeyStore;
@@ -29,23 +32,16 @@ import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.util.Collections;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.siemens.pki.cmpracomponent.configuration.CkgKeyAgreementContext;
-import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
-import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(CkgKeyAgreementContextImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CkgKeyAgreementContextImpl.class);
 
     private String KeyAgreementAlg;
     private String KeyEncryptionAlg;
@@ -57,14 +53,12 @@ public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
 
     @Override
     public String getKeyAgreementAlg() {
-        return computeDefaultIfNull(KeyAgreementAlg,
-                CkgKeyAgreementContext.super::getKeyAgreementAlg);
+        return computeDefaultIfNull(KeyAgreementAlg, CkgKeyAgreementContext.super::getKeyAgreementAlg);
     }
 
     @Override
     public String getKeyEncryptionAlg() {
-        return computeDefaultIfNull(KeyEncryptionAlg,
-                CkgKeyAgreementContext.super::getKeyEncryptionAlg);
+        return computeDefaultIfNull(KeyEncryptionAlg, CkgKeyAgreementContext.super::getKeyEncryptionAlg);
     }
 
     @Override
@@ -107,10 +101,8 @@ public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
     }
 
     private void extractKeysFromKeystore() {
-        final char[] passwordAsChars =
-                AlgorithmHelper.convertSharedSecretToPassword(password);
-        final KeyStore ks =
-                CredentialLoader.loadKeyStore(keyStore, passwordAsChars);
+        final char[] passwordAsChars = AlgorithmHelper.convertSharedSecretToPassword(password);
+        final KeyStore ks = CredentialLoader.loadKeyStore(keyStore, passwordAsChars);
         if (ks == null) {
             return;
         }
@@ -119,16 +111,13 @@ public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
             for (final String aktAlias : Collections.list(ks.aliases())) {
                 try {
                     final Key key = ks.getKey(aktAlias, passwordAsChars);
-                    final Certificate[] chain =
-                            ks.getCertificateChain(aktAlias);
-                    if (key instanceof PrivateKey && chain != null
-                            && chain.length > 0) {
+                    final Certificate[] chain = ks.getCertificateChain(aktAlias);
+                    if (key instanceof PrivateKey && chain != null && chain.length > 0) {
                         OwnPrivateKey = (PrivateKey) key;
                         OwnPublicKey = chain[0].getPublicKey();
                         return;
                     }
-                } catch (UnrecoverableKeyException | KeyStoreException
-                        | NoSuchAlgorithmException e) {
+                } catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {
                     LOGGER.warn(msg, e);
                 }
             }
@@ -136,6 +125,5 @@ public class CkgKeyAgreementContextImpl implements CkgKeyAgreementContext {
             LOGGER.error(msg, e);
             throw new RuntimeException(msg, e);
         }
-
     }
 }

@@ -17,19 +17,17 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
+import com.siemens.pki.cmpracomponent.configuration.CmpMessageInterface;
+import com.siemens.pki.cmpracomponent.configuration.CredentialContext;
+import com.siemens.pki.cmpracomponent.configuration.NestedEndpointContext;
+import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 
-import com.siemens.pki.cmpracomponent.configuration.CmpMessageInterface;
-import com.siemens.pki.cmpracomponent.configuration.CredentialContext;
-import com.siemens.pki.cmpracomponent.configuration.NestedEndpointContext;
-import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
-
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem
-        implements CmpMessageInterface {
+public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem implements CmpMessageInterface {
 
     private VerificationContextImpl VerificationContext;
 
@@ -37,8 +35,7 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem
 
     private CredentialContextImpl OutputCredentials;
 
-    private ReprotectMode ReprotectMode =
-            CmpMessageInterface.ReprotectMode.keep;
+    private ReprotectMode ReprotectMode = CmpMessageInterface.ReprotectMode.keep;
 
     private boolean SuppressRedundantExtraCerts;
 
@@ -81,8 +78,7 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem
         return Math.abs(deviation) <= allowedMessageTimDeviation;
     }
 
-    public void setAllowedMessageTimeDeviation(
-            final long messageTimeDeviationAllowed) {
+    public void setAllowedMessageTimeDeviation(final long messageTimeDeviationAllowed) {
         allowedMessageTimDeviation = messageTimeDeviationAllowed;
     }
 
@@ -90,16 +86,15 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem
         CacheExtraCerts = cacheExtraCerts;
     }
 
-    public void setNestedEndpointContext(
-            final NestedEndpointContextImpl nestedEndpointContext) {
+    public void setNestedEndpointContext(final NestedEndpointContextImpl nestedEndpointContext) {
         NestedEndpointContext = nestedEndpointContext;
     }
 
     @XmlElements({
-            @XmlElement(name = "SharedSecret", type = SharedSecretCredentialContextImpl.class, required = false),
-            @XmlElement(name = "Signature", type = SignatureCredentialContextImpl.class, required = false)})
-    public void setOutputCredentials(
-            final CredentialContextImpl outputCredentials) {
+        @XmlElement(name = "SharedSecret", type = SharedSecretCredentialContextImpl.class, required = false),
+        @XmlElement(name = "Signature", type = SignatureCredentialContextImpl.class, required = false)
+    })
+    public void setOutputCredentials(final CredentialContextImpl outputCredentials) {
         OutputCredentials = outputCredentials;
     }
 
@@ -108,14 +103,11 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem
         ReprotectMode = reprotectMode;
     }
 
-    public void setSuppressRedundantExtraCerts(
-            final boolean suppressRedundantExtraCerts) {
+    public void setSuppressRedundantExtraCerts(final boolean suppressRedundantExtraCerts) {
         SuppressRedundantExtraCerts = suppressRedundantExtraCerts;
     }
 
-    public void setVerificationContext(
-            final VerificationContextImpl verificationContext) {
+    public void setVerificationContext(final VerificationContextImpl verificationContext) {
         VerificationContext = verificationContext;
     }
-
 }

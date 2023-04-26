@@ -24,7 +24,8 @@ import org.junit.Test;
 public class TestCrWithNested extends OnlineEnrollmentTestcaseBase {
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6005/nestedlra",
+        initTestbed(
+                "http://localhost:6005/nestedlra",
                 "NestedEnrollmentRaTestConfig.yaml",
                 "NestedEnrollmentLraTestConfig.yaml");
     }
@@ -36,8 +37,10 @@ public class TestCrWithNested extends OnlineEnrollmentTestcaseBase {
      */
     @Test
     public void testCrWithNested() throws Exception {
-        executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
+        executeCrmfCertificateRequest(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                getEeSignaturebasedProtectionProvider(),
                 getEeCmpClient());
     }
 }

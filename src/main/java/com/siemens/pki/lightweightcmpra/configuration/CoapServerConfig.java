@@ -33,5 +33,4 @@ public class CoapServerConfig extends AbstractDownstreamInterfaceConfig {
     public void setServerPath(final String serverPath) {
         this.serverPath = serverPath;
     }
-
 }

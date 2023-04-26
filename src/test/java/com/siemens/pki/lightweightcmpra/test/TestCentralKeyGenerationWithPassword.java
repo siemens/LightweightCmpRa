@@ -17,32 +17,30 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
-
-public class TestCentralKeyGenerationWithPassword
-        extends CkgOnlineEnrollmentTestcaseBase {
+public class TestCentralKeyGenerationWithPassword extends CkgOnlineEnrollmentTestcaseBase {
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6012/ckgwithmac",
-                "EnrollmentConfigWithCKGPass.yaml");
+        initTestbed("http://localhost:6012/ckgwithmac", "EnrollmentConfigWithCKGPass.yaml");
     }
 
     @Test
     public void testCrWithPassword() throws Exception {
         final ProtectionProvider macBasedProvider =
-                TestUtils.createPasswordBasedMacProtection("keyIdentification",
-                        "myPresharedSecret");
-        executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, macBasedProvider, getEeCmpClient(),
+                TestUtils.createPasswordBasedMacProtection("keyIdentification", "myPresharedSecret");
+        executeCrmfCertificateRequestWithoutKey(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                macBasedProvider,
+                getEeCmpClient(),
                 new CmsDecryptor(null, null, "myPresharedSecret".toCharArray()),
                 verifier);
     }
-
 }

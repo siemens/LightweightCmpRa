@@ -22,5 +22,4 @@ public interface DownstreamInterface {
     interface ExFunction {
         byte[] apply(byte[] request) throws Exception;
     }
-
 }

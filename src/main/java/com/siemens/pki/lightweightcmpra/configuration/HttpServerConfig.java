@@ -30,5 +30,4 @@ public class HttpServerConfig extends AbstractDownstreamInterfaceConfig {
     public void setServingUri(final URI ServingUri) {
         this.ServingUri = ServingUri;
     }
-
 }

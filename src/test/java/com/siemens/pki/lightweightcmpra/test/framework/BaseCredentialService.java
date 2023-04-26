@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 
 /**
@@ -44,14 +43,15 @@ public class BaseCredentialService {
     private final X509Certificate endCertificate;
     private final List<X509Certificate> certChain = new ArrayList<>();
 
-    public BaseCredentialService(final PrivateKey privateKey,
+    public BaseCredentialService(
+            final PrivateKey privateKey,
             final X509Certificate endCertificate,
-            final Collection<X509Certificate> certChain) throws Exception {
+            final Collection<X509Certificate> certChain)
+            throws Exception {
         this.privateKey = privateKey;
         this.endCertificate = endCertificate;
         this.certChain.addAll(certChain);
-        signatureAlgorithmName =
-                SignHelperUtil.getSigningAlgNameFromKey(privateKey);
+        signatureAlgorithmName = SignHelperUtil.getSigningAlgNameFromKey(privateKey);
         signatureAlgorithm = SignHelperUtil.getSigningAlgIdFromKey(privateKey);
     }
 
@@ -63,41 +63,33 @@ public class BaseCredentialService {
      * @throws Exception
      *             in case of an error
      */
-    public BaseCredentialService(final String keyStorePath,
-            final char[] password) throws Exception {
-        final KeyStore keyStore =
-                CertUtility.loadKeystoreFromFile(keyStorePath, password);
+    public BaseCredentialService(final String keyStorePath, final char[] password) throws Exception {
+        final KeyStore keyStore = CertUtility.loadKeystoreFromFile(keyStorePath, password);
 
         final Map<String, X509Certificate> certsFromKeystore = new HashMap<>();
         PrivateKey lastFoundPrivateKey = null;
         X509Certificate lastFoundEndCertificate = null;
         for (final String aktAlias : Collections.list(keyStore.aliases())) {
-            final Certificate[] certificateChain =
-                    keyStore.getCertificateChain(aktAlias);
+            final Certificate[] certificateChain = keyStore.getCertificateChain(aktAlias);
             if (certificateChain != null) {
                 for (final Certificate aktChainCert : certificateChain) {
-                    final X509Certificate x509aktChainCert =
-                            (X509Certificate) aktChainCert;
+                    final X509Certificate x509aktChainCert = (X509Certificate) aktChainCert;
                     if (CertUtility.isSelfSigned(x509aktChainCert)) {
                         // ignore all root certificates
                         continue;
                     }
-                    certsFromKeystore.put(
-                            x509aktChainCert.getSubjectDN().getName(),
-                            x509aktChainCert);
+                    certsFromKeystore.put(x509aktChainCert.getSubjectDN().getName(), x509aktChainCert);
                 }
             }
             final Certificate certificate = keyStore.getCertificate(aktAlias);
             if (!(certificate instanceof X509Certificate)) {
                 continue;
             }
-            final X509Certificate x509Certificate =
-                    (X509Certificate) certificate;
+            final X509Certificate x509Certificate = (X509Certificate) certificate;
             if (CertUtility.isSelfSigned(x509Certificate)) {
                 continue;
             }
-            certsFromKeystore.put(x509Certificate.getSubjectDN().getName(),
-                    x509Certificate);
+            certsFromKeystore.put(x509Certificate.getSubjectDN().getName(), x509Certificate);
             final Key aktKey = keyStore.getKey(aktAlias, password);
             if (!(aktKey instanceof PrivateKey)) {
                 continue;
@@ -109,19 +101,16 @@ public class BaseCredentialService {
         privateKey = lastFoundPrivateKey;
         endCertificate = lastFoundEndCertificate;
         if (privateKey == null || endCertificate == null) {
-            throw new KeyStoreException(
-                    "no keypair (certificate + private key) for protection found");
+            throw new KeyStoreException("no keypair (certificate + private key) for protection found");
         }
-        signatureAlgorithmName =
-                SignHelperUtil.getSigningAlgNameFromKey(privateKey);
+        signatureAlgorithmName = SignHelperUtil.getSigningAlgNameFromKey(privateKey);
         signatureAlgorithm = SignHelperUtil.getSigningAlgIdFromKey(privateKey);
         // bring the certificates in the correct order
         // poor mens chain building, never use this algorithm for chain validation!
         certChain.add(endCertificate);
         String curIssuer = endCertificate.getIssuerDN().getName();
-        for (;;) {
-            final X509Certificate nextIssuer =
-                    certsFromKeystore.remove(curIssuer);
+        for (; ; ) {
+            final X509Certificate nextIssuer = certsFromKeystore.remove(curIssuer);
             if (nextIssuer == null) {
                 break;
             }

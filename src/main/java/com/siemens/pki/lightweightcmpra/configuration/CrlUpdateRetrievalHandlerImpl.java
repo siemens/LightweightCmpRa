@@ -17,23 +17,19 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
+import com.siemens.pki.cmpracomponent.configuration.CrlUpdateRetrievalHandler;
+import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.net.URI;
 import java.security.cert.X509CRL;
 import java.util.Date;
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 
-import com.siemens.pki.cmpracomponent.configuration.CrlUpdateRetrievalHandler;
-import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
-
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CrlUpdateRetrievalHandlerImpl
-        extends SupportMessageHandlerInterfaceImpl
+public class CrlUpdateRetrievalHandlerImpl extends SupportMessageHandlerInterfaceImpl
         implements CrlUpdateRetrievalHandler {
 
     private List<URI> crls;
@@ -49,8 +45,11 @@ public class CrlUpdateRetrievalHandlerImpl
     }
 
     @Override
-    public List<X509CRL> getCrls(final String[] dpnFullName, String dpnNameRelativeToCRLIssuer,
-            final String[] issuer, final Date thisUpdate) {
+    public List<X509CRL> getCrls(
+            final String[] dpnFullName,
+            String dpnNameRelativeToCRLIssuer,
+            final String[] issuer,
+            final Date thisUpdate) {
 
         if (x509Crls == null && crls != null) {
             x509Crls = CredentialLoader.loadCRLs(crls.toArray(new URI[0]));
@@ -62,5 +61,4 @@ public class CrlUpdateRetrievalHandlerImpl
     public void setCrls(final List<URI> crl) {
         this.crls = crl;
     }
-
 }

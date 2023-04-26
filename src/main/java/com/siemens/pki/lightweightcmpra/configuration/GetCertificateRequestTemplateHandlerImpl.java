@@ -17,28 +17,23 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
+import com.siemens.pki.cmpracomponent.configuration.GetCertificateRequestTemplateHandler;
+import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.configuration.GetCertificateRequestTemplateHandler;
-import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
-
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class GetCertificateRequestTemplateHandlerImpl
-        extends SupportMessageHandlerInterfaceImpl
+public class GetCertificateRequestTemplateHandlerImpl extends SupportMessageHandlerInterfaceImpl
         implements GetCertificateRequestTemplateHandler {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(GetCertificateRequestTemplateHandlerImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetCertificateRequestTemplateHandlerImpl.class);
 
     private URI template;
 
@@ -51,8 +46,7 @@ public class GetCertificateRequestTemplateHandlerImpl
     @Override
     public byte[] getCertificateRequestTemplate() {
         if (templateBytes == null && template != null) {
-            try (InputStream urlStream =
-                    ConfigFileLoader.getConfigUriAsStream(template)) {
+            try (InputStream urlStream = ConfigFileLoader.getConfigUriAsStream(template)) {
                 templateBytes = urlStream.readAllBytes();
             } catch (final IOException e1) {
                 final String msg = "error loading template from " + template;
@@ -71,5 +65,4 @@ public class GetCertificateRequestTemplateHandlerImpl
     public void setTemplate(final URI template) {
         this.template = template;
     }
-
 }

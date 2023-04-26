@@ -24,7 +24,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cms.ContentInfo;
@@ -47,35 +46,29 @@ import org.bouncycastle.util.CollectionStore;
  */
 public class DataSigner {
 
-    private final ASN1ObjectIdentifier id_ct_KP_aKeyPackage =
-            new ASN1ObjectIdentifier("1.2.16.840.1.101.2.1.2.78.5");
+    private final ASN1ObjectIdentifier id_ct_KP_aKeyPackage = new ASN1ObjectIdentifier("1.2.16.840.1.101.2.1.2.78.5");
 
     private final CMSSignedDataGenerator gen = new CMSSignedDataGenerator();
 
     public DataSigner(final BaseCredentialService credentialService)
-            throws OperatorCreationException, CertificateEncodingException,
-            IOException, CMSException {
-        final SignerInfoGenerator signerInfoGenerator =
-                new JcaSimpleSignerInfoGeneratorBuilder()
-                        .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
-                        .build(credentialService.getSignatureAlgorithmName(),
-                                credentialService.getPrivateKey(),
-                                credentialService.getEndCertificate());
+            throws OperatorCreationException, CertificateEncodingException, IOException, CMSException {
+        final SignerInfoGenerator signerInfoGenerator = new JcaSimpleSignerInfoGeneratorBuilder()
+                .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
+                .build(
+                        credentialService.getSignatureAlgorithmName(),
+                        credentialService.getPrivateKey(),
+                        credentialService.getEndCertificate());
         gen.addSignerInfoGenerator(signerInfoGenerator);
 
-        final List<X509CertificateHolder> certChain =
-                new ArrayList<X509CertificateHolder>();
+        final List<X509CertificateHolder> certChain = new ArrayList<X509CertificateHolder>();
         for (final X509Certificate aktCert : credentialService.getCertChain()) {
             certChain.add(new X509CertificateHolder(aktCert.getEncoded()));
         }
-        gen.addCertificates(
-                new CollectionStore<X509CertificateHolder>(certChain));
+        gen.addCertificates(new CollectionStore<X509CertificateHolder>(certChain));
     }
 
-    public DataSigner(final PrivateKey privateKey,
-            final X509Certificate endCertificate) throws Exception {
-        this(new BaseCredentialService(privateKey, endCertificate,
-                Arrays.asList(endCertificate)));
+    public DataSigner(final PrivateKey privateKey, final X509Certificate endCertificate) throws Exception {
+        this(new BaseCredentialService(privateKey, endCertificate, Arrays.asList(endCertificate)));
     }
 
     /**
@@ -86,8 +79,7 @@ public class DataSigner {
      * @throws Exception
      *             in case of an error
      */
-    public DataSigner(final String keyStorePath, final char[] password)
-            throws Exception {
+    public DataSigner(final String keyStorePath, final char[] password) throws Exception {
         this(new BaseCredentialService(keyStorePath, password));
     }
 
@@ -99,8 +91,7 @@ public class DataSigner {
      * @throws Exception
      *             in case of error
      */
-    public DataSigner(final String keyStorePath, final String password)
-            throws Exception {
+    public DataSigner(final String keyStorePath, final String password) throws Exception {
         this(keyStorePath, password.toCharArray());
     }
 
@@ -115,8 +106,7 @@ public class DataSigner {
      *             in case of error
      */
     public SignedData signData(final byte[] msg) throws CMSException {
-        final CMSSignedData cmsSigned = gen.generate(
-                new CMSProcessableByteArray(id_ct_KP_aKeyPackage, msg), true);
+        final CMSSignedData cmsSigned = gen.generate(new CMSProcessableByteArray(id_ct_KP_aKeyPackage, msg), true);
         final ContentInfo contentInfo = cmsSigned.toASN1Structure();
         return SignedData.getInstance(contentInfo.getContent());
     }
@@ -133,9 +123,7 @@ public class DataSigner {
      * @throws IOException
      *             in case of ASN.1 encoding error
      */
-    public SignedData signPrivateKey(final PrivateKey privateKey)
-            throws CMSException, IOException {
-        return signData(PrivateKeyInfo.getInstance(privateKey.getEncoded())
-                .getEncoded(ASN1Encoding.DER));
+    public SignedData signPrivateKey(final PrivateKey privateKey) throws CMSException, IOException {
+        return signData(PrivateKeyInfo.getInstance(privateKey.getEncoded()).getEncoded(ASN1Encoding.DER));
     }
 }

@@ -17,11 +17,6 @@
  */
 package com.siemens.pki.lightweightcmpra.upstream;
 
-import java.net.URI;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.siemens.pki.lightweightcmpra.configuration.AbstractUpstreamInterfaceConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpClientConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpsClientConfig;
@@ -29,11 +24,13 @@ import com.siemens.pki.lightweightcmpra.configuration.OfflineFileClientConfig;
 import com.siemens.pki.lightweightcmpra.upstream.offline.FileOfflineClient;
 import com.siemens.pki.lightweightcmpra.upstream.online.HttpSession;
 import com.siemens.pki.lightweightcmpra.upstream.online.HttpsSession;
+import java.net.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UpstreamInterfaceFactory {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(UpstreamInterfaceFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpstreamInterfaceFactory.class);
 
     /**
      * create an {@link UpstreamInterface} instance according to the given
@@ -43,41 +40,29 @@ public class UpstreamInterfaceFactory {
      *            upstream interface configuration
      * @return an upstream instance
      */
-    public static UpstreamInterface create(
-            final AbstractUpstreamInterfaceConfig configuration) {
+    public static UpstreamInterface create(final AbstractUpstreamInterfaceConfig configuration) {
         try {
             if (configuration instanceof OfflineFileClientConfig) {
-                return new FileOfflineClient(
-                        (OfflineFileClientConfig) configuration);
+                return new FileOfflineClient((OfflineFileClientConfig) configuration);
             }
             if (configuration instanceof HttpClientConfig) {
-                final HttpClientConfig httpConfig =
-                        (HttpClientConfig) configuration;
+                final HttpClientConfig httpConfig = (HttpClientConfig) configuration;
                 final URI ServingUri = httpConfig.getServingUri();
                 final String scheme = ServingUri.getScheme();
                 if ("http".equalsIgnoreCase(scheme)) {
-                    return new HttpSession(ServingUri.toURL(),
-                            httpConfig.getTimeout());
+                    return new HttpSession(ServingUri.toURL(), httpConfig.getTimeout());
                 }
-                if ("https".equalsIgnoreCase(scheme)
-                        && httpConfig instanceof HttpsClientConfig) {
-                    return new HttpsSession(ServingUri.toURL(),
-                            httpConfig.getTimeout(),
-                            (HttpsClientConfig) httpConfig);
+                if ("https".equalsIgnoreCase(scheme) && httpConfig instanceof HttpsClientConfig) {
+                    return new HttpsSession(
+                            ServingUri.toURL(), httpConfig.getTimeout(), (HttpsClientConfig) httpConfig);
                 }
             }
-            LOGGER.error(
-                    "error creating upstream interface from given configuration");
+            LOGGER.error("error creating upstream interface from given configuration");
         } catch (final Exception e) {
-            LOGGER.error(
-                    "error creating upstream interface from given configuration",
-                    e);
+            LOGGER.error("error creating upstream interface from given configuration", e);
         }
         return null;
     }
 
-    private UpstreamInterfaceFactory() {
-
-    }
-
+    private UpstreamInterfaceFactory() {}
 }

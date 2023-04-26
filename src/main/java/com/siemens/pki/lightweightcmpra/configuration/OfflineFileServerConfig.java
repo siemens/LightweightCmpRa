@@ -57,5 +57,4 @@ public class OfflineFileServerConfig extends AbstractDownstreamInterfaceConfig {
     public void setOutputDirectory(final String outputDirectory) {
         this.outputDirectory = outputDirectory;
     }
-
 }

@@ -30,8 +30,7 @@ import org.bouncycastle.cms.jcajce.JcePasswordRecipientInfoGenerator;
  */
 public class PasswordEncryptor extends CmsEncryptorBase {
 
-    public static final ASN1ObjectIdentifier DEFAULT_KEK_ALG =
-            CMSAlgorithm.AES256_CBC;
+    public static final ASN1ObjectIdentifier DEFAULT_KEK_ALG = CMSAlgorithm.AES256_CBC;
 
     public static final PRF DEFAULT_PRF = PasswordRecipient.PRF.HMacSHA256;
 
@@ -59,8 +58,7 @@ public class PasswordEncryptor extends CmsEncryptorBase {
      * @param kekAlgorithmOID
      *            key encryption algorithm
      */
-    public static void setKekAlgorithmOID(
-            final ASN1ObjectIdentifier kekAlgorithmOID) {
+    public static void setKekAlgorithmOID(final ASN1ObjectIdentifier kekAlgorithmOID) {
         PasswordEncryptor.kekAlgorithmOID = kekAlgorithmOID;
     }
 
@@ -82,14 +80,11 @@ public class PasswordEncryptor extends CmsEncryptorBase {
      *             in case of error
      */
     public PasswordEncryptor(final char[] passwd) throws Exception {
-        addRecipientInfoGenerator(
-                new JcePasswordRecipientInfoGenerator(kekAlgorithmOID, passwd)
-                        .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
-                        .setPasswordConversionScheme(
-                                PasswordRecipient.PKCS5_SCHEME2_UTF8)
-                        .setPRF(prf).setSaltAndIterationCount(
-                                CertUtility.generateRandomBytes(20),
-                                iterationCount));
+        addRecipientInfoGenerator(new JcePasswordRecipientInfoGenerator(kekAlgorithmOID, passwd)
+                .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
+                .setPasswordConversionScheme(PasswordRecipient.PKCS5_SCHEME2_UTF8)
+                .setPRF(prf)
+                .setSaltAndIterationCount(CertUtility.generateRandomBytes(20), iterationCount));
     }
 
     /**

@@ -29,9 +29,10 @@ public class TestCrWithPolling extends DelayedEnrollmentTescaseBase {
      */
     @Test
     public void testCrWithPolling() throws Exception {
-        executeDelayedCertificateRequest(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
+        executeDelayedCertificateRequest(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                getEeSignaturebasedProtectionProvider(),
                 getEeCmpClient());
     }
-
 }

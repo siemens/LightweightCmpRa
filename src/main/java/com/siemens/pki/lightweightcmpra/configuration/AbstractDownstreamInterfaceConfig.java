@@ -22,6 +22,4 @@ package com.siemens.pki.lightweightcmpra.configuration;
  * base class for all downstream interface configurations
  *
  */
-public abstract class AbstractDownstreamInterfaceConfig {
-
-}
+public abstract class AbstractDownstreamInterfaceConfig {}

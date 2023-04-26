@@ -17,9 +17,11 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.DERNull;
 import org.bouncycastle.asn1.cmp.PKIBody;
@@ -32,96 +34,67 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
-
 @RunWith(Parameterized.class)
 public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
 
     private static final AlgorithmIdentifier DEFAULT_PRF =
-            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA256,
-                    DERNull.INSTANCE);
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA256, DERNull.INSTANCE);
 
     private static final AlgorithmIdentifier DEFAULT_MAC = DEFAULT_PRF;
 
     public static Object[][] inputList = new Object[][] {
-            {DEFAULT_PRF, DEFAULT_MAC},
+        {DEFAULT_PRF, DEFAULT_MAC},
+        //
+        {
             //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA1,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA1,
-                            DERNull.INSTANCE)},
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA1, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA1, DERNull.INSTANCE)
+        },
+        //
+        {
             //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA224,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA224,
-                            DERNull.INSTANCE)},
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA224, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA224, DERNull.INSTANCE)
+        },
+        //
+        {
             //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA256,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA256,
-                            DERNull.INSTANCE)},
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA256, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA256, DERNull.INSTANCE)
+        },
+        //
+        {
             //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA384,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA384,
-                            DERNull.INSTANCE)},
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA384, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA384, DERNull.INSTANCE)
+        },
+        //
+        {
             //
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA512,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA512,
-                            DERNull.INSTANCE)},
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA1,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA512,
-                            DERNull.INSTANCE)},
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA512,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA1,
-                            DERNull.INSTANCE)},
-            {
-                    //
-                    new AlgorithmIdentifier(
-                            PKCSObjectIdentifiers.id_hmacWithSHA512,
-                            DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            NISTObjectIdentifiers.id_KmacWithSHAKE128,
-                            DERNull.INSTANCE)},
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA512, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA512, DERNull.INSTANCE)
+        },
+        {
             //
-            {new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA1,
-                    DERNull.INSTANCE),
-                    new AlgorithmIdentifier(
-                            NISTObjectIdentifiers.id_KmacWithSHAKE256,
-                            DERNull.INSTANCE)}};
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA1, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA512, DERNull.INSTANCE)
+        },
+        {
+            //
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA512, DERNull.INSTANCE),
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA1, DERNull.INSTANCE)
+        },
+        {
+            //
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA512, DERNull.INSTANCE),
+            new AlgorithmIdentifier(NISTObjectIdentifiers.id_KmacWithSHAKE128, DERNull.INSTANCE)
+        },
+        //
+        {
+            new AlgorithmIdentifier(PKCSObjectIdentifiers.id_hmacWithSHA1, DERNull.INSTANCE),
+            new AlgorithmIdentifier(NISTObjectIdentifiers.id_KmacWithSHAKE256, DERNull.INSTANCE)
+        }
+    };
 
     @Parameters(name = "{index}: prf=>{0}, mac=>{1}")
     public static List<Object[]> data() {
@@ -130,8 +103,8 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
             final Object prf = aktInput[0];
             final Object mac = aktInput[1];
             ret.add(new Object[] {
-                    MessageDumper.dumpAsn1Object((ASN1Object) prf),
-                    MessageDumper.dumpAsn1Object((ASN1Object) mac), prf, mac});
+                MessageDumper.dumpAsn1Object((ASN1Object) prf), MessageDumper.dumpAsn1Object((ASN1Object) mac), prf, mac
+            });
         }
         return ret;
     }
@@ -140,8 +113,10 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
 
     private final AlgorithmIdentifier mac;
 
-    public TestIrWithPbmac1Protection(final String prfAsString,
-            final String macAsString, final AlgorithmIdentifier prf,
+    public TestIrWithPbmac1Protection(
+            final String prfAsString,
+            final String macAsString,
+            final AlgorithmIdentifier prf,
             final AlgorithmIdentifier mac) {
         this.prf = prf;
         this.mac = mac;
@@ -149,8 +124,7 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6002/lrawithmacprotection",
-                "EnrollmentConfigWithHttpAndPassword.yaml");
+        initTestbed("http://localhost:6002/lrawithmacprotection", "EnrollmentConfigWithHttpAndPassword.yaml");
     }
 
     /**
@@ -161,10 +135,7 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
     @Test
     public void testIrWithPbmac1Protection() throws Exception {
         final ProtectionProvider macBasedProvider =
-                TestUtils.createPBMAC1Protection("keyIdentification",
-                        "myPresharedSecret", prf, mac);
-        executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,
-                PKIBody.TYPE_INIT_REP, macBasedProvider, getEeCmpClient());
+                TestUtils.createPBMAC1Protection("keyIdentification", "myPresharedSecret", prf, mac);
+        executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ, PKIBody.TYPE_INIT_REP, macBasedProvider, getEeCmpClient());
     }
-
 }

@@ -29,8 +29,10 @@ public class TestCoapIrCr extends OnlineEnrollmentCoapTestcaseBase {
      */
     @Test
     public void testCr() throws Exception {
-        executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
+        executeCrmfCertificateRequest(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                getEeSignaturebasedProtectionProvider(),
                 getEeCmpClient());
     }
 
@@ -41,8 +43,10 @@ public class TestCoapIrCr extends OnlineEnrollmentCoapTestcaseBase {
      */
     @Test
     public void testIr() throws Exception {
-        executeCrmfCertificateRequest(PKIBody.TYPE_INIT_REQ,
-                PKIBody.TYPE_INIT_REP, getEeSignaturebasedProtectionProvider(),
+        executeCrmfCertificateRequest(
+                PKIBody.TYPE_INIT_REQ,
+                PKIBody.TYPE_INIT_REP,
+                getEeSignaturebasedProtectionProvider(),
                 getEeCmpClient());
     }
 }

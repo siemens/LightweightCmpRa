@@ -30,5 +30,4 @@ public class XmlStringToByteAdapter extends XmlAdapter<String, byte[]> {
     public byte[] unmarshal(final String v) throws Exception {
         return v.getBytes();
     }
-
 }

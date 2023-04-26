@@ -17,6 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpra.util;
 
+import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,11 +35,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 
 /**
  * utility class to load various credentials, certificates and CRLs from URIs
@@ -47,13 +45,11 @@ import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 public class CredentialLoader {
     protected static CertificateFactory cf = null;
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(CredentialLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CredentialLoader.class);
 
     static {
         try {
-            cf = CertificateFactory.getInstance("X.509",
-                    CertUtility.getBouncyCastleProvider());
+            cf = CertificateFactory.getInstance("X.509", CertUtility.getBouncyCastleProvider());
         } catch (final CertificateException e) {
             LOGGER.error("error creating CertificateFactory ", e);
         }
@@ -73,11 +69,9 @@ public class CredentialLoader {
         }
         final ArrayList<X509Certificate> ret = new ArrayList<>(uris.length);
         for (final URI aktUri : uris) {
-            try (InputStream is = new BufferedInputStream(
-                    ConfigFileLoader.getConfigUriAsStream(aktUri))) {
+            try (InputStream is = new BufferedInputStream(ConfigFileLoader.getConfigUriAsStream(aktUri))) {
                 while (is.available() > 0) {
-                    ret.addAll((Collection<? extends X509Certificate>) cf
-                            .generateCertificates(is));
+                    ret.addAll((Collection<? extends X509Certificate>) cf.generateCertificates(is));
                 }
 
             } catch (final IOException | CertificateException e) {
@@ -102,8 +96,7 @@ public class CredentialLoader {
         }
         final ArrayList<X509CRL> ret = new ArrayList<>(uris.length);
         for (final URI aktUri : uris) {
-            try (InputStream is = new BufferedInputStream(
-                    ConfigFileLoader.getConfigUriAsStream(aktUri))) {
+            try (InputStream is = new BufferedInputStream(ConfigFileLoader.getConfigUriAsStream(aktUri))) {
                 while (is.available() > 0) {
                     ret.add((X509CRL) cf.generateCRL(is));
                 }
@@ -121,18 +114,15 @@ public class CredentialLoader {
         if (uri == null) {
             return null;
         }
-        try (InputStream is = new BufferedInputStream(
-                ConfigFileLoader.getConfigUriAsStream(uri))) {
+        try (InputStream is = new BufferedInputStream(ConfigFileLoader.getConfigUriAsStream(uri))) {
             is.mark(is.available());
             GeneralSecurityException lastException = null;
-            for (final String keyStoreType : new String[] {"PKCS12", "JKS",
-                    "BKS"}) {
+            for (final String keyStoreType : new String[] {"PKCS12", "JKS", "BKS"}) {
                 try {
                     final KeyStore ks = KeyStore.getInstance(keyStoreType);
                     ks.load(is, password);
                     return ks;
-                } catch (NoSuchAlgorithmException | CertificateException
-                        | KeyStoreException e) {
+                } catch (NoSuchAlgorithmException | CertificateException | KeyStoreException e) {
                     lastException = e;
                     is.reset();
                 }
@@ -148,8 +138,5 @@ public class CredentialLoader {
     }
 
     // utility class
-    private CredentialLoader() {
-
-    }
-
+    private CredentialLoader() {}
 }

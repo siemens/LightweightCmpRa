@@ -19,6 +19,11 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.junit.Before;
@@ -26,20 +31,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
-import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
-
 public class TestRr extends OnlineEnrollmentTestcaseBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestRr.class);
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6001/rr",
-                "RrConfigWithHttpAndSignature.yaml");
+        initTestbed("http://localhost:6001/rr", "RrConfigWithHttpAndSignature.yaml");
     }
 
     /**
@@ -49,18 +47,18 @@ public class TestRr extends OnlineEnrollmentTestcaseBase {
      */
     @Test
     public void testRr() throws Exception {
-        final EnrollmentResult certificateToRevoke =
-                executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
-                        PKIBody.TYPE_CERT_REP,
-                        getEeSignaturebasedProtectionProvider(),
-                        getEeCmpClient());
+        final EnrollmentResult certificateToRevoke = executeCrmfCertificateRequest(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                getEeSignaturebasedProtectionProvider(),
+                getEeCmpClient());
         final ProtectionProvider rrProtector = getEnrollmentCredentials()
-                .setEndEntityToProtect(certificateToRevoke.getCertificate(),
-                        certificateToRevoke.getPrivateKey());
+                .setEndEntityToProtect(certificateToRevoke.getCertificate(), certificateToRevoke.getPrivateKey());
 
         final PKIMessage rr = PkiMessageGenerator.generateAndProtectMessage(
-                new HeaderProviderForTest(), rrProtector, PkiMessageGenerator
-                        .generateRrBody(certificateToRevoke.getCertificate()));
+                new HeaderProviderForTest(),
+                rrProtector,
+                PkiMessageGenerator.generateRrBody(certificateToRevoke.getCertificate()));
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(rr));
@@ -70,9 +68,9 @@ public class TestRr extends OnlineEnrollmentTestcaseBase {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(rrResponse));
         }
-        assertEquals("message type", PKIBody.TYPE_REVOCATION_REP,
+        assertEquals(
+                "message type",
+                PKIBody.TYPE_REVOCATION_REP,
                 rrResponse.getBody().getType());
-
     }
-
 }

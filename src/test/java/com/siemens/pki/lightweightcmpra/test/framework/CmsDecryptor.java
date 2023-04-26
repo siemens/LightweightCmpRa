@@ -19,7 +19,6 @@ package com.siemens.pki.lightweightcmpra.test.framework;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-
 import org.bouncycastle.asn1.cms.ContentInfo;
 import org.bouncycastle.asn1.cms.EnvelopedData;
 import org.bouncycastle.cms.CMSEnvelopedData;
@@ -44,8 +43,7 @@ import org.bouncycastle.cms.jcajce.JcePasswordRecipient;
  */
 public class CmsDecryptor {
 
-    private static final RecipientId passRecipientId =
-            new PasswordRecipientId();
+    private static final RecipientId passRecipientId = new PasswordRecipientId();
 
     private final JceKeyTransRecipient transRecipient;
 
@@ -56,28 +54,25 @@ public class CmsDecryptor {
     private final JceKeyAgreeRecipient agreeRecipient;
     private final JcePasswordRecipient passwordRecipient;
 
-    public CmsDecryptor(final X509Certificate recipientCert,
-            final PrivateKey recipientKey, final char[] passwd) {
+    public CmsDecryptor(final X509Certificate recipientCert, final PrivateKey recipientKey, final char[] passwd) {
         if (recipientCert != null && recipientKey != null) {
             transRecipientId = new JceKeyTransRecipientId(recipientCert);
-            transRecipient = new JceKeyTransEnvelopedRecipient(recipientKey)
-                    .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+            transRecipient =
+                    new JceKeyTransEnvelopedRecipient(recipientKey).setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
             agreeRecipientId = new JceKeyAgreeRecipientId(recipientCert);
-            agreeRecipient = new JceKeyAgreeEnvelopedRecipient(recipientKey)
-                    .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+            agreeRecipient =
+                    new JceKeyAgreeEnvelopedRecipient(recipientKey).setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
         } else {
             transRecipientId = null;
             transRecipient = null;
             agreeRecipientId = null;
             agreeRecipient = null;
-
         }
-        passwordRecipient =
-                passwd != null
-                        ? new JcePasswordEnvelopedRecipient(passwd)
-                                .setProvider("BC").setPasswordConversionScheme(
-                                        PasswordRecipient.PKCS5_SCHEME2_UTF8)
-                        : null;
+        passwordRecipient = passwd != null
+                ? new JcePasswordEnvelopedRecipient(passwd)
+                        .setProvider("BC")
+                        .setPasswordConversionScheme(PasswordRecipient.PKCS5_SCHEME2_UTF8)
+                : null;
     }
 
     /**
@@ -91,15 +86,12 @@ public class CmsDecryptor {
      * @throws CMSException
      *             in case of an CMS processing error
      */
-    public byte[] decrypt(final EnvelopedData envelopedData)
-            throws CMSException {
+    public byte[] decrypt(final EnvelopedData envelopedData) throws CMSException {
 
         final CMSEnvelopedData cmsEnvelopedData = new CMSEnvelopedData(
-                new ContentInfo(envelopedData.getEncryptedContentInfo()
-                        .getContentType(), envelopedData));
+                new ContentInfo(envelopedData.getEncryptedContentInfo().getContentType(), envelopedData));
 
-        final RecipientInformationStore recipients =
-                cmsEnvelopedData.getRecipientInfos();
+        final RecipientInformationStore recipients = cmsEnvelopedData.getRecipientInfos();
         RecipientInformation recipient;
         if (agreeRecipientId != null) {
             recipient = recipients.get(agreeRecipientId);
@@ -119,8 +111,6 @@ public class CmsDecryptor {
                 return recipient.getContent(passwordRecipient);
             }
         }
-        throw new IllegalArgumentException(
-                "recipient for certificate not found");
+        throw new IllegalArgumentException("recipient for certificate not found");
     }
-
 }

@@ -17,10 +17,10 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1Integer;
@@ -44,8 +44,6 @@ import org.bouncycastle.asn1.x509.GeneralNamesBuilder;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-
 /**
  *
  * a HELPER class for writing a proper CertReqTemplateValue
@@ -53,72 +51,56 @@ import com.siemens.pki.cmpracomponent.util.MessageDumper;
  */
 public class CertReqTemplateValueWriter {
 
-    public static void writeCertReqTemplateValue(final File outFile)
-            throws Exception {
+    public static void writeCertReqTemplateValue(final File outFile) throws Exception {
         try (FileOutputStream outStream = new FileOutputStream(outFile)) {
             final CertTemplateBuilder ctb = new CertTemplateBuilder();
             ctb.setIssuer(new X500Name(new RDN[0]));
             ctb.setSubject(new X500Name("CN=,OU=myDept,OU=myGroup"));
             final GeneralNamesBuilder gnb = new GeneralNamesBuilder();
-            gnb.addName(
-                    new GeneralName(GeneralName.dNSName, "www.myServer.com"));
+            gnb.addName(new GeneralName(GeneralName.dNSName, "www.myServer.com"));
             gnb.addName(new GeneralName(GeneralName.iPAddress, "0.0.0.0"));
-            final Extension san =
-                    new Extension(Extension.subjectAlternativeName, false,
-                            gnb.build().getEncoded(ASN1Encoding.DER));
-            ctb.setExtensions(new Extensions(new Extension[] {san,
-                    createKeyUsageExtension(KeyUsage.digitalSignature,
-                            KeyUsage.keyAgreement),
-                    createExtendedKeyUsageExtension()}));
+            final Extension san = new Extension(
+                    Extension.subjectAlternativeName, false, gnb.build().getEncoded(ASN1Encoding.DER));
+            ctb.setExtensions(new Extensions(new Extension[] {
+                san,
+                createKeyUsageExtension(KeyUsage.digitalSignature, KeyUsage.keyAgreement),
+                createExtendedKeyUsageExtension()
+            }));
             final Controls controls = new Controls(new AttributeTypeAndValue[] {
-
-                    new AttributeTypeAndValue(
-                            CMPObjectIdentifiers.id_regCtrl_algId,
-                            new DERSequence(new ASN1Encodable[] {
-                                    new ASN1ObjectIdentifier(
-                                            "1.2.840.10045.2.1")
-                                                    .toASN1Primitive(),
-                                    new ASN1ObjectIdentifier(
-                                            "1.2.840.10045.3.1.7")
-                                                    .toASN1Primitive()})),
-                    new AttributeTypeAndValue(
-                            CMPObjectIdentifiers.id_regCtrl_rsaKeyLen,
-                            new ASN1Integer(2048))});
+                new AttributeTypeAndValue(CMPObjectIdentifiers.id_regCtrl_algId, new DERSequence(new ASN1Encodable[] {
+                    new ASN1ObjectIdentifier("1.2.840.10045.2.1").toASN1Primitive(),
+                    new ASN1ObjectIdentifier("1.2.840.10045.3.1.7").toASN1Primitive()
+                })),
+                new AttributeTypeAndValue(CMPObjectIdentifiers.id_regCtrl_rsaKeyLen, new ASN1Integer(2048))
+            });
             final CertTemplate template = ctb.build();
-            final ASN1Sequence certReqTemplateValue =
-                    new DERSequence(new ASN1Encodable[] {template, controls});
+            final ASN1Sequence certReqTemplateValue = new DERSequence(new ASN1Encodable[] {template, controls});
             final ASN1OutputStream out = ASN1OutputStream.create(outStream);
-            System.out.println(
-                    MessageDumper.dumpAsn1Object(certReqTemplateValue));
+            System.out.println(MessageDumper.dumpAsn1Object(certReqTemplateValue));
             out.writeObject(certReqTemplateValue);
-            System.out
-                    .println(ASN1Dump.dumpAsString(certReqTemplateValue, true));
+            System.out.println(ASN1Dump.dumpAsString(certReqTemplateValue, true));
         }
     }
 
     // KeyPurposeId.id_kp_serverAuth | KeyPurposeId.id_kp_clientAuth |
     // KeyUsage.cRLSign
-    private static Extension createExtendedKeyUsageExtension(
-            final KeyPurposeId... extendedKeyUsages) throws IOException {
-        return new Extension(Extension.extendedKeyUsage, false,
-                new ExtendedKeyUsage(extendedKeyUsages)
-                        .getEncoded(ASN1Encoding.DER));
+    private static Extension createExtendedKeyUsageExtension(final KeyPurposeId... extendedKeyUsages)
+            throws IOException {
+        return new Extension(
+                Extension.extendedKeyUsage,
+                false,
+                new ExtendedKeyUsage(extendedKeyUsages).getEncoded(ASN1Encoding.DER));
     }
 
     // KeyUsage.digitalSignature | KeyUsage.keyCertSign | KeyUsage.cRLSign
-    private static Extension createKeyUsageExtension(final int... keyUsages)
-            throws IOException {
+    private static Extension createKeyUsageExtension(final int... keyUsages) throws IOException {
         int keyUsage = 0;
         for (final int aktUsage : keyUsages) {
             keyUsage |= aktUsage;
         }
-        return new Extension(Extension.keyUsage, true,
-                new KeyUsage(keyUsage).getEncoded(ASN1Encoding.DER));
+        return new Extension(Extension.keyUsage, true, new KeyUsage(keyUsage).getEncoded(ASN1Encoding.DER));
     }
 
     // utility class
-    private CertReqTemplateValueWriter() {
-
-    }
-
+    private CertReqTemplateValueWriter() {}
 }

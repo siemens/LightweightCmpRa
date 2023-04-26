@@ -17,20 +17,16 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
-import java.net.URI;
-import java.security.cert.X509Certificate;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-
-import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
-
 import com.siemens.pki.cmpracomponent.configuration.GetRootCaCertificateUpdateHandler;
 import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
+import java.net.URI;
+import java.security.cert.X509Certificate;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class GetRootCaCertificateUpdateHandlerImpl
-        extends SupportMessageHandlerInterfaceImpl
+public class GetRootCaCertificateUpdateHandlerImpl extends SupportMessageHandlerInterfaceImpl
         implements GetRootCaCertificateUpdateHandler {
 
     private URI newWithNew;
@@ -56,18 +52,14 @@ public class GetRootCaCertificateUpdateHandlerImpl
     }
 
     @Override
-    public RootCaCertificateUpdateResponse getRootCaCertificateUpdate(
-            final X509Certificate oldRootCaCertificate) {
+    public RootCaCertificateUpdateResponse getRootCaCertificateUpdate(final X509Certificate oldRootCaCertificate) {
         if (response == null) {
             response = new RootCaCertificateUpdateResponse() {
-                private final X509Certificate newWithNewCert =
-                        loadCertFromUri(newWithNew);
+                private final X509Certificate newWithNewCert = loadCertFromUri(newWithNew);
 
-                private final X509Certificate newWithOldCert =
-                        loadCertFromUri(newWithOld);
+                private final X509Certificate newWithOldCert = loadCertFromUri(newWithOld);
 
-                private final X509Certificate oldWithNewCert =
-                        loadCertFromUri(oldWithNew);
+                private final X509Certificate oldWithNewCert = loadCertFromUri(oldWithNew);
 
                 @Override
                 public X509Certificate getNewWithNew() {
@@ -106,5 +98,4 @@ public class GetRootCaCertificateUpdateHandlerImpl
         }
         return CredentialLoader.loadCertificates(uri).get(0);
     }
-
 }

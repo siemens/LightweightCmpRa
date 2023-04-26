@@ -19,13 +19,12 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.computeDefaultIfNull;
 
+import com.siemens.pki.cmpracomponent.configuration.CkgPasswordContext;
+import com.siemens.pki.cmpracomponent.configuration.SharedSecretCredentialContext;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
-
-import com.siemens.pki.cmpracomponent.configuration.CkgPasswordContext;
-import com.siemens.pki.cmpracomponent.configuration.SharedSecretCredentialContext;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CkgPasswordContextImpl implements CkgPasswordContext {
@@ -41,14 +40,11 @@ public class CkgPasswordContextImpl implements CkgPasswordContext {
 
     @Override
     public String getKekAlg() {
-        return computeDefaultIfNull(KekAlg,
-                CkgPasswordContext.super::getKekAlg);
+        return computeDefaultIfNull(KekAlg, CkgPasswordContext.super::getKekAlg);
     }
 
-    @XmlElements({
-            @XmlElement(name = "SharedSecret", type = SharedSecretCredentialContextImpl.class, required = false)})
-    public void setEncryptionCredentials(
-            final SharedSecretCredentialContextImpl encryptionCredentials) {
+    @XmlElements({@XmlElement(name = "SharedSecret", type = SharedSecretCredentialContextImpl.class, required = false)})
+    public void setEncryptionCredentials(final SharedSecretCredentialContextImpl encryptionCredentials) {
         EncryptionCredentials = encryptionCredentials;
     }
 
@@ -56,5 +52,4 @@ public class CkgPasswordContextImpl implements CkgPasswordContext {
     public void setKekAlg(final String kekAlg) {
         KekAlg = kekAlg;
     }
-
 }

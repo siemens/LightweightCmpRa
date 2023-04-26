@@ -19,25 +19,21 @@ package com.siemens.pki.lightweightcmpra.upstream.online;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
 
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.siemens.pki.lightweightcmpra.configuration.HttpsClientConfig;
 import com.siemens.pki.lightweightcmpra.configuration.SignatureCredentialContextImpl;
 import com.siemens.pki.lightweightcmpra.util.SslContextFactory;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of a CMP over HTTPS/TLS client.
  */
 public class HttpsSession extends HttpSession {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(HttpsSession.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpsSession.class);
 
     private final SSLContext sslContext;
 
@@ -54,16 +50,14 @@ public class HttpsSession extends HttpSession {
      * @throws Exception
      *             in case of error
      */
-    public HttpsSession(final URL remoteUrl, final int timeoutInSeconds,
-            final HttpsClientConfig config) throws Exception {
+    public HttpsSession(final URL remoteUrl, final int timeoutInSeconds, final HttpsClientConfig config)
+            throws Exception {
         super(remoteUrl, timeoutInSeconds);
-        final SignatureCredentialContextImpl clientCredentials =
-                config.getClientCredentials();
-        sslContext = SslContextFactory.createSslContext(config.getClientTrust(),
-                ifNotNull(clientCredentials,
-                        SignatureCredentialContextImpl::getKeyStore),
-                ifNotNull(clientCredentials,
-                        SignatureCredentialContextImpl::getPassword));
+        final SignatureCredentialContextImpl clientCredentials = config.getClientCredentials();
+        sslContext = SslContextFactory.createSslContext(
+                config.getClientTrust(),
+                ifNotNull(clientCredentials, SignatureCredentialContextImpl::getKeyStore),
+                ifNotNull(clientCredentials, SignatureCredentialContextImpl::getPassword));
     }
 
     /**
@@ -72,15 +66,12 @@ public class HttpsSession extends HttpSession {
     @Override
     public byte[] apply(final byte[] message, final String certProfile) {
         try {
-            final HttpsURLConnection httpsConnection =
-                    (HttpsURLConnection) remoteUrl.openConnection();
+            final HttpsURLConnection httpsConnection = (HttpsURLConnection) remoteUrl.openConnection();
             httpsConnection.setSSLSocketFactory(sslContext.getSocketFactory());
-            return sendReceivePkiMessageIntern(message, httpsConnection,
-                    timeoutInSeconds);
+            return sendReceivePkiMessageIntern(message, httpsConnection, timeoutInSeconds);
         } catch (final Exception ex) {
             LOGGER.warn("client connection to " + remoteUrl, ex);
             throw new RuntimeException("client connection to " + remoteUrl, ex);
         }
     }
-
 }

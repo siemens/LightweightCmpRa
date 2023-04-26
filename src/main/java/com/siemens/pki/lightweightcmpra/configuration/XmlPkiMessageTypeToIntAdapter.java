@@ -21,10 +21,35 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class XmlPkiMessageTypeToIntAdapter extends XmlAdapter<String, Integer> {
 
-    private final String[] TYPE_TABLE = {"ir", "ip", "cr", "cp", "p10cr",
-            "popdecc", "popdecr", "kur", "kup", "krr", "krp", "rr", "rp", "ccr",
-            "ccp", "ckuann", "cann", "rann", "crlann", "pkiconf", "nested",
-            "genm", "genp", "error", "certConf", "pollReq", "pollRep"};
+    private final String[] TYPE_TABLE = {
+        "ir",
+        "ip",
+        "cr",
+        "cp",
+        "p10cr",
+        "popdecc",
+        "popdecr",
+        "kur",
+        "kup",
+        "krr",
+        "krp",
+        "rr",
+        "rp",
+        "ccr",
+        "ccp",
+        "ckuann",
+        "cann",
+        "rann",
+        "crlann",
+        "pkiconf",
+        "nested",
+        "genm",
+        "genp",
+        "error",
+        "certConf",
+        "pollReq",
+        "pollRep"
+    };
 
     @Override
     public String marshal(final Integer v) throws Exception {
@@ -40,5 +65,4 @@ public class XmlPkiMessageTypeToIntAdapter extends XmlAdapter<String, Integer> {
         }
         return Integer.valueOf(v);
     }
-
 }

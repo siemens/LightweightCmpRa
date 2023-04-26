@@ -18,7 +18,6 @@
 package com.siemens.pki.lightweightcmpra.test.framework;
 
 import java.io.IOException;
-
 import org.bouncycastle.asn1.cms.EnvelopedData;
 import org.bouncycastle.asn1.cms.SignedData;
 import org.bouncycastle.cms.CMSAlgorithm;
@@ -36,15 +35,11 @@ import org.bouncycastle.cms.jcajce.JceCMSContentEncryptorBuilder;
  */
 public class CmsEncryptorBase {
 
-    private final CMSEnvelopedDataGenerator envGen =
-            new CMSEnvelopedDataGenerator();
+    private final CMSEnvelopedDataGenerator envGen = new CMSEnvelopedDataGenerator();
 
-    protected CmsEncryptorBase() {
+    protected CmsEncryptorBase() {}
 
-    }
-
-    protected void addRecipientInfoGenerator(
-            final RecipientInfoGenerator recipientGenerator) {
+    protected void addRecipientInfoGenerator(final RecipientInfoGenerator recipientGenerator) {
         envGen.addRecipientInfoGenerator(recipientGenerator);
     }
 
@@ -64,8 +59,7 @@ public class CmsEncryptorBase {
                 new JceCMSContentEncryptorBuilder(CMSAlgorithm.AES256_CBC)
                         .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
                         .build());
-        return EnvelopedData
-                .getInstance(cmsEnvData.toASN1Structure().getContent());
+        return EnvelopedData.getInstance(cmsEnvData.toASN1Structure().getContent());
     }
 
     /**
@@ -79,14 +73,12 @@ public class CmsEncryptorBase {
      * @throws IOException
      *             in case of ASN.1 encoding error
      */
-    public EnvelopedData encrypt(final SignedData data)
-            throws CMSException, IOException {
+    public EnvelopedData encrypt(final SignedData data) throws CMSException, IOException {
         final CMSEnvelopedData cmsEnvData = envGen.generate(
                 new CMSProcessableByteArray(data.getEncoded()),
                 new JceCMSContentEncryptorBuilder(CMSAlgorithm.AES256_CBC)
                         .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
                         .build());
-        return EnvelopedData
-                .getInstance(cmsEnvData.toASN1Structure().getContent());
+        return EnvelopedData.getInstance(cmsEnvData.toASN1Structure().getContent());
     }
 }

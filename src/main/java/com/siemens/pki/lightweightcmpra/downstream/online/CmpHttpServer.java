@@ -17,27 +17,23 @@
  */
 package com.siemens.pki.lightweightcmpra.downstream.online;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.siemens.pki.lightweightcmpra.configuration.HttpsServerConfig;
 import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
 import com.sun.net.httpserver.HttpExchange;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * a HTTP/HTTPS server needed for CMP downstream interfaces
  *
  */
-public class CmpHttpServer extends BaseHttpServer
-        implements DownstreamInterface {
+public class CmpHttpServer extends BaseHttpServer implements DownstreamInterface {
 
-    public static final Logger LOGGER =
-            LoggerFactory.getLogger(CmpHttpServer.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(CmpHttpServer.class);
 
     private final ExFunction messageHandler;
 
@@ -50,50 +46,40 @@ public class CmpHttpServer extends BaseHttpServer
      * @throws IOException
      *             in case of error
      */
-    public CmpHttpServer(final URL servingUrl,
-            final DownstreamInterface.ExFunction messageHandler)
-            throws IOException {
+    public CmpHttpServer(final URL servingUrl, final DownstreamInterface.ExFunction messageHandler) throws IOException {
         super(servingUrl);
         this.messageHandler = messageHandler;
     }
 
-    public CmpHttpServer(final URL servingUrl, final ExFunction messageHandler,
-            final HttpsServerConfig config) throws Exception {
+    public CmpHttpServer(final URL servingUrl, final ExFunction messageHandler, final HttpsServerConfig config)
+            throws Exception {
         super(servingUrl, config);
 
         this.messageHandler = messageHandler;
     }
 
     @Override
-    public synchronized void handle(final HttpExchange exchange)
-            throws IOException {
+    public synchronized void handle(final HttpExchange exchange) throws IOException {
         try {
             if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
-                final byte[] responseBody =
-                        "only HTTP POST is supported".getBytes();
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD,
-                        responseBody.length);
+                final byte[] responseBody = "only HTTP POST is supported".getBytes();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_METHOD, responseBody.length);
                 exchange.getResponseBody().write(responseBody);
                 return;
             }
-            final byte[] encodedResponse = messageHandler
-                    .apply(exchange.getRequestBody().readAllBytes());
+            final byte[] encodedResponse =
+                    messageHandler.apply(exchange.getRequestBody().readAllBytes());
             if (encodedResponse == null) {
-                exchange.sendResponseHeaders(
-                        HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
             } else {
-                exchange.getResponseHeaders().set("Content-Type",
-                        "application/pkixcmp");
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,
-                        encodedResponse.length);
+                exchange.getResponseHeaders().set("Content-Type", "application/pkixcmp");
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, encodedResponse.length);
                 exchange.getResponseBody().write(encodedResponse);
             }
         } catch (final Exception e) {
             LOGGER.error("error while processing request", e);
-            final byte[] responseBody = ("error while processing request: "
-                    + e.getLocalizedMessage()).getBytes();
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR,
-                    responseBody.length);
+            final byte[] responseBody = ("error while processing request: " + e.getLocalizedMessage()).getBytes();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, responseBody.length);
             exchange.getResponseBody().write(responseBody);
         } finally {
             exchange.getResponseBody().close();

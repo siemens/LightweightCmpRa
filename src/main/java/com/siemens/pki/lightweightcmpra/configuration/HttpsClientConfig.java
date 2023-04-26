@@ -37,8 +37,7 @@ public class HttpsClientConfig extends HttpClientConfig {
     }
 
     @XmlElement(required = true)
-    public void setClientCredentials(
-            final SignatureCredentialContextImpl clientCredentials) {
+    public void setClientCredentials(final SignatureCredentialContextImpl clientCredentials) {
         this.clientCredentials = clientCredentials;
     }
 
@@ -46,5 +45,4 @@ public class HttpsClientConfig extends HttpClientConfig {
     public void setClientTrust(final VerificationContextImpl clientTrust) {
         this.clientTrust = clientTrust;
     }
-
 }

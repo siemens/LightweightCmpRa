@@ -21,7 +21,6 @@ import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.cms.CMSAlgorithm;
 import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientInfoGenerator;
@@ -33,14 +32,11 @@ import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientInfoGenerator;
  */
 public class KeyAgreementEncryptor extends CmsEncryptorBase {
 
-    public static final ASN1ObjectIdentifier DEFAULT_KEY_AGREEMENT =
-            CMSAlgorithm.ECCDH_SHA256KDF;
+    public static final ASN1ObjectIdentifier DEFAULT_KEY_AGREEMENT = CMSAlgorithm.ECCDH_SHA256KDF;
 
-    public static final ASN1ObjectIdentifier DEFAULT_KEY_ENCRYPTION =
-            CMSAlgorithm.AES256_WRAP;
+    public static final ASN1ObjectIdentifier DEFAULT_KEY_ENCRYPTION = CMSAlgorithm.AES256_WRAP;
 
-    private static ASN1ObjectIdentifier keyEncryptionOID =
-            DEFAULT_KEY_ENCRYPTION;
+    private static ASN1ObjectIdentifier keyEncryptionOID = DEFAULT_KEY_ENCRYPTION;
 
     private static ASN1ObjectIdentifier keyAgreementOID = DEFAULT_KEY_AGREEMENT;
 
@@ -50,8 +46,7 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      * @param keyAgreementOID
      *            key agreement algorithm
      */
-    public static void setKeyAgreementOID(
-            final ASN1ObjectIdentifier keyAgreementOID) {
+    public static void setKeyAgreementOID(final ASN1ObjectIdentifier keyAgreementOID) {
         KeyAgreementEncryptor.keyAgreementOID = keyAgreementOID;
     }
 
@@ -61,8 +56,7 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      * @param keyEncryptionOID
      *            key encryption algorithm
      */
-    public static void setKeyEncryptionOID(
-            final ASN1ObjectIdentifier keyEncryptionOID) {
+    public static void setKeyEncryptionOID(final ASN1ObjectIdentifier keyEncryptionOID) {
         KeyAgreementEncryptor.keyEncryptionOID = keyEncryptionOID;
     }
 
@@ -79,19 +73,17 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      *             if the necessary data cannot be extracted from the
      *             certificates
      */
-    public KeyAgreementEncryptor(final BaseCredentialService keystore,
-            final Collection<X509Certificate> recipientCerts)
+    public KeyAgreementEncryptor(final BaseCredentialService keystore, final Collection<X509Certificate> recipientCerts)
             throws GeneralSecurityException {
-        final JceKeyAgreeRecipientInfoGenerator infGen =
-                new JceKeyAgreeRecipientInfoGenerator(keyAgreementOID,
-                        keystore.getPrivateKey(),
-                        keystore.getEndCertificate().getPublicKey(),
-                        keyEncryptionOID);
+        final JceKeyAgreeRecipientInfoGenerator infGen = new JceKeyAgreeRecipientInfoGenerator(
+                keyAgreementOID,
+                keystore.getPrivateKey(),
+                keystore.getEndCertificate().getPublicKey(),
+                keyEncryptionOID);
         for (final X509Certificate aktCert : recipientCerts) {
             infGen.addRecipient(aktCert);
         }
-        addRecipientInfoGenerator(
-                infGen.setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER));
+        addRecipientInfoGenerator(infGen.setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER));
     }
 
     /**
@@ -107,8 +99,7 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      *             if the necessary data cannot be extracted from the
      *             certificates
      */
-    public KeyAgreementEncryptor(final BaseCredentialService keystore,
-            final X509Certificate... recipientCerts)
+    public KeyAgreementEncryptor(final BaseCredentialService keystore, final X509Certificate... recipientCerts)
             throws GeneralSecurityException {
         this(keystore, Arrays.asList(recipientCerts));
     }
@@ -125,11 +116,11 @@ public class KeyAgreementEncryptor extends CmsEncryptorBase {
      * @throws Exception
      *             in case of general error while loading certificates
      */
-    public KeyAgreementEncryptor(final String keystorePath,
-            final String keystorePassword, final String pathOfCertificateFile)
+    public KeyAgreementEncryptor(
+            final String keystorePath, final String keystorePassword, final String pathOfCertificateFile)
             throws Exception {
-        this(new BaseCredentialService(keystorePath,
-                keystorePassword.toCharArray()),
+        this(
+                new BaseCredentialService(keystorePath, keystorePassword.toCharArray()),
                 CertUtility.loadCertificatesFromFile(pathOfCertificateFile));
     }
 }

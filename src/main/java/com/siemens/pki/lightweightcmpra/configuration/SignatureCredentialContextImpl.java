@@ -19,6 +19,9 @@ package com.siemens.pki.lightweightcmpra.configuration;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.defaultIfNull;
 
+import com.siemens.pki.cmpracomponent.configuration.SignatureCredentialContext;
+import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
+import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.net.URI;
 import java.security.Key;
 import java.security.KeyStore;
@@ -31,24 +34,16 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.configuration.SignatureCredentialContext;
-import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
-import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
-
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class SignatureCredentialContextImpl extends CredentialContextImpl
-        implements SignatureCredentialContext {
+public class SignatureCredentialContextImpl extends CredentialContextImpl implements SignatureCredentialContext {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(SignatureCredentialContextImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SignatureCredentialContextImpl.class);
 
     private URI keyStore;
     private byte[] password;
@@ -85,8 +80,7 @@ public class SignatureCredentialContextImpl extends CredentialContextImpl
 
     @Override
     public String getSignatureAlgorithmName() {
-        return defaultIfNull(SignatureAlgorithmName,
-                SignatureCredentialContext.super.getSignatureAlgorithmName());
+        return defaultIfNull(SignatureAlgorithmName, SignatureCredentialContext.super.getSignatureAlgorithmName());
     }
 
     @XmlElement(required = true)
@@ -104,10 +98,8 @@ public class SignatureCredentialContextImpl extends CredentialContextImpl
     }
 
     private void extractKeyAndChainFromKeyStore() {
-        final char[] passwordAsChars =
-                AlgorithmHelper.convertSharedSecretToPassword(password);
-        final KeyStore ks =
-                CredentialLoader.loadKeyStore(keyStore, passwordAsChars);
+        final char[] passwordAsChars = AlgorithmHelper.convertSharedSecretToPassword(password);
+        final KeyStore ks = CredentialLoader.loadKeyStore(keyStore, passwordAsChars);
         if (ks == null) {
             return;
         }
@@ -117,22 +109,18 @@ public class SignatureCredentialContextImpl extends CredentialContextImpl
 
                 try {
                     final Key key = ks.getKey(aktAlias, passwordAsChars);
-                    final Certificate[] chain =
-                            ks.getCertificateChain(aktAlias);
+                    final Certificate[] chain = ks.getCertificateChain(aktAlias);
                     if (key instanceof PrivateKey && chain != null) {
                         privateKeyAsPK = (PrivateKey) key;
                         if (certificateChainAsList == null) {
-                            certificateChainAsList =
-                                    new ArrayList<>(chain.length);
+                            certificateChainAsList = new ArrayList<>(chain.length);
                         }
                         for (final Certificate aktCert : chain) {
-                            certificateChainAsList
-                                    .add((X509Certificate) aktCert);
+                            certificateChainAsList.add((X509Certificate) aktCert);
                         }
                         return;
                     }
-                } catch (UnrecoverableKeyException | KeyStoreException
-                        | NoSuchAlgorithmException e) {
+                } catch (UnrecoverableKeyException | KeyStoreException | NoSuchAlgorithmException e) {
                     LOGGER.warn(msg, e);
                 }
             }
@@ -140,6 +128,5 @@ public class SignatureCredentialContextImpl extends CredentialContextImpl
             LOGGER.error(msg, e);
             throw new RuntimeException(msg, e);
         }
-
     }
 }

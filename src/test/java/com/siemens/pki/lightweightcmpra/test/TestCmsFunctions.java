@@ -17,6 +17,20 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.configuration.VerificationContextImpl;
+import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
+import com.siemens.pki.lightweightcmpra.test.framework.CertUtility;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsEncryptorBase;
+import com.siemens.pki.lightweightcmpra.test.framework.DataSignVerifier;
+import com.siemens.pki.lightweightcmpra.test.framework.DataSigner;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyAgreementEncryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyPairGeneratorFactory;
+import com.siemens.pki.lightweightcmpra.test.framework.KeyTransportEncryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.PasswordEncryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
+import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -31,9 +45,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
-
 import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.cms.EnvelopedData;
 import org.bouncycastle.asn1.cms.SignedData;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -53,168 +65,124 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.configuration.VerificationContextImpl;
-import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
-import com.siemens.pki.lightweightcmpra.test.framework.CertUtility;
-import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.CmsEncryptorBase;
-import com.siemens.pki.lightweightcmpra.test.framework.DataSignVerifier;
-import com.siemens.pki.lightweightcmpra.test.framework.DataSigner;
-import com.siemens.pki.lightweightcmpra.test.framework.KeyAgreementEncryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.KeyPairGeneratorFactory;
-import com.siemens.pki.lightweightcmpra.test.framework.KeyTransportEncryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.PasswordEncryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
-import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
-
 public class TestCmsFunctions {
     static BaseCredentialService lraCredentials;
 
     static BaseCredentialService eeCredentials;
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(TestCmsFunctions.class);
-    static public final File CONFIG_DIRECTORY = new File(
-            "./src/test/java/com/siemens/pki/lightweightcmpra/test/config");
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestCmsFunctions.class);
+    public static final File CONFIG_DIRECTORY =
+            new File("./src/test/java/com/siemens/pki/lightweightcmpra/test/config");
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
         ConfigFileLoader.setConfigFileBase(CONFIG_DIRECTORY);
         lraCredentials =
-                new BaseCredentialService("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.getPasswordAsCharArray());
+                new BaseCredentialService("credentials/CMP_CA_Keystore.p12", TestUtils.getPasswordAsCharArray());
         eeCredentials =
-                new BaseCredentialService("credentials/CMP_EE_Keystore.p12",
-                        TestUtils.getPasswordAsCharArray());
+                new BaseCredentialService("credentials/CMP_EE_Keystore.p12", TestUtils.getPasswordAsCharArray());
     }
 
     @Test
     public void testDataSigning() throws Exception {
-        final DataSigner signer =
-                new DataSigner("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.getPasswordAsCharArray());
+        final DataSigner signer = new DataSigner("credentials/CMP_CA_Keystore.p12", TestUtils.getPasswordAsCharArray());
         final byte[] msgToSign = "Hello Signer, I am the message".getBytes();
         final SignedData signedData = signer.signData(msgToSign);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("CMSSignedData:\n"
-                    + MessageDumper.dumpAsn1Object(signedData));
+            LOGGER.debug("CMSSignedData:\n" + MessageDumper.dumpAsn1Object(signedData));
         }
         final byte[] signedAndEncoded = signedData.getEncoded();
-        final VerificationContextImpl verifierConfig = TestUtils
-                .createVerificationContext("credentials/CMP_CA_Root.pem");
+        final VerificationContextImpl verifierConfig =
+                TestUtils.createVerificationContext("credentials/CMP_CA_Root.pem");
         final DataSignVerifier verifier = new DataSignVerifier(verifierConfig);
-        Assert.assertArrayEquals(msgToSign,
-                verifier.verifySignatureAndTrust(signedAndEncoded));
+        Assert.assertArrayEquals(msgToSign, verifier.verifySignatureAndTrust(signedAndEncoded));
     }
 
     @Test
     public void testKeyagreementBasedKeyEncryptionEC() throws Exception {
-        final KeyPair kp = KeyPairGeneratorFactory
-                .getEcKeyPairGenerator("secp256r1").generateKeyPair();
+        final KeyPair kp =
+                KeyPairGeneratorFactory.getEcKeyPairGenerator("secp256r1").generateKeyPair();
         testKeyagreementBasedKeyEncryption(kp);
     }
 
     @Test
     public void testKeyagreementBasedKeyEncryptionRSA() throws Exception {
-        final KeyPair kp = KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048)
-                .generateKeyPair();
+        final KeyPair kp = KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048).generateKeyPair();
         testKeyagreementBasedKeyEncryption(kp);
     }
 
     @Test
     public void testKeytransportBasedDataEncryption() throws Exception {
-        final KeyPair keyPair = KeyPairGeneratorFactory
-                .getRsaKeyPairGenerator(2048).generateKeyPair();
-        final X509Certificate certificate =
-                createSelfsignedCertificate("CN=MySelf", keyPair);
-        final CmsEncryptorBase encryptor =
-                new KeyTransportEncryptor(certificate);
-        final CmsDecryptor decryptor =
-                new CmsDecryptor(certificate, keyPair.getPrivate(), null);
+        final KeyPair keyPair =
+                KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048).generateKeyPair();
+        final X509Certificate certificate = createSelfsignedCertificate("CN=MySelf", keyPair);
+        final CmsEncryptorBase encryptor = new KeyTransportEncryptor(certificate);
+        final CmsDecryptor decryptor = new CmsDecryptor(certificate, keyPair.getPrivate(), null);
         testDataEncryption(encryptor, decryptor);
     }
 
     @Test
     public void testPasswordBasedDataEncryption() throws Exception {
         final char[] passphrase = "VerySecretPassword".toCharArray();
-        final CmsEncryptorBase encryptor =
-                new PasswordEncryptor("VerySecretPassword");
+        final CmsEncryptorBase encryptor = new PasswordEncryptor("VerySecretPassword");
         final CmsDecryptor decryptor = new CmsDecryptor(null, null, passphrase);
         testDataEncryption(encryptor, decryptor);
     }
 
-    private X509Certificate createSelfsignedCertificate(final String subject,
-            final KeyPair keypair)
-            throws PEMException, NoSuchAlgorithmException, CertIOException,
-            CertificateEncodingException, CertificateException,
-            OperatorCreationException {
+    private X509Certificate createSelfsignedCertificate(final String subject, final KeyPair keypair)
+            throws PEMException, NoSuchAlgorithmException, CertIOException, CertificateEncodingException,
+                    CertificateException, OperatorCreationException {
         final long now = System.currentTimeMillis();
         final PublicKey pubKey = keypair.getPublic();
-        final X509v3CertificateBuilder v3CertBldr =
-                new JcaX509v3CertificateBuilder(new X500Principal(subject),
-                        BigInteger.valueOf(now),
-                        new Date(now - 60 * 60 * 1000L),
-                        new Date(now + 100 * 60 * 60 * 1000L),
-                        new X500Principal(subject), pubKey);
+        final X509v3CertificateBuilder v3CertBldr = new JcaX509v3CertificateBuilder(
+                new X500Principal(subject),
+                BigInteger.valueOf(now),
+                new Date(now - 60 * 60 * 1000L),
+                new Date(now + 100 * 60 * 60 * 1000L),
+                new X500Principal(subject),
+                pubKey);
 
         final JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-        v3CertBldr.addExtension(Extension.subjectKeyIdentifier, false,
-                extUtils.createSubjectKeyIdentifier(pubKey));
-        v3CertBldr.addExtension(Extension.authorityKeyIdentifier, false,
-                extUtils.createSubjectKeyIdentifier(pubKey));
-        v3CertBldr.addExtension(Extension.basicConstraints, true,
-                new BasicConstraints(false));
+        v3CertBldr.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(pubKey));
+        v3CertBldr.addExtension(Extension.authorityKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(pubKey));
+        v3CertBldr.addExtension(Extension.basicConstraints, true, new BasicConstraints(false));
 
         final JcaContentSignerBuilder signerBuilder =
-                new JcaContentSignerBuilder("SHA384withRSA")
-                        .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+                new JcaContentSignerBuilder("SHA384withRSA").setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
 
         return new JcaX509CertificateConverter()
                 .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
-                .getCertificate(v3CertBldr
-                        .build(signerBuilder.build(keypair.getPrivate())));
+                .getCertificate(v3CertBldr.build(signerBuilder.build(keypair.getPrivate())));
     }
 
-    private void testDataEncryption(final CmsEncryptorBase encryptor,
-            final CmsDecryptor decryptor) throws IOException, CMSException {
-        final byte[] msgToEncrypt =
-                "Hello Encryptor, I am the message".getBytes();
+    private void testDataEncryption(final CmsEncryptorBase encryptor, final CmsDecryptor decryptor)
+            throws IOException, CMSException {
+        final byte[] msgToEncrypt = "Hello Encryptor, I am the message".getBytes();
         final EnvelopedData encrypted = encryptor.encrypt(msgToEncrypt);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("EnvelopedData:\n"
-                    + MessageDumper.dumpAsn1Object(encrypted));
+            LOGGER.debug("EnvelopedData:\n" + MessageDumper.dumpAsn1Object(encrypted));
         }
         Assert.assertArrayEquals(msgToEncrypt, decryptor.decrypt(encrypted));
     }
 
     private void testKeyagreementBasedKeyEncryption(final KeyPair kp)
-            throws GeneralSecurityException, Exception, CMSException,
-            IOException, KeyStoreException, CertificateException,
-            NoSuchAlgorithmException {
-        final CmsEncryptorBase encryptor =
-                new KeyAgreementEncryptor("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.getPassword(), "credentials/CMP_EE_Cert.pem");
-        final DataSigner signer =
-                new DataSigner("credentials/CMP_CA_Keystore.p12",
-                        TestUtils.getPasswordAsCharArray());
-        final EnvelopedData encryptedKey =
-                encryptor.encrypt(signer.signPrivateKey(kp.getPrivate()));
+            throws GeneralSecurityException, Exception, CMSException, IOException, KeyStoreException,
+                    CertificateException, NoSuchAlgorithmException {
+        final CmsEncryptorBase encryptor = new KeyAgreementEncryptor(
+                "credentials/CMP_CA_Keystore.p12", TestUtils.getPassword(), "credentials/CMP_EE_Cert.pem");
+        final DataSigner signer = new DataSigner("credentials/CMP_CA_Keystore.p12", TestUtils.getPasswordAsCharArray());
+        final EnvelopedData encryptedKey = encryptor.encrypt(signer.signPrivateKey(kp.getPrivate()));
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("EnvelopedData;\n"
-                    + MessageDumper.dumpAsn1Object(encryptedKey));
+            LOGGER.debug("EnvelopedData;\n" + MessageDumper.dumpAsn1Object(encryptedKey));
         }
-        final VerificationContextImpl verifierConfig = TestUtils
-                .createVerificationContext("credentials/CMP_CA_Root.pem");
+        final VerificationContextImpl verifierConfig =
+                TestUtils.createVerificationContext("credentials/CMP_CA_Root.pem");
         final DataSignVerifier verifier = new DataSignVerifier(verifierConfig);
         final CmsDecryptor decryptor =
-                new CmsDecryptor(eeCredentials.getEndCertificate(),
-                        eeCredentials.getPrivateKey(), null);
-        final PrivateKey recoveredKey =
-                verifier.verifySignedKey(decryptor.decrypt(encryptedKey));
+                new CmsDecryptor(eeCredentials.getEndCertificate(), eeCredentials.getPrivateKey(), null);
+        final PrivateKey recoveredKey = verifier.verifySignedKey(decryptor.decrypt(encryptedKey));
         Assert.assertEquals(recoveredKey, kp.getPrivate());
     }
-
 }

@@ -17,39 +17,35 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
-import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
-
-public class TestCentralKeyGenerationWithKeyTransport
-        extends CkgOnlineEnrollmentTestcaseBase {
+public class TestCentralKeyGenerationWithKeyTransport extends CkgOnlineEnrollmentTestcaseBase {
 
     private CmsDecryptor keyTransportDecryptor;
 
     @Before
     public void setUp() throws Exception {
         final BaseCredentialService eeRsaCredentials =
-                new BaseCredentialService("credentials/CMP_EE_Keystore_RSA.p12",
-                        TestUtils.getPasswordAsCharArray());
+                new BaseCredentialService("credentials/CMP_EE_Keystore_RSA.p12", TestUtils.getPasswordAsCharArray());
         keyTransportDecryptor =
-                new CmsDecryptor(eeRsaCredentials.getEndCertificate(),
-                        eeRsaCredentials.getPrivateKey(), null);
-        initTestbed("http://localhost:6010/ckgtrans",
-                "EnrollmentConfigWithCKGTrans.yaml");
+                new CmsDecryptor(eeRsaCredentials.getEndCertificate(), eeRsaCredentials.getPrivateKey(), null);
+        initTestbed("http://localhost:6010/ckgtrans", "EnrollmentConfigWithCKGTrans.yaml");
     }
 
     @Test
     public void testCrWithKeyTransport() throws Exception {
-        executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
+        executeCrmfCertificateRequestWithoutKey(
+                PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP,
                 TestUtils.createSignatureBasedProtection(
-                        "credentials/CMP_EE_Keystore_RSA.p12",
-                        TestUtils.getPasswordAsCharArray()),
-                getEeCmpClient(), keyTransportDecryptor, verifier);
+                        "credentials/CMP_EE_Keystore_RSA.p12", TestUtils.getPasswordAsCharArray()),
+                getEeCmpClient(),
+                keyTransportDecryptor,
+                verifier);
     }
-
 }

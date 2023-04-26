@@ -17,39 +17,35 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
+import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
+import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.siemens.pki.lightweightcmpra.test.framework.BaseCredentialService;
-import com.siemens.pki.lightweightcmpra.test.framework.CmsDecryptor;
-import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
-
-public class TestCentralKeyGenerationWithKeyAgreement
-        extends CkgOnlineEnrollmentTestcaseBase {
+public class TestCentralKeyGenerationWithKeyAgreement extends CkgOnlineEnrollmentTestcaseBase {
 
     private CmsDecryptor keyAgreementDecryptor;
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6011/ckgagree",
-                "EnrollmentConfigWithCKGAgree.yaml");
+        initTestbed("http://localhost:6011/ckgagree", "EnrollmentConfigWithCKGAgree.yaml");
         final BaseCredentialService eeCredentials =
-                new BaseCredentialService("credentials/CMP_EE_Keystore.p12",
-                        TestUtils.getPasswordAsCharArray());
+                new BaseCredentialService("credentials/CMP_EE_Keystore.p12", TestUtils.getPasswordAsCharArray());
         keyAgreementDecryptor =
-                new CmsDecryptor(eeCredentials.getEndCertificate(),
-                        eeCredentials.getPrivateKey(), null);
+                new CmsDecryptor(eeCredentials.getEndCertificate(), eeCredentials.getPrivateKey(), null);
     }
 
     @Test
     public void testCrWithKeyAgreement() throws Exception {
-        executeCrmfCertificateRequestWithoutKey(PKIBody.TYPE_CERT_REQ,
+        executeCrmfCertificateRequestWithoutKey(
+                PKIBody.TYPE_CERT_REQ,
                 PKIBody.TYPE_CERT_REP,
                 TestUtils.createSignatureBasedProtection(
-                        "credentials/CMP_EE_Keystore.p12",
-                        TestUtils.getPasswordAsCharArray()),
+                        "credentials/CMP_EE_Keystore.p12", TestUtils.getPasswordAsCharArray()),
                 TestUtils.createCmpClient("http://localhost:6011/ckgagree"),
-                keyAgreementDecryptor, verifier);
+                keyAgreementDecryptor,
+                verifier);
     }
 }

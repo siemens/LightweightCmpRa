@@ -17,22 +17,19 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
+import com.siemens.pki.cmpracomponent.configuration.GetCaCertificatesHandler;
+import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.net.URI;
 import java.security.cert.X509Certificate;
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-
 import org.bouncycastle.asn1.cmp.CMPObjectIdentifiers;
 
-import com.siemens.pki.cmpracomponent.configuration.GetCaCertificatesHandler;
-import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
-
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class GetCaCertificatesHandlerImpl extends
-        SupportMessageHandlerInterfaceImpl implements GetCaCertificatesHandler {
+public class GetCaCertificatesHandlerImpl extends SupportMessageHandlerInterfaceImpl
+        implements GetCaCertificatesHandler {
 
     private List<X509Certificate> certificateList;
 
@@ -48,7 +45,6 @@ public class GetCaCertificatesHandlerImpl extends
             certificateList = CredentialLoader.loadCertificates(caCertificates);
         }
         return certificateList;
-
     }
 
     @XmlElement(required = true)

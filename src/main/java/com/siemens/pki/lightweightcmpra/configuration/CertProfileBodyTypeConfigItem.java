@@ -41,5 +41,4 @@ public class CertProfileBodyTypeConfigItem extends CertProfileConfigItem {
         }
         return this.bodyType == null || this.bodyType.equals(bodyType);
     }
-
 }

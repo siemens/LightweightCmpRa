@@ -18,6 +18,8 @@
 
 package com.siemens.pki.lightweightcmpra.downstream.offline;
 
+import com.siemens.pki.lightweightcmpra.configuration.OfflineFileServerConfig;
+import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,12 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.siemens.pki.lightweightcmpra.configuration.OfflineFileServerConfig;
-import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
 
 /**
  * a file system based downstream interface
@@ -39,11 +37,9 @@ import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
  */
 public class OfflineFileServer implements DownstreamInterface {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(OfflineFileServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OfflineFileServer.class);
 
-    static final SimpleDateFormat DATE_FORMATTER =
-            new SimpleDateFormat("yyMMddHHmmssZ");
+    static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyMMddHHmmssZ");
 
     private final File inputDirectory;
 
@@ -60,18 +56,15 @@ public class OfflineFileServer implements DownstreamInterface {
      * @throws IOException
      *             in case of error
      */
-    public OfflineFileServer(final OfflineFileServerConfig config,
-            final ExFunction messageHandler) throws IOException {
+    public OfflineFileServer(final OfflineFileServerConfig config, final ExFunction messageHandler) throws IOException {
         this.messageHandler = messageHandler;
         inputDirectory = new File(config.getInputDirectory());
         if (!inputDirectory.isDirectory() || !inputDirectory.canWrite()) {
-            throw new IOException(config.getInputDirectory()
-                    + " is not a writable directory");
+            throw new IOException(config.getInputDirectory() + " is not a writable directory");
         }
         outputDirectory = new File(config.getOutputDirectory());
         if (!outputDirectory.isDirectory() || !outputDirectory.canWrite()) {
-            throw new IOException(config.getOutputDirectory()
-                    + " is not a writable directory");
+            throw new IOException(config.getOutputDirectory() + " is not a writable directory");
         }
         final long pollInterval = config.getInputDirectoryPollcycle() * 1000L;
         final Timer pollTimer = new Timer(true);
@@ -83,9 +76,7 @@ public class OfflineFileServer implements DownstreamInterface {
             }
         };
 
-        pollTimer.schedule(task,
-                new Date(System.currentTimeMillis() + pollInterval),
-                pollInterval);
+        pollTimer.schedule(task, new Date(System.currentTimeMillis() + pollInterval), pollInterval);
     }
 
     /**
@@ -114,9 +105,8 @@ public class OfflineFileServer implements DownstreamInterface {
             }
             final File outFile;
             synchronized (DATE_FORMATTER) {
-                outFile = new File(outputDirectory,
-                        "REP_" + DATE_FORMATTER.format(new Date()) + "_"
-                                + aktFile.getName());
+                outFile =
+                        new File(outputDirectory, "REP_" + DATE_FORMATTER.format(new Date()) + "_" + aktFile.getName());
             }
             try (FileOutputStream outStream = new FileOutputStream(outFile)) {
                 outStream.write(response);

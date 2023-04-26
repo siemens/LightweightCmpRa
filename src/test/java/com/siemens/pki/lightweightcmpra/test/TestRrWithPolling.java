@@ -19,21 +19,19 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
-import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
-
 public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(TestRrWithPolling.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestRrWithPolling.class);
 
     /**
      * Revoking a certificate
@@ -42,30 +40,29 @@ public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
      */
     @Test
     public void testRrWithPolling() throws Exception {
-        final EnrollmentResult certificateToRevoke =
-                executeDelayedCertificateRequest(PKIBody.TYPE_CERT_REQ,
-                        PKIBody.TYPE_CERT_REP,
-                        getEeSignaturebasedProtectionProvider(),
-                        getEeCmpClient());
+        final EnrollmentResult certificateToRevoke = executeDelayedCertificateRequest(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                getEeSignaturebasedProtectionProvider(),
+                getEeCmpClient());
         final PKIMessage rr = PkiMessageGenerator.generateAndProtectMessage(
                 new HeaderProviderForTest(),
-                getEeSignaturebasedProtectionProvider(), PkiMessageGenerator
-                        .generateRrBody(certificateToRevoke.getCertificate()));
+                getEeSignaturebasedProtectionProvider(),
+                PkiMessageGenerator.generateRrBody(certificateToRevoke.getCertificate()));
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary string processing, if debug isn't enabled
             LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(rr));
         }
 
-        final PKIMessage rrResponse = DelayedDeliveryTestcaseBase
-                .executeRequestWithPolling(PKIBody.TYPE_ERROR,
-                        getEeSignaturebasedProtectionProvider(),
-                        getEeCmpClient(), rr);
+        final PKIMessage rrResponse = DelayedDeliveryTestcaseBase.executeRequestWithPolling(
+                PKIBody.TYPE_ERROR, getEeSignaturebasedProtectionProvider(), getEeCmpClient(), rr);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(rrResponse));
         }
-        assertEquals("message type", PKIBody.TYPE_REVOCATION_REP,
+        assertEquals(
+                "message type",
+                PKIBody.TYPE_REVOCATION_REP,
                 rrResponse.getBody().getType());
-
     }
 }

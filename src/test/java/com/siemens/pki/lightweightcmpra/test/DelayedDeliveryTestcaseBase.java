@@ -19,9 +19,12 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
 import java.io.File;
 import java.util.function.Function;
-
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
 import org.bouncycastle.asn1.cmp.CertResponse;
@@ -33,15 +36,9 @@ import org.bouncycastle.asn1.cmp.PollRepContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
-
 public class DelayedDeliveryTestcaseBase {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(DelayedDeliveryTestcaseBase.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DelayedDeliveryTestcaseBase.class);
 
     public static boolean deleteDirectory(final File directoryToBeDeleted) {
         final File[] allContents = directoryToBeDeleted.listFiles();
@@ -57,63 +54,57 @@ public class DelayedDeliveryTestcaseBase {
             final int expectedWaitingResponseMessageType,
             final ProtectionProvider protectionProvider,
             final Function<PKIMessage, PKIMessage> cmpClient,
-            final PKIMessage request) throws Exception, InterruptedException {
+            final PKIMessage request)
+            throws Exception, InterruptedException {
         PKIMessage response = cmpClient.apply(request);
 
         if (LOGGER.isDebugEnabled()) {
             // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
-            LOGGER.debug("test client got:\n"
-                    + MessageDumper.dumpPkiMessage(response));
+            LOGGER.debug("test client got:\n" + MessageDumper.dumpPkiMessage(response));
         }
         final int responseType = response.getBody().getType();
-        assertEquals("message type", expectedWaitingResponseMessageType,
-                responseType);
+        assertEquals("message type", expectedWaitingResponseMessageType, responseType);
 
         boolean pollingTriggered = false;
         switch (responseType) {
-        case PKIBody.TYPE_INIT_REP:
-        case PKIBody.TYPE_CERT_REP:
-        case PKIBody.TYPE_KEY_UPDATE_REP: {
-            final CertResponse certResponseInBody =
-                    ((CertRepMessage) response.getBody().getContent())
-                            .getResponse()[0];
-            if (certResponseInBody.getStatus() != null && certResponseInBody
-                    .getStatus().getStatus().intValue() == PKIStatus.WAITING) {
-                pollingTriggered = true;
+            case PKIBody.TYPE_INIT_REP:
+            case PKIBody.TYPE_CERT_REP:
+            case PKIBody.TYPE_KEY_UPDATE_REP: {
+                final CertResponse certResponseInBody =
+                        ((CertRepMessage) response.getBody().getContent()).getResponse()[0];
+                if (certResponseInBody.getStatus() != null
+                        && certResponseInBody.getStatus().getStatus().intValue() == PKIStatus.WAITING) {
+                    pollingTriggered = true;
+                }
+                break;
             }
-            break;
-        }
-        case PKIBody.TYPE_ERROR: {
-            final ErrorMsgContent errorContent =
-                    (ErrorMsgContent) response.getBody().getContent();
-            if (errorContent.getPKIStatusInfo().getStatus()
-                    .intValue() == PKIStatus.WAITING) {
-                pollingTriggered = true;
+            case PKIBody.TYPE_ERROR: {
+                final ErrorMsgContent errorContent =
+                        (ErrorMsgContent) response.getBody().getContent();
+                if (errorContent.getPKIStatusInfo().getStatus().intValue() == PKIStatus.WAITING) {
+                    pollingTriggered = true;
+                }
+                break;
             }
-            break;
-        }
-        default:
-            ;
+            default:
+                ;
         }
         if (pollingTriggered) {
             // delayed delivery triggered, start polling
-            for (;;) {
-                final PKIMessage pollReq =
-                        PkiMessageGenerator.generateAndProtectMessage(
-                                new HeaderProviderForTest(response.getHeader()),
-                                protectionProvider,
-                                PkiMessageGenerator.generatePollReq());
+            for (; ; ) {
+                final PKIMessage pollReq = PkiMessageGenerator.generateAndProtectMessage(
+                        new HeaderProviderForTest(response.getHeader()),
+                        protectionProvider,
+                        PkiMessageGenerator.generatePollReq());
                 response = cmpClient.apply(pollReq);
                 if (response.getBody().getType() != PKIBody.TYPE_POLL_REP) {
                     break;
                 }
                 final ASN1Integer checkAfter =
-                        ((PollRepContent) response.getBody().getContent())
-                                .getCheckAfter(0);
+                        ((PollRepContent) response.getBody().getContent()).getCheckAfter(0);
                 Thread.sleep(1000L * checkAfter.getValue().longValue());
             }
         }
         return response;
     }
-
 }

@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpra.configuration;
 
+import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
+import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.net.URI;
 import java.security.cert.PKIXRevocationChecker;
 import java.security.cert.PKIXRevocationChecker.Option;
@@ -25,12 +27,8 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-
-import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
-import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class VerificationContextImpl implements VerificationContext {
@@ -51,8 +49,7 @@ public class VerificationContextImpl implements VerificationContext {
     @Override
     public Collection<X509Certificate> getAdditionalCerts() {
         if (AdditionalCertsAsCollection == null) {
-            AdditionalCertsAsCollection =
-                    CredentialLoader.loadCertificates(AdditionalCerts);
+            AdditionalCertsAsCollection = CredentialLoader.loadCertificates(AdditionalCerts);
         }
         return AdditionalCertsAsCollection;
     }
@@ -83,8 +80,7 @@ public class VerificationContextImpl implements VerificationContext {
     @Override
     public Collection<X509Certificate> getTrustedCertificates() {
         if (TrustedCertificatesAsCollection == null) {
-            TrustedCertificatesAsCollection =
-                    CredentialLoader.loadCertificates(TrustedCertificates);
+            TrustedCertificatesAsCollection = CredentialLoader.loadCertificates(TrustedCertificates);
         }
         return TrustedCertificatesAsCollection;
     }
@@ -131,5 +127,4 @@ public class VerificationContextImpl implements VerificationContext {
     public void setTrustedCertificates(final URI[] trustedCertificates) {
         TrustedCertificates = trustedCertificates;
     }
-
 }

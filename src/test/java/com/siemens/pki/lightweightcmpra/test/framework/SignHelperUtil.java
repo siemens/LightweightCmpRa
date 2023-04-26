@@ -18,7 +18,6 @@
 package com.siemens.pki.lightweightcmpra.test.framework;
 
 import java.security.Key;
-
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
@@ -49,11 +48,9 @@ public class SignHelperUtil {
      */
     public static AlgorithmIdentifier getAlgOID(final String algorithm) {
         if ("RSA".equalsIgnoreCase(algorithm)) {
-            return new AlgorithmIdentifier(
-                    PKCSObjectIdentifiers.sha256WithRSAEncryption);
+            return new AlgorithmIdentifier(PKCSObjectIdentifiers.sha256WithRSAEncryption);
         } else if (algorithm.startsWith("EC")) {
-            return new AlgorithmIdentifier(
-                    X9ObjectIdentifiers.ecdsa_with_SHA256);
+            return new AlgorithmIdentifier(X9ObjectIdentifiers.ecdsa_with_SHA256);
         } else if ("Ed448".equalsIgnoreCase(algorithm)) {
             return new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed448);
         } else if ("Ed25519".equalsIgnoreCase(algorithm)) {
@@ -62,16 +59,12 @@ public class SignHelperUtil {
         return null;
     }
 
-    public static AlgorithmIdentifier getSigningAlgIdFromKey(final Key key)
-            throws Exception {
+    public static AlgorithmIdentifier getSigningAlgIdFromKey(final Key key) throws Exception {
         return getSigningAlgIdFromKeyAlg(key.getAlgorithm());
-
     }
 
-    public static AlgorithmIdentifier getSigningAlgIdFromKeyAlg(
-            final String keyAlgorithm) throws Exception {
-        return DEFAULT_SIGNATURE_ALGORITHM_IDENTIFIER_FINDER
-                .find(getSigningAlgNameFromKeyAlg(keyAlgorithm));
+    public static AlgorithmIdentifier getSigningAlgIdFromKeyAlg(final String keyAlgorithm) throws Exception {
+        return DEFAULT_SIGNATURE_ALGORITHM_IDENTIFIER_FINDER.find(getSigningAlgNameFromKeyAlg(keyAlgorithm));
     }
 
     /**
@@ -94,8 +87,7 @@ public class SignHelperUtil {
      * @return standard java name for signature algorithm or <code>null</code>
      *         if key uses algorithms beside RSA, EC or EdDSA
      */
-    public static String getSigningAlgNameFromKeyAlg(
-            final String keyAlgorithm) {
+    public static String getSigningAlgNameFromKeyAlg(final String keyAlgorithm) {
         if (keyAlgorithm.startsWith("Ed")) {
             // EdDSA key
             return keyAlgorithm;
@@ -106,5 +98,4 @@ public class SignHelperUtil {
         }
         return "SHA256with" + keyAlgorithm;
     }
-
 }

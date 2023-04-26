@@ -17,22 +17,19 @@
  */
 package com.siemens.pki.lightweightcmpra.upstream.online;
 
+import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterface;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterface;
 
 /**
  * Implementation of a HTTP client.
  */
 public class HttpSession implements UpstreamInterface {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(HttpSession.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpSession.class);
 
     /**
      * send a CMP message to the already connected server and return received
@@ -50,39 +47,28 @@ public class HttpSession implements UpstreamInterface {
      *             if something went wrong in message encoding or CMP message
      *             transfer
      */
-    protected static byte[] sendReceivePkiMessageIntern(final byte[] message,
-            final HttpURLConnection httpConnection, final int timeoutInSeconds)
-                    throws Exception {
+    protected static byte[] sendReceivePkiMessageIntern(
+            final byte[] message, final HttpURLConnection httpConnection, final int timeoutInSeconds) throws Exception {
         httpConnection.setDoInput(true);
         httpConnection.setDoOutput(true);
-        httpConnection.setConnectTimeout(
-                timeoutInSeconds > 0 ? timeoutInSeconds * 1000
-                        : Integer.MAX_VALUE);
-        httpConnection
-        .setReadTimeout(timeoutInSeconds > 0 ? timeoutInSeconds * 1000
-                : Integer.MAX_VALUE);
+        httpConnection.setConnectTimeout(timeoutInSeconds > 0 ? timeoutInSeconds * 1000 : Integer.MAX_VALUE);
+        httpConnection.setReadTimeout(timeoutInSeconds > 0 ? timeoutInSeconds * 1000 : Integer.MAX_VALUE);
         httpConnection.setRequestMethod("POST");
-        httpConnection.setRequestProperty("Content-type",
-                "application/pkixcmp");
+        httpConnection.setRequestProperty("Content-type", "application/pkixcmp");
         httpConnection.connect();
-        try (final OutputStream outputStream =
-                httpConnection.getOutputStream()) {
-            LOGGER.debug(
-                    "send " + message.length + " bytes to " + httpConnection);
+        try (final OutputStream outputStream = httpConnection.getOutputStream()) {
+            LOGGER.debug("send " + message.length + " bytes to " + httpConnection);
             outputStream.write(message);
         }
         final int lastResponseCode = httpConnection.getResponseCode();
 
         if (lastResponseCode == HttpURLConnection.HTTP_OK) {
-            final byte[] response =
-                    httpConnection.getInputStream().readAllBytes();
-            LOGGER.debug(
-                    "got " + response.length + " bytes from " + httpConnection);
+            final byte[] response = httpConnection.getInputStream().readAllBytes();
+            LOGGER.debug("got " + response.length + " bytes from " + httpConnection);
             return response;
         }
-        final String errorString =
-                "got response '" + httpConnection.getResponseMessage() + "("
-                        + lastResponseCode + ")' from " + httpConnection;
+        final String errorString = "got response '" + httpConnection.getResponseMessage() + "(" + lastResponseCode
+                + ")' from " + httpConnection;
         LOGGER.error(errorString + ", closing client");
         throw new Exception(errorString);
     }
@@ -99,8 +85,7 @@ public class HttpSession implements UpstreamInterface {
      * @throws Exception
      *             in case of error
      */
-    public HttpSession(final URL remoteUrl, final int timeoutInSeconds)
-            throws Exception {
+    public HttpSession(final URL remoteUrl, final int timeoutInSeconds) throws Exception {
         this.remoteUrl = remoteUrl;
         this.timeoutInSeconds = timeoutInSeconds;
     }
@@ -111,18 +96,15 @@ public class HttpSession implements UpstreamInterface {
     @Override
     public byte[] apply(final byte[] message, final String certProfile) {
         try {
-            final HttpURLConnection httpConnection =
-                    (HttpURLConnection) remoteUrl.openConnection();
-            return sendReceivePkiMessageIntern(message, httpConnection,
-                    timeoutInSeconds);
+            final HttpURLConnection httpConnection = (HttpURLConnection) remoteUrl.openConnection();
+            return sendReceivePkiMessageIntern(message, httpConnection, timeoutInSeconds);
         } catch (final Exception e) {
             throw new RuntimeException("client connection to " + remoteUrl, e);
         }
     }
 
     @Override
-    public void setDelayedResponseHandler(
-            final AsyncResponseHandler asyncResponseHandler) {
+    public void setDelayedResponseHandler(final AsyncResponseHandler asyncResponseHandler) {
         // no async response expected
     }
 }

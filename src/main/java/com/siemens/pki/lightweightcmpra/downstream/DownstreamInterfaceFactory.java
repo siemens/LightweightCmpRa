@@ -17,11 +17,6 @@
  */
 package com.siemens.pki.lightweightcmpra.downstream;
 
-import java.net.URI;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.siemens.pki.lightweightcmpra.configuration.AbstractDownstreamInterfaceConfig;
 import com.siemens.pki.lightweightcmpra.configuration.CoapServerConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpServerConfig;
@@ -30,11 +25,13 @@ import com.siemens.pki.lightweightcmpra.configuration.OfflineFileServerConfig;
 import com.siemens.pki.lightweightcmpra.downstream.offline.OfflineFileServer;
 import com.siemens.pki.lightweightcmpra.downstream.online.CmpCoapServer;
 import com.siemens.pki.lightweightcmpra.downstream.online.CmpHttpServer;
+import java.net.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DownstreamInterfaceFactory {
 
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(DownstreamInterfaceFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DownstreamInterfaceFactory.class);
 
     /**
      * create an {@link DownstreamInterface} instance according to the given
@@ -51,41 +48,28 @@ public class DownstreamInterfaceFactory {
             final DownstreamInterface.ExFunction requestHandler) {
         try {
             if (configuration instanceof OfflineFileServerConfig) {
-                return new OfflineFileServer(
-                        (OfflineFileServerConfig) configuration,
-                        requestHandler);
+                return new OfflineFileServer((OfflineFileServerConfig) configuration, requestHandler);
             }
             if (configuration instanceof HttpServerConfig) {
-                final HttpServerConfig httpConfig =
-                        (HttpServerConfig) configuration;
+                final HttpServerConfig httpConfig = (HttpServerConfig) configuration;
                 final URI ServingUri = httpConfig.getServingUri();
                 final String scheme = ServingUri.getScheme();
                 if ("http".equalsIgnoreCase(scheme)) {
-                    return new CmpHttpServer(ServingUri.toURL(),
-                            requestHandler);
+                    return new CmpHttpServer(ServingUri.toURL(), requestHandler);
                 }
-                if ("https".equalsIgnoreCase(scheme)
-                        && httpConfig instanceof HttpsServerConfig) {
-                    return new CmpHttpServer(ServingUri.toURL(), requestHandler,
-                            (HttpsServerConfig) httpConfig);
+                if ("https".equalsIgnoreCase(scheme) && httpConfig instanceof HttpsServerConfig) {
+                    return new CmpHttpServer(ServingUri.toURL(), requestHandler, (HttpsServerConfig) httpConfig);
                 }
             }
             if (configuration instanceof CoapServerConfig) {
-                return new CmpCoapServer((CoapServerConfig) configuration,
-                        requestHandler);
+                return new CmpCoapServer((CoapServerConfig) configuration, requestHandler);
             }
-            LOGGER.error(
-                    "error creating downstream interface from given configuration");
+            LOGGER.error("error creating downstream interface from given configuration");
         } catch (final Exception e) {
-            LOGGER.error(
-                    "error creating downstream interface from given configuration",
-                    e);
+            LOGGER.error("error creating downstream interface from given configuration", e);
         }
         return null;
     }
 
-    private DownstreamInterfaceFactory() {
-
-    }
-
+    private DownstreamInterfaceFactory() {}
 }

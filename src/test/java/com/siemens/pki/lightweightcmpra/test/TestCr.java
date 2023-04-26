@@ -25,8 +25,7 @@ public class TestCr extends OnlineEnrollmentTestcaseBase {
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6000/onlinelra",
-                "EnrollmentConfigWithHttpAndSignature.yaml");
+        initTestbed("http://localhost:6000/onlinelra", "EnrollmentConfigWithHttpAndSignature.yaml");
     }
 
     /**
@@ -36,8 +35,10 @@ public class TestCr extends OnlineEnrollmentTestcaseBase {
      */
     @Test
     public void testCr() throws Exception {
-        executeCrmfCertificateRequest(PKIBody.TYPE_CERT_REQ,
-                PKIBody.TYPE_CERT_REP, getEeSignaturebasedProtectionProvider(),
+        executeCrmfCertificateRequest(
+                PKIBody.TYPE_CERT_REQ,
+                PKIBody.TYPE_CERT_REP,
+                getEeSignaturebasedProtectionProvider(),
                 getEeCmpClient());
     }
 }

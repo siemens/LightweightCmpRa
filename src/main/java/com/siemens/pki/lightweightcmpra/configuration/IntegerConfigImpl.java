@@ -18,14 +18,12 @@
 package com.siemens.pki.lightweightcmpra.configuration;
 
 import java.util.function.IntSupplier;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class IntegerConfigImpl extends CertProfileBodyTypeConfigItem
-        implements IntSupplier {
+public class IntegerConfigImpl extends CertProfileBodyTypeConfigItem implements IntSupplier {
 
     @XmlElement(required = true)
     private Integer value;
@@ -38,5 +36,4 @@ public class IntegerConfigImpl extends CertProfileBodyTypeConfigItem
     public void setValue(final Integer value) {
         this.value = value;
     }
-
 }

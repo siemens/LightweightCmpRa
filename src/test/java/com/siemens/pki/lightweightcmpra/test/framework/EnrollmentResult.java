@@ -18,15 +18,13 @@
 package com.siemens.pki.lightweightcmpra.test.framework;
 
 import java.security.PrivateKey;
-
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 
 public class EnrollmentResult {
     CMPCertificate certificate;
     PrivateKey privateKey;
 
-    public EnrollmentResult(final CMPCertificate certificate,
-            final PrivateKey privateKey) {
+    public EnrollmentResult(final CMPCertificate certificate, final PrivateKey privateKey) {
         this.certificate = certificate;
         this.privateKey = privateKey;
     }
@@ -38,5 +36,4 @@ public class EnrollmentResult {
     public CMPCertificate getCertificate() {
         return certificate;
     }
-
 }
