@@ -24,6 +24,7 @@ import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
 import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.io.File;
 import java.security.KeyPair;
 import java.util.function.Function;
@@ -105,7 +106,7 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
 
     @After
     public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/Downstream"));
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/Upstream"));
+        TestUtils.deleteDirectory(new File("./target/CmpTest/Downstream"));
+        TestUtils.deleteDirectory(new File("./target/CmpTest/Upstream"));
     }
 }

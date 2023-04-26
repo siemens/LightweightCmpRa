@@ -22,7 +22,7 @@ import com.siemens.pki.lightweightcmpra.configuration.CoapServerConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpServerConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpsServerConfig;
 import com.siemens.pki.lightweightcmpra.configuration.OfflineFileServerConfig;
-import com.siemens.pki.lightweightcmpra.downstream.offline.OfflineFileServer;
+import com.siemens.pki.lightweightcmpra.downstream.offline.CmpOfflineFileServer;
 import com.siemens.pki.lightweightcmpra.downstream.online.CmpCoapServer;
 import com.siemens.pki.lightweightcmpra.downstream.online.CmpHttpServer;
 import java.net.URI;
@@ -48,17 +48,17 @@ public class DownstreamInterfaceFactory {
             final DownstreamInterface.ExFunction requestHandler) {
         try {
             if (configuration instanceof OfflineFileServerConfig) {
-                return new OfflineFileServer((OfflineFileServerConfig) configuration, requestHandler);
+                return new CmpOfflineFileServer((OfflineFileServerConfig) configuration, requestHandler);
             }
             if (configuration instanceof HttpServerConfig) {
                 final HttpServerConfig httpConfig = (HttpServerConfig) configuration;
-                final URI ServingUri = httpConfig.getServingUri();
-                final String scheme = ServingUri.getScheme();
+                final URI UpstreamURI = httpConfig.getUpstreamURI();
+                final String scheme = UpstreamURI.getScheme();
                 if ("http".equalsIgnoreCase(scheme)) {
-                    return new CmpHttpServer(ServingUri.toURL(), requestHandler);
+                    return new CmpHttpServer(UpstreamURI.toURL(), requestHandler);
                 }
                 if ("https".equalsIgnoreCase(scheme) && httpConfig instanceof HttpsServerConfig) {
-                    return new CmpHttpServer(ServingUri.toURL(), requestHandler, (HttpsServerConfig) httpConfig);
+                    return new CmpHttpServer(UpstreamURI.toURL(), requestHandler, (HttpsServerConfig) httpConfig);
                 }
             }
             if (configuration instanceof CoapServerConfig) {

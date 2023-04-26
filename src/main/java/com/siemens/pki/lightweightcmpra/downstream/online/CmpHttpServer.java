@@ -19,10 +19,22 @@ package com.siemens.pki.lightweightcmpra.downstream.online;
 
 import com.siemens.pki.lightweightcmpra.configuration.HttpsServerConfig;
 import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
+import com.siemens.pki.lightweightcmpra.util.SslContextFactory;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpsConfigurator;
+import com.sun.net.httpserver.HttpsParameters;
+import com.sun.net.httpserver.HttpsServer;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +43,15 @@ import org.slf4j.LoggerFactory;
  * a HTTP/HTTPS server needed for CMP downstream interfaces
  *
  */
-public class CmpHttpServer extends BaseHttpServer implements DownstreamInterface {
+public class CmpHttpServer implements HttpHandler, DownstreamInterface {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(CmpHttpServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmpHttpServer.class);
+
+    private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
     private final ExFunction messageHandler;
+
+    protected final HttpServer httpServer;
 
     /**
      *
@@ -47,15 +63,48 @@ public class CmpHttpServer extends BaseHttpServer implements DownstreamInterface
      *             in case of error
      */
     public CmpHttpServer(final URL servingUrl, final DownstreamInterface.ExFunction messageHandler) throws IOException {
-        super(servingUrl);
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary string processing, if debug isn't enabled
+            LOGGER.debug("create HTTP server for " + servingUrl);
+        }
         this.messageHandler = messageHandler;
+        final int servingPort = servingUrl.getPort();
+        final int port = servingPort > 0 ? servingPort : servingUrl.getDefaultPort();
+        httpServer = HttpServer.create(new InetSocketAddress(port), 1);
+        startHttpServer(servingUrl);
     }
 
     public CmpHttpServer(final URL servingUrl, final ExFunction messageHandler, final HttpsServerConfig config)
             throws Exception {
-        super(servingUrl, config);
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary string processing, if debug isn't enabled
+            LOGGER.debug("create HTTPS server for " + servingUrl);
+        }
 
         this.messageHandler = messageHandler;
+
+        final SSLContext sslContext = SslContextFactory.createSslContext(
+                config.getServerTrust(),
+                config.getServerCredentials().getKeyStore(),
+                config.getServerCredentials().getPassword());
+
+        final HttpsServer httpsServer = HttpsServer.create(
+                new InetSocketAddress(servingUrl.getPort() > 0 ? servingUrl.getPort() : servingUrl.getDefaultPort()),
+                1);
+        httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
+            @Override
+            public void configure(final HttpsParameters params) {
+                final SSLContext c = getSSLContext();
+                final SSLParameters sslparams = c.getDefaultSSLParameters();
+                sslparams.setNeedClientAuth(config.isClientAuthenticationNeeded());
+                final SSLEngine engine = c.createSSLEngine();
+                params.setCipherSuites(engine.getEnabledCipherSuites());
+                params.setProtocols(engine.getEnabledProtocols());
+                params.setSSLParameters(sslparams);
+            }
+        });
+        httpServer = httpsServer;
+        startHttpServer(servingUrl);
     }
 
     @Override
@@ -84,5 +133,18 @@ public class CmpHttpServer extends BaseHttpServer implements DownstreamInterface
         } finally {
             exchange.getResponseBody().close();
         }
+    }
+
+    private void startHttpServer(final URL servingUrl) {
+        httpServer.createContext(servingUrl.getPath(), this);
+        httpServer.setExecutor(THREAD_POOL);
+        httpServer.start();
+    }
+
+    /**
+     * stop the server
+     */
+    public void stop() {
+        httpServer.stop(1);
     }
 }

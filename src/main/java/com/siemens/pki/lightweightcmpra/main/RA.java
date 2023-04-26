@@ -108,7 +108,8 @@ public class RA {
                 tg,
                 () -> {
                     try {
-                        final ConfigurationImpl configuration = YamlConfigLoader.loadConfig(actConfigFile);
+                        final ConfigurationImpl configuration =
+                                YamlConfigLoader.loadConfig(actConfigFile, ConfigurationImpl.class);
                         final DeferredSupplier<CmpRaInterface> raHolder = new DeferredSupplier<>();
                         final Map<CertProfileBodyTypeTupel, UpstreamInterface> upstreamInterfaceMap = new HashMap<>();
                         final UpstreamExchange upstreamExchange = (request, certProfile, bodyTypeOfFirstRequest) -> {

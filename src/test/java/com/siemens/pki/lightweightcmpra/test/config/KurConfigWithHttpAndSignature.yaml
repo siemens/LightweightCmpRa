@@ -2,11 +2,11 @@
 
 UpstreamInterface:
   - HttpClient:
-      ServingUri:  "http://localhost:7000/ca"
+      UpstreamURI:  "http://localhost:7000/ca"
 
 DownstreamInterface:
   HttpServer:
-    ServingUri: "http://localhost:6007/kur"
+    UpstreamURI: "http://localhost:6007/kur"
 
 UpstreamConfiguration:
   - VerificationContext:

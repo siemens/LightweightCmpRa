@@ -36,10 +36,10 @@ import org.slf4j.LoggerFactory;
  * a file system based upstream client
  *
  */
-public class FileOfflineClient implements UpstreamInterface {
+public class CmpFileOfflineClient implements UpstreamInterface {
 
     static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyMMddHHmmssZ");
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileOfflineClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmpFileOfflineClient.class);
 
     private final File inputDirectory;
 
@@ -54,7 +54,7 @@ public class FileOfflineClient implements UpstreamInterface {
      * @throws IOException
      *             in case of error
      */
-    public FileOfflineClient(final OfflineFileClientConfig config) throws IOException {
+    public CmpFileOfflineClient(final OfflineFileClientConfig config) throws IOException {
 
         inputDirectory = new File(config.getInputDirectory());
         if (!inputDirectory.isDirectory() || !inputDirectory.canWrite()) {

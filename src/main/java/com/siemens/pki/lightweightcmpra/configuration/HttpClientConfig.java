@@ -25,11 +25,11 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class HttpClientConfig extends AbstractUpstreamInterfaceConfig {
 
-    private URI ServingUri;
+    private URI UpstreamURI;
     private int timeoutinseconds = 30;
 
-    public URI getServingUri() {
-        return ServingUri;
+    public URI getUpstreamURI() {
+        return UpstreamURI;
     }
 
     public int getTimeout() {
@@ -37,8 +37,8 @@ public class HttpClientConfig extends AbstractUpstreamInterfaceConfig {
     }
 
     @XmlElement(required = true)
-    public void setServingUri(final URI ServingUri) {
-        this.ServingUri = ServingUri;
+    public void setUpstreamURI(final URI UpstreamURI) {
+        this.UpstreamURI = UpstreamURI;
     }
 
     @XmlElement

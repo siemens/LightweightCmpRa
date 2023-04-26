@@ -36,7 +36,7 @@ public class CertProfileBodyTypeConfigItem extends CertProfileConfigItem {
     }
 
     boolean matchesScope(final String certProfile, final int bodyType) {
-        if (!super.matchesScope(certProfile)) {
+        if (!super.matchesCertProfile(certProfile)) {
             return false;
         }
         return this.bodyType == null || this.bodyType.equals(bodyType);

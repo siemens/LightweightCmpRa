@@ -1,0 +1,20 @@
+---
+
+MessageInterface:
+  - HttpClient:
+      UpstreamURI:  "http://localhost:6004/supportlra"
+
+MessageConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_EE_Keystore_EdDSA.p12"
+        Password: "Password"
+
+ClientContext:
+  - Recipient: "CN=recip"
+    
+
+    

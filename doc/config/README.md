@@ -1,9 +1,10 @@
-# Configuration of the Lightweight CMP RA
+# General configuration concepts
 
-The **Lightweight CMP RA** behavior is specified in configuration files.
-The path name of each configuration file is given as a command line parameter.
-On startup all configuration files are loaded and parsed. URIs given in
+The **Lightweight CMP RA** and also partially the **CMP Client CLI application** behavior is specified in configuration files.
+On startup the configuration files are loaded and parsed. URIs given in
 configuration files are loaded once at first use. 
+
+## Configuration file syntax
 
 A configuration file must be written in [YAML](https://yaml.org/spec/).
 Embedding [JSON](http://json-schema.org/) in YAML is also supported.
@@ -56,6 +57,42 @@ or
 }
 ```
 
+**Keys and string-like values of configuration objects are case insensitive, while
+Uniform Resource Identifiers (URI), directory names, shared secrets, and passwords
+are case sensitive.**
+
+The format and syntax of an URI is specified in [RFC2396](https://www.ietf.org/rfc/rfc2396.txt).
+
+
+## Matching array entries
+
+Depending on a currently processed **certProfile** and maybe **bodyType** different parts of a configuration can be matched and used:
+
+Most top level array entries may have a **certProfile** included.
+The value of a **certProfile** is a string.
+An absent **certProfile** matches CMP messages with any (or absent) `certProfile` header field.
+
+Most top level array entries may have a **bodyType** included.
+The value of the **bodyType** is
+a number (0..26) or an equivalent string (`"ir"`..`"pollRep"`),
+while for `UpstreamInterface` only the numbers 0, 2, 7, 11, and 21 or the
+equivalent strings `"ir"`, `"cr"`, `"kur"`, `"rr"`, and `"genm"` are allowed.
+An absent **bodyType** matches CMP messages of any type.
+
+While processing a CMP message (which may be a request or response, including
+an error message), its bodyType (see [RFC4210](https://datatracker.ietf.org/doc/html/rfc4210),
+section PKI Message Body) and any certProfile optionally given in the message header (see
+[CMP updates](https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cmp-updates),
+section certProfile)
+are matched against the array entries until a fully matching entry is found.
+This entry is then used to control the further processing of this message.
+
+# Configuration of the Lightweight CMP RA CLI application
+
+The **Lightweight CMP RA** behavior is specified in configuration files.
+The path names of all **Lightweight CMP RA** configuration files are given as a command line parameter.
+On startup these configuration files are loaded and parses as already described in 
+[Configuration file syntax](#configuration-file-syntax).
 
 Each configuration file must contain a configuration for exactly one RA.
 In productive use, configuration files should be integrity protected
@@ -64,20 +101,12 @@ because they contain critical data such as trust anchors.
 Example configuration files can be found in the
 [Test Configuration](/src/test/java/com/siemens/pki/lightweightcmpra/test/config).
 
-**Keys and string-like values of configuration objects are case insensitive, while
-Uniform Resource Identifiers (URI), directory names, shared secrets, and passwords
-are case sensitive.**
-
-The format and syntax of an URI is specified in
-[RFC2396](https://www.ietf.org/rfc/rfc2396.txt).
-
-
 ## Top-level Structure
 
 The **Top-level Structure** determines the overall behavior of an RA instance.
 It may contain declarations of the object types listed below in any order:
 
-| mandatory/optional| object type |certProfile|bodyType
+| mandatory/optional| object type |has certProfile|has bodyType|
 |-------------------------|:------------|:---|:---|
 | mandatory                                              | [`DownstreamInterface` object](#the-downstreaminterface-object)           |   |   |
 | mandatory if messages need to be sent upstream         | [`UpstreamInterface` object](#the-upstreaminterface-object)               | x | x |
@@ -95,30 +124,6 @@ It may contain declarations of the object types listed below in any order:
 All objects except for `DownstreamInterface` have array values.
 If an object type is not mandatory,
 an empty array may given or the whole key may be absent.
-
-As indicated in the above table, each array entry (for objects other than
-`DownstreamInterface`) may have a **certProfile** included.
-The value of a **certProfile** is a string.
-An absent **certProfile** matches
-CMP messages with any (or absent) `certProfile` header field.
-
-As indicated in the above table, each array entry for objects other than
-`DownstreamInterface` and `SupportMessageHandlerInterface`
-may have a **bodyType** included.
-The value of the **bodyType** is
-a number (0..26) or an equivalent string (`"ir"`..`"pollRep"`),
-while for `UpstreamInterface` only the numbers 0, 2, 7, 11, and 21 or the
-equivalent strings `"ir"`, `"cr"`, `"kur"`, `"rr"`, and `"genm"` are allowed.
-An absent **bodyType** matches CMP messages of any type.
-
-While processing a CMP message (which may be a request or response, including
-an error message), its bodyType (see
-[RFC4210](https://datatracker.ietf.org/doc/html/rfc4210),
-section PKI Message Body) and any certProfile optionally given in the message header (see
-[CMP updates](https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cmp-updates),
-section certProfile)
-are matched against the array entries until a fully matching entry is found.
-This entry is then used to control the further processing of this message.
 
 Note: Authorization of clients to request certificate enrollment
 can be checked via the `InventoryInterface`.
@@ -140,6 +145,7 @@ section Root CA Certificate Update, Certificate Request Template, and
 CRL Update Retrieval depending on the specific handler are used for matching.
 If under some conditions such array is not mandatory, the whole key might be absent or the array might be empty.
 
+
 ## The `DownstreamInterface` object
 
 The **`DownstreamInterface` object** describes the transport layer
@@ -154,6 +160,7 @@ It must contain exactly one of the objects described below:
 | [`CoapServer` object](#the-coapserver-object) |
 | [`OfflineFileServer` object](#the-offlinefileserver-object) |
 
+
 ### The `HttpServer` object
 
 The **`HttpServer` object** describes the instantiation
@@ -165,9 +172,10 @@ It must contain the key/value pair described below:
 
 | mandatory/optional|default | key | value type| value description|
 |-|-|-|-|-|
-| mandatory|| ServingUri | URI | the HTTP path to be served |
+| mandatory|| UpstreamURI | URI | the HTTP path to be served |
 
-The hostname or IP part of the **ServingUri** will be ignored.
+The hostname or IP part of the **UpstreamURI** will be ignored.
+
 
 ### The `HttpsServer` object
 
@@ -180,12 +188,13 @@ It must contain the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-|mandatory||ServingUri|URI|the HTTPS path to be served|
+|mandatory||UpstreamURI|URI|the HTTPS path to be served|
 |optional|accept all|serverTrust|[`VerificationContext`](#the-verificationcontext-object)| TLS server trust|
 |mandatory||serverCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS server credentials|
 
-The hostname or IP part of the **ServingUri** will be ignored.
+The hostname or IP part of the **UpstreamURI** will be ignored.
 The serverTrust and serverCredentials describe the TLS server configuration.
+
 
 ### The `CoapServer` object
 
@@ -199,6 +208,7 @@ It must contain the key/value pair described below:
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 | mandatory| |ServerPath | string | the CoAP path to be served |
+
 
 ### The `OfflineFileServer` object
 
@@ -229,14 +239,9 @@ As mentioned before for na outgoing message always the first matching array
 entry is used. 
 
 
-The value array contains
-
-| requested cardinality | object type |
-|-------------------------|-------------|
-|0..n| [`HttpClient` object](#the-httpclient-object) |
-|0..n| [`HttpsClient` object](#the-httpsclient-object) |
-|0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
-
+The value array contains zero or more [`HttpClient` object](#the-httpclient-object), [`HttpsClient` object](#the-httpsclient-object),
+[`CoapClient` object](#the-coapclient-object) or [`OfflineFileClient` object](#the-offlinefileclient-object) entries in any order.
+As already described in [Matching array entries](#matching-array-entries) always the first matching entry is used.
 
 ### The `HttpClient` object
 
@@ -247,24 +252,37 @@ It must contain the key/value pair described below:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-| mandatory| | ServingUri|URI|server URL to connect to |
-| optional| 30 | Timeout|integer|HTTP connect and read timeout in seconds |
+| mandatory| | UpstreamURI|URI|server URL to connect to |
+| optional| 30 | Timeout|integer|HTTP connect and read timeout in seconds, 0 or negative value means wait forever |
 
 
 ### The `HttpsClient` object
 
 The **`HttpsClient` object** describes the instantiation of
-the upstream interface to an HTTPS/TLS client.
+the upstream interface to an HTTPS/TLS server.
 
 It should contain the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-| mandatory || ServingUri|URI|server URL to connect to |
-|optional| 30 | Timeout|integer|HTTPS connect and read timeout in seconds |
+| mandatory || UpstreamURI|URI|server URL to connect to |
+|optional| 30 | Timeout|integer|HTTPS connect and read timeout in seconds, 0 or negative value means wait forever |
 |optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust|
 |optional|false|DisableHostnameVerification|boolean|suppress verification of server hostname against server certificate|
 |mandatory||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
+
+
+### The `CoapClient` object
+
+The **`CoapClient` object** describes the instantiation of
+the upstream interface to a CoAP server.
+
+It must contain the key/value pair described below:
+
+| mandatory/optional|default | key | value type| value description|
+|--|--|--|--|:--|
+| mandatory| | UpstreamURI|URI|server URL to connect to |
+| optional| 30 | Timeout|integer|CoAP acknowledge and read timeout in seconds, 0 or negative value means wait forever |
 
 
 ### The `OfflineFileClient` object
@@ -390,6 +408,7 @@ It may contain the key/value pairs described below in any order:
 On the upstream interface,
 for certficate update (`KUR`) requests the reprotection mode is always **keep**.
 
+
 #### The `VerificationContext` object
 
 The **`VerificationContext` object** describes all values needed to authenticate peers or signed messages. If the `VerificationContext` is optional
@@ -440,6 +459,7 @@ protection within the same transaction, care needs to be taken such that
 the EE and RA configurations are consistent for all types of requests.
 To this end it can be helpful to differentiate via certificate profiles.
 
+
 ##### The `SignatureCredentialContext` object
 
 The **`SignatureCredentialContext`** object holds the values needed
@@ -453,6 +473,7 @@ It contains all of the key/value pairs described below in any order:
 |mandatory||KeyStore|URI|location of a key store holding certificate, private key and certificate chain|
 |mandatory||Password|array of byte|password for the KeyStore|
 |optional|derived from signing key|SignatureAlgorithmName|string|name or OID of signature algorithm|
+
 
 ##### The `SharedSecretCredentialContext` object
 
@@ -473,6 +494,7 @@ as far as needed depending on the chosen MAC algorithm.
 |optional|randomly generated 20 bytes|Salt|array of byte|input salt|
 |optional|absent|SenderKID|string|sender key identifier to be used for the CMP message protection, which can be for instance a user name|
 
+
 #### The `NestedEndpointContext` object
 
 The **`NestedEndpointContext` object** provides values that determine
@@ -485,12 +507,14 @@ It should contain all needed key/value pairs described below in any order:
 | optional|accept all | `VerificationContext` |[`VerificationContext` object](#the-verificationcontext-object)|if provided, all elements of incoming nested messages are validated with the given trust.|
 | mandatory || outputCredentials| [`OutputCredentials` object](#the-outputcredentials-object) | when a `NestedEndpointContext` object is given, all outgoing messages are nested and protected using these credentials.|
 
+
 ## The `EnrollmentTrust` object
 
 The **`EnrollmentTrust` object** provides a `VerificationContext`
 used to validate an enrolled certificate and to calculate the additional
 certificates in the extraCerts field of IP, CP and KUP.
 Any given SharedSecret key/value is ignored here.
+
 
 ## The `CkgConfiguration` object
 
@@ -509,6 +533,7 @@ It should contain all needed key/value pairs described below in any order:
 Note: Authorization of clients to request central key generation (including
 the option to specifiy a key type) can be checked via the `InventoryInterface`.
 
+
 ## The `CkgKeyAgreementContext` object
 
 The **`CkgKeyAgreementContext` object** provides the values required
@@ -522,11 +547,13 @@ It contains all of the key/value pairs described below in any order:
 |optional|"1.3.132.1.11.0" (ECDH_SHA224KDF), must be consistent with type of key agreement key|KeyAgreementAlg|string|the algorithm (Name or OID) used for key agreement, see <a href="https://tools.ietf.org/wg/lamps/draft-ietf-lamps-cmp-algorithms"> Certificate Management Protocol (CMP) Algorithms</a>, section "Key Agreement Algorithms"
 |optional|"2.16.840.1.101.3.4.1.5" (AES128_wrap)|KeyEncryptionAlg|string|the symmetric algorithm (Name or OID) used for key encryption, see <a href="https://tools.ietf.org/wg/lamps/draft-ietf-lamps-cmp-algorithms"> Certificate Management Protocol (CMP) Algorithms </a>, section "Key Management Algorithms"
 
+
 ### The `CkgKeyTransportContext` object
 
 The **`CkgKeyTransportContext` object** marks the support
 for performing key transport in the context of central key generation.
 It is empty, so must be specified as `KeyTransportContext: {}`.
+
 
 ### The `CkgPasswordContext` object
 
@@ -638,3 +665,91 @@ using the parameter-less default constructor.
 This instance is then used to execute the appropriate methods
 of com.siemens.pki.cmpracomponent.configuration.InventoryInterface
 when an IR, CR, P10CR, KUR, IP, CP or KUP message is processed.
+
+
+# Configuration of the CMP Client CLI application
+
+The **CMP Client** general behavior is specified in a configuration file.
+Its path name is given as argument to the `-c'  CLI option.
+On startup the configuration file is loaded and parsed.
+URIs given in configuration files are loaded once at first use.
+
+The **Top-level Structure** determines the overall behavior of of the CMP Client.
+It may contain declarations of the object types listed below in any order:
+
+| mandatory/optional| object type |has certProfile|has bodyType |
+|-------------------------|:------------|:---|:---|
+| mandatory  | [`MessageInterface` object](#the-messageinterface-object)             | x | x |
+| mandatory  | [`MessageConfiguration` object](#the-messageconfiguration-object)     | x | x |
+| mandatory  | [`ClientContext` object](#the-clientcontext-object)                   | x |   |
+
+For `MessageInterface` the matching just described is not done for each
+message but only for the first (request) message of a transaction.
+The array entry determined this way is used to control the routing of not only the
+first message but also of all further upstream messages in the same transaction.
+
+## The `MessageInterface` object
+
+The **`MessageInterface` object** describes the transport layers of the
+interface to which the client may send CMP requests and receives responses from.
+
+The value array contains zero or more [`HttpClient` object](#the-httpclient-object), [`HttpsClient` object](#the-httpsclient-object),
+[`CoapClient` object](#the-coapclient-object) or [`OfflineFileClient` object](#the-offlinefileclient-object) entries in any order.
+As already described in [Matching array entries](#matching-array-entries) always the first matching entry is used.
+
+
+## The `MessageConfiguration` object
+
+The **`MessageConfiguration` object** describes the behavior of
+the clients CMP interface.
+
+The value array contains
+
+| requested cardinality | object type |
+|-------------------------|-------------|
+|0..n| [`CmpMessageInterface` values](#the-cmpmessageinterface-value).|
+
+The `NestedEndpointContext` configuration is partially supported just for internal test purposes.
+
+
+## The ClientContext object
+
+The **`ClientContext` object** controls the overall behavior of the client.
+
+It contains all of the key/value pairs described below in any order:
+
+| mandatory/optional|default | key | value type| value description|
+|--|--|--|--|:--|
+|optional |null DN|Recipient|String| recipient used in CMP message header|
+|optional|absent|EnrollmentContext|[`EnrollmentContext` object](#the-enrollmentcontext-object)| required if enrollment will be invoked |
+
+
+## The EnrollmentContext object
+
+The **`EnrollmentContext` object** controls
+the enrollment-specific behavior of the client.
+It contains all of the key/value pairs described below in any order:
+
+| mandatory/optional|default | key | value type| value description|
+|--|--|--|--|:--|
+|mandatory if EnrollmentType is  `"ir"`, `"cr"`, `"kur"`||KeyType|String| certificate key type, eg. `RSA2048`, `secp192`, `Ed25519`, ...|
+|optional|false|RequestCentralKeyGeneration|boolean|is central key generation requested?|
+|optional|EnrollmentType|cr(2)|a number (0, 2, 7, 4) or an equivalent string (`"ir"`, `"cr"`, `"kur"`, `"p10cr"`)|request type used in enrollment|
+|optional|absent|OldCert|URI|location of old certificate to reference in the id-regCtrl-oldCertID control|
+|optional|subject of OldCert or absent |Subject|String|Subject to be used in certificate template|
+|optional|extensions of OldCert or absent |Extensions|array of [`Extensions` object](#the-extensions-object)|extensions to be used in certificate template|
+|mandatory ||EnrollmentTrust| [`EnrollmentTrust` object](#the-enrollmenttrust-object)| trust to validate the enrolled certificate| 
+|optional|true|RequestImplictConfirm|boolean|shall implicit confirmation be requested?|
+|mandatory if  EnrollmentType is `"p10cr"` |absent| CertificationRequest|URI|location of the PKCS#10 CSR, which must be ASN.1 DER-encoded|
+
+
+## The Extensions object
+
+The **`Extensions` object** specifies
+one extension to be added to the Extensions array in the certificate template.
+It contains all of the key/value pairs described below in any order:
+
+| mandatory/optional|default | key | value type| value description|
+|--|--|--|--|:--|
+|mandatory||Id|OID string|extension ID|
+|optional|null|value|binary|extension value|

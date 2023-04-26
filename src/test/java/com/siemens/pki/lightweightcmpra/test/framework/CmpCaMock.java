@@ -21,8 +21,8 @@ import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface.ExFunction;
-import com.siemens.pki.lightweightcmpra.downstream.online.BaseHttpServer;
 import com.siemens.pki.lightweightcmpra.downstream.online.CmpHttpServer;
+import com.siemens.pki.lightweightcmpra.test.EnrollmentTestcaseBase;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.File;
 import java.math.BigInteger;
@@ -73,6 +73,28 @@ public class CmpCaMock implements ExFunction {
 
     private static JcaPEMKeyConverter JCA_KEY_CONVERTER = new JcaPEMKeyConverter();
 
+    public static CmpCaMock singleCaMock;
+
+    public static CmpCaMock launchSingleCaMock() throws InterruptedException {
+        if (singleCaMock == null) {
+            new Thread(
+                            (Runnable) () -> {
+                                try {
+                                    singleCaMock = new CmpCaMock(
+                                            "http://localhost:7000/ca",
+                                            "credentials/ENROLL_Keystore.p12",
+                                            "credentials/CMP_CA_Keystore.p12");
+                                } catch (final Exception e) {
+                                    EnrollmentTestcaseBase.LOGGER.error("CA start", e);
+                                }
+                            },
+                            "CA thread")
+                    .start();
+            Thread.sleep(2000L);
+        }
+        return singleCaMock;
+    }
+
     public static void main(final String args[]) throws Exception {
         Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
         final String configFileDirectory = args[0];
@@ -83,7 +105,14 @@ public class CmpCaMock implements ExFunction {
         new CmpCaMock(servingUrl, enrollmentCredentials, protectionCredentials);
     }
 
-    private final BaseHttpServer httpServer;
+    public static void stopSingleCaMock() {
+        if (singleCaMock != null) {
+            singleCaMock.stop();
+            singleCaMock = null;
+        }
+    }
+
+    private CmpHttpServer httpServer;
 
     private final ProtectionProvider caProtectionProvider;
 
@@ -133,10 +162,6 @@ public class CmpCaMock implements ExFunction {
         return ret.getEncoded();
     }
 
-    public void stop() {
-        httpServer.stop();
-    }
-
     private CMPCertificate createCertificate(
             final X500Name subject, final SubjectPublicKeyInfo publicKey, final X509Certificate issuingCert)
             throws PEMException, NoSuchAlgorithmException, CertIOException, CertificateEncodingException,
@@ -160,12 +185,10 @@ public class CmpCaMock implements ExFunction {
         final JcaContentSignerBuilder signerBuilder =
                 new JcaContentSignerBuilder("SHA384withECDSA").setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
 
-        final CMPCertificate cmpCertificateFromCertificate =
-                CertUtility.cmpCertificateFromCertificate(new JcaX509CertificateConverter()
-                        .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
-                        .getCertificate(v3CertBldr.build(
-                                signerBuilder.build(enrollmentCredentials.getPrivateKeyOfEndCertififcate()))));
-        return cmpCertificateFromCertificate;
+        return CertUtility.cmpCertificateFromCertificate(new JcaX509CertificateConverter()
+                .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
+                .getCertificate(
+                        v3CertBldr.build(signerBuilder.build(enrollmentCredentials.getPrivateKeyOfEndCertififcate()))));
     }
 
     private PKIMessage generateError(final PKIMessage receivedMessage, final String errorDetails) throws Exception {
@@ -202,13 +225,12 @@ public class CmpCaMock implements ExFunction {
         for (final X509Certificate aktCert : issuingChain) {
             issuingChainForExtraCerts.add(CertUtility.cmpCertificateFromCertificate(aktCert));
         }
-        final PKIMessage ret = PkiMessageGenerator.generateAndProtectMessage(
+        return PkiMessageGenerator.generateAndProtectMessage(
                 PkiMessageGenerator.buildRespondingHeaderProvider(receivedMessage),
                 caProtectionProvider,
                 PkiMessageGenerator.generateIpCpKupBody(
                         receivedMessage.getBody().getType() + 1, cmpCertificateFromCertificate),
                 issuingChainForExtraCerts);
-        return ret;
     }
 
     private PKIMessage handleP10CerticateRequest(final PKIMessage receivedMessage) throws Exception {
@@ -227,12 +249,11 @@ public class CmpCaMock implements ExFunction {
         for (final X509Certificate aktCert : issuingChain) {
             issuingChainForExtraCerts.add(CertUtility.cmpCertificateFromCertificate(aktCert));
         }
-        final PKIMessage ret = PkiMessageGenerator.generateAndProtectMessage(
+        return PkiMessageGenerator.generateAndProtectMessage(
                 PkiMessageGenerator.buildRespondingHeaderProvider(receivedMessage),
                 caProtectionProvider,
                 PkiMessageGenerator.generateIpCpKupBody(PKIBody.TYPE_CERT_REP, cmpCertificateFromCertificate),
                 issuingChainForExtraCerts);
-        return ret;
     }
 
     private PKIMessage handleRevocationRequest(final PKIMessage receivedMessage) throws Exception {
@@ -242,5 +263,12 @@ public class CmpCaMock implements ExFunction {
                 PkiMessageGenerator.buildRespondingHeaderProvider(receivedMessage),
                 caProtectionProvider,
                 new PKIBody(PKIBody.TYPE_REVOCATION_REP, rrcb.build()));
+    }
+
+    public void stop() {
+        if (httpServer != null) {
+            httpServer.stop();
+            httpServer = null;
+        }
     }
 }

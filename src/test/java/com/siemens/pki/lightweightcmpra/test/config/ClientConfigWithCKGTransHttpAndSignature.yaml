@@ -1,0 +1,28 @@
+---
+
+MessageInterface:
+  - HttpClient:
+      UpstreamURI:  "http://localhost:6010/ckgtrans"
+
+MessageConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_EE_Keystore_RSA.p12"
+        Password: "Password"
+
+ClientContext:
+  - Recipient: "CN=recip"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: Ed25519
+      RequestCentralKeyGeneration: true
+      Subject: "CN=subject"
+      RequestImplictConfirm: false
+    

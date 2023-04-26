@@ -1,0 +1,114 @@
+---
+
+MessageInterface:
+# should never match
+  - HttpClient:
+      certProfile:   wrongCertProfile
+      UpstreamURI:  "http://localhost:8888/wrong"
+  - HttpClient:
+       certProfile: secret1
+       UpstreamURI:  "http://localhost:6008/lrawithcertprofile"
+       timeout: 1000
+  - HttpClient:
+        certProfile: secret2
+        UpstreamURI:  "http://localhost:6008/lrawithcertprofile"
+# fall back
+  - HttpClient:
+      UpstreamURI:  "http://localhost:7777/wrong2"
+
+MessageConfiguration:
+# should never match
+  - certProfile: wrongCertProfile
+    VerificationContext:
+      SharedSecret: "wrong"
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"        
+    outputCredentials:
+      SharedSecret:
+        PasswordBasedMacAlgorithm: PBMAC1
+        SharedSecret: "wrong"
+        SenderKID: secret1KeyIdentification
+        
+  - certProfile: secret1
+    VerificationContext:
+      SharedSecret: "secret1"
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"        
+    outputCredentials:
+      SharedSecret:
+        PasswordBasedMacAlgorithm: PBMAC1
+        SharedSecret: "secret1"
+        SenderKID: secret1KeyIdentification
+        
+  - certProfile: secret2
+    VerificationContext:
+      SharedSecret: "secret2"
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"        
+    outputCredentials:
+      SharedSecret:
+        PasswordBasedMacAlgorithm: PBMAC1
+        SharedSecret: "secret2"
+        SenderKID: secret2KeyIdentification
+
+# fall back
+  - VerificationContext:
+     SharedSecret: "wrong2"
+     trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"        
+    outputCredentials:
+      SharedSecret:
+        PasswordBasedMacAlgorithm: PBMAC1
+        SharedSecret: "wrong2"
+        SenderKID: secret1KeyIdentification
+        
+        
+ClientContext:
+# should never match
+  - certProfile: wrongCertProfile
+    Recipient: "broken"
+    EnrollmentContext:
+      EnrollmentType: IR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "broken"
+      RequestImplictConfirm: false
+  
+  - certProfile: secret1
+    Recipient: "CN=Recip_secret1"
+    EnrollmentContext:
+      EnrollmentType: IR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "CN=Subject_secret1"
+      RequestImplictConfirm: false
+      
+  - certProfile: secret2
+    Recipient: "CN=Recip_secret2"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "CN=Subject_secret2"
+      RequestImplictConfirm: false
+
+# fall back
+  - Recipient: "broken2"
+    EnrollmentContext:
+      EnrollmentType: IR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "broken2"
+      RequestImplictConfirm: false    

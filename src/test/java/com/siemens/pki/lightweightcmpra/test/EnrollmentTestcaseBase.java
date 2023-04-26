@@ -23,19 +23,16 @@ import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import com.siemens.pki.lightweightcmpra.test.framework.TrustChainAndPrivateKey;
 import java.security.GeneralSecurityException;
 import java.security.KeyPairGenerator;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EnrollmentTestcaseBase extends CmpTestcaseBase {
 
     private static KeyPairGenerator keyGenerator;
-    private static CmpCaMock caMock;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EnrollmentTestcaseBase.class);
-
-    public static CmpCaMock getCaMock() {
-        return caMock;
-    }
+    public static final Logger LOGGER = LoggerFactory.getLogger(EnrollmentTestcaseBase.class);
 
     protected static KeyPairGenerator getKeyGenerator() {
         return keyGenerator;
@@ -59,20 +56,15 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
             keyGenerator = KeyPairGeneratorFactory.getEcKeyPairGenerator("secp256r1");
             // keyGenerator = KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048);
         }
-        if (caMock == null) {
-            new Thread(
-                            (Runnable) () -> {
-                                try {
-                                    caMock = new CmpCaMock(
-                                            "http://localhost:7000/ca",
-                                            "credentials/ENROLL_Keystore.p12",
-                                            "credentials/CMP_CA_Keystore.p12");
-                                } catch (final Exception e) {
-                                    LOGGER.error("CA start", e);
-                                }
-                            },
-                            "CA thread")
-                    .start();
-        }
+    }
+
+    @AfterClass
+    public static void shutDownClass() {
+        CmpCaMock.stopSingleCaMock();
+    }
+
+    @BeforeClass
+    public static void setUpClass() throws InterruptedException {
+        CmpCaMock.launchSingleCaMock();
     }
 }

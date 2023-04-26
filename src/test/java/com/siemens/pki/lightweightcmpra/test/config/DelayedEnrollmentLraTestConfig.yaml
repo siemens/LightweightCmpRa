@@ -3,7 +3,7 @@
 
 DownstreamInterface:
   HttpServer:
-    ServingUri:  "http://localhost:6003/delayedlra"
+    UpstreamURI:  "http://localhost:6003/delayedlra"
 
 UpstreamInterface:
   - OfflineFileClient:
@@ -22,9 +22,18 @@ UpstreamConfiguration:
         Password: "Password"
 
 DownstreamConfiguration:
+  - bodyType: RR
+    VerificationContext:
+      trustedCertificates:
+        - "credentials/ENROLL_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"
   - VerificationContext:
       trustedCertificates:
         - "credentials/CMP_EE_Root.pem"
+        - "credentials/ENROLL_Root.pem"
     OutputCredentials:
       Signature:
         keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"

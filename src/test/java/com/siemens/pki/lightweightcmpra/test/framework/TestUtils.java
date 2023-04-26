@@ -27,8 +27,9 @@ import com.siemens.pki.cmpracomponent.protection.SignatureBasedProtection;
 import com.siemens.pki.lightweightcmpra.configuration.SharedSecretCredentialContextImpl;
 import com.siemens.pki.lightweightcmpra.configuration.SignatureCredentialContextImpl;
 import com.siemens.pki.lightweightcmpra.configuration.VerificationContextImpl;
-import com.siemens.pki.lightweightcmpra.upstream.online.HttpSession;
+import com.siemens.pki.lightweightcmpra.upstream.online.CmpHttpClient;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -64,10 +65,10 @@ public class TestUtils {
      */
     public static Function<PKIMessage, PKIMessage> createCmpClient(final String serverPath) throws Exception {
         if (serverPath.toLowerCase().startsWith("http")) {
-            final HttpSession httpSession = new HttpSession(new URL(serverPath), 30);
+            final CmpHttpClient cmpHttpClient = new CmpHttpClient(new URL(serverPath), 30);
             return request -> {
                 try {
-                    return ifNotNull(httpSession.apply(request.getEncoded(), "http client"), PKIMessage::getInstance);
+                    return ifNotNull(cmpHttpClient.apply(request.getEncoded(), "http client"), PKIMessage::getInstance);
                 } catch (RuntimeException | IOException e) {
                     fail(e.getMessage());
                     return null;
@@ -150,4 +151,14 @@ public class TestUtils {
 
     // utility class, never create an instance
     private TestUtils() {}
+
+    public static boolean deleteDirectory(final File directoryToBeDeleted) {
+        final File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (final File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
+    }
 }

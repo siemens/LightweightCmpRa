@@ -16,6 +16,6 @@
  *  SPDX-License-Identifier: Apache-2.0
  */
 /**
- * the top level, main and configuration loader functions
+ * the RA top level, main and configuration loader functions
  */
 package com.siemens.pki.lightweightcmpra.main;

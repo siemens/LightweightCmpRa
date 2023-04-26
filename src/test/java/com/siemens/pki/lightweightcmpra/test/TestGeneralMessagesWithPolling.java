@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.security.cert.CRL;
@@ -72,8 +73,8 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
     @After
     public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/GenDownstream"));
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/GenUpstream"));
+        TestUtils.deleteDirectory(new File("./target/CmpTest/GenDownstream"));
+        TestUtils.deleteDirectory(new File("./target/CmpTest/GenUpstream"));
     }
 
     /**

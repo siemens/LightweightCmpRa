@@ -1,0 +1,27 @@
+---
+
+MessageInterface:
+  - CoapClient:
+      UpstreamURI:  "coap://localhost/onlinelra"
+
+MessageConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_EE_Keystore_EdDSA.p12"
+        Password: "Password"
+
+ClientContext:
+  - Recipient: "CN=recip"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "CN=subject"
+      RequestImplictConfirm: false
+    

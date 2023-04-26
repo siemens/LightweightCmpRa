@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
  * a file system based downstream interface
  *
  */
-public class OfflineFileServer implements DownstreamInterface {
+public class CmpOfflineFileServer implements DownstreamInterface {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OfflineFileServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmpOfflineFileServer.class);
 
     static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyMMddHHmmssZ");
 
@@ -56,7 +56,8 @@ public class OfflineFileServer implements DownstreamInterface {
      * @throws IOException
      *             in case of error
      */
-    public OfflineFileServer(final OfflineFileServerConfig config, final ExFunction messageHandler) throws IOException {
+    public CmpOfflineFileServer(final OfflineFileServerConfig config, final ExFunction messageHandler)
+            throws IOException {
         this.messageHandler = messageHandler;
         inputDirectory = new File(config.getInputDirectory());
         if (!inputDirectory.isDirectory() || !inputDirectory.canWrite()) {
