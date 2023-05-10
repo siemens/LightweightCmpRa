@@ -32,6 +32,7 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertPathBuilder;
 import java.security.cert.CertStore;
+import java.security.cert.CertificateException;
 import java.security.cert.CollectionCertStoreParameters;
 import java.security.cert.PKIXBuilderParameters;
 import java.security.cert.PKIXRevocationChecker;
@@ -48,7 +49,9 @@ import java.util.stream.Collectors;
 import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,17 +68,14 @@ public class SslContextFactory {
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, KeyManagementException,
                     UnrecoverableKeyException, KeyStoreException {
 
-        final TrustManagerFactory tmf = createTrustManagerFactory(verificationContext);
+        final TrustManager[] trustManagers = createTrustManagerFactory(verificationContext);
 
         final KeyManagerFactory kmf = createKeyManagerFactory(ownKeyStoreUri, ownKeyStorePassword);
 
         // Supports RFC 8446: TLS version 1.3; may support other SSL/TLS versions
         final SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
 
-        sslContext.init(
-                ifNotNull(kmf, KeyManagerFactory::getKeyManagers),
-                ifNotNull(tmf, TrustManagerFactory::getTrustManagers),
-                new SecureRandom());
+        sslContext.init(ifNotNull(kmf, KeyManagerFactory::getKeyManagers), trustManagers, new SecureRandom());
         return sslContext;
     }
 
@@ -93,7 +93,7 @@ public class SslContextFactory {
         return kmf;
     }
 
-    protected static TrustManagerFactory createTrustManagerFactory(final VerificationContext verificationContext)
+    protected static TrustManager[] createTrustManagerFactory(final VerificationContext verificationContext)
             throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         TrustManagerFactory tmf = null;
         if (verificationContext != null && verificationContext.getTrustedCertificates() != null) {
@@ -170,8 +170,23 @@ public class SslContextFactory {
             tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 
             tmf.init(new CertPathTrustManagerParameters(params));
+            return tmf.getTrustManagers();
         }
-        return tmf;
+        return new X509TrustManager[] {
+            new X509TrustManager() {
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            }
+        };
     }
 
     private SslContextFactory() {}

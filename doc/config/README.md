@@ -232,7 +232,8 @@ The value array contains
 | requested cardinality | object type |
 |-------------------------|-------------|
 |0..n| [`HttpClient` object](#the-httpclient-object) |
-|0..n| [`HttpsClient` object](#the-httpclient-object) |
+|0..n| [`HttpsClient` object](#the-httpsclient-object) |
+|0..n| [`CoapClient` object](#the-coapclient-object) |
 |0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
 
 
@@ -259,8 +260,9 @@ It should contain the key/value pairs described below in any order:
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 | mandatory || ServingUri|URI|server URL to connect to |
-| optional| 30 | Timeout|integer|HTTPS connect and read timeout in seconds |
+|optional| 30 | Timeout|integer|HTTPS connect and read timeout in seconds |
 |optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust|
+|optional|false|DisableHostnameVerification|boolean|suppress verification of server hostname against server certificate|
 |mandatory||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
 
 

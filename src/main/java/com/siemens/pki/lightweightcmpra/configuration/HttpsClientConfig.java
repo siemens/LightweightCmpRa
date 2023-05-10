@@ -28,6 +28,16 @@ public class HttpsClientConfig extends HttpClientConfig {
 
     private SignatureCredentialContextImpl clientCredentials;
 
+    private boolean disableHostnameVerification = false;
+
+    public boolean isDisableHostnameVerification() {
+        return disableHostnameVerification;
+    }
+
+    public void setDisableHostnameVerification(boolean disableHostnameVerification) {
+        this.disableHostnameVerification = disableHostnameVerification;
+    }
+
     public SignatureCredentialContextImpl getClientCredentials() {
         return clientCredentials;
     }

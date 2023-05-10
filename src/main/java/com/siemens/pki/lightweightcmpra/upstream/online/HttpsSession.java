@@ -23,8 +23,10 @@ import com.siemens.pki.lightweightcmpra.configuration.HttpsClientConfig;
 import com.siemens.pki.lightweightcmpra.configuration.SignatureCredentialContextImpl;
 import com.siemens.pki.lightweightcmpra.util.SslContextFactory;
 import java.net.URL;
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,23 +39,22 @@ public class HttpsSession extends HttpSession {
 
     private final SSLContext sslContext;
 
+    private boolean disableHostnameVerification;
+
     /**
      * Constructor for the TLS Session handling.
      *
-     * @param remoteUrl
-     *            servers HTTPS URL to connect to
-     * @param timeoutInSeconds
-     *            connection and read timeout
-     * @param config
-     *            TLS configuration
+     * @param remoteUrl        servers HTTPS URL to connect to
+     * @param timeoutInSeconds connection and read timeout
+     * @param config           TLS configuration
      *
-     * @throws Exception
-     *             in case of error
+     * @throws Exception in case of error
      */
     public HttpsSession(final URL remoteUrl, final int timeoutInSeconds, final HttpsClientConfig config)
             throws Exception {
         super(remoteUrl, timeoutInSeconds);
         final SignatureCredentialContextImpl clientCredentials = config.getClientCredentials();
+        disableHostnameVerification = config.isDisableHostnameVerification();
         sslContext = SslContextFactory.createSslContext(
                 config.getClientTrust(),
                 ifNotNull(clientCredentials, SignatureCredentialContextImpl::getKeyStore),
@@ -68,6 +69,15 @@ public class HttpsSession extends HttpSession {
         try {
             final HttpsURLConnection httpsConnection = (HttpsURLConnection) remoteUrl.openConnection();
             httpsConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+            if (disableHostnameVerification) {
+                httpsConnection.setHostnameVerifier(new HostnameVerifier() {
+
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            }
             return sendReceivePkiMessageIntern(message, httpsConnection, timeoutInSeconds);
         } catch (final Exception ex) {
             LOGGER.warn("client connection to " + remoteUrl, ex);

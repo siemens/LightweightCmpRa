@@ -84,3 +84,8 @@ fix: rename DownstreamExpirationTime to TransactionMaxLifetime
 ### 2.7.0 (Mar 21 2023)
 
 fix: Rename TransactionMaxLifetime to DownstreamTimeout
+
+### 2.7.3 (May 10 2023)
+
+feat: optional disable TLS server trust validation
+
