@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<parent.basedir>.</parent.basedir>
-		<spotless.version>2.36.0</spotless.version>
+		<spotless.version>2.37.0</spotless.version>
 		<jacoco.version>0.8.10</jacoco.version>
 		<source.version>3.3.0</source.version>
 		<maven.compiler.source>11</maven.compiler.source>
