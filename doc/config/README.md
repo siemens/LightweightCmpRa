@@ -225,6 +225,8 @@ The **`UpstreamInterface` object** describes the transport layers
 of the upstream interface to which the component may send/forward CMP requests.
 It may be omitted if all CMP messages can be handled locally
 (e.g., support messages only that are not forwarded to an upstream server).
+As mentioned before for na outgoing message always the first matching array
+entry is used. 
 
 
 The value array contains
@@ -233,7 +235,6 @@ The value array contains
 |-------------------------|-------------|
 |0..n| [`HttpClient` object](#the-httpclient-object) |
 |0..n| [`HttpsClient` object](#the-httpsclient-object) |
-|0..n| [`CoapClient` object](#the-coapclient-object) |
 |0..n| [`OfflineFileClient` object](#the-offlinefileclient-object) |
 
 
