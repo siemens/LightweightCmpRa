@@ -89,3 +89,6 @@ fix: Rename TransactionMaxLifetime to DownstreamTimeout
 
 feat: optional disable TLS server trust validation
 
+### 2.7.4 (Jun 27 2023)
+
+fix: update some dependencies
