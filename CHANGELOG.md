@@ -92,3 +92,8 @@ feat: optional disable TLS server trust validation
 ### 2.7.4 (Jun 27 2023)
 
 fix: update some dependencies
+
+### 2.7.5 (Jun 29 2023)
+
+fix: update CmpRaComponent dependency
+

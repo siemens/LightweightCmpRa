@@ -42,11 +42,13 @@ public class InventoryInterfaceImpl extends CertProfileBodyTypeConfigItem implem
             final byte[] transactionID,
             final String requesterDn,
             final byte[] certTemplate,
-            final String requestedSubjectDn) {
+            final String requestedSubjectDn,
+            byte[] pkiMessage) {
         checkCreateImplementation();
         return ifNotNull(
                 implementation,
-                x -> x.checkAndModifyCertRequest(transactionID, requesterDn, certTemplate, requestedSubjectDn));
+                x -> x.checkAndModifyCertRequest(
+                        transactionID, requesterDn, certTemplate, requestedSubjectDn, pkiMessage));
     }
 
     @Override
@@ -54,11 +56,13 @@ public class InventoryInterfaceImpl extends CertProfileBodyTypeConfigItem implem
             final byte[] transactionID,
             final String requesterDn,
             final byte[] pkcs10CertRequest,
-            final String requestedSubjectDn) {
+            final String requestedSubjectDn,
+            byte[] pkiMessage) {
         checkCreateImplementation();
         return ifNotNull(
                 implementation,
-                x -> x.checkP10CertRequest(transactionID, requesterDn, pkcs10CertRequest, requestedSubjectDn));
+                x -> x.checkP10CertRequest(
+                        transactionID, requesterDn, pkcs10CertRequest, requestedSubjectDn, pkiMessage));
     }
 
     public String getImplementingClass() {
