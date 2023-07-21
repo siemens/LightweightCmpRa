@@ -1,0 +1,61 @@
+# Run various code quality checks when pushing to main or when opening pull requests.
+# - This will run the tests, as well as
+# - Perform an analysis via SonarCloud
+# - Examine whether any of the dependencies contain known vulnerabilities
+
+name: Code quality checks
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  analyze_sonar:
+    name: Run unit tests and Sonar analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'temurin'
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Analyze code quality
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # note that we deliberately turn off the OWASP dependency checker here, it will run in a separate job,
+        # such that its results can be viewed independently of what Sonar has to say
+        run: |
+          mvn -B verify sonar:sonar -Dsonar.projectKey=siemens_cmp-ra-component -Ddependency-check.skip=true -Dgpg.skip
+
+  analyze_dependencies_owasp:
+    name: Check dependencies with OWASP
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'temurin'
+      - name: Analyze dependencies
+        # this will run the OWASP dependency checker only
+        run: mvn -B verify -DskipTests -Dgpg.skip
