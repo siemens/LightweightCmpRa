@@ -30,10 +30,10 @@ import org.bouncycastle.asn1.x509.GeneralName;
 
 public class HeaderProviderForTest implements HeaderProvider {
     final ASN1OctetString transactionId;
-    final byte[] senderNonce = CertUtility.generateRandomBytes(16);
+    final ASN1OctetString senderNonce = new DEROctetString(CertUtility.generateRandomBytes(16));
 
     private final ASN1GeneralizedTime messageTime = new DERGeneralizedTime(new Date());
-    private final byte[] recipientNonce;
+    private final ASN1OctetString recipientNonce;
     private final int pvno;
 
     public HeaderProviderForTest() {
@@ -48,7 +48,7 @@ public class HeaderProviderForTest implements HeaderProvider {
 
     public HeaderProviderForTest(final PKIHeader lastHeader) {
         this.transactionId = lastHeader.getTransactionID();
-        this.recipientNonce = lastHeader.getSenderNonce().getOctets();
+        this.recipientNonce = lastHeader.getSenderNonce();
         this.pvno = lastHeader.getPvno().intValueExact();
     }
 
@@ -73,7 +73,7 @@ public class HeaderProviderForTest implements HeaderProvider {
     }
 
     @Override
-    public byte[] getRecipNonce() {
+    public ASN1OctetString getRecipNonce() {
         return recipientNonce;
     }
 
@@ -83,7 +83,7 @@ public class HeaderProviderForTest implements HeaderProvider {
     }
 
     @Override
-    public byte[] getSenderNonce() {
+    public ASN1OctetString getSenderNonce() {
         return senderNonce;
     }
 
