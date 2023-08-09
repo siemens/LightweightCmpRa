@@ -96,7 +96,13 @@ fix: update some dependencies
 ### 2.7.5 (Jun 29 2023)
 
 fix: update CmpRaComponent dependency
+
 ### 2.7.6 (Aug 03 2023)
 
 fix: update CmpRaComponent dependency
+
+### 2.7.7 (Aug 08 2023)
+
+fix: update CmpRaComponent dependency
+fix: mainClass in pom.xml
 
