@@ -27,6 +27,7 @@ import com.siemens.pki.lightweightcmpclient.util.CredentialWriter;
 import com.siemens.pki.lightweightcmpra.configuration.YamlConfigLoader;
 import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterface;
 import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterfaceFactory;
+import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,7 +70,10 @@ public class CliCmpClient {
 
     private static final Option OPTION_certProfile =
             new Option("p", "certProfile", true, "certProfile to use; optional for all client commands");
+
     private static final Option OPTION_help = new Option("h", "help", false, "print help and exit");
+
+    private static final Option OPTION_configroot = new Option(null, "configroot", true, "configuration root path");
 
     private static final Option OPTION_invokeRevocationWithCert = new Option(
             "r",
@@ -213,6 +217,7 @@ public class CliCmpClient {
         OPTION_configfile.setRequired(true);
         cliOptions.addOption(OPTION_configfile);
         cliOptions.addOption(OPTION_certProfile);
+        cliOptions.addOption(OPTION_configroot);
 
         cliOptions.addOption(OPTION_enrollmentChain);
         cliOptions.addOption(OPTION_enrollmentKeystore);
@@ -380,6 +385,9 @@ public class CliCmpClient {
             if (cmd.hasOption(OPTION_help)) {
                 printHelp();
                 return 0;
+            }
+            if (cmd.hasOption(OPTION_configroot)) {
+                ConfigFileLoader.setConfigFileBase(new File(cmd.getOptionValue(OPTION_configroot)));
             }
             int initialRequestType = -1;
             final ClientConfiguration config;
