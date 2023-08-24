@@ -106,3 +106,7 @@ fix: update CmpRaComponent dependency
 fix: update CmpRaComponent dependency
 fix: mainClass in pom.xml
 
+### 2.7.8 (Aug 29 2023)
+
+fix: switch to SUN provider for chain validation
+

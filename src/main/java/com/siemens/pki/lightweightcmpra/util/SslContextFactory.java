@@ -21,13 +21,13 @@ import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
 
 import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
-import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
 import java.net.URI;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertPathBuilder;
@@ -61,23 +61,9 @@ import org.slf4j.LoggerFactory;
  */
 public class SslContextFactory {
 
+    // private static final BouncyCastleProvider PROVIDER = CertUtility.getBouncyCastleProvider();
+    private static final String PROVIDER = "SUN";
     private static final Logger LOGGER = LoggerFactory.getLogger(SslContextFactory.class);
-
-    public static SSLContext createSslContext(
-            final VerificationContext verificationContext, final URI ownKeyStoreUri, final byte[] ownKeyStorePassword)
-            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, KeyManagementException,
-                    UnrecoverableKeyException, KeyStoreException {
-
-        final TrustManager[] trustManagers = createTrustManagerFactory(verificationContext);
-
-        final KeyManagerFactory kmf = createKeyManagerFactory(ownKeyStoreUri, ownKeyStorePassword);
-
-        // Supports RFC 8446: TLS version 1.3; may support other SSL/TLS versions
-        final SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
-
-        sslContext.init(ifNotNull(kmf, KeyManagerFactory::getKeyManagers), trustManagers, new SecureRandom());
-        return sslContext;
-    }
 
     protected static KeyManagerFactory createKeyManagerFactory(
             final URI ownKeyStoreUri, final byte[] ownKeyStorePassword)
@@ -93,8 +79,24 @@ public class SslContextFactory {
         return kmf;
     }
 
+    public static SSLContext createSslContext(
+            final VerificationContext verificationContext, final URI ownKeyStoreUri, final byte[] ownKeyStorePassword)
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, KeyManagementException,
+                    UnrecoverableKeyException, KeyStoreException, NoSuchProviderException {
+
+        final TrustManager[] trustManagers = createTrustManagerFactory(verificationContext);
+
+        final KeyManagerFactory kmf = createKeyManagerFactory(ownKeyStoreUri, ownKeyStorePassword);
+
+        // Supports RFC 8446: TLS version 1.3; may support other SSL/TLS versions
+        final SSLContext sslContext = SSLContext.getInstance("TLSv1.3");
+
+        sslContext.init(ifNotNull(kmf, KeyManagerFactory::getKeyManagers), trustManagers, new SecureRandom());
+        return sslContext;
+    }
+
     protected static TrustManager[] createTrustManagerFactory(final VerificationContext verificationContext)
-            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+            throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException {
         TrustManagerFactory tmf = null;
         if (verificationContext != null && verificationContext.getTrustedCertificates() != null) {
 
@@ -137,7 +139,7 @@ public class SslContextFactory {
 
             final CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(lstCertCrlStores);
 
-            final CertStore store = CertStore.getInstance("Collection", ccsp, CertUtility.getBouncyCastleProvider());
+            final CertStore store = CertStore.getInstance("Collection", ccsp, PROVIDER);
 
             final Set<TrustAnchor> trust = trustedCertificates.stream()
                     .map(trustedCert -> new TrustAnchor(trustedCert, null))
@@ -147,7 +149,7 @@ public class SslContextFactory {
 
             params.addCertStore(store);
 
-            final CertPathBuilder cpb = CertPathBuilder.getInstance("PKIX", CertUtility.getBouncyCastleProvider());
+            final CertPathBuilder cpb = CertPathBuilder.getInstance("PKIX", PROVIDER);
 
             final PKIXRevocationChecker revChecker = (PKIXRevocationChecker) cpb.getRevocationChecker();
 
