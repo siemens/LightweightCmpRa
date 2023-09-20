@@ -21,6 +21,7 @@ DownstreamConfiguration:
   - VerificationContext:
       trustedCertificates:
         - "credentials/CMP_EE_Root.pem"
+        - "credentials/CMP_EE_RSA_Root.pem"
     OutputCredentials:
       Signature:
         keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"

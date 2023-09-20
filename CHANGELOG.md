@@ -110,3 +110,7 @@ fix: mainClass in pom.xml
 
 fix: switch to SUN provider for chain validation
 
+### 2.7.10 (Sept 20 2023)
+
+fix: update test credentials, update depedencies
+

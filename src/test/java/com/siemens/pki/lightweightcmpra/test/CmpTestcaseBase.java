@@ -43,18 +43,17 @@ public class CmpTestcaseBase {
 
     private static Map<String, Function<PKIMessage, PKIMessage>> startedEeClients = new HashMap<>();
 
+    protected static ProtectionProvider getEeSignaturebasedProtectionProvider() {
+        return eeSignaturebasedProtectionProvider;
+    }
+
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         Security.addProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
         ConfigFileLoader.setConfigFileBase(CONFIG_DIRECTORY);
         eeSignaturebasedProtectionProvider = TestUtils.createSignatureBasedProtection(
-                "credentials/CMP_EE_Keystore_EdDSA.p12",
-                // "credentials/CMP_EE_Keystore.p12",
-                TestUtils.getPasswordAsCharArray());
-    }
-
-    protected static ProtectionProvider getEeSignaturebasedProtectionProvider() {
-        return eeSignaturebasedProtectionProvider;
+                // "credentials/CMP_EE_Keystore_EdDSA.p12",
+                "credentials/CMP_EE_Keystore.p12", TestUtils.getPasswordAsCharArray());
     }
 
     private Function<PKIMessage, PKIMessage> eeCmpClient;
