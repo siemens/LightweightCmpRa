@@ -128,10 +128,11 @@ an empty array may given or the whole key may be absent.
 Note: Authorization of clients to request certificate enrollment
 can be checked via the `InventoryInterface`.
 
-For `UpstreamInterface` the matching just described is not done for each
-message but only for the first (request) message of a transaction.
-The array entry determined this way is used to control the routing of not only the
-first message but also of all further upstream messages in the same transaction.
+The `UpstreamInterface` array controls the routing of upstream messages.
+The procedure described in [Matching array entries](#matching-array-entries)
+is performed not for each message but only for the first (request) message of a transaction.
+Thus the routing determined for the first message of a transaction
+is used also for all further upstream messages within the same transaction.
 
 For the `SupportMessageHandlerInterface` object,
 each array entry has the implicit bodyType `"genm"`
@@ -232,16 +233,19 @@ to a directory to write outgoing-DER encoded CMP response messages to|
 ## The `UpstreamInterface` object
 
 The **`UpstreamInterface` object** describes the transport layers
-of the upstream interface to which the component may send/forward CMP requests.
+of the upstream interface to which the component may send/forward CMP requests
+and receive reponses from.
 It may be omitted if all CMP messages can be handled locally
 (e.g., support messages only that are not forwarded to an upstream server).
-As mentioned before for na outgoing message always the first matching array
-entry is used. 
 
-
-The value array contains zero or more [`HttpClient` object](#the-httpclient-object), [`HttpsClient` object](#the-httpsclient-object),
-[`CoapClient` object](#the-coapclient-object) or [`OfflineFileClient` object](#the-offlinefileclient-object) entries in any order.
-As already described in [Matching array entries](#matching-array-entries) always the first matching entry is used.
+The value array contains zero or more
+[`HttpClient` object](#the-httpclient-object),
+[`HttpsClient` object](#the-httpsclient-object),
+[`CoapClient` object](#the-coapclient-object), or
+[`OfflineFileClient` object](#the-offlinefileclient-object)
+entries in any order.
+As already described in [Matching array entries](#matching-array-entries),
+always the first matching entry is used.
 
 ### The `HttpClient` object
 
@@ -670,9 +674,9 @@ when an IR, CR, P10CR, KUR, IP, CP or KUP message is processed.
 # Configuration of the CMP Client CLI application
 
 The **CMP Client** general behavior is specified in a configuration file.
-Its path name is given as argument to the `-c'  CLI option.
+Its path name is given as argument to the `-c` (or  `--configfile`) CLI option.
 On startup the configuration file is loaded and parsed.
-URIs given in configuration files are loaded once at first use.
+Contents referred to via URIs included there are loaded once at first use.
 
 The **Top-level Structure** determines the overall behavior of of the CMP Client.
 It may contain declarations of the object types listed below in any order:
@@ -683,25 +687,31 @@ It may contain declarations of the object types listed below in any order:
 | mandatory  | [`MessageConfiguration` object](#the-messageconfiguration-object)     | x | x |
 | mandatory  | [`ClientContext` object](#the-clientcontext-object)                   | x |   |
 
-For `MessageInterface` the matching just described is not done for each
-message but only for the first (request) message of a transaction.
-The array entry determined this way is used to control the routing of not only the
-first message but also of all further upstream messages in the same transaction.
+For `MessageInterface` array controls the routing of (request) messages to be sent.
+The procedure described in [Matching array entries](#matching-array-entries)
+is performed not for each message but only for the first (request) message of a transaction.
+Thus the routing determined for the first message of a transaction
+is used also for all further upstream messages within the same transaction.
 
 ## The `MessageInterface` object
 
-The **`MessageInterface` object** describes the transport layers of the
-interface to which the client may send CMP requests and receives responses from.
+The **`MessageInterface` object** describes the transport layer of the
+interface to which the client sends CMP requests and receives responses from.
 
-The value array contains zero or more [`HttpClient` object](#the-httpclient-object), [`HttpsClient` object](#the-httpsclient-object),
-[`CoapClient` object](#the-coapclient-object) or [`OfflineFileClient` object](#the-offlinefileclient-object) entries in any order.
-As already described in [Matching array entries](#matching-array-entries) always the first matching entry is used.
+The value array contains zero or more
+[`HttpClient` object](#the-httpclient-object),
+[`HttpsClient` object](#the-httpsclient-object),
+[`CoapClient` object](#the-coapclient-object), or
+[`OfflineFileClient` object](#the-offlinefileclient-object)
+entries in any order.
+As already described in [Matching array entries](#matching-array-entries),
+always the first matching entry is used.
 
 
 ## The `MessageConfiguration` object
 
 The **`MessageConfiguration` object** describes the behavior of
-the clients CMP interface.
+the CMP interface of the client.
 
 The value array contains
 
@@ -732,15 +742,15 @@ It contains all of the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-|mandatory if EnrollmentType is  `"ir"`, `"cr"`, `"kur"`||KeyType|String| certificate key type, eg. `RSA2048`, `secp192`, `Ed25519`, ...|
-|optional|false|RequestCentralKeyGeneration|boolean|is central key generation requested?|
+|mandatory if EnrollmentType is `"ir"`, `"cr"`, `"kur"`||KeyType|String| certificate key type, eg. `RSA2048`, `secp192`, `Ed25519`, ...|
+|optional|false|RequestCentralKeyGeneration|boolean|whether central key generation requested|
 |optional|EnrollmentType|cr(2)|a number (0, 2, 7, 4) or an equivalent string (`"ir"`, `"cr"`, `"kur"`, `"p10cr"`)|request type used in enrollment|
-|optional|absent|OldCert|URI|location of old certificate to reference in the id-regCtrl-oldCertID control|
+|optional|absent|OldCert|URI|location of old certificate to reference in the `id-regCtrl-oldCertID` control|
 |optional|subject of OldCert or absent |Subject|String|Subject to be used in certificate template|
 |optional|extensions of OldCert or absent |Extensions|array of [`Extensions` object](#the-extensions-object)|extensions to be used in certificate template|
 |mandatory ||EnrollmentTrust| [`EnrollmentTrust` object](#the-enrollmenttrust-object)| trust to validate the enrolled certificate| 
 |optional|true|RequestImplictConfirm|boolean|shall implicit confirmation be requested?|
-|mandatory if  EnrollmentType is `"p10cr"` |absent| CertificationRequest|URI|location of the PKCS#10 CSR, which must be ASN.1 DER-encoded|
+|mandatory if EnrollmentType is `"p10cr"` |absent| CertificationRequest|URI|location of the PKCS#10 CSR, which must be ASN.1 DER-encoded|
 
 
 ## The Extensions object
@@ -753,3 +763,6 @@ It contains all of the key/value pairs described below in any order:
 |--|--|--|--|:--|
 |mandatory||Id|OID string|extension ID|
 |optional|null|value|binary|extension value|
+
+
+<!--TODO revocation configuration-->
