@@ -71,26 +71,27 @@ public class CliCmpClient {
     private static final Option OPTION_certProfile =
             new Option("p", "certProfile", true, "certProfile to use; optional for all client commands");
 
-    private static final Option OPTION_help = new Option("h", "help", false, "print help and exit");
+    private static final Option OPTION_help = new Option("h", "help", false, "print help and exit.");
 
-    private static final Option OPTION_configroot = new Option(null, "configroot", true, "configuration root path");
+    private static final Option OPTION_configroot = new Option("C", "configroot", true, "configuration root path");
 
     private static final Option OPTION_invokeRevocationWithCert = new Option(
             "r",
             "revokecert",
             true,
-            "invoke a revocation transaction; <arg> is the file path and name of certificate to revoke in PEM format");
+            "invoke a revocation transaction; <arg> is the file path and name of certificate to revoke in PEM format.");
 
     private static final Option OPTION_invokeRevocation =
-            new Option(null, "revoke", false, "invoke a revocation transaction");
+            new Option("R", "revoke", false, "invoke a revocation transaction "
+                       + "with data from configuration.");
 
     private static final Option OPTION_invokeEnrollment = new Option(
             "e",
             "enroll",
             true,
             "invoke a certificate enrollment " + "transaction; <arg> is the file path "
-                    + "and name where the newly enrolled" + "certificate and the "
-                    + "corresponding private key will be " + "written in PEM format");
+                    + "and name where the newly enrolled " + "certificate and the "
+                    + "corresponding private key will be " + "written in PEM format.");
     private static final String Invoke_appendix = PREFIX_APPENDIX + OPTION_invokeEnrollment.getOpt() + " option.";
 
     private static final Option OPTION_enrollmentKeystore = new Option(
@@ -120,25 +121,25 @@ public class CliCmpClient {
             "getRootCaCertificateUpdate",
             false,
             "invoke a Get root CA " + "certificate update GENM " + "request; optional <arg> is the "
-                    + "file path and name of certificate " + "to get an update for in PEM format");
+                    + "file path and name of certificate " + "to get an update for in PEM format.");
 
     private static final String RootCaCertificateUpdate_appendix =
             PREFIX_APPENDIX + OPTION_getRootCaCertificateUpdate.getOpt() + " option.";
 
     private static final Option OPTION_NewWithNew = new Option(
-            null,
+            "W",
             "NewWithNew",
             true,
             "<arg> is the file path and name of " + "the new root CA certificate to " + "write in PEM format"
                     + RootCaCertificateUpdate_appendix);
     private static final Option OPTION_NewWithOld = new Option(
-            null,
+            "N",
             "NewWithOld",
             true,
             "<arg> is the path and name of the " + "file to write any received " + "new root CA public key signed "
                     + "with the old private root CA key" + RootCaCertificateUpdate_appendix);
     private static final Option OPTION_OldWithNew = new Option(
-            null,
+            "O",
             "OldWithNew",
             true,
             "<arg> is the path and name of the " + "file to write any received " + "certificate containing the "
@@ -150,36 +151,36 @@ public class CliCmpClient {
             "getCrls",
             true,
             "invoke a CRL Update Retrieval " + "GENM request; <arg> is the file " + "path and name of CRLs to write "
-                    + "in PEM format");
+                    + "in PEM format.");
 
     private static final String Crls_appendix = PREFIX_APPENDIX + OPTION_getCrls.getOpt() + " option.";
 
     private static final Option OPTION_serial = new Option(
-            null,
+            "S",
             "serial",
             true,
-            "<arg> is the serial number of the " + "certificate to revoke with the " + "--revoke option.");
+            "<arg> is the serial number of the " + "certificate to revoke with the " + "-R option.");
 
     private static final Option OPTION_issuer = new Option(
-            null,
+            "I",
             "issuer",
             true,
-            "<arg> can be the issuer of the " + "certificate to revoke with the " + "--revoke option; "
+            "<arg> can be the issuer of the " + "certificate to revoke with the " + "-R option; "
                     + "<arg> can also be the issuer in " + "CRLSource to consult in "
-                    + "conjunction with the -l option ");
+                    + "conjunction with the -l option.");
 
     private static final Option OPTION_dpn =
-            new Option(null, "dpn", true, "<arg> is the DistributionPointName in CRLSource to consult" + Crls_appendix);
+            new Option("D", "dpn", true, "<arg> is the DistributionPointName in CRLSource to consult" + Crls_appendix);
 
     private static final Option OPTION_thisUpdate = new Option(
-            null,
+            "U",
             "thisUpdate",
             true,
             "<arg> is the thisUpdate time in " + "CRLStatus of the most recent CRL " + "knowns by the client; "
                     + "format is \"" + DATE_FORMAT + "\" or \"now\"" + Crls_appendix);
 
     private static final Option OPTION_oldCRL = new Option(
-            null,
+            "L",
             "oldCRL",
             true,
             "<arg> is the CRL for which an update " + "is requested; this is an alternative "
@@ -189,13 +190,13 @@ public class CliCmpClient {
             "t",
             "getCertificateRequestTemplate",
             true,
-            "invoke a Get certificate request template GENM request, <arg> is the file path and name of the request template to write");
+            "invoke a Get certificate request template GENM request, <arg> is the file path and name of the request template to write in DER format");
     private static final Option OPTION_getCaCertificates = new Option(
             "a",
             "getCaCertificates",
             true,
             "invoke a Get CA certificates " + "GENM request, <arg> is the file " + "path and name of certificates "
-                    + "to write in PEM format");
+                    + "to write in PEM format.");
 
     private static final Options cliOptions = new Options();
 

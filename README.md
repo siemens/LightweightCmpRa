@@ -208,10 +208,10 @@ Due to a lack of public available implementations the
 
 An End Entity (EE) client implementation of the
 [Lightweight CMP Profile](<https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/>)
-based on OpenSSL can be found at
-[CMPforOpenSSL](https://github.com/mpeylo/cmpossl/wiki).
+based on OpenSSL with an high-level C API and a CLI is provided by the
+[generic CMP client](https://github.com/siemens/gencmpclient).
 The [openssl-cmp manual page](https://github.com/openssl/openssl/blob/master/doc/man1/openssl-cmp.pod.in)
-gives an overview of the functionality.
+gives an overview of the functionality from CLI usage perspective.
 
 ## Interoperability
 
@@ -229,7 +229,7 @@ With JDK 11, revocation checking has some issues:
 
 # Lightweight CMP client CLI application
 
-This repository provides a CLI-based CMP client application
+This repository provides a CLI-based CMP client application in Java
 for demonstration and test purposes that implements the
 [Lightweight CMP Profile](
 https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).
@@ -245,7 +245,7 @@ given with a `-c` or `--configfile` option.
 It can invoke the following CMP transactions.
 * certificate enrollment (option `--enroll`)
 * certificate revocation using issuer and serial number from configuration (option `--revoke`)
-* certificate revocation  for a given certificate (option `--revokecert`)
+* certificate revocation for a given certificate (option `--revokecert`)
 * get CA certificates (option `--getCaCertificates`)
 * get a root CA certificate update  (option `--getRootCaCertificateUpdate`)
 * get certificate request template (option `--getCertificateRequestTemplate`)
@@ -263,118 +263,109 @@ to distinguish between the following.
 * different CAs to get certificates or root certificate updates for
 
 ```
-Client failed.  Reason: Missing required option: c
 usage: java -jar path/to/CmpClient.jar
- -h,--help                                  print help and exit
+ -h,--help                                  print help and exit.
  -e,--enroll <arg>                          invoke a certificate
                                             enrollment transaction; <arg>
                                             is the file path and name
                                             where the newly
-                                            enrolledcertificate and the
+                                            enrolled certificate and the
                                             corresponding private key will
-                                            be written in PEM format
- -r,--revokecert <arg>                      invoke a revocation
+                                            be written in PEM format,
+ -R,--revoke                                invoke a revocation transaction
+                                            with data from configuration
+ -r,--revokecert <arg>                      invoke a revocation.
                                             transaction; <arg> is the file
                                             path and name of certificate
                                             to revoke in PEM format
  -a,--getCaCertificates <arg>               invoke a Get CA certificates
                                             GENM request, <arg> is the
-                                            file path and name of
-                                            certificates to write in PEM
-                                            format
+                                            file path and name of certificates
+                                            to write in PEM format.
  -t,--getCertificateRequestTemplate <arg>   invoke a Get certificate
                                             request template GENM request,
                                             <arg> is the file path and
                                             name of the request template
-                                            to write
- -u,--getRootCaCertificateUpdate            invoke a Get root CA
+                                            to write in DER format.
+ -u,--getRootCaCertificateUpdate [<arg>]    invoke a Get root CA
                                             certificate update GENM
-                                            request; optional <arg> is the
+                                            request; the optional <arg> is the
                                             file path and name of
                                             certificate to get an update
-                                            for in PEM format
+                                            for in PEM format.
  -l,--getCrls <arg>                         invoke a CRL Update Retrieval
                                             GENM request; <arg> is the
                                             file path and name of CRLs to
-                                            write in PEM format
+                                            write in PEM format.
  -c,--configfile <arg>                      <arg> is the path and name of
                                             the CMP client configuration
-                                            file to use; this option is
-                                            mandatory.
+                                            file to use;
+                                            this option is mandatory.
+ -C,--configroot <arg>                      configuration root path
  -p,--certProfile <arg>                     certProfile to use; optional
-                                            for all client commands
+                                            for all client commands.
  -n,--enrollmentChain <arg>                 <arg> is the file path and
                                             name to write the newly
                                             enrolled certificate and its
                                             chain (excluding the root
                                             certifiate) in PEM format.
                                             This option can be used in
-                                            conjunction with the -e
-                                            option.
+                                            conjunction with the -e option.
  -k,--enrollmentKeystore <arg>              <arg> is the file path and
                                             name to write the enrolled
                                             certificate, chain, and
                                             private key in PKCS#12 format.
                                             This option can be used in
-                                            conjunction with the -e
-                                            option.
+                                            conjunction with the -e option.
  -w,--enrollmentKeystorePassword <arg>      <arg> is the password to be
                                             used for encrypting the
-                                            enrollmentKeystore. This
-                                            option can be used in
-                                            conjunction with the -k
-                                            option.
-    --NewWithNew <arg>                      <arg> is the file path and
+                                            enrollmentKeystore.
+                                            This option can be used in
+                                            conjunction with the -k option.
+ -W,--NewWithNew <arg>                      <arg> is the file path and
                                             name of the new root CA
-                                            certificate to write in PEM
-                                            format. This option can be
-                                            used in conjunction with the
-                                            -u option.
-    --NewWithOld <arg>                      <arg> is the path and name of
+                                            certificate to write in PEM format.
+                                            This option can be used in
+                                            conjunction with the -u option.
+ -N,--NewWithOld <arg>                      <arg> is the path and name of
                                             the file to write any received
                                             new root CA public key signed
-                                            with the old private root CA
-                                            key. This option can be used
-                                            in conjunction with the -u
-                                            option.
-    --OldWithNew <arg>                      <arg> is the path and name of
+                                            with the old private root CA key.
+                                            This option can be used in
+                                            conjunction with the -u option.
+ -O,--OldWithNew <arg>                      <arg> is the path and name of
                                             the file to write any received
                                             certificate containing the old
                                             root CA public key signed with
                                             the new private root CA key.
                                             This option can be used in
-                                            conjunction with the -u
-                                            option.
-    --serial <arg>                          <arg> is the serial number of
+                                            conjunction with the -u option.
+ -S,--serial <arg>                          <arg> is the serial number of
                                             the certificate to revoke with
-                                            the --revoke option.
-    --issuer <arg>                          <arg> can be the issuer of the
+                                            the -R option.
+ -I,--issuer <arg>                          <arg> can be the issuer of the
                                             certificate to revoke with the
-                                            --revoke option; <arg> can
+                                            -R option; <arg> can
                                             also be the issuer in
                                             CRLSource to consult in
-                                            conjunction with the -l option
-    --dpn <arg>                             <arg> is the
+                                            conjunction with the -l option.
+ -D,--dpn <arg>                             <arg> is the
                                             DistributionPointName in
                                             CRLSource to consult. This
                                             option can be used in
-                                            conjunction with the -l
-                                            option.
-    --thisUpdate <arg>                      <arg> is the thisUpdate time
+                                            conjunction with the -l option.
+ -U,--thisUpdate <arg>                      <arg> is the thisUpdate time
                                             in CRLStatus of the most
-                                            recent CRL knowns by the
-                                            client; format is "yyyy-MM-dd"
-                                            or "now". This option can be
-                                            used in conjunction with the
-                                            -l option.
-    --oldCRL <arg>                          <arg> is the CRL for which an
-                                            update is requested; this is
-                                            an alternative to using the
-                                            --issuer, --dpn, and
-                                            --thisUpdate options. This
-                                            option can be used in
-                                            conjunction with the -l
-                                            option.
+                                            recent CRL knowns by the client;
+                                            format is "yyyy-MM-dd" or "now".
+                                            This option can be used in
+                                            conjunction with the -l option.
+ -L,--oldCRL <arg>                          <arg> is the CRL for which an
+                                            update is requested; this is an
+                                            alternative to using the --issuer,
+                                            --dpn, and --thisUpdate options.
+                                            This   option can be used in
+                                            conjunction with the -l option.
 
 ```
 
