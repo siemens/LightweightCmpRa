@@ -33,37 +33,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @XmlRootElement
 // {@link java.util.List} sub classing works only with {@link XmlAccessType}.FIELD
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ConfigurationImpl implements Configuration {
-
-    static class CertProfileBodyTypeScopedList<T extends CertProfileBodyTypeConfigItem> extends ArrayList<T> {
-
-        private static final long serialVersionUID = 1L;
-
-        T getMatchingConfig(final String certProfile, final int bodyType) {
-            for (final T aktItem : this) {
-                if (aktItem.matchesScope(certProfile, bodyType)) {
-                    return aktItem;
-                }
-            }
-            return null;
-        }
-
-        T getMatchingConfig(final String certProfile, final int bodyType, final String itemName) {
-            final T ret = getMatchingConfig(certProfile, bodyType);
-            if (ret != null) {
-                return ret;
-            }
-            LOGGER.error("no matching " + itemName + " entry found for certProfile: " + certProfile + ", bodyType: "
-                    + bodyType);
-            return null;
-        }
-    }
 
     static class CertProfileInfoTypeScopedList<T extends CertProfileInfoTypeConfigItem> extends ArrayList<T> {
 
@@ -79,14 +53,13 @@ public class ConfigurationImpl implements Configuration {
         }
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationImpl.class);
-
     private final PersistencyInterface persistency = new DefaultPersistencyImplementation(600);
 
     @XmlElements({
         @XmlElement(name = "OfflineFileClient", type = OfflineFileClientConfig.class, required = false),
         @XmlElement(name = "HttpClient", type = HttpClientConfig.class, required = false),
-        @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false)
+        @XmlElement(name = "HttpsClient", type = HttpsClientConfig.class, required = false),
+        @XmlElement(name = "CoapClient", type = CoapClientConfig.class, required = false),
     })
     private final CertProfileBodyTypeScopedList<AbstractUpstreamInterfaceConfig> UpstreamInterface =
             new CertProfileBodyTypeScopedList<>();

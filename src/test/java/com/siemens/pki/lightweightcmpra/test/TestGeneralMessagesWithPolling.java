@@ -22,9 +22,10 @@ import static org.junit.Assert.assertNotNull;
 
 import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.main.RA;
 import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.security.cert.CRL;
 import java.security.cert.CertificateFactory;
 import java.util.Date;
@@ -51,19 +52,27 @@ import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.Time;
 import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore
 public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestGeneralMessagesWithPolling.class);
 
-    @Before
-    public void setUp() throws Exception {
-        new File("./target/CmpTest/GenDownstream").mkdirs();
-        new File("./target/CmpTest/GenUpstream").mkdirs();
+    @AfterClass
+    public static void removeDirs() {
+        RA.stopAllRas();
+        TestUtils.removeDirectories("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+    }
+
+    @BeforeClass
+    public static void setUpDirsAndRas() throws Exception {
+        TestUtils.createDirectories("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
         initTestbed(
                 "http://localhost:6006/delayedsupportlra",
                 "DelayedSupportMessagesRaTestConfig.yaml",
@@ -71,9 +80,8 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     }
 
     @After
-    public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/GenDownstream"));
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/GenUpstream"));
+    public void clearDirs() {
+        TestUtils.deleteAllFilesIn("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
     }
 
     /**

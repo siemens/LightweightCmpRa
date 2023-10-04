@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
  * a file system based downstream interface
  *
  */
-public class OfflineFileServer implements DownstreamInterface {
+public class CmpOfflineFileServer implements DownstreamInterface {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OfflineFileServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmpOfflineFileServer.class);
 
     static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyMMddHHmmssZ");
 
@@ -46,6 +46,8 @@ public class OfflineFileServer implements DownstreamInterface {
     private final File outputDirectory;
 
     private final ExFunction messageHandler;
+
+    private final Timer pollTimer;
 
     /**
      *
@@ -56,7 +58,8 @@ public class OfflineFileServer implements DownstreamInterface {
      * @throws IOException
      *             in case of error
      */
-    public OfflineFileServer(final OfflineFileServerConfig config, final ExFunction messageHandler) throws IOException {
+    public CmpOfflineFileServer(final OfflineFileServerConfig config, final ExFunction messageHandler)
+            throws IOException {
         this.messageHandler = messageHandler;
         inputDirectory = new File(config.getInputDirectory());
         if (!inputDirectory.isDirectory() || !inputDirectory.canWrite()) {
@@ -67,7 +70,7 @@ public class OfflineFileServer implements DownstreamInterface {
             throw new IOException(config.getOutputDirectory() + " is not a writable directory");
         }
         final long pollInterval = config.getInputDirectoryPollcycle() * 1000L;
-        final Timer pollTimer = new Timer(true);
+        pollTimer = new Timer(true);
         final TimerTask task = new TimerTask() {
 
             @Override
@@ -114,5 +117,10 @@ public class OfflineFileServer implements DownstreamInterface {
                 LOGGER.warn("error writing message to filesystem", ex);
             }
         }
+    }
+
+    @Override
+    public void stop() {
+        pollTimer.cancel();
     }
 }

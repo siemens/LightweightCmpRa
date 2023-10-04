@@ -24,7 +24,7 @@ import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import com.siemens.pki.lightweightcmpra.test.framework.EnrollmentResult;
 import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
-import java.io.File;
+import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.security.KeyPair;
 import java.util.function.Function;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
@@ -35,7 +35,8 @@ import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,10 +94,14 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
         return new EnrollmentResult(enrolledCertificate, keyPair.getPrivate());
     }
 
-    @Before
-    public void setUp() throws Exception {
-        new File("./target/CmpTest/Downstream").mkdirs();
-        new File("./target/CmpTest/Upstream").mkdirs();
+    @AfterClass
+    public static void removeDirs() {
+        TestUtils.removeDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+    }
+
+    @BeforeClass
+    public static void setUpDirsAndRas() throws Exception {
+        TestUtils.createDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
         initTestbed(
                 "http://localhost:6003/delayedlra",
                 "DelayedEnrollmentRaTestConfig.yaml",
@@ -104,8 +109,7 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
     }
 
     @After
-    public void shutDown() throws Exception {
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/Downstream"));
-        DelayedDeliveryTestcaseBase.deleteDirectory(new File("./target/CmpTest/Upstream"));
+    public void clearDirs() {
+        TestUtils.deleteAllFilesIn("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
     }
 }

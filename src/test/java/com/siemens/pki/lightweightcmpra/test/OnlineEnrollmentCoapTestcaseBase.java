@@ -17,13 +17,19 @@
  */
 package com.siemens.pki.lightweightcmpra.test;
 
-import org.junit.Before;
+import com.siemens.pki.lightweightcmpra.main.RA;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 public class OnlineEnrollmentCoapTestcaseBase extends OnlineEnrollmentTestcaseBase {
 
-    @Before
-    public void setUp() throws Exception {
-
+    @BeforeClass
+    public static void setUpRa() throws Exception {
         initTestbed("coap://localhost/onlinelra", "EnrollmentConfigWithCoapAndSignature.yaml");
+    }
+
+    @AfterClass
+    public static void shutDownRa() {
+        RA.stopAllRas();
     }
 }

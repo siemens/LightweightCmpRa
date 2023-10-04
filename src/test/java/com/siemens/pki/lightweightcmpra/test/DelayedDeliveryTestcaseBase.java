@@ -23,7 +23,6 @@ import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
 import com.siemens.pki.lightweightcmpra.test.framework.HeaderProviderForTest;
-import java.io.File;
 import java.util.function.Function;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.cmp.CertRepMessage;
@@ -39,16 +38,6 @@ import org.slf4j.LoggerFactory;
 public class DelayedDeliveryTestcaseBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelayedDeliveryTestcaseBase.class);
-
-    public static boolean deleteDirectory(final File directoryToBeDeleted) {
-        final File[] allContents = directoryToBeDeleted.listFiles();
-        if (allContents != null) {
-            for (final File file : allContents) {
-                deleteDirectory(file);
-            }
-        }
-        return directoryToBeDeleted.delete();
-    }
 
     protected static PKIMessage executeRequestWithPolling(
             final int expectedWaitingResponseMessageType,

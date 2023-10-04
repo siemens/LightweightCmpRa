@@ -18,12 +18,14 @@
 package com.siemens.pki.lightweightcmpra.upstream;
 
 import com.siemens.pki.lightweightcmpra.configuration.AbstractUpstreamInterfaceConfig;
+import com.siemens.pki.lightweightcmpra.configuration.CoapClientConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpClientConfig;
 import com.siemens.pki.lightweightcmpra.configuration.HttpsClientConfig;
 import com.siemens.pki.lightweightcmpra.configuration.OfflineFileClientConfig;
-import com.siemens.pki.lightweightcmpra.upstream.offline.FileOfflineClient;
-import com.siemens.pki.lightweightcmpra.upstream.online.HttpSession;
-import com.siemens.pki.lightweightcmpra.upstream.online.HttpsSession;
+import com.siemens.pki.lightweightcmpra.upstream.offline.CmpFileOfflineClient;
+import com.siemens.pki.lightweightcmpra.upstream.online.CmpCoapClient;
+import com.siemens.pki.lightweightcmpra.upstream.online.CmpHttpClient;
+import com.siemens.pki.lightweightcmpra.upstream.online.CmpHttpsClient;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,26 +38,29 @@ public class UpstreamInterfaceFactory {
      * create an {@link UpstreamInterface} instance according to the given
      * configuration
      *
-     * @param configuration
-     *            upstream interface configuration
+     * @param configuration upstream interface configuration
      * @return an upstream instance
      */
     public static UpstreamInterface create(final AbstractUpstreamInterfaceConfig configuration) {
         try {
             if (configuration instanceof OfflineFileClientConfig) {
-                return new FileOfflineClient((OfflineFileClientConfig) configuration);
+                return new CmpFileOfflineClient((OfflineFileClientConfig) configuration);
             }
             if (configuration instanceof HttpClientConfig) {
                 final HttpClientConfig httpConfig = (HttpClientConfig) configuration;
-                final URI ServingUri = httpConfig.getServingUri();
-                final String scheme = ServingUri.getScheme();
+                final URI UpstreamURI = httpConfig.getUpstreamURI();
+                final String scheme = UpstreamURI.getScheme();
                 if ("http".equalsIgnoreCase(scheme)) {
-                    return new HttpSession(ServingUri.toURL(), httpConfig.getTimeout());
+                    return new CmpHttpClient(UpstreamURI.toURL(), httpConfig.getTimeout());
                 }
                 if ("https".equalsIgnoreCase(scheme) && httpConfig instanceof HttpsClientConfig) {
-                    return new HttpsSession(
-                            ServingUri.toURL(), httpConfig.getTimeout(), (HttpsClientConfig) httpConfig);
+                    return new CmpHttpsClient(
+                            UpstreamURI.toURL(), httpConfig.getTimeout(), (HttpsClientConfig) httpConfig);
                 }
+            }
+            if (configuration instanceof CoapClientConfig) {
+                final CoapClientConfig coapConfig = (CoapClientConfig) configuration;
+                return new CmpCoapClient(coapConfig.getUpstreamURI(), coapConfig.getTimeout());
             }
             LOGGER.error("error creating upstream interface from given configuration");
         } catch (final Exception e) {

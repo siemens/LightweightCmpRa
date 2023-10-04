@@ -21,14 +21,18 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-class CertProfileConfigItem {
+public class CertProfileConfigItem {
     private String certProfile;
 
     public String getCertProfile() {
         return certProfile;
     }
 
-    boolean matchesScope(final String certProfile) {
+    public void setCertProfile(final String certProfile) {
+        this.certProfile = certProfile;
+    }
+
+    public boolean matchesCertProfile(final String certProfile) {
         return this.certProfile == null || this.certProfile.equals(certProfile);
     }
 }

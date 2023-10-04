@@ -37,9 +37,9 @@ public class YamlConfigLoader {
             .registerModules(new JaxbAnnotationModule())
             .setSerializationInclusion(Include.NON_EMPTY);
 
-    public static ConfigurationImpl loadConfig(final String filename) throws IOException {
+    public static <C> C loadConfig(final String filename, final Class<C> configClass) throws IOException {
         try (InputStream is = ConfigFileLoader.getConfigFileAsStream(filename)) {
-            return JACKSON_OBJECT_MAPPER.readValue(is, ConfigurationImpl.class);
+            return JACKSON_OBJECT_MAPPER.readValue(is, configClass);
         }
     }
 

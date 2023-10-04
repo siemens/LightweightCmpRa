@@ -38,7 +38,7 @@ public abstract class CertProfileInfoTypeConfigItem extends CertProfileConfigIte
     }
 
     boolean matchesScope(final String certProfile, final String infoTypeOid) {
-        if (!super.matchesScope(certProfile)) {
+        if (!super.matchesCertProfile(certProfile)) {
             return false;
         }
         return this.infoTypeOid == null || this.infoTypeOid.equals(infoTypeOid);

@@ -23,34 +23,26 @@ import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import com.siemens.pki.lightweightcmpra.test.framework.TrustChainAndPrivateKey;
 import java.security.GeneralSecurityException;
 import java.security.KeyPairGenerator;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EnrollmentTestcaseBase extends CmpTestcaseBase {
 
     private static KeyPairGenerator keyGenerator;
-    private static CmpCaMock caMock;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EnrollmentTestcaseBase.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(EnrollmentTestcaseBase.class);
 
-    public static CmpCaMock getCaMock() {
-        return caMock;
-    }
+    private static TrustChainAndPrivateKey enrollmentCredentials;
 
     protected static KeyPairGenerator getKeyGenerator() {
         return keyGenerator;
     }
 
-    private TrustChainAndPrivateKey enrollmentCredentials;
-
-    protected TrustChainAndPrivateKey getEnrollmentCredentials() {
-        return enrollmentCredentials;
-    }
-
-    @Override
-    protected void initTestbed(final String cmpClientUrl, final String... namesOfRaConfigFile)
+    protected static void initTestbed(final String cmpClientUrl, final String... namesOfRaConfigFile)
             throws Exception, GeneralSecurityException, InterruptedException {
-        super.initTestbed(cmpClientUrl, namesOfRaConfigFile);
+        CmpTestcaseBase.initTestbed(cmpClientUrl, namesOfRaConfigFile);
         if (enrollmentCredentials == null) {
             enrollmentCredentials =
                     new TrustChainAndPrivateKey("credentials/ENROLL_Keystore.p12", TestUtils.getPasswordAsCharArray());
@@ -59,20 +51,19 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
             keyGenerator = KeyPairGeneratorFactory.getEcKeyPairGenerator("secp256r1");
             // keyGenerator = KeyPairGeneratorFactory.getRsaKeyPairGenerator(2048);
         }
-        if (caMock == null) {
-            new Thread(
-                            (Runnable) () -> {
-                                try {
-                                    caMock = new CmpCaMock(
-                                            "http://localhost:7000/ca",
-                                            "credentials/ENROLL_Keystore.p12",
-                                            "credentials/CMP_CA_Keystore.p12");
-                                } catch (final Exception e) {
-                                    LOGGER.error("CA start", e);
-                                }
-                            },
-                            "CA thread")
-                    .start();
-        }
+    }
+
+    @BeforeClass
+    public static void launchCa() throws InterruptedException {
+        CmpCaMock.launchSingleCaMock();
+    }
+
+    @AfterClass
+    public static void shutDownCa() {
+        CmpCaMock.stopSingleCaMock();
+    }
+
+    protected TrustChainAndPrivateKey getEnrollmentCredentials() {
+        return enrollmentCredentials;
     }
 }

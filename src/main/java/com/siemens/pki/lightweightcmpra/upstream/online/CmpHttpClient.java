@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation of a HTTP client.
  */
-public class HttpSession implements UpstreamInterface {
+public class CmpHttpClient implements UpstreamInterface {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpSession.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmpHttpClient.class);
 
     /**
      * send a CMP message to the already connected server and return received
@@ -85,7 +85,7 @@ public class HttpSession implements UpstreamInterface {
      * @throws Exception
      *             in case of error
      */
-    public HttpSession(final URL remoteUrl, final int timeoutInSeconds) throws Exception {
+    public CmpHttpClient(final URL remoteUrl, final int timeoutInSeconds) throws Exception {
         this.remoteUrl = remoteUrl;
         this.timeoutInSeconds = timeoutInSeconds;
     }

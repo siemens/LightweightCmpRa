@@ -131,4 +131,10 @@ public class CmpCoapServer implements DownstreamInterface {
             exchange.respond(ResponseCode.INTERNAL_SERVER_ERROR, "Internal error:" + e.getMessage());
         }
     }
+
+    @Override
+    public void stop() {
+        coapServer.stop();
+        coapServer = null;
+    }
 }

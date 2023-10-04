@@ -114,3 +114,7 @@ fix: switch to SUN provider for chain validation
 
 fix: update test credentials, update depedencies
 
+### 3.0.0 (Oct 04 2023)
+
+feat: provide CMP client implementation
+

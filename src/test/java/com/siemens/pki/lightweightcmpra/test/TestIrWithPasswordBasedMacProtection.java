@@ -19,6 +19,7 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.main.RA;
 import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,8 @@ import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.iana.IANAObjectIdentifiers;
 import org.bouncycastle.asn1.oiw.OIWObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -36,7 +38,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class TestIrWithPasswordBasedMacProtection extends OnlineEnrollmentTestcaseBase {
 
-    public static Object[][] inputList = new Object[][] {
+    public static Object[][] inputList = {
         //
         {OIWObjectIdentifiers.idSHA1, PKCSObjectIdentifiers.id_hmacWithSHA224},
         {OIWObjectIdentifiers.idSHA1, PKCSObjectIdentifiers.id_hmacWithSHA512},
@@ -47,6 +49,11 @@ public class TestIrWithPasswordBasedMacProtection extends OnlineEnrollmentTestca
         {new ASN1ObjectIdentifier("2.16.840.1.101.3.4.2.1"), IANAObjectIdentifiers.hmacSHA1}
     };
     //
+
+    @AfterClass
+    public static void clearRas() {
+        RA.stopAllRas();
+    }
 
     @Parameters(name = "{index}: owf=>{0}, mac=>{1}")
     public static List<Object[]> data() {
@@ -66,6 +73,11 @@ public class TestIrWithPasswordBasedMacProtection extends OnlineEnrollmentTestca
         return ret;
     }
 
+    @BeforeClass
+    public static void setUpRas() throws Exception {
+        initTestbed("http://localhost:6002/lrawithmacprotection", "EnrollmentConfigWithHttpAndPassword.yaml");
+    }
+
     private final ASN1ObjectIdentifier owf;
 
     private final ASN1ObjectIdentifier mac;
@@ -77,11 +89,6 @@ public class TestIrWithPasswordBasedMacProtection extends OnlineEnrollmentTestca
             final ASN1ObjectIdentifier mac) {
         this.owf = owf;
         this.mac = mac;
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        initTestbed("http://localhost:6002/lrawithmacprotection", "EnrollmentConfigWithHttpAndPassword.yaml");
     }
 
     /**

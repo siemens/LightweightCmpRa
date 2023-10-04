@@ -18,6 +18,7 @@
 package com.siemens.pki.lightweightcmpra.test.framework;
 
 import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.siemens.pki.cmpracomponent.protection.PBMAC1Protection;
@@ -27,8 +28,9 @@ import com.siemens.pki.cmpracomponent.protection.SignatureBasedProtection;
 import com.siemens.pki.lightweightcmpra.configuration.SharedSecretCredentialContextImpl;
 import com.siemens.pki.lightweightcmpra.configuration.SignatureCredentialContextImpl;
 import com.siemens.pki.lightweightcmpra.configuration.VerificationContextImpl;
-import com.siemens.pki.lightweightcmpra.upstream.online.HttpSession;
+import com.siemens.pki.lightweightcmpra.upstream.online.CmpHttpClient;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -64,10 +66,10 @@ public class TestUtils {
      */
     public static Function<PKIMessage, PKIMessage> createCmpClient(final String serverPath) throws Exception {
         if (serverPath.toLowerCase().startsWith("http")) {
-            final HttpSession httpSession = new HttpSession(new URL(serverPath), 30);
+            final CmpHttpClient cmpHttpClient = new CmpHttpClient(new URL(serverPath), 30);
             return request -> {
                 try {
-                    return ifNotNull(httpSession.apply(request.getEncoded(), "http client"), PKIMessage::getInstance);
+                    return ifNotNull(cmpHttpClient.apply(request.getEncoded(), "http client"), PKIMessage::getInstance);
                 } catch (RuntimeException | IOException e) {
                     fail(e.getMessage());
                     return null;
@@ -89,6 +91,16 @@ public class TestUtils {
             };
         }
         throw new IllegalArgumentException("invalid server path: " + serverPath);
+    }
+
+    public static void createDirectories(String... directoryNames) {
+        for (final String akt : directoryNames) {
+            final File dirFile = new File(akt);
+            if (dirFile.exists()) {
+                deleteDirectory(dirFile);
+            }
+            assertTrue("creating " + akt, dirFile.mkdirs());
+        }
     }
 
     public static PasswordBasedMacProtection createPasswordBasedMacProtection(
@@ -140,12 +152,38 @@ public class TestUtils {
         return verifierConfig;
     }
 
+    private static void deleteAllFilesIn(final File directory) {
+        final File[] allContents = directory.listFiles();
+        if (allContents != null) {
+            for (final File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+    }
+
+    public static void deleteAllFilesIn(String... directoryNames) {
+        for (final String akt : directoryNames) {
+            deleteAllFilesIn(new File(akt));
+        }
+    }
+
+    private static boolean deleteDirectory(final File directoryToBeDeleted) {
+        deleteAllFilesIn(directoryToBeDeleted);
+        return directoryToBeDeleted.delete();
+    }
+
     public static String getPassword() {
         return PASSWORD;
     }
 
     public static char[] getPasswordAsCharArray() {
         return PASSWORD_AS_CHAR_ARRAY;
+    }
+
+    public static void removeDirectories(String... directoryNames) {
+        for (final String akt : directoryNames) {
+            assertTrue("deleting " + akt, deleteDirectory(new File(akt)));
+        }
     }
 
     // utility class, never create an instance

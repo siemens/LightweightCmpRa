@@ -2,7 +2,7 @@
 
 DownstreamInterface:
   HttpServer:
-    ServingUri: "http://localhost:6004/supportlra"
+    UpstreamURI: "http://localhost:6004/supportlra"
 
 SupportMessageHandlerInterface:
   - GetCaCertificates:

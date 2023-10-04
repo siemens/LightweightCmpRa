@@ -19,6 +19,7 @@ package com.siemens.pki.lightweightcmpra.test;
 
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.main.RA;
 import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,8 @@ import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,7 +44,7 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
 
     private static final AlgorithmIdentifier DEFAULT_MAC = DEFAULT_PRF;
 
-    public static Object[][] inputList = new Object[][] {
+    public static Object[][] inputList = {
         {DEFAULT_PRF, DEFAULT_MAC},
         //
         {
@@ -96,6 +98,11 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
         }
     };
 
+    @AfterClass
+    public static void clearRas() {
+        RA.stopAllRas();
+    }
+
     @Parameters(name = "{index}: prf=>{0}, mac=>{1}")
     public static List<Object[]> data() {
         final List<Object[]> ret = new ArrayList<>(inputList.length);
@@ -109,6 +116,11 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
         return ret;
     }
 
+    @BeforeClass
+    public static void setUp() throws Exception {
+        initTestbed("http://localhost:6002/lrawithmacprotection", "EnrollmentConfigWithHttpAndPassword.yaml");
+    }
+
     private final AlgorithmIdentifier prf;
 
     private final AlgorithmIdentifier mac;
@@ -120,11 +132,6 @@ public class TestIrWithPbmac1Protection extends OnlineEnrollmentTestcaseBase {
             final AlgorithmIdentifier mac) {
         this.prf = prf;
         this.mac = mac;
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        initTestbed("http://localhost:6002/lrawithmacprotection", "EnrollmentConfigWithHttpAndPassword.yaml");
     }
 
     /**

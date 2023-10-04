@@ -2,12 +2,12 @@
 
 UpstreamInterface:
   - HttpClient:
-      ServingUri:  "http://localhost:7000/ca"
+      UpstreamURI:  "http://localhost:7000/ca"
       Timeout: 44
 
 DownstreamInterface:
   HttpServer:
-    ServingUri: "http://localhost:6000/onlinelra"
+    UpstreamURI: "http://localhost:6000/onlinelra"
 
 UpstreamConfiguration:
   - VerificationContext:
