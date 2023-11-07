@@ -118,3 +118,7 @@ fix: update test credentials, update depedencies
 
 feat: provide CMP client implementation
 
+### 3.0.1 (Nov 07 2023)
+
+fix: update some dependencies
+
