@@ -30,6 +30,7 @@ public class DelayedEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
 
     @BeforeClass
     public static void setupRas() throws GeneralSecurityException, InterruptedException, Exception {
+        TestUtils.createDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
         initTestbed("DelayedEnrollmentRaTestConfig.yaml", "DelayedEnrollmentLraTestConfig.yaml");
     }
 
@@ -40,13 +41,11 @@ public class DelayedEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
     }
 
     @After
-    public void cleanUpDelayedEnrollmentDirs() {
-        TestUtils.deleteAllFilesIn("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
-    }
+    public void cleanUpDelayedEnrollmentDirs() {}
 
     @Before
     public void setUpDelayedEnrollmentDirs() throws Exception {
-        TestUtils.createDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.deleteAllFilesIn("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
     }
 
     @Test

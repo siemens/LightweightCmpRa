@@ -24,8 +24,8 @@ import com.siemens.pki.lightweightcmpclient.main.CliCmpClient;
 import com.siemens.pki.lightweightcmpra.main.RA;
 import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import java.io.File;
-import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
         initTestbed("DelayedSupportMessagesRaTestConfig.yaml", "DelayedSupportMessagesLraTestConfig.yaml");
     }
 
-    @After
+    @Before
     public void cleanDirectories() {
         TestUtils.deleteAllFilesIn("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
     }

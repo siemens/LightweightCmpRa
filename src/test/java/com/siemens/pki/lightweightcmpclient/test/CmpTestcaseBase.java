@@ -24,8 +24,8 @@ import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.File;
 import java.security.GeneralSecurityException;
 import java.security.Security;
-import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 public class CmpTestcaseBase {
@@ -53,7 +53,7 @@ public class CmpTestcaseBase {
         TestUtils.createDirectories(RESULT_DIR);
     }
 
-    @After
+    @Before
     public void cleanResultDir() {
         TestUtils.deleteAllFilesIn(RESULT_DIR);
     }

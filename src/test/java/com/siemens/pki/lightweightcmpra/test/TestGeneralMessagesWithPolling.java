@@ -51,8 +51,8 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.Time;
-import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
                 "DelayedSupportMessagesLraTestConfig.yaml");
     }
 
-    @After
+    @Before
     public void clearDirs() {
         TestUtils.deleteAllFilesIn("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
     }
