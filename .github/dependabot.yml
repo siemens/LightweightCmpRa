@@ -9,3 +9,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      dependabot-dependency-updates:
+        update-types:
+        - "minor"
+        - "patch"
