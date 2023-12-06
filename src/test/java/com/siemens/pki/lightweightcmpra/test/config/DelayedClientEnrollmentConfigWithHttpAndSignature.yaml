@@ -15,6 +15,7 @@ MessageConfiguration:
       Signature:
         keyStore: "../../../../../../../../../target/CmpTest/Results/EnrollmentKeystore.p12"
         Password: "secret"
+    Recipient: "CN=recip"
   - VerificationContext:
       trustedCertificates:
         - "credentials/CMP_CA_Root.pem"
@@ -27,8 +28,7 @@ MessageConfiguration:
         Password: "Password"
 
 ClientContext:
-  - Recipient: "CN=recip"
-    EnrollmentContext:
+  - EnrollmentContext:
       EnrollmentType: CR
       EnrollmentTrust: 
         trustedCertificates:

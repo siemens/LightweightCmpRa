@@ -17,6 +17,7 @@ UpstreamConfiguration:
         keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
         Password: "Password"
     reprotectmode: reprotect
+    recipient: "CN=newRecipient"
 
 DownstreamConfiguration:
   - VerificationContext:

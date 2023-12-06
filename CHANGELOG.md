@@ -122,3 +122,7 @@ feat: provide CMP client implementation
 
 fix: update some dependencies
 
+### 4.0.0 (Nov 08 2023)
+
+feat:  implement configurable recipient
+

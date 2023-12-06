@@ -35,6 +35,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.asn1.cmp.CMPCertificate;
@@ -69,11 +70,23 @@ import org.slf4j.LoggerFactory;
  */
 public class CmpCaMock implements ExFunction {
 
+    private static final int MAX_LAST_RECEIVED = 10;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CmpCaMock.class);
 
     private static JcaPEMKeyConverter JCA_KEY_CONVERTER = new JcaPEMKeyConverter();
 
-    public static CmpCaMock singleCaMock;
+    private static CmpCaMock singleCaMock;
+
+    private static final LinkedList<PKIMessage> lastReceivedMessages = new LinkedList<>();
+
+    public static PKIMessage getLastReceivedRequest() {
+        return lastReceivedMessages.getFirst();
+    }
+
+    public static PKIMessage getReceivedRequestAt(int index) {
+        return lastReceivedMessages.get(index);
+    }
 
     public static CmpCaMock launchSingleCaMock() throws InterruptedException {
         if (singleCaMock == null) {
@@ -92,6 +105,7 @@ public class CmpCaMock implements ExFunction {
                     .start();
             Thread.sleep(2000L);
         }
+        lastReceivedMessages.clear();
         return singleCaMock;
     }
 
@@ -131,8 +145,13 @@ public class CmpCaMock implements ExFunction {
     public byte[] apply(final byte[] receivedMessageAsByte) throws Exception {
         final PKIMessage receivedMessage = PKIMessage.getInstance(receivedMessageAsByte);
         if (LOGGER.isDebugEnabled()) {
-            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
+            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't
+            // enabled
             LOGGER.debug("CA: got:\n" + MessageDumper.dumpPkiMessage(receivedMessage));
+        }
+        lastReceivedMessages.addFirst(receivedMessage);
+        while (lastReceivedMessages.size() > MAX_LAST_RECEIVED) {
+            lastReceivedMessages.removeLast();
         }
         final PKIMessage ret;
         switch (receivedMessage.getBody().getType()) {
@@ -156,7 +175,8 @@ public class CmpCaMock implements ExFunction {
                         "unsuported message type " + receivedMessage.getBody().getType());
         }
         if (LOGGER.isDebugEnabled()) {
-            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't enabled
+            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't
+            // enabled
             LOGGER.debug("CA: respond:\n" + MessageDumper.dumpPkiMessage(ret));
         }
         return ret.getEncoded();
@@ -228,6 +248,7 @@ public class CmpCaMock implements ExFunction {
         return PkiMessageGenerator.generateAndProtectMessage(
                 PkiMessageGenerator.buildRespondingHeaderProvider(receivedMessage),
                 caProtectionProvider,
+                null,
                 PkiMessageGenerator.generateIpCpKupBody(
                         receivedMessage.getBody().getType() + 1, cmpCertificateFromCertificate),
                 issuingChainForExtraCerts);
@@ -252,6 +273,7 @@ public class CmpCaMock implements ExFunction {
         return PkiMessageGenerator.generateAndProtectMessage(
                 PkiMessageGenerator.buildRespondingHeaderProvider(receivedMessage),
                 caProtectionProvider,
+                null,
                 PkiMessageGenerator.generateIpCpKupBody(PKIBody.TYPE_CERT_REP, cmpCertificateFromCertificate),
                 issuingChainForExtraCerts);
     }

@@ -13,10 +13,10 @@ MessageConfiguration:
       Signature:
         keyStore: "credentials/CMP_EE_Keystore.p12"
         Password: "Password"
+    Recipient: "CN=recip"
 
 ClientContext:
-  - Recipient: "CN=recip"
-    EnrollmentContext:
+  - EnrollmentContext:
       EnrollmentType: P10CR
       EnrollmentTrust: 
         trustedCertificates:

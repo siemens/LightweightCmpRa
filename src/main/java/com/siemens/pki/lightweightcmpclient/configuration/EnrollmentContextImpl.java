@@ -17,10 +17,11 @@
  */
 package com.siemens.pki.lightweightcmpclient.configuration;
 
+import static com.siemens.pki.cmpracomponent.util.NullUtil.ifNotNull;
+
 import com.siemens.pki.cmpclientcomponent.configuration.EnrollmentContext;
 import com.siemens.pki.cmpracomponent.configuration.VerificationContext;
 import com.siemens.pki.cmpracomponent.cryptoservices.KeyPairGeneratorFactory;
-import com.siemens.pki.cmpracomponent.util.NullUtil;
 import com.siemens.pki.lightweightcmpra.configuration.VerificationContextImpl;
 import com.siemens.pki.lightweightcmpra.configuration.XmlPkiMessageTypeToIntAdapter;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
@@ -70,7 +71,7 @@ public class EnrollmentContextImpl implements EnrollmentContext {
 
     @Override
     public KeyPair getCertificateKeypair() {
-        if ((keyType == null && requestCentralKeyGeneration) || (enrollmentType == PKIBody.TYPE_P10_CERT_REQ)) {
+        if (keyType == null && requestCentralKeyGeneration || enrollmentType == PKIBody.TYPE_P10_CERT_REQ) {
             return null;
         }
         try {
@@ -114,7 +115,7 @@ public class EnrollmentContextImpl implements EnrollmentContext {
     @Override
     public byte[] getCertificationRequest() {
         try {
-            return NullUtil.ifNotNull(certificationRequest, cr -> ConfigFileLoader.getConfigUriAsStream(cr)
+            return ifNotNull(certificationRequest, cr -> ConfigFileLoader.getConfigUriAsStream(cr)
                     .readAllBytes());
         } catch (final IOException e) {
             e.printStackTrace();
@@ -139,8 +140,7 @@ public class EnrollmentContextImpl implements EnrollmentContext {
 
     @Override
     public X509Certificate getOldCert() {
-        return NullUtil.ifNotNull(
-                oldCert, url -> CredentialLoader.loadCertificates(url).get(0));
+        return ifNotNull(oldCert, url -> CredentialLoader.loadCertificates(url).get(0));
     }
 
     @Override
