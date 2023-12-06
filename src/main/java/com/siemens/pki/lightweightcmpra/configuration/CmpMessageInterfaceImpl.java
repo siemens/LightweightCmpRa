@@ -43,6 +43,8 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem imple
 
     private long allowedMessageTimDeviation = 3600;
 
+    private String recipient = CmpMessageInterface.super.getRecipient();
+
     @Override
     public VerificationContext getInputVerification() {
         return VerificationContext;
@@ -56,6 +58,11 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem imple
     @Override
     public CredentialContext getOutputCredentials() {
         return OutputCredentials;
+    }
+
+    @Override
+    public String getRecipient() {
+        return recipient;
     }
 
     @Override
@@ -96,6 +103,10 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem imple
     })
     public void setOutputCredentials(final CredentialContextImpl outputCredentials) {
         OutputCredentials = outputCredentials;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     @XmlElement(required = true)

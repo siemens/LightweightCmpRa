@@ -19,6 +19,7 @@ MessageInterface:
 MessageConfiguration:
 # should never match
   - certProfile: wrongCertProfile
+    recipient: "broken"
     VerificationContext:
       SharedSecret: "wrong"
       trustedCertificates:
@@ -31,6 +32,7 @@ MessageConfiguration:
         SenderKID: secret1KeyIdentification
         
   - certProfile: secret1
+    recipient: "CN=secret1"
     VerificationContext:
       SharedSecret: "secret1"
       trustedCertificates:
@@ -43,6 +45,7 @@ MessageConfiguration:
         SenderKID: secret1KeyIdentification
         
   - certProfile: secret2
+    recipient: "CN=secret2"
     VerificationContext:
       SharedSecret: "secret2"
       trustedCertificates:
@@ -65,12 +68,11 @@ MessageConfiguration:
         PasswordBasedMacAlgorithm: PBMAC1
         SharedSecret: "wrong2"
         SenderKID: secret1KeyIdentification
-        
+    recipient: "broken2"        
         
 ClientContext:
 # should never match
   - certProfile: wrongCertProfile
-    Recipient: "broken"
     EnrollmentContext:
       EnrollmentType: IR
       EnrollmentTrust: 
@@ -81,7 +83,6 @@ ClientContext:
       RequestImplictConfirm: false
   
   - certProfile: secret1
-    Recipient: "CN=Recip_secret1"
     EnrollmentContext:
       EnrollmentType: IR
       EnrollmentTrust: 
@@ -92,7 +93,6 @@ ClientContext:
       RequestImplictConfirm: false
       
   - certProfile: secret2
-    Recipient: "CN=Recip_secret2"
     EnrollmentContext:
       EnrollmentType: CR
       EnrollmentTrust: 
@@ -103,8 +103,7 @@ ClientContext:
       RequestImplictConfirm: false
 
 # fall back
-  - Recipient: "broken2"
-    EnrollmentContext:
+  - EnrollmentContext:
       EnrollmentType: IR
       EnrollmentTrust: 
         trustedCertificates:

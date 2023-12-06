@@ -401,6 +401,7 @@ It may contain the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
+|optional |formerly set recipient|Recipient|String| recipient used in outgoing CMP message header, only used if protection is rebuild or absent|
 |optional|accept all|`VerificationContext`|[`VerificationContext` object](#the-verificationcontext-object)|trust for protection validation of incoming messages|
 | optional|mandatory for reprotect | outputCredentials| [`OutputCredentials` object](#the-outputcredentials-object) | determines protection of outgoing messages
 | optional|no special processing of nested messages |`NestedEndpointContext`| [`NestedEndpointContext` object](#the-nestedendpointcontext-object) |determines processing of nested messages
@@ -730,7 +731,6 @@ It contains all of the key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
-|optional |null DN|Recipient|String| recipient used in CMP message header|
 |optional|absent|EnrollmentContext|[`EnrollmentContext` object](#the-enrollmentcontext-object)| required if enrollment will be invoked |
 
 

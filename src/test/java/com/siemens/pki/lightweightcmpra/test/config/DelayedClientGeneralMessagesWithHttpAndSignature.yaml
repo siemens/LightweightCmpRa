@@ -13,9 +13,8 @@ MessageConfiguration:
       Signature:
         keyStore: "credentials/CMP_EE_Keystore.p12"
         Password: "Password"
-
-ClientContext:
-  - Recipient: "CN=recip"
+    Recipient: "CN=recip"
+ClientContext: []
     
 
     

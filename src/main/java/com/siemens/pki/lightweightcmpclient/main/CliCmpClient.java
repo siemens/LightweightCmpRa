@@ -401,8 +401,8 @@ public class CliCmpClient {
                 System.err.println("Client failed. Reason: configfile parsing failed:" + ex);
                 return 1;
             }
+            ClientContextImpl clientContext = null;
             final String cliCertProfile = cmd.getOptionValue(OPTION_certProfile);
-            final ClientContextImpl clientContext = config.getClientContext(cliCertProfile);
             if (cmd.hasOption(OPTION_getCaCertificates)
                     || cmd.hasOption(OPTION_getCertificateRequestTemplate)
                     || cmd.hasOption(OPTION_getCrls)
@@ -411,6 +411,7 @@ public class CliCmpClient {
             } else if (cmd.hasOption(OPTION_invokeRevocation) || cmd.hasOption(OPTION_invokeRevocationWithCert)) {
                 initialRequestType = PKIBody.TYPE_REVOCATION_REQ;
             } else if (cmd.hasOption(OPTION_invokeEnrollment)) {
+                clientContext = config.getClientContext(cliCertProfile);
                 initialRequestType = clientContext.getEnrollmentContext().getEnrollmentType();
             }
 
@@ -430,6 +431,7 @@ public class CliCmpClient {
                 revocationContext.setIssuer(
                         certToRevoke.getIssuerX500Principal().getName());
                 revocationContext.setSerialNumber(certToRevoke.getSerialNumber());
+                clientContext = config.getClientContext(cliCertProfile);
                 clientContext.setRevocationContext(revocationContext);
             } else if (cmd.hasOption(OPTION_invokeRevocation)) {
                 final RevocationContextImpl revocationContext = new RevocationContextImpl();
@@ -452,6 +454,7 @@ public class CliCmpClient {
                     serialAsString = serialAsString.replaceAll("[^1234567890abcdef]", "");
                     revocationContext.setSerialNumber(new BigInteger(serialAsString, base));
                 }
+                clientContext = config.getClientContext(cliCertProfile);
                 clientContext.setRevocationContext(revocationContext);
             }
 

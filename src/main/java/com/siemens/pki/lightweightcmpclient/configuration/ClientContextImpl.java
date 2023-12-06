@@ -27,8 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class ClientContextImpl extends CertProfileConfigItem implements ClientContext {
 
-    private String recipient = ClientContext.super.getRecipient();
-
     private EnrollmentContext enrollmentContext;
 
     private RevocationContext revocationContext;
@@ -39,21 +37,12 @@ public class ClientContextImpl extends CertProfileConfigItem implements ClientCo
     }
 
     @Override
-    public String getRecipient() {
-        return recipient;
-    }
-
-    @Override
     public RevocationContext getRevocationContext() {
         return revocationContext;
     }
 
     public void setEnrollmentContext(final EnrollmentContextImpl enrollmentContext) {
         this.enrollmentContext = enrollmentContext;
-    }
-
-    public void setRecipient(final String recipient) {
-        this.recipient = recipient;
     }
 
     public void setRevocationContext(final RevocationContextImpl revocationContext) {
