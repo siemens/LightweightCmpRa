@@ -1,0 +1,41 @@
+---
+
+UpstreamInterface:
+  - HttpClient:
+      UpstreamURI:  "http://localhost:7000/ca"
+      Timeout: 44
+
+DownstreamInterface:
+  HttpServer:
+    UpstreamURI: "http://localhost:6060/inventoryra"
+
+UpstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_UPSTREAM_Keystore.p12"
+        Password: "Password"
+
+DownstreamConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_EE_Root.pem"
+    OutputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
+        Password: "Password"
+
+EnrollmentTrust:
+  - trustedCertificates:
+    - "credentials/ENROLL_Root.pem"
+
+RaVerifiedAcceptable:
+  - value: false
+
+ForceRaVerifyOnUpstream:
+  - value: false
+
+InventoryInterface:
+  - ImplementingClass: "com.siemens.pki.lightweightcmpra.plugin.LocalInventoryInterfaceImpl"
