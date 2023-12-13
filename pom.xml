@@ -157,8 +157,22 @@
 				<executions>
 					<execution>
 						<id>attach-source</id>
+						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<version>2.7.9</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>makeAggregateBom</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -242,4 +256,10 @@
 	<name>Lightweight CMP RA</name>
 	<description>This project provides a Proof of Concept (PoC) implementation
 		of the Lightweight CMP Profile for CMP [RFC 4210].</description>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 </project>

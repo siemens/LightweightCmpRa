@@ -1,0 +1,8 @@
+# This is a list of licenses, one per line, that will be treated as acceptable. Any license in the SBOM that
+# is not in this list will cause the pipeline to fail. The file is prepared for use by scripts/license-check.py
+Apache-2.0
+MIT
+EPL-2.0
+BSD-3-Clause
+EPL-1.0
+Bouncy Castle Licence
