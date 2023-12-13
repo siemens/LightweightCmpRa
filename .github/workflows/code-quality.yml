@@ -18,10 +18,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'temurin'
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
@@ -42,7 +42,7 @@ jobs:
         # note that we deliberately turn off the OWASP dependency checker here, it will run in a separate job,
         # such that its results can be viewed independently of what Sonar has to say
         run: |
-          mvn -B verify sonar:sonar -Dsonar.projectKey=siemens_cmp-ra-component -Ddependency-check.skip=true -Dgpg.skip
+          mvn -B verify sonar:sonar -Dsonar.projectKey=kiron-mx_LightweightCmpRa -Ddependency-check.skip=true
 
   analyze_dependencies_owasp:
     name: Check dependencies with OWASP
@@ -58,4 +58,4 @@ jobs:
           distribution: 'temurin'
       - name: Analyze dependencies
         # this will run the OWASP dependency checker only
-        run: mvn -B verify -DskipTests -Dgpg.skip
+        run: mvn -B verify -DskipTests
