@@ -126,3 +126,8 @@ fix: update some dependencies
 
 feat:  implement configurable recipient
 
+### 4.0.1 (Dec 20 2023)
+
+fix: update some dependencies
+
+
