@@ -66,7 +66,10 @@ def generate_license_report(sbom):
             try:
                 license_id = entry['license']['id']
             except KeyError:
-                license_id = entry['license']['name']
+                try:
+                    license_id = entry['license']['name']
+                except KeyError:
+                    license_id = entry['expression']
             entries.append((name, version, license_id))
     return entries
 
@@ -100,8 +103,13 @@ def check_license_compliance(sbom, allowed):
             try:
                 license_id = license['license']['id']
             except KeyError:
-                license_id = license['license']['name']
-            if license_id not in allowed:
+                try:
+                    license_id = license['license']['name']
+                except KeyError:
+                    license_id = license['expression']
+            if license_id in allowed:
+                break
+            else:
                 errors.append((name, version, f'`{license_id}` not allowed'))
 
     if not errors:
