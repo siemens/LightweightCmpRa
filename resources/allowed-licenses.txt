@@ -6,6 +6,7 @@ EPL-2.0
 BSD-3-Clause
 EPL-1.0
 CDDL-1.1
+CC0-1.0
 Bouncy Castle Licence
 Eclipse Distribution License - Version 1.0
 # In the entry below we interpret it as CDDL-1.0
