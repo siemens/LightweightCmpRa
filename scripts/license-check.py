@@ -157,5 +157,4 @@ if __name__ == '__main__':
             logging.info('SUCCESS: No license issues found')
             sys.exit(0)
 
-
         sys.exit(1)

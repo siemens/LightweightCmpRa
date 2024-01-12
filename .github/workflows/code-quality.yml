@@ -66,4 +66,4 @@ jobs:
         env:
           NVD_API_KEY: ${{ secrets.NVD_TOKEN }}
         # this will run the OWASP dependency checker only
-        run: mvn -B verify -DskipTests -Dgpg.skip
+        run: mvn -B verify -DskipTests
