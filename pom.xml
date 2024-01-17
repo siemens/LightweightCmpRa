@@ -2,8 +2,8 @@
 <!-- Copyright (c) 2020 Siemens AG Licensed under the Apache License, Version
 2.0 SPDX-License-Identifier: Apache-2.0 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.siemens.pki</groupId>
 	<artifactId>LightweightCmpRa</artifactId>
@@ -18,6 +18,14 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.8.2</maven-site-plugin.version>
+		<sonar.organization>siemens</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.coverage.jacoco.xmlReportPaths>
+			${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.language>java</sonar.language>
+		<sonar.verbose>true</sonar.verbose>
 	</properties>
 	<build>
 		<plugins>
@@ -74,7 +82,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.6.3</version>
-				<configuration />
 			</plugin>
 			<plugin>
 				<groupId>com.diffplug.spotless</groupId>
@@ -93,14 +100,14 @@
 						<importOrder />
 						<removeUnusedImports />
 						<formatAnnotations />
-						<endWithNewline />
+						<endWithNewline/>
 					</java>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>8.4.2</version>
+				<version>9.0.8</version>
 				<executions>
 					<execution>
 						<goals>
@@ -134,24 +141,27 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.13</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>${source.version}</version>
 				<executions>
 					<execution>
 						<id>attach-source</id>
+						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<version>2.7.9</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>makeAggregateBom</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -209,6 +219,20 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.6.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>${jacoco.version}</version>
+		</dependency>
+		<dependency>
+			<!--		Indirect dependency of jacoco-maven-plugin. We add this one
+			explicitly, otherwise the included version-->
+			<!--		would pull maven-artifact-manager-2.0.2 and lead to
+			CVE-2021-26291.-->
+			<groupId>org.apache.maven.shared</groupId>
+			<artifactId>file-management</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 
 	</dependencies>
 	<scm>
@@ -221,4 +245,10 @@
 	<name>Lightweight CMP RA</name>
 	<description>This project provides a Proof of Concept (PoC) implementation
 		of the Lightweight CMP Profile for CMP [RFC 4210].</description>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 </project>
