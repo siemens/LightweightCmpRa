@@ -7,7 +7,7 @@ UpstreamInterface:
 
 DownstreamInterface:
   HttpServer:
-    UpstreamURI: "http://localhost:6061/inventoryra"
+    UpstreamURI: "http://localhost:6062/inventoryra"
 
 UpstreamConfiguration:
   - VerificationContext:
@@ -38,4 +38,4 @@ ForceRaVerifyOnUpstream:
   - value: false
 
 InventoryInterface:
-  - ImplementingClass: "com.siemens.pki.lightweightcmpra.plugin.ProcessBasedInventoryInterfaceImpl"
+  - ImplementingClass: "com.siemens.pki.lightweightcmpra.plugin.HttpInventoryInterfaceImpl"

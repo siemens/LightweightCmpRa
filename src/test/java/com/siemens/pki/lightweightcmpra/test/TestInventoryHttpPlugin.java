@@ -22,21 +22,20 @@ import org.bouncycastle.asn1.cmp.PKIBody;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestInventoryExternalPlugin extends InventoryOnlineEnrollmentTestcaseBase {
+public class TestInventoryHttpPlugin extends InventoryOnlineEnrollmentTestcaseBase {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("RA_INVENTORY_EXEC","scripts/external-inventory-example.pyw");
+        System.setProperty("RA_INVENTORY_URL","http://127.0.0.1:8000/check");
 
-        initTestbed("http://localhost:6061/inventoryra", "EnrollmentConfigWithExternalInventory.yaml");
+        initTestbed("http://localhost:6062/inventoryra", "EnrollmentConfigWithHttpInventory.yaml");
     }
 
     /**
-     * Request rejected by local inventory
+     * Request granted by external service
      *
      * @throws Exception
      */
-
     @Test
     public void testExternalInventoryValidationProcess() throws Exception {
         executeCrmfCertificateRequestWithExternalInventory(
