@@ -2,16 +2,11 @@ package com.siemens.pki.lightweightcmpra.plugin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.siemens.pki.cmpracomponent.configuration.CheckAndModifyResult;
-import com.siemens.pki.cmpracomponent.configuration.InventoryInterface;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Paths;
-import java.util.Base64;
 
 public class ProcessBasedInventoryInterfaceImpl extends InventoryPluginBase {
 
