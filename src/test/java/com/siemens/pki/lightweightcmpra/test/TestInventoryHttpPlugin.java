@@ -26,7 +26,9 @@ public class TestInventoryExternalPlugin extends InventoryOnlineEnrollmentTestca
 
     @Before
     public void setUp() throws Exception {
-        initTestbed("http://localhost:6060/inventoryra", "EnrollmentConfigWithExternalInventory.yaml");
+        System.setProperty("RA_INVENTORY_EXEC","scripts/external-inventory-example.pyw");
+
+        initTestbed("http://localhost:6061/inventoryra", "EnrollmentConfigWithExternalInventory.yaml");
     }
 
     /**
