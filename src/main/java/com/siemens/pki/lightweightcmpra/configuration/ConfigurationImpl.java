@@ -111,7 +111,8 @@ public class ConfigurationImpl implements Configuration {
         @XmlElement(
                 name = "GetRootCaCertificateUpdate",
                 type = GetRootCaCertificateUpdateHandlerImpl.class,
-                required = false)
+                required = false),
+        @XmlElement(name = "GetFreshRatNonce", type = GetFreshRatNonceHandlerImpl.class, required = false)
     })
     private final CertProfileInfoTypeScopedList<SupportMessageHandlerInterfaceImpl> SupportMessageHandlerInterface =
             new CertProfileInfoTypeScopedList<>();
@@ -126,18 +127,17 @@ public class ConfigurationImpl implements Configuration {
         return DownstreamConfiguration.getMatchingConfig(certProfile, bodyType, "DownstreamConfiguration");
     }
 
+    public AbstractDownstreamInterfaceConfig getDownstreamInterface() {
+        return DownstreamInterface;
+    }
+
     @Override
     public int getDownstreamTimeout(final String certProfile, final int bodyType) {
         final IntegerConfigImpl matchingConfig = DownstreamTimeout.getMatchingConfig(certProfile, bodyType);
         if (matchingConfig == null) {
             return 0;
         }
-        final int asInt = matchingConfig.getAsInt();
-        return asInt;
-    }
-
-    public AbstractDownstreamInterfaceConfig getDownstreamInterface() {
-        return DownstreamInterface;
+        return matchingConfig.getAsInt();
     }
 
     @Override

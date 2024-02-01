@@ -17,6 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpclient.configuration;
 
+import com.siemens.pki.cmpclientcomponent.configuration.ClientAttestationContext;
 import com.siemens.pki.cmpclientcomponent.configuration.ClientContext;
 import com.siemens.pki.cmpclientcomponent.configuration.EnrollmentContext;
 import com.siemens.pki.cmpclientcomponent.configuration.RevocationContext;
@@ -31,6 +32,13 @@ public class ClientContextImpl extends CertProfileConfigItem implements ClientCo
 
     private RevocationContext revocationContext;
 
+    private ClientAttestationContext attestationContext;
+
+    @Override
+    public ClientAttestationContext getAttestationContext() {
+        return attestationContext;
+    }
+
     @Override
     public EnrollmentContext getEnrollmentContext() {
         return enrollmentContext;
@@ -39,6 +47,10 @@ public class ClientContextImpl extends CertProfileConfigItem implements ClientCo
     @Override
     public RevocationContext getRevocationContext() {
         return revocationContext;
+    }
+
+    public void setAttestationContext(ClientAttestationContextImpl attestationContext) {
+        this.attestationContext = attestationContext;
     }
 
     public void setEnrollmentContext(final EnrollmentContextImpl enrollmentContext) {
