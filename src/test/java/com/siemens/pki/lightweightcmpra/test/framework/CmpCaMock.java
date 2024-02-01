@@ -17,6 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
 import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
@@ -30,10 +31,10 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,7 @@ import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.Extensions;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
@@ -183,9 +185,12 @@ public class CmpCaMock implements ExFunction {
     }
 
     private CMPCertificate createCertificate(
-            final X500Name subject, final SubjectPublicKeyInfo publicKey, final X509Certificate issuingCert)
-            throws PEMException, NoSuchAlgorithmException, CertIOException, CertificateEncodingException,
-                    CertificateException, OperatorCreationException {
+            final X500Name subject,
+            final SubjectPublicKeyInfo publicKey,
+            final X509Certificate issuingCert,
+            Extensions extensionsFromTemplate)
+            throws PEMException, NoSuchAlgorithmException, CertIOException, CertificateException,
+                    OperatorCreationException {
         final long now = System.currentTimeMillis();
         final PublicKey pubKey = JCA_KEY_CONVERTER.getPublicKey(publicKey);
         final X509v3CertificateBuilder v3CertBldr = new JcaX509v3CertificateBuilder(
@@ -197,13 +202,25 @@ public class CmpCaMock implements ExFunction {
                 pubKey);
 
         final JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
+        if (extensionsFromTemplate != null) {
+            Arrays.stream(extensionsFromTemplate.getExtensionOIDs()).forEach(oid -> {
+                try {
+                    v3CertBldr.addExtension(extensionsFromTemplate.getExtension(oid));
+                } catch (final CertIOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            });
+        }
         v3CertBldr.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(pubKey));
         v3CertBldr.addExtension(
                 Extension.authorityKeyIdentifier, false, extUtils.createAuthorityKeyIdentifier(issuingCert));
         v3CertBldr.addExtension(Extension.basicConstraints, true, new BasicConstraints(false));
 
-        final JcaContentSignerBuilder signerBuilder =
-                new JcaContentSignerBuilder("SHA384withECDSA").setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+        final JcaContentSignerBuilder signerBuilder = new JcaContentSignerBuilder(
+                        AlgorithmHelper.getSigningAlgNameFromKey(
+                                enrollmentCredentials.getPrivateKeyOfEndCertififcate()))
+                .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
 
         return CertUtility.cmpCertificateFromCertificate(new JcaX509CertificateConverter()
                 .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
@@ -237,7 +254,8 @@ public class CmpCaMock implements ExFunction {
                 .getCertTemplate();
         final SubjectPublicKeyInfo publicKey = requestTemplate.getPublicKey();
         final X500Name subject = requestTemplate.getSubject();
-        final CMPCertificate cmpCertificateFromCertificate = createCertificate(subject, publicKey, issuingCert);
+        final CMPCertificate cmpCertificateFromCertificate =
+                createCertificate(subject, publicKey, issuingCert, requestTemplate.getExtensions());
 
         // drop root certificate from copy
         issuingChain.remove(issuingChain.size() - 1);
@@ -261,8 +279,12 @@ public class CmpCaMock implements ExFunction {
         final X509Certificate issuingCert = issuingChain.get(0);
         final CertificationRequestInfo certificationRequestInfo =
                 ((CertificationRequest) receivedMessage.getBody().getContent()).getCertificationRequestInfo();
+
         final CMPCertificate cmpCertificateFromCertificate = createCertificate(
-                certificationRequestInfo.getSubject(), certificationRequestInfo.getSubjectPublicKeyInfo(), issuingCert);
+                certificationRequestInfo.getSubject(),
+                certificationRequestInfo.getSubjectPublicKeyInfo(),
+                issuingCert,
+                null);
 
         // drop root certificate from copy
         issuingChain.remove(issuingChain.size() - 1);
