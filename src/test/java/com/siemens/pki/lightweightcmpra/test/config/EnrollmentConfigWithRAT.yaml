@@ -7,7 +7,7 @@ UpstreamInterface:
 
 DownstreamInterface:
   HttpServer:
-    UpstreamURI: "http://localhost:6020/onlinelra"
+    UpstreamURI: "http://localhost:6666/pkix"
 
 UpstreamConfiguration:
   - VerificationContext:
@@ -21,7 +21,7 @@ UpstreamConfiguration:
 DownstreamConfiguration:
   - VerificationContext:
       trustedCertificates:
-        - "credentials/CMP_EE_Root.pem"
+        - "credentials/ossl_cmp_signer.crt"
     OutputCredentials:
       Signature:
         keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"

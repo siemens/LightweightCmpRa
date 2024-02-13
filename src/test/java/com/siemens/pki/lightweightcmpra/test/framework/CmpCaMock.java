@@ -17,14 +17,6 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
-import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
-import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
-import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
-import com.siemens.pki.cmpracomponent.util.MessageDumper;
-import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface.ExFunction;
-import com.siemens.pki.lightweightcmpra.downstream.online.CmpHttpServer;
-import com.siemens.pki.lightweightcmpra.test.EnrollmentTestcaseBase;
-import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.File;
 import java.math.BigInteger;
 import java.net.URL;
@@ -38,7 +30,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.security.auth.x500.X500Principal;
+
 import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
@@ -66,6 +60,15 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
+import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
+import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import com.siemens.pki.cmpracomponent.util.MessageDumper;
+import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface.ExFunction;
+import com.siemens.pki.lightweightcmpra.downstream.online.CmpHttpServer;
+import com.siemens.pki.lightweightcmpra.test.EnrollmentTestcaseBase;
+import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 
 /**
  * a mocked Certificate Authority
