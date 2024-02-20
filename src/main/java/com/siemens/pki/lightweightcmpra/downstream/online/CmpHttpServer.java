@@ -116,19 +116,25 @@ public class CmpHttpServer implements HttpHandler, DownstreamInterface {
                 exchange.getResponseBody().write(responseBody);
                 return;
             }
-            final byte[] encodedResponse =
-                    messageHandler.apply(exchange.getRequestBody().readAllBytes());
+            final byte[] rawRequest = exchange.getRequestBody().readAllBytes();
+            if (rawRequest == null || rawRequest.length < 1) {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_NO_CONTENT, -1);
+                return;
+            }
+            final byte[] encodedResponse = messageHandler.apply(rawRequest);
             if (encodedResponse == null) {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, -1);
             } else {
                 exchange.getResponseHeaders().set("Content-Type", "application/pkixcmp");
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, encodedResponse.length);
                 exchange.getResponseBody().write(encodedResponse);
             }
         } catch (final Exception e) {
+            final int statusCode =
+                    e.getCause() != null ? HttpURLConnection.HTTP_BAD_REQUEST : HttpURLConnection.HTTP_INTERNAL_ERROR;
             LOGGER.error("error while processing request", e);
             final byte[] responseBody = ("error while processing request: " + e.getLocalizedMessage()).getBytes();
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, responseBody.length);
+            exchange.sendResponseHeaders(statusCode, responseBody.length);
             exchange.getResponseBody().write(responseBody);
         } finally {
             exchange.getResponseBody().close();
