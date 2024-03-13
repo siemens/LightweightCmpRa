@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.siemens.pki.cmpracomponent.configuration.CheckAndModifyResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Paths;
 
 public class ProcessBasedInventoryInterfaceImpl extends InventoryPluginBase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessBasedInventoryInterfaceImpl.class);
 
     /**
      * check and optionally modify a CRMF certificate request that was received in a
@@ -54,7 +58,7 @@ public class ProcessBasedInventoryInterfaceImpl extends InventoryPluginBase {
         try {
             json = createJson(transactionID, requesterDn, certTemplate, requestedSubjectDn, pkiMessage);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("inventory error while checking certificate request:", e);
         }
 
         // Stringify json
@@ -63,8 +67,8 @@ public class ProcessBasedInventoryInterfaceImpl extends InventoryPluginBase {
 
         try {
             jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
+        } catch (JsonProcessingException e) {
+            LOGGER.error("inventory error while checking certificate request:", e);
             return NEGATIVE_CHECK_RESULT;
         }
 
@@ -137,8 +141,8 @@ public class ProcessBasedInventoryInterfaceImpl extends InventoryPluginBase {
                 }
 
             };
-        } catch (IOException | InterruptedException ex) {
-            ex.printStackTrace();
+        } catch (IOException | InterruptedException e) {
+            LOGGER.error("inventory error while checking certificate request:", e);
             return NEGATIVE_CHECK_RESULT;
         }
     }

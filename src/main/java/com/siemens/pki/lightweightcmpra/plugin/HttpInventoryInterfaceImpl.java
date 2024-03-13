@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.siemens.pki.cmpracomponent.configuration.CheckAndModifyResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,6 +15,8 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpClient;
 
 public class HttpInventoryInterfaceImpl extends InventoryPluginBase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpInventoryInterfaceImpl.class);
 
     /**
      * check and optionally modify a CRMF certificate request that was received in a
@@ -57,8 +61,8 @@ public class HttpInventoryInterfaceImpl extends InventoryPluginBase {
         ObjectNode json = null;
         try {
             json = createJson(transactionID, requesterDn, certTemplate, requestedSubjectDn, pkiMessage);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
+        } catch (JsonProcessingException e) {
+            LOGGER.error("inventory error while checking certificate request:", e);
             return NEGATIVE_CHECK_RESULT;
         }
         // Stringify json
@@ -67,8 +71,8 @@ public class HttpInventoryInterfaceImpl extends InventoryPluginBase {
 
         try {
             jsonString = objectMapper.writeValueAsString(json);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
+        } catch (JsonProcessingException e) {
+            LOGGER.error("inventory error while checking certificate request:", e);
             return NEGATIVE_CHECK_RESULT;
         }
 
@@ -89,10 +93,6 @@ public class HttpInventoryInterfaceImpl extends InventoryPluginBase {
             // Execute the request and obtain the response
             HttpResponse<String> httpResponse =httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-            // Print the response
-            System.out.println(httpResponse);
-
             // Parse response
 
             // return validation result
@@ -109,7 +109,7 @@ public class HttpInventoryInterfaceImpl extends InventoryPluginBase {
             };
 
         } catch (RuntimeException | InterruptedException | IOException e) {
-            e.printStackTrace();
+            LOGGER.error("inventory error while checking certificate request:", e);
             return NEGATIVE_CHECK_RESULT;
         }
     }
