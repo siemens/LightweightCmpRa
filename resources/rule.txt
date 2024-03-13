@@ -1,0 +1,3 @@
+subject.o must be requester.o
+AND subject.c must be requester.c
+AND subject.cn must end with ".siemens.com"
