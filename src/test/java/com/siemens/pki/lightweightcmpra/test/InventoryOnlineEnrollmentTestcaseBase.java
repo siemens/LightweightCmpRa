@@ -148,7 +148,8 @@ public class InventoryOnlineEnrollmentTestcaseBase extends OnlineEnrollmentTestc
             final int requestMessageType,
             final int expectedResponseMessageType,
             final ProtectionProvider protectionProvider,
-            final Function<PKIMessage, PKIMessage> cmpClient, InventoryResult expectedInventoryValidationResult)
+            final Function<PKIMessage, PKIMessage> cmpClient,
+            InventoryResult expectedInventoryValidationResult)
             throws Exception {
         final KeyPair keyPair = getKeyGenerator().generateKeyPair();
         final CertTemplateBuilder ctb = new CertTemplateBuilder()
@@ -175,7 +176,71 @@ public class InventoryOnlineEnrollmentTestcaseBase extends OnlineEnrollmentTestc
                 expectedResponseMessageType,
                 crResponse.getBody().getType());
 
-        assertTrue("external inventory invoked", new File("C:\\Users\\z004thmt\\AppData\\Local\\Temp\\RaPluginLog.txt").length() > 0);
+        //assertTrue("external inventory invoked", new File("C:\\path\\to\\AppData\\Local\\Temp\\RaPluginLog.txt").length() > 0);
+
+        assertEquals(
+                "inventory validation result",
+                expectedInventoryValidationResult,
+                isGranted(crResponse));
+
+        if (expectedInventoryValidationResult == InventoryResult.GRANTED) {
+
+            final CMPCertificate enrolledCertificate = ((CertRepMessage)
+                    crResponse.getBody().getContent())
+                    .getResponse()[0]
+                    .getCertifiedKeyPair()
+                    .getCertOrEncCert()
+                    .getCertificate();
+
+            final PKIMessage certConf = PkiMessageGenerator.generateAndProtectMessage(
+                    new HeaderProviderForTest(crResponse.getHeader()),
+                    protectionProvider,
+                    PkiMessageGenerator.generateCertConfBody(enrolledCertificate));
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(certConf));
+            }
+            final PKIMessage pkiConf = cmpClient.apply(certConf);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(pkiConf));
+            }
+            assertEquals("message type", PKIBody.TYPE_CONFIRM, pkiConf.getBody().getType());
+        }
+    }
+
+    public static void executeCrmfCertificateRequestWithDslInventory(
+            final int requestMessageType,
+            final int expectedResponseMessageType,
+            final ProtectionProvider protectionProvider,
+            final Function<PKIMessage, PKIMessage> cmpClient, InventoryResult expectedInventoryValidationResult)
+            throws Exception {
+        final KeyPair keyPair = getKeyGenerator().generateKeyPair();
+        final CertTemplateBuilder ctb = new CertTemplateBuilder()
+                .setPublicKey(
+                        SubjectPublicKeyInfo.getInstance(keyPair.getPublic().getEncoded()))
+                .setSubject(new X500Name("C=DE, O=Siemens, CN=subject.siemens.com"));
+
+        final PKIBody crBody =
+                PkiMessageGenerator.generateIrCrKurBody(requestMessageType, ctb.build(), null, keyPair.getPrivate());
+
+        final PKIMessage cr =
+                PkiMessageGenerator.generateAndProtectMessage(new HeaderProviderForTest(), protectionProvider, crBody);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("send:\n" + MessageDumper.dumpPkiMessage(cr));
+        }
+        final PKIMessage crResponse = cmpClient.apply(cr);
+
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary string processing, if debug isn't enabled
+            LOGGER.debug("got:\n" + MessageDumper.dumpPkiMessage(crResponse));
+        }
+        assertEquals(
+                "message type",
+                expectedResponseMessageType,
+                crResponse.getBody().getType());
+
+        //assertTrue("external inventory invoked", new File("C:\\path\\to\\AppData\\Local\\Temp\\RaPluginLog.txt").length() > 0);
 
         assertEquals(
                 "inventory validation result",
