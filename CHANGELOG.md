@@ -130,4 +130,8 @@ feat:  implement configurable recipient
 
 fix: update some dependencies
 
+### 4.0.2 (Mar 26 2024)
+
+feat: add nested message support to CmpCaMock
+
 
