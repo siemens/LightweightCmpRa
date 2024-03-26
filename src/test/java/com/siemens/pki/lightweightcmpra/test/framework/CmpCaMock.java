@@ -25,6 +25,7 @@ import com.siemens.pki.lightweightcmpra.downstream.online.CmpHttpServer;
 import com.siemens.pki.lightweightcmpra.test.EnrollmentTestcaseBase;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -42,6 +43,7 @@ import org.bouncycastle.asn1.cmp.CMPCertificate;
 import org.bouncycastle.asn1.cmp.PKIBody;
 import org.bouncycastle.asn1.cmp.PKIFailureInfo;
 import org.bouncycastle.asn1.cmp.PKIMessage;
+import org.bouncycastle.asn1.cmp.PKIMessages;
 import org.bouncycastle.asn1.cmp.PKIStatus;
 import org.bouncycastle.asn1.cmp.PKIStatusInfo;
 import org.bouncycastle.asn1.cmp.RevRepContentBuilder;
@@ -144,42 +146,7 @@ public class CmpCaMock implements ExFunction {
     @Override
     public byte[] apply(final byte[] receivedMessageAsByte) throws Exception {
         final PKIMessage receivedMessage = PKIMessage.getInstance(receivedMessageAsByte);
-        if (LOGGER.isDebugEnabled()) {
-            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't
-            // enabled
-            LOGGER.debug("CA: got:\n" + MessageDumper.dumpPkiMessage(receivedMessage));
-        }
-        lastReceivedMessages.addFirst(receivedMessage);
-        while (lastReceivedMessages.size() > MAX_LAST_RECEIVED) {
-            lastReceivedMessages.removeLast();
-        }
-        final PKIMessage ret;
-        switch (receivedMessage.getBody().getType()) {
-            case PKIBody.TYPE_INIT_REQ:
-            case PKIBody.TYPE_CERT_REQ:
-            case PKIBody.TYPE_KEY_UPDATE_REQ:
-                ret = handleCrmfCerticateRequest(receivedMessage);
-                break;
-            case PKIBody.TYPE_P10_CERT_REQ:
-                ret = handleP10CerticateRequest(receivedMessage);
-                break;
-            case PKIBody.TYPE_CERT_CONFIRM:
-                ret = handleCertConfirm(receivedMessage);
-                break;
-            case PKIBody.TYPE_REVOCATION_REQ:
-                ret = handleRevocationRequest(receivedMessage);
-                break;
-            default:
-                ret = generateError(
-                        receivedMessage,
-                        "unsuported message type " + receivedMessage.getBody().getType());
-        }
-        if (LOGGER.isDebugEnabled()) {
-            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't
-            // enabled
-            LOGGER.debug("CA: respond:\n" + MessageDumper.dumpPkiMessage(ret));
-        }
-        return ret.getEncoded();
+        return handlePkiMessage(receivedMessage).getEncoded();
     }
 
     private CMPCertificate createCertificate(
@@ -254,6 +221,12 @@ public class CmpCaMock implements ExFunction {
                 issuingChainForExtraCerts);
     }
 
+    private PKIMessage handleNested(PKIMessage receivedMessage) throws Exception {
+        final PKIMessages nestedMessages =
+                (PKIMessages) receivedMessage.getBody().getContent();
+        return handlePkiMessage(nestedMessages.toPKIMessageArray()[0]);
+    }
+
     private PKIMessage handleP10CerticateRequest(final PKIMessage receivedMessage) throws Exception {
         // get copy of enrollment chain
         final List<X509Certificate> issuingChain = enrollmentCredentials.getTrustChain();
@@ -276,6 +249,48 @@ public class CmpCaMock implements ExFunction {
                 null,
                 PkiMessageGenerator.generateIpCpKupBody(PKIBody.TYPE_CERT_REP, cmpCertificateFromCertificate),
                 issuingChainForExtraCerts);
+    }
+
+    private PKIMessage handlePkiMessage(final PKIMessage receivedMessage) throws Exception, IOException {
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't
+            // enabled
+            LOGGER.debug("CA: got:\n" + MessageDumper.dumpPkiMessage(receivedMessage));
+        }
+        lastReceivedMessages.addFirst(receivedMessage);
+        while (lastReceivedMessages.size() > MAX_LAST_RECEIVED) {
+            lastReceivedMessages.removeLast();
+        }
+        final PKIMessage ret;
+        switch (receivedMessage.getBody().getType()) {
+            case PKIBody.TYPE_INIT_REQ:
+            case PKIBody.TYPE_CERT_REQ:
+            case PKIBody.TYPE_KEY_UPDATE_REQ:
+                ret = handleCrmfCerticateRequest(receivedMessage);
+                break;
+            case PKIBody.TYPE_P10_CERT_REQ:
+                ret = handleP10CerticateRequest(receivedMessage);
+                break;
+            case PKIBody.TYPE_CERT_CONFIRM:
+                ret = handleCertConfirm(receivedMessage);
+                break;
+            case PKIBody.TYPE_REVOCATION_REQ:
+                ret = handleRevocationRequest(receivedMessage);
+                break;
+            case PKIBody.TYPE_NESTED:
+                ret = handleNested(receivedMessage);
+                break;
+            default:
+                ret = generateError(
+                        receivedMessage,
+                        "unsuported message type " + receivedMessage.getBody().getType());
+        }
+        if (LOGGER.isDebugEnabled()) {
+            // avoid unnecessary call of MessageDumper.dumpPkiMessage, if debug isn't
+            // enabled
+            LOGGER.debug("CA: respond:\n" + MessageDumper.dumpPkiMessage(ret));
+        }
+        return ret;
     }
 
     private PKIMessage handleRevocationRequest(final PKIMessage receivedMessage) throws Exception {
