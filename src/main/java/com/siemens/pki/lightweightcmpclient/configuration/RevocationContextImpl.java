@@ -54,7 +54,7 @@ public class RevocationContextImpl implements RevocationContext {
             return;
         }
         final X509Certificate firstCert = certificates.get(0);
-        issuer = firstCert.getIssuerDN().getName();
+        issuer = firstCert.getIssuerX500Principal().getName();
         serialNumber = firstCert.getSerialNumber();
     }
 
