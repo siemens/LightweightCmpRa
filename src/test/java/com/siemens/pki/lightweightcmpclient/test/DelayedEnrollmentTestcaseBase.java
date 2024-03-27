@@ -36,8 +36,8 @@ public class DelayedEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
 
     @AfterClass
     public static void stopAllRas() {
-        TestUtils.removeDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
         RA.stopAllRas();
+        TestUtils.removeDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
     }
 
     @After

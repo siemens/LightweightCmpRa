@@ -78,7 +78,8 @@ public class BaseCredentialService {
                         // ignore all root certificates
                         continue;
                     }
-                    certsFromKeystore.put(x509aktChainCert.getSubjectDN().getName(), x509aktChainCert);
+                    certsFromKeystore.put(
+                            x509aktChainCert.getSubjectX500Principal().getName(), x509aktChainCert);
                 }
             }
             final Certificate certificate = keyStore.getCertificate(aktAlias);
@@ -89,7 +90,7 @@ public class BaseCredentialService {
             if (CertUtility.isSelfSigned(x509Certificate)) {
                 continue;
             }
-            certsFromKeystore.put(x509Certificate.getSubjectDN().getName(), x509Certificate);
+            certsFromKeystore.put(x509Certificate.getSubjectX500Principal().getName(), x509Certificate);
             final Key aktKey = keyStore.getKey(aktAlias, password);
             if (!(aktKey instanceof PrivateKey)) {
                 continue;
@@ -108,14 +109,14 @@ public class BaseCredentialService {
         // bring the certificates in the correct order
         // poor mens chain building, never use this algorithm for chain validation!
         certChain.add(endCertificate);
-        String curIssuer = endCertificate.getIssuerDN().getName();
+        String curIssuer = endCertificate.getIssuerX500Principal().getName();
         for (; ; ) {
             final X509Certificate nextIssuer = certsFromKeystore.remove(curIssuer);
             if (nextIssuer == null) {
                 break;
             }
             certChain.add(nextIssuer);
-            curIssuer = nextIssuer.getIssuerDN().getName();
+            curIssuer = nextIssuer.getIssuerX500Principal().getName();
         }
     }
 
