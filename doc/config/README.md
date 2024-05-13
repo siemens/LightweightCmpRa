@@ -271,9 +271,9 @@ It should contain the key/value pairs described below in any order:
 |--|--|--|--|:--|
 | mandatory || UpstreamURI|URI|server URL to connect to |
 |optional| 30 | Timeout|integer|HTTPS connect and read timeout in seconds, 0 or negative value means wait forever |
-|optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust|
+|optional|accept all|ClientTrust|[`VerificationContext`](#the-verificationcontext-object)|TLS client trust for validation of server side TLS|
 |optional|false|DisableHostnameVerification|boolean|suppress verification of server hostname against server certificate|
-|mandatory||ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials|
+|optional|no client side TLS|ClientCredentials|[`SignatureCredentialContext`](#the-signaturecredentialcontext-object)|TLS client credentials for mutual TLS connections|
 
 
 ### The `CoapClient` object
