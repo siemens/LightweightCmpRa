@@ -17,6 +17,9 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import static com.siemens.pki.cmpracomponent.cryptoservices.ProviderWrapper.tryWithAllProviders;
+
+import com.siemens.pki.cmpracomponent.cryptoservices.AlgorithmHelper;
 import com.siemens.pki.cmpracomponent.msggeneration.PkiMessageGenerator;
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import com.siemens.pki.cmpracomponent.util.MessageDumper;
@@ -28,11 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,14 +55,11 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.openssl.PEMException;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,8 +72,6 @@ public class CmpCaMock implements ExFunction {
     private static final int MAX_LAST_RECEIVED = 10;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmpCaMock.class);
-
-    private static JcaPEMKeyConverter JCA_KEY_CONVERTER = new JcaPEMKeyConverter();
 
     private static CmpCaMock singleCaMock;
 
@@ -151,10 +146,10 @@ public class CmpCaMock implements ExFunction {
 
     private CMPCertificate createCertificate(
             final X500Name subject, final SubjectPublicKeyInfo publicKey, final X509Certificate issuingCert)
-            throws PEMException, NoSuchAlgorithmException, CertIOException, CertificateEncodingException,
-                    CertificateException, OperatorCreationException {
+            throws Exception {
         final long now = System.currentTimeMillis();
-        final PublicKey pubKey = JCA_KEY_CONVERTER.getPublicKey(publicKey);
+        final PublicKey pubKey =
+                tryWithAllProviders(p -> new JcaPEMKeyConverter().setProvider(p).getPublicKey(publicKey));
         final X509v3CertificateBuilder v3CertBldr = new JcaX509v3CertificateBuilder(
                 issuingCert.getSubjectX500Principal(),
                 BigInteger.valueOf(now),
@@ -170,12 +165,14 @@ public class CmpCaMock implements ExFunction {
         v3CertBldr.addExtension(Extension.basicConstraints, true, new BasicConstraints(false));
 
         final JcaContentSignerBuilder signerBuilder =
-                new JcaContentSignerBuilder("SHA384withECDSA").setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
+                tryWithAllProviders(p -> new JcaContentSignerBuilder(AlgorithmHelper.getSigningAlgNameFromKey(
+                                enrollmentCredentials.getPrivateKeyOfEndCertififcate()))
+                        .setProvider(p));
 
-        return CertUtility.cmpCertificateFromCertificate(new JcaX509CertificateConverter()
-                .setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER)
-                .getCertificate(
-                        v3CertBldr.build(signerBuilder.build(enrollmentCredentials.getPrivateKeyOfEndCertififcate()))));
+        return tryWithAllProviders(p -> CertUtility.cmpCertificateFromCertificate(new JcaX509CertificateConverter()
+                .setProvider(p)
+                .getCertificate(v3CertBldr.build(
+                        signerBuilder.build(enrollmentCredentials.getPrivateKeyOfEndCertififcate())))));
     }
 
     private PKIMessage generateError(final PKIMessage receivedMessage, final String errorDetails) throws Exception {

@@ -317,7 +317,7 @@ public class CliCmpClient {
     }
 
     private static int doGetCrls(final CommandLine cmd, final CmpClient client)
-            throws java.text.ParseException, CRLException, IOException {
+            throws java.text.ParseException, IOException, GeneralSecurityException {
         List<X509CRL> crls = null;
         if (cmd.hasOption(OPTION_oldCRL)) {
             final X509CRL crl = CredentialLoader.loadCRLs(new File(cmd.getOptionValue(OPTION_oldCRL)).toURI())

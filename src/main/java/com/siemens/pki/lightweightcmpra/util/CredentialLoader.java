@@ -17,7 +17,7 @@
  */
 package com.siemens.pki.lightweightcmpra.util;
 
-import com.siemens.pki.cmpracomponent.cryptoservices.CertUtility;
+import com.siemens.pki.cmpracomponent.cryptoservices.ProviderWrapper;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +49,7 @@ public class CredentialLoader {
 
     static {
         try {
-            cf = CertificateFactory.getInstance("X.509", CertUtility.getBouncyCastleProvider());
+            cf = CertificateFactory.getInstance("X.509", ProviderWrapper.getBouncyCastleProvider());
         } catch (final CertificateException e) {
             LOGGER.error("error creating CertificateFactory ", e);
         }

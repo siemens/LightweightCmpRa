@@ -66,7 +66,12 @@ public class EnrollmentContextImpl implements EnrollmentContext {
         if (upperKeyType.startsWith("ED")) {
             return KeyPairGeneratorFactory.getEdDsaKeyPairGenerator(keyType).generateKeyPair();
         }
-        return KeyPairGeneratorFactory.getEcKeyPairGenerator(keyType).generateKeyPair();
+        try {
+            return KeyPairGeneratorFactory.getEcKeyPairGenerator(keyType).generateKeyPair();
+        } catch (GeneralSecurityException ex) {
+            return KeyPairGeneratorFactory.getGenericKeyPairGenerator(upperKeyType)
+                    .generateKeyPair();
+        }
     }
 
     @Override
