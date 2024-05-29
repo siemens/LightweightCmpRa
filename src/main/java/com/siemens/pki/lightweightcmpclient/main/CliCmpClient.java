@@ -47,11 +47,11 @@ import java.util.List;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.bouncycastle.asn1.cmp.PKIBody;
 
 public class CliCmpClient {
@@ -317,7 +317,7 @@ public class CliCmpClient {
     }
 
     private static int doGetCrls(final CommandLine cmd, final CmpClient client)
-            throws java.text.ParseException, CRLException, IOException {
+            throws java.text.ParseException, IOException, GeneralSecurityException {
         List<X509CRL> crls = null;
         if (cmd.hasOption(OPTION_oldCRL)) {
             final X509CRL crl = CredentialLoader.loadCRLs(new File(cmd.getOptionValue(OPTION_oldCRL)).toURI())
@@ -376,10 +376,9 @@ public class CliCmpClient {
         System.exit(ret);
     }
 
-    private static void printHelp() {
-        final HelpFormatter formatter = new HelpFormatter();
-        formatter.setOptionComparator(null);
-        formatter.printHelp("java -jar path/to/CmpClient.jar", cliOptions);
+    private static void printHelp() throws IOException {
+        final HelpFormatter formatter = HelpFormatter.builder().get();
+        formatter.printHelp("java -jar path/to/CmpClient.jar", null, cliOptions, null, true);
     }
 
     public static int runClient(final String... args) {
@@ -486,7 +485,12 @@ public class CliCmpClient {
             return 2;
         } catch (final ParseException | java.text.ParseException e) {
             System.err.println("Client failed. Reason: " + e.getMessage());
-            printHelp();
+            try {
+                printHelp();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             return 3;
         } catch (final Throwable e) {
             System.err.println("Client failed. Reason: " + e.getCause());

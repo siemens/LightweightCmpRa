@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.siemens.pki</groupId>
 	<artifactId>LightweightCmpRa</artifactId>
-	<version>4.0.3</version>
+	<version>4.3.0_PQ</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<parent.basedir>.</parent.basedir>
@@ -172,7 +172,7 @@
 		<dependency>
 			<groupId>com.siemens.pki</groupId>
 			<artifactId>CmpRaComponent</artifactId>
-			<version>4.2.0</version>
+			<version>4.3.0_PQ</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
@@ -207,20 +207,12 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-yaml-provider</artifactId>
-<<<<<<< HEAD
 			<version>2.20.0</version>
-=======
-			<version>2.19.0</version>
->>>>>>> bcbde5a (build(deps): bump the dependabot-dependency-updates group with 9 updates)
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-<<<<<<< HEAD
 			<version>2.20.0</version>
-=======
-			<version>2.19.0</version>
->>>>>>> bcbde5a (build(deps): bump the dependabot-dependency-updates group with 9 updates)
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
