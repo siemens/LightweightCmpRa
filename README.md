@@ -73,7 +73,7 @@ The component needs to be installed into the local maven repository:
 ```bash
 git clone https://github.com/siemens/cmp-ra-component.git
 cd cmp-ra-component
-mvn clean install -DskipTests=true
+mvn clean install -DskipTests=true -Dgpg.skip
 cd ..
 ```
 
@@ -95,6 +95,17 @@ This includes running unit tests, which may also be invoked explicitly by
 ```bash
 mvn test
 ```
+
+## Updating the Lightweight CMP RA
+
+In case the software has already been installed before,
+for updating it is sufficient to execute
+
+```bash
+git pull
+mvn clean install -DskipTests=true -Dgpg.skip
+```
+in both directories.
 
 ## Running the RA
 
