@@ -37,6 +37,17 @@ public class NestedEndpointContextImpl implements NestedEndpointContext {
 
     private Pattern recipientPatternAsPattern;
 
+    private String recipient;
+
+    @Override
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
     @Override
     public VerificationContext getInputVerification() {
         return InputVerification;

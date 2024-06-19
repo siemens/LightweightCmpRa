@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.siemens.pki</groupId>
 	<artifactId>LightweightCmpRa</artifactId>
-	<version>4.0.2</version>
+	<version>4.0.3</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<parent.basedir>.</parent.basedir>
@@ -172,7 +172,7 @@
 		<dependency>
 			<groupId>com.siemens.pki</groupId>
 			<artifactId>CmpRaComponent</artifactId>
-			<version>4.1.0</version>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
