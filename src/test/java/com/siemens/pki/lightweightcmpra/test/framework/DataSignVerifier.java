@@ -52,6 +52,7 @@ import org.bouncycastle.util.Store;
  */
 public class DataSignVerifier extends TrustCredentialAdapter {
 
+    private static final String INTERFACE_NAME = "TEST_CLIENT";
     private static JcaSimpleSignerInfoVerifierBuilder builder =
             new JcaSimpleSignerInfoVerifierBuilder().setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
 
@@ -92,7 +93,7 @@ public class DataSignVerifier extends TrustCredentialAdapter {
 
     public DataSignVerifier(final VerificationContext config)
             throws KeyStoreException, CertificateException, NoSuchAlgorithmException, Exception {
-        super(config);
+        super(config, INTERFACE_NAME);
     }
 
     /**

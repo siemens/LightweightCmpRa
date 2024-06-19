@@ -31,21 +31,24 @@ import org.junit.Test;
 
 public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
+    private static final String UPSTREAM_DIR = "./target/CmpTest/GenUpstream";
+    private static final String DOWNSTREAM_DIR = "./target/CmpTest/GenDownstream";
+
     @AfterClass
     public static void cleanUpDirsAnRas() {
         RA.stopAllRas();
-        TestUtils.removeDirectories("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+        TestUtils.removeDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
     @BeforeClass
     public static void setUpDirsAndRas() throws Exception {
-        TestUtils.createDirectories("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+        TestUtils.createDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
         initTestbed("DelayedSupportMessagesRaTestConfig.yaml", "DelayedSupportMessagesLraTestConfig.yaml");
     }
 
     @Before
     public void cleanDirectories() {
-        TestUtils.deleteAllFilesIn("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+        TestUtils.deleteAllFilesIn(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
     /**
