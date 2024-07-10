@@ -107,11 +107,10 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>9.1.0</version>
+				<version>10.0.2</version>
 				<executions>
 					<execution>
 						<goals>
-							<goal>update-only</goal>
 							<goal>check</goal>
 						</goals>
 					</execution>
@@ -173,7 +172,7 @@
 		<dependency>
 			<groupId>com.siemens.pki</groupId>
 			<artifactId>CmpRaComponent</artifactId>
-			<version>4.1.2</version>
+			<version>4.1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
