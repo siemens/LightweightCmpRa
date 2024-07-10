@@ -42,7 +42,7 @@ jobs:
         # note that we deliberately turn off the OWASP dependency checker here, it will run in a separate job,
         # such that its results can be viewed independently of what Sonar has to say
         run: |
-          mvn -B verify sonar:sonar -Dsonar.projectKey=siemens_LightweightCmpRa -Ddependency-check.skip=true
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=siemens_LightweightCmpRa -Ddependency-check.skip=true
 
   analyze_dependencies_owasp:
     name: Check dependencies with OWASP
