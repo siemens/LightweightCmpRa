@@ -111,6 +111,7 @@
 				<executions>
 					<execution>
 						<goals>
+							<goal>update-only</goal>
 							<goal>check</goal>
 						</goals>
 					</execution>
