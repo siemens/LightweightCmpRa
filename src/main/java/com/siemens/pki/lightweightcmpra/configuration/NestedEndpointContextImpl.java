@@ -35,6 +35,17 @@ public class NestedEndpointContextImpl implements NestedEndpointContext {
 
     private CredentialContextImpl OutputCredentials;
 
+    private String recipient;
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    @Override
+    public String getRecipient() {
+        return recipient;
+    }
+
     private Pattern recipientPatternAsPattern;
 
     @Override

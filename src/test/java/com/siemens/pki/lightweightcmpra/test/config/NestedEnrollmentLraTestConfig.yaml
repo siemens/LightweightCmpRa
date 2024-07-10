@@ -26,6 +26,7 @@ UpstreamConfiguration:
         Signature:
           keystore: "credentials/CMP_CA_Keystore.p12"
           Password: "Password"
+      Recipient: "CN=TheNestedRecipient"
 
 DownstreamConfiguration:
   - VerificationContext:

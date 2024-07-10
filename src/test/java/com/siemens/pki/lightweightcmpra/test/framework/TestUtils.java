@@ -169,9 +169,9 @@ public class TestUtils {
         }
     }
 
-    private static boolean deleteDirectory(final File directoryToBeDeleted) {
+    private static void deleteDirectory(final File directoryToBeDeleted) {
         deleteAllFilesIn(directoryToBeDeleted);
-        return directoryToBeDeleted.delete();
+        assertTrue("delete " + directoryToBeDeleted, directoryToBeDeleted.delete());
     }
 
     public static String getPassword() {
@@ -184,7 +184,7 @@ public class TestUtils {
 
     public static void removeDirectories(String... directoryNames) {
         for (final String akt : directoryNames) {
-            assertTrue("deleting " + akt, deleteDirectory(new File(akt)));
+            deleteDirectory(new File(akt));
         }
     }
 
