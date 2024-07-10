@@ -48,12 +48,12 @@ public class DelayedEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
         TestUtils.deleteAllFilesIn("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
     }
 
-    @Test
+    @Test(timeout = 60000L)
     public void testCrWithPolling() throws Exception {
         enrollWithConfig("DelayedClientEnrollmentConfigWithHttpAndSignature.yaml");
     }
 
-    @Test
+    @Test(timeout = 60000L)
     public void testRrWithPolling() throws Exception {
         revokeWithConfigAndCert("DelayedClientEnrollmentConfigWithHttpAndSignature.yaml");
     }
