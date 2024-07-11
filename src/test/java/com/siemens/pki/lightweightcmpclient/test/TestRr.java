@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -34,12 +36,12 @@ public class TestRr extends EnrollmentTestcaseBase {
     }
 
     @Test
-    public void testRRWithConfigAndCert() throws Exception {
-        revokeWithConfigAndCert("ClientRevocationConfigWithHttpAndSignature.yaml");
+    public void testRRWithConfigAndCert() {
+        assertTrue(revokeWithConfigAndCert("ClientRevocationConfigWithHttpAndSignature.yaml"));
     }
 
     @Test
-    public void testRRWithIssuerAndSerial() throws Exception {
-        revokeWithIssuerAndSerial("ClientRevocationConfigWithHttpAndSignature.yaml");
+    public void testRRWithIssuerAndSerial() {
+        assertTrue(revokeWithIssuerAndSerial("ClientRevocationConfigWithHttpAndSignature.yaml"));
     }
 }

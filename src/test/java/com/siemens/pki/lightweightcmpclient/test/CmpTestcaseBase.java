@@ -22,7 +22,6 @@ import com.siemens.pki.lightweightcmpra.test.framework.CertUtility;
 import com.siemens.pki.lightweightcmpra.test.framework.TestUtils;
 import com.siemens.pki.lightweightcmpra.util.ConfigFileLoader;
 import java.io.File;
-import java.security.GeneralSecurityException;
 import java.security.Security;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,8 +33,7 @@ public class CmpTestcaseBase {
     public static final File CONFIG_DIRECTORY =
             new File("./src/test/java/com/siemens/pki/lightweightcmpra/test/config");
 
-    protected static void initTestbed(final String... namesOfRaConfigFile)
-            throws Exception, GeneralSecurityException, InterruptedException {
+    protected static void initTestbed(final String... namesOfRaConfigFile) throws Exception {
         for (final String nameOfRaConfigFile : namesOfRaConfigFile) {
             RA.main(new String[] {nameOfRaConfigFile});
         }

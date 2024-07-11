@@ -7,8 +7,8 @@ DownstreamInterface:
 
 UpstreamInterface:
   - OfflineFileClient:
-      inputDirectory: "./target/CmpTest/GenDownstream"
-      outputDirectory: "./target/CmpTest/GenUpstream"
+      inputDirectory: "./target/CmpTest/GenDownstream_GEN"
+      outputDirectory: "./target/CmpTest/GenUpstream_GEN"
 
 UpstreamConfiguration:
   - VerificationContext:
@@ -43,4 +43,4 @@ RetryAfterTimeInSeconds:
   - value: 1
   
 DownstreamTimeout:
-  - value: 20
+  - value: 100

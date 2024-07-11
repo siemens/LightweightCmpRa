@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,12 +37,12 @@ public class TestIrWithSharedSecretProtection extends EnrollmentTestcaseBase {
     }
 
     @Test
-    public void testIrWithPasswordBasedProtection() throws Exception {
-        enrollWithConfig("ClientEnrollmentConfigWithHttpAndPassword.yaml");
+    public void testIrWithPasswordBasedProtection() {
+        assertTrue(enrollWithConfig("ClientEnrollmentConfigWithHttpAndPassword.yaml"));
     }
 
     @Test
-    public void testIrWithPBMAC1Protection() throws Exception {
-        enrollWithConfig("ClientEnrollmentConfigWithHttpAndPBMAC1.yaml");
+    public void testIrWithPBMAC1Protection() {
+        assertTrue(enrollWithConfig("ClientEnrollmentConfigWithHttpAndPBMAC1.yaml"));
     }
 }
