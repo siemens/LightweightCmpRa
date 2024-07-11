@@ -24,7 +24,7 @@ import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("RajeevKemCaRa Launch Group must be up")
+// @Ignore("RajeevKemCaRa Launch Group must be up")
 public class TestOsslKemlIntegrationStandalone extends EnrollmentTestcaseBase {
 
 	   static {
