@@ -78,7 +78,7 @@ public class RA {
         }
     }
 
-    private static ArrayList<RA> raList;
+    private static ArrayList<RA> raList = new ArrayList<>();
 
     /**
      * @param args command line arguments. Call with &lt;name of XML/YAML/JSON
@@ -90,10 +90,11 @@ public class RA {
             System.err.println("call with <name of YAML/JSON config file>");
             return;
         }
-        raList = new ArrayList<>(args.length);
-        // start RAs
-        for (final String actConfigFile : args) {
-            raList.add(new RA(actConfigFile));
+        synchronized (raList) {
+            // start RAs
+            for (final String actConfigFile : args) {
+                raList.add(new RA(actConfigFile));
+            }
         }
     }
 
@@ -101,16 +102,15 @@ public class RA {
      * stop all RA instances, used for unit tests
      */
     public static void stopAllRas() {
-        for (; ; ) {
-            if (raList.isEmpty()) {
-                break;
-            }
-            raList.remove(0).stop();
+        synchronized (raList) {
+            raList.forEach(RA::stop);
+            raList.clear();
         }
     }
 
     private DownstreamInterface downstreamInterface;
     private String configFile;
+    private Map<CertProfileBodyTypeTupel, UpstreamInterface> upstreamInterfaceMap;
 
     private RA(final String actConfigFile) throws Exception {
         configFile = actConfigFile;
@@ -118,7 +118,7 @@ public class RA {
         try {
             final ConfigurationImpl configuration = YamlConfigLoader.loadConfig(configFile, ConfigurationImpl.class);
             final DeferredSupplier<CmpRaInterface> raHolder = new DeferredSupplier<>();
-            final Map<CertProfileBodyTypeTupel, UpstreamInterface> upstreamInterfaceMap = new HashMap<>();
+            upstreamInterfaceMap = new HashMap<>();
             final UpstreamExchange upstreamExchange = (request, certProfile, bodyTypeOfFirstRequest) -> {
                 final CertProfileBodyTypeTupel key = new CertProfileBodyTypeTupel(certProfile, bodyTypeOfFirstRequest);
                 UpstreamInterface upstreamInterface = upstreamInterfaceMap.get(key);
@@ -146,6 +146,7 @@ public class RA {
         if (downstreamInterface != null) {
             downstreamInterface.stop();
         }
+        upstreamInterfaceMap.values().forEach(UpstreamInterface::stop);
         System.out.println("RA configured with " + configFile + " stopped");
     }
 }

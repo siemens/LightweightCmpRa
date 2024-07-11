@@ -53,4 +53,9 @@ public class CmpCoapClient implements UpstreamInterface {
     public void setDelayedResponseHandler(final AsyncResponseHandler asyncResponseHandler) {
         // no async response expected
     }
+
+    @Override
+    public void stop() {
+        client.shutdown();
+    }
 }

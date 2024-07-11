@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,7 +37,7 @@ public class TestCentralKeyGenerationWithKeyAgreement extends EnrollmentTestcase
     }
 
     @Test
-    public void testCrWithKeyAgreement() throws Exception {
-        enrollWithConfig("ClientConfigWithCKGAgreeHttpAndSignature.yaml");
+    public void testCrWithKeyAgreement() {
+        assertTrue(enrollWithConfig("ClientConfigWithCKGAgreeHttpAndSignature.yaml"));
     }
 }

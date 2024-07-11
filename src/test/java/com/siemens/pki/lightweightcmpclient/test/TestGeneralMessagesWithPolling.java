@@ -31,8 +31,8 @@ import org.junit.Test;
 
 public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
-    private static final String UPSTREAM_DIR = "./target/CmpTest/GenUpstream";
-    private static final String DOWNSTREAM_DIR = "./target/CmpTest/GenDownstream";
+    private static final String UPSTREAM_DIR = "./target/CmpTest/GenUpstream_GEN";
+    private static final String DOWNSTREAM_DIR = "./target/CmpTest/GenDownstream_GEN";
 
     @AfterClass
     public static void cleanUpDirsAnRas() {
@@ -56,7 +56,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
      *
      * @throws Exception
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testCrlUpdateRetrieval() throws Exception {
         final String cmdArgs = "--configfile " + "DelayedClientGeneralMessagesWithHttpAndSignature.yaml" + " "
                 + "--getCrls ./target/CmpTest/Results/CRLs.crl " + "--issuer CN=distributionPoint ";
@@ -70,7 +70,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
      *
      * @throws Exception
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testCrlUpdateRetrievalWithOldCrl() throws Exception {
         final String cmdArgs = "--configfile " + "DelayedClientGeneralMessagesWithHttpAndSignature.yaml" + " "
                 + "--getCrls ./target/CmpTest/Results/CRLs.crl "
@@ -83,7 +83,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     /*
      * Get CA certificates
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testGetCaCerts() throws Exception {
         final String cmdArgs = "--configfile " + "DelayedClientGeneralMessagesWithHttpAndSignature.yaml" + " "
                 + "--getCaCertificates ./target/CmpTest/Results/Certificates.cer ";
@@ -95,7 +95,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     /*
      * Get certificate request template
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testGetCertificateRequestTemplate() throws Exception {
 
         final String cmdArgs = "--configfile " + "DelayedClientGeneralMessagesWithHttpAndSignature.yaml" + " "
@@ -108,7 +108,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     /*
      * Get root CA certificate update
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testGetRootCaKeyUpdateInfo() throws Exception {
         final String cmdArgs = "--configfile " + "DelayedClientGeneralMessagesWithHttpAndSignature.yaml" + " "
                 + "--getRootCaCertificateUpdate " + "--NewWithNew ./target/CmpTest/Results/NewWithNew.cer "
