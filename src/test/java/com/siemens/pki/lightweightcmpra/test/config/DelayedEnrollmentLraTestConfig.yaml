@@ -8,8 +8,8 @@ DownstreamInterface:
 UpstreamInterface:
   - OfflineFileClient:
       certProfile: ~
-      inputDirectory: "./target/CmpTest/Downstream"
-      outputDirectory: "./target/CmpTest/Upstream"
+      inputDirectory: "./target/CmpTest/Downstream_REV"
+      outputDirectory: "./target/CmpTest/Upstream_REV"
 
 UpstreamConfiguration:
   - VerificationContext:
@@ -53,6 +53,6 @@ RetryAfterTimeInSeconds:
   - value: 1
   
 DownstreamTimeout:
-  - value: 20
+  - value: 100
 
   

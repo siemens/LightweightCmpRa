@@ -34,6 +34,7 @@ import org.bouncycastle.asn1.cmp.PKIMessage;
 import org.bouncycastle.asn1.crmf.CertTemplateBuilder;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -41,6 +42,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
+
+    private static final String UPSTREAM_DIR = "./target/CmpTest/Upstream_REV";
+    private static final String DOWNSTREAM_DIR = "./target/CmpTest/Downstream_REV";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelayedEnrollmentTescaseBase.class);
 
@@ -96,12 +100,12 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
 
     @AfterClass
     public static void removeDirs() {
-        TestUtils.removeDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.removeDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
     @BeforeClass
     public static void setUpDirsAndRas() throws Exception {
-        TestUtils.createDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.createDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
         initTestbed(
                 "http://localhost:6003/delayedlra",
                 "DelayedEnrollmentRaTestConfig.yaml",
@@ -109,7 +113,12 @@ public class DelayedEnrollmentTescaseBase extends EnrollmentTestcaseBase {
     }
 
     @Before
-    public void clearDirs() {
-        TestUtils.deleteAllFilesIn("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+    public void clearDirsBefore() {
+        TestUtils.deleteAllFilesIn(DOWNSTREAM_DIR, UPSTREAM_DIR);
+    }
+
+    @After
+    public void clearDirsAfter() {
+        TestUtils.deleteAllFilesIn(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 }

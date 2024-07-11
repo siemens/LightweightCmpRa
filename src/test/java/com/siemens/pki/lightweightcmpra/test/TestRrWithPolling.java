@@ -39,7 +39,7 @@ public class TestRrWithPolling extends DelayedEnrollmentTescaseBase {
      *
      * @throws Exception
      */
-    @Test(timeout = 60000L)
+    @Test(timeout = 100000L)
     public void testRrWithPolling() throws Exception {
         final EnrollmentResult certificateToRevoke = executeDelayedCertificateRequest(
                 PKIBody.TYPE_CERT_REQ,

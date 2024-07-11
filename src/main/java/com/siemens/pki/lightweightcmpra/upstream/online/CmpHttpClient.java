@@ -107,4 +107,10 @@ public class CmpHttpClient implements UpstreamInterface {
     public void setDelayedResponseHandler(final AsyncResponseHandler asyncResponseHandler) {
         // no async response expected
     }
+
+    @Override
+    public void stop() {
+        // nothing to do
+
+    }
 }
