@@ -35,7 +35,7 @@ public class TestCrWithNested extends OnlineEnrollmentTestcaseBase {
      *
      * @throws Exception
      */
-    @Test(timeout = 10000000L)
+    @Test(timeout = 100000L)
     public void testCrWithNested() throws Exception {
         executeCrmfCertificateRequest(
                 PKIBody.TYPE_CERT_REQ,

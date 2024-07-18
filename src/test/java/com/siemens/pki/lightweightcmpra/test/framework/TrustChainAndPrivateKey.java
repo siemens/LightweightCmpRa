@@ -18,8 +18,12 @@
 package com.siemens.pki.lightweightcmpra.test.framework;
 
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.Certificate;
@@ -81,7 +85,8 @@ public class TrustChainAndPrivateKey {
                 CertUtility.extractSubjectKeyIdentifierFromCert(CertUtility.certificateFromCmpCertificate(certificate));
         return new ProtectionProvider() {
             @Override
-            public List<CMPCertificate> getProtectingExtraCerts() throws Exception {
+            public List<CMPCertificate> getProtectingExtraCerts()
+                    throws java.security.cert.CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
                 final List<CMPCertificate> ret = new ArrayList<>(trustChain.size());
                 ret.add(certificate);
                 for (final X509Certificate aktCert : trustChain) {
@@ -100,7 +105,8 @@ public class TrustChainAndPrivateKey {
             }
 
             @Override
-            public DERBitString getProtectionFor(final ProtectedPart protectedPart) throws Exception {
+            public DERBitString getProtectionFor(final ProtectedPart protectedPart)
+                    throws GeneralSecurityException, IOException {
                 final Signature sig = Signature.getInstance(SignHelperUtil.getSigningAlgNameFromKey(privateKey));
                 sig.initSign(privateKey);
                 sig.update(protectedPart.getEncoded(ASN1Encoding.DER));

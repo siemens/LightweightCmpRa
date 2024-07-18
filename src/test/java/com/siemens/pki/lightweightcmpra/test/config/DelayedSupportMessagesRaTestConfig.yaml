@@ -3,8 +3,8 @@
 
 DownstreamInterface:
   OfflineFileServer:
-    inputDirectory: "./target/CmpTest/GenUpstream"
-    outputDirectory: "./target/CmpTest/GenDownstream"
+    inputDirectory: "./target/CmpTest/GenUpstream_GEN"
+    outputDirectory: "./target/CmpTest/GenDownstream_GEN"
 
 DownstreamConfiguration:
   - VerificationContext:
@@ -34,4 +34,4 @@ SupportMessageHandlerInterface:
         - "credentials/CRL.der"
 
 DownstreamTimeout:
-  - value: 20
+  - value: 100

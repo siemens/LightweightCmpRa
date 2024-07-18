@@ -26,34 +26,39 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class DelayedEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
+public class TestDelayedEnrollmentAndRevocation extends EnrollmentTestcaseBase {
+
+    private static final String UPSTREAM_DIR = "./target/CmpTest/Upstream_REV";
+    private static final String DOWNSTREAM_DIR = "./target/CmpTest/Downstream_REV";
 
     @BeforeClass
     public static void setupRas() throws GeneralSecurityException, InterruptedException, Exception {
-        TestUtils.createDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.createDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
         initTestbed("DelayedEnrollmentRaTestConfig.yaml", "DelayedEnrollmentLraTestConfig.yaml");
     }
 
     @AfterClass
     public static void stopAllRas() {
         RA.stopAllRas();
-        TestUtils.removeDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.removeDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
     @After
-    public void cleanUpDelayedEnrollmentDirs() {}
+    public void cleanUpDelayedEnrollmentDirs() {
+        TestUtils.deleteAllFilesIn(DOWNSTREAM_DIR, UPSTREAM_DIR);
+    }
 
     @Before
     public void setUpDelayedEnrollmentDirs() throws Exception {
-        TestUtils.deleteAllFilesIn("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.deleteAllFilesIn(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
-    @Test(timeout = 60000L)
+    @Test(timeout = 100000L)
     public void testCrWithPolling() throws Exception {
         enrollWithConfig("DelayedClientEnrollmentConfigWithHttpAndSignature.yaml");
     }
 
-    @Test(timeout = 60000L)
+    @Test(timeout = 100000L)
     public void testRrWithPolling() throws Exception {
         revokeWithConfigAndCert("DelayedClientEnrollmentConfigWithHttpAndSignature.yaml");
     }

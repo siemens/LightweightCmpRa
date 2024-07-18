@@ -54,25 +54,25 @@ import org.bouncycastle.asn1.x509.Time;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Ignore
 public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
+    private static final String UPSTREAM_DIR = "./target/CmpTest/GenUpstream_GEN";
+    private static final String DOWNSTREAM_DIR = "./target/CmpTest/GenDownstream_GEN";
     private static final Logger LOGGER = LoggerFactory.getLogger(TestGeneralMessagesWithPolling.class);
 
     @AfterClass
     public static void removeDirs() {
         RA.stopAllRas();
-        TestUtils.removeDirectories("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+        TestUtils.removeDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
     @BeforeClass
     public static void setUpDirsAndRas() throws Exception {
-        TestUtils.createDirectories("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+        TestUtils.createDirectories(DOWNSTREAM_DIR, UPSTREAM_DIR);
         initTestbed(
                 "http://localhost:6006/delayedsupportlra",
                 "DelayedSupportMessagesRaTestConfig.yaml",
@@ -81,7 +81,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
 
     @Before
     public void clearDirs() {
-        TestUtils.deleteAllFilesIn("./target/CmpTest/GenDownstream", "./target/CmpTest/GenUpstream");
+        TestUtils.deleteAllFilesIn(DOWNSTREAM_DIR, UPSTREAM_DIR);
     }
 
     /**
@@ -89,7 +89,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
      *
      * @throws Exception
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testCrlUpdateRetrieval() throws Exception {
         final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier statusListOid = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.22");
@@ -132,7 +132,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     /*
      * Get CA certificates
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testGetCaCerts() throws Exception {
         final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier getCaCertOid = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.17");
@@ -166,7 +166,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     /*
      * Get certificate request template
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testGetCertificateRequestTemplate() throws Exception {
         final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier getCaCertOid = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.19");
@@ -215,7 +215,7 @@ public class TestGeneralMessagesWithPolling extends CmpTestcaseBase {
     /*
      * Get root CA certificate update
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testGetRootCaKeyUpdateInfo() throws Exception {
         final Function<PKIMessage, PKIMessage> eeCmpClient = getEeCmpClient();
         final ASN1ObjectIdentifier getCaCertOid = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.4.20");
