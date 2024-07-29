@@ -236,7 +236,7 @@ With JDK 11, revocation checking has some issues:
   for CMP and TLS trust chains.
 * An OCSP AIA extension is not always used in path validation
   for TLS trust chains.
-
+  
 
 # Lightweight CMP client CLI application
 
@@ -384,3 +384,15 @@ usage: java -jar path/to/CmpClient.jar
 
 The lower part of the [configuration README file](/doc/config/README.md)
 explains the YAML configuration file structure.
+
+# RA plugin
+
+The Inventory interface supports two ways to use an external certificate request checker using system environment variables
+1. Plugin for external processes: `RA_INVENTORY_EXEC = <path to executable>`
+2. Plugin for HTTP service: `RA_INVENTORY_URL = <URL to HTTP server>`
+
+## Process-based checker
+An example for an external process is the python program [scripts/external-inventory-example.pyw](scripts/external-inventory-example.pyw).
+
+## HTTP (REST-API) checker
+The test case expects the HTTP server running on http://127.0.0.1:8000/check

@@ -68,7 +68,7 @@ public class TestUtils {
      */
     public static Function<PKIMessage, PKIMessage> createCmpClient(final String serverPath) throws Exception {
         if (serverPath.toLowerCase().startsWith("http")) {
-            final CmpHttpClient cmpHttpClient = new CmpHttpClient(new URL(serverPath), 30);
+            final CmpHttpClient cmpHttpClient = new CmpHttpClient(new URL(serverPath), 100);
             return request -> {
                 try {
                     return ifNotNull(cmpHttpClient.apply(request.getEncoded(), "http client"), PKIMessage::getInstance);
