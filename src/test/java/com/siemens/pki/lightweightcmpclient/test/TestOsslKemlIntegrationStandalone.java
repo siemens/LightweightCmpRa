@@ -18,20 +18,18 @@
 package com.siemens.pki.lightweightcmpclient.test;
 
 import java.security.Security;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
-import org.junit.Ignore;
 import org.junit.Test;
 
 // @Ignore("RajeevKemCaRa Launch Group must be up")
 public class TestOsslKemlIntegrationStandalone extends EnrollmentTestcaseBase {
 
-	   static {
-	        Security.addProvider(new BouncyCastleProvider());
-	        Security.addProvider(new BouncyCastlePQCProvider());
-	    }
- 
+    static {
+        Security.addProvider(new BouncyCastleProvider());
+        Security.addProvider(new BouncyCastlePQCProvider());
+    }
+
     /**
      * certificate from a trusted PKI with signature protection
      *

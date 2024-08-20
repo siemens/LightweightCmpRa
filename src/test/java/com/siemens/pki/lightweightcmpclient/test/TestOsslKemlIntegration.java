@@ -17,15 +17,13 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.siemens.pki.lightweightcmpra.main.RA;
-
 public class TestOsslKemlIntegration extends EnrollmentTestcaseBase {
 
- 
     @BeforeClass
     public static void setUpRas() throws Exception {
         initTestbed("EnrollmentOsslKem.yaml");

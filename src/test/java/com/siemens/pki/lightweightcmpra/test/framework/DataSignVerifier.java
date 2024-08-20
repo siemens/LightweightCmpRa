@@ -55,7 +55,7 @@ public class DataSignVerifier extends TrustCredentialAdapter {
     private static final String INTERFACE_NAME = "TEST_CLIENT";
     private static JcaSimpleSignerInfoVerifierBuilder builder =
             new JcaSimpleSignerInfoVerifierBuilder().setProvider(CertUtility.BOUNCY_CASTLE_PROVIDER);
- 
+
     public static byte[] verifySignature(final byte[] encodedSignedData) throws CMSException, Exception, IOException {
         return verifySignature(encodedSignedData, (cert, additionalCerts) -> true);
     }

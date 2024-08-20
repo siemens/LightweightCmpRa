@@ -26,14 +26,12 @@ import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterface;
 import com.siemens.pki.lightweightcmpra.downstream.DownstreamInterfaceFactory;
 import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterface;
 import com.siemens.pki.lightweightcmpra.upstream.UpstreamInterfaceFactory;
-
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
 
@@ -42,7 +40,7 @@ import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
  *
  */
 public class RA {
-	
+
     static {
         Security.addProvider(new BouncyCastleProvider());
         Security.addProvider(new BouncyCastlePQCProvider());

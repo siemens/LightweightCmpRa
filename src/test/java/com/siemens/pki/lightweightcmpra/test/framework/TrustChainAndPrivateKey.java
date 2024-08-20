@@ -17,12 +17,17 @@
  */
 package com.siemens.pki.lightweightcmpra.test.framework;
 
+import static org.junit.Assert.fail;
+
 import com.siemens.pki.cmpracomponent.protection.ProtectionProvider;
 import java.security.Key;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,7 +86,8 @@ public class TrustChainAndPrivateKey {
                 CertUtility.extractSubjectKeyIdentifierFromCert(CertUtility.certificateFromCmpCertificate(certificate));
         return new ProtectionProvider() {
             @Override
-            public List<CMPCertificate> getProtectingExtraCerts() throws Exception {
+            public List<CMPCertificate> getProtectingExtraCerts()
+                    throws CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
                 final List<CMPCertificate> ret = new ArrayList<>(trustChain.size());
                 ret.add(certificate);
                 for (final X509Certificate aktCert : trustChain) {
@@ -100,11 +106,15 @@ public class TrustChainAndPrivateKey {
             }
 
             @Override
-            public DERBitString getProtectionFor(final ProtectedPart protectedPart) throws Exception {
-                final Signature sig = Signature.getInstance(SignHelperUtil.getSigningAlgNameFromKey(privateKey));
-                sig.initSign(privateKey);
-                sig.update(protectedPart.getEncoded(ASN1Encoding.DER));
-                return new DERBitString(sig.sign());
+            public DERBitString getProtectionFor(final ProtectedPart protectedPart) {
+                try {
+                    final Signature sig = Signature.getInstance(SignHelperUtil.getSigningAlgNameFromKey(privateKey));
+                    sig.update(protectedPart.getEncoded(ASN1Encoding.DER));
+                    return new DERBitString(sig.sign());
+                } catch (Exception e) {
+                    fail(e.getLocalizedMessage());
+                    return null;
+                }
             }
 
             @Override
