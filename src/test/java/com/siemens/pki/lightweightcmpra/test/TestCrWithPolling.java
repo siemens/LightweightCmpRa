@@ -27,7 +27,7 @@ public class TestCrWithPolling extends DelayedEnrollmentTescaseBase {
      *
      * @throws Exception
      */
-    @Test
+    @Test(timeout = 100000L)
     public void testCrWithPolling() throws Exception {
         executeDelayedCertificateRequest(
                 PKIBody.TYPE_CERT_REQ,

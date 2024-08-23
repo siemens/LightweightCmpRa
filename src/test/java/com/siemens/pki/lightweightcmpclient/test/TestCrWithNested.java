@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -40,7 +42,7 @@ public class TestCrWithNested extends EnrollmentTestcaseBase {
      * @throws Exception
      */
     @Test
-    public void testNestedCr() throws Exception {
-        enrollWithConfig("ClientNestedEnrollmentConfig.yaml");
+    public void testNestedCr() {
+        assertTrue(enrollWithConfig("ClientNestedEnrollmentConfig.yaml"));
     }
 }

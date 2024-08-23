@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -40,8 +42,8 @@ public class TestCertProfile extends EnrollmentTestcaseBase {
      * @throws Exception
      */
     @Test(timeout = 100000L)
-    public void testEnrollmentWithCertProfile1() throws Exception {
-        enrollWithConfigAndCertProfile("ClientCertProfileEnrollment.yaml", "secret1");
+    public void testEnrollmentWithCertProfile1() {
+        assertTrue(enrollWithConfigAndCertProfile("ClientCertProfileEnrollment.yaml", "secret1"));
     }
 
     /**
@@ -50,7 +52,7 @@ public class TestCertProfile extends EnrollmentTestcaseBase {
      * @throws Exception
      */
     @Test
-    public void testEnrollmentWithCertProfile2() throws Exception {
-        enrollWithConfigAndCertProfile("ClientCertProfileEnrollment.yaml", "secret2");
+    public void testEnrollmentWithCertProfile2() {
+        assertTrue(enrollWithConfigAndCertProfile("ClientCertProfileEnrollment.yaml", "secret2"));
     }
 }

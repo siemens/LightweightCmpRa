@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -40,7 +42,7 @@ public class TestCoapCr extends EnrollmentTestcaseBase {
      * @throws Exception
      */
     @Test
-    public void testCr() throws Exception {
-        enrollWithConfig("ClientEnrollmentConfigWithCoapAndSignature.yaml");
+    public void testCr() {
+        assertTrue(enrollWithConfig("ClientEnrollmentConfigWithCoapAndSignature.yaml"));
     }
 }

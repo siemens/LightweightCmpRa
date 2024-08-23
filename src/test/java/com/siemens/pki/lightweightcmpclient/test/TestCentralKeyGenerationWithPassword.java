@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,7 +37,7 @@ public class TestCentralKeyGenerationWithPassword extends EnrollmentTestcaseBase
     }
 
     @Test
-    public void testCrWithPassword() throws Exception {
-        enrollWithConfig("ClientConfigWithCKGPassword.yaml");
+    public void testCrWithPassword() {
+        assertTrue(enrollWithConfig("ClientConfigWithCKGPassword.yaml"));
     }
 }

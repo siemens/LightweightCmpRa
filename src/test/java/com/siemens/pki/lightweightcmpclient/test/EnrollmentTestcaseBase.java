@@ -24,8 +24,6 @@ import com.siemens.pki.lightweightcmpclient.main.CliCmpClient;
 import com.siemens.pki.lightweightcmpra.test.framework.CmpCaMock;
 import com.siemens.pki.lightweightcmpra.util.CredentialLoader;
 import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -42,7 +40,7 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
         CmpCaMock.stopSingleCaMock();
     }
 
-    public void enrollWithConfig(String configFile) throws IOException, GeneralSecurityException {
+    public boolean enrollWithConfig(String configFile) {
         final String cmdArgs =
                 "--configfile " + configFile + " " + "--enroll ./target/CmpTest/Results/EnrollmentResult.pem "
                         + "--enrollmentChain ./target/CmpTest/Results/EnrollmentChain.pem ";
@@ -50,10 +48,10 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
         assertEquals("Client failed", 0, ret);
         assertTrue("enrollment result", new File("./target/CmpTest/Results/EnrollmentResult.pem").length() > 0);
         assertTrue("enrollment chain", new File("./target/CmpTest/Results/EnrollmentChain.pem").length() > 0);
+        return true;
     }
 
-    public void enrollWithConfigAndCertProfile(String configFile, String certProfile)
-            throws IOException, GeneralSecurityException {
+    public boolean enrollWithConfigAndCertProfile(String configFile, String certProfile) {
         final String cmdArgs = "--configfile " + configFile + " "
                 + "--enroll ./target/CmpTest/Results/EnrollmentResult.pem "
                 + "--enrollmentChain ./target/CmpTest/Results/EnrollmentChain.pem " + "--certProfile " + certProfile
@@ -62,9 +60,10 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
         assertEquals("Client failed", 0, ret);
         assertTrue("enrollment result", new File("./target/CmpTest/Results/EnrollmentResult.pem").length() > 0);
         assertTrue("enrollment chain", new File("./target/CmpTest/Results/EnrollmentChain.pem").length() > 0);
+        return true;
     }
 
-    public void revokeWithConfigAndCert(String configFile) throws IOException, GeneralSecurityException {
+    public boolean revokeWithConfigAndCert(String configFile) {
         String cmdArgs = "--configfile " + configFile + " " + "--enroll ./target/CmpTest/Results/EnrollmentResult.pem "
                 + "--enrollmentChain ./target/CmpTest/Results/EnrollmentChain.pem "
                 + "--enrollmentKeystore ./target/CmpTest/Results/EnrollmentKeystore.p12 "
@@ -77,9 +76,10 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
         cmdArgs = "--configfile " + configFile + " " + "--revokecert ./target/CmpTest/Results/EnrollmentResult.pem ";
         ret = CliCmpClient.runClient(cmdArgs.split("\\s+"));
         assertEquals("Client failed", 0, ret);
+        return true;
     }
 
-    public void revokeWithIssuerAndSerial(String configFile) throws IOException, GeneralSecurityException {
+    public boolean revokeWithIssuerAndSerial(String configFile) {
         String cmdArgs = "--configfile " + configFile + " " + "--enroll ./target/CmpTest/Results/EnrollmentResult.pem "
                 + "--enrollmentChain ./target/CmpTest/Results/EnrollmentChain.pem "
                 + "--enrollmentKeystore ./target/CmpTest/Results/EnrollmentKeystore.p12 "
@@ -95,5 +95,6 @@ public class EnrollmentTestcaseBase extends CmpTestcaseBase {
                 + certToRevoke.getIssuerX500Principal().getName() + " --serial " + certToRevoke.getSerialNumber();
         ret = CliCmpClient.runClient(cmdArgs.split("\\s+"));
         assertEquals("Client failed", 0, ret);
+        return true;
     }
 }

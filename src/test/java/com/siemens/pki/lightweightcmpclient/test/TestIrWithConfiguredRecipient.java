@@ -18,6 +18,7 @@
 package com.siemens.pki.lightweightcmpclient.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.siemens.pki.lightweightcmpra.main.RA;
 import com.siemens.pki.lightweightcmpra.test.framework.CmpCaMock;
@@ -41,8 +42,8 @@ public class TestIrWithConfiguredRecipient extends EnrollmentTestcaseBase {
     }
 
     @Test
-    public void testIrWithNewRecipient() throws Exception {
-        enrollWithConfig("ClientEnrollmentConfigWithHttpAndPBMAC1.yaml");
+    public void testIrWithNewRecipient() {
+        assertTrue(enrollWithConfig("ClientEnrollmentConfigWithHttpAndPBMAC1.yaml"));
         final PKIMessage ir = CmpCaMock.getReceivedRequestAt(1);
         assertEquals(
                 "Recipient",
