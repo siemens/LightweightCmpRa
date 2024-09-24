@@ -465,6 +465,13 @@ the EE and RA configurations are consistent for all types of requests.
 To this end it can be helpful to differentiate via certificate profiles.
 
 
+Note: If the `VerificationContext` is configured with MAC-based protection,
+the RA must use the same credentials as `OutputCredentials`.
+In this case, the configuration of the `OutputCredentials` object is ignored
+and the credentials from the `VerificationContext` are used for protecting outgoing messages.
+If a validation error occurs at the RA, the `OutputCredentials` are used to protect the error message.
+
+
 ##### The `SignatureCredentialContext` object
 
 The **`SignatureCredentialContext`** object holds the values needed
