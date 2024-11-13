@@ -45,6 +45,7 @@ public class CmpFileOfflineClient implements UpstreamInterface {
 
     private final File outputDirectory;
     private AsyncResponseHandler asyncResponseHandler;
+    private TimerTask timerTask;
 
     /**
      *
@@ -66,14 +67,14 @@ public class CmpFileOfflineClient implements UpstreamInterface {
         }
         final long pollInterval = config.getInputDirectoryPollcycle() * 1000L;
         final Timer pollTimer = new Timer(true);
-        final TimerTask task = new TimerTask() {
+        timerTask = new TimerTask() {
 
             @Override
             public void run() {
                 pollInputDirectory();
             }
         };
-        pollTimer.schedule(task, new Date(System.currentTimeMillis() + pollInterval), pollInterval);
+        pollTimer.schedule(timerTask, new Date(System.currentTimeMillis() + pollInterval), pollInterval);
     }
 
     @Override
@@ -117,5 +118,10 @@ public class CmpFileOfflineClient implements UpstreamInterface {
                 aktFile.delete();
             }
         }
+    }
+
+    @Override
+    public void stop() {
+        timerTask.cancel();
     }
 }

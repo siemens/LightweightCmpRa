@@ -56,6 +56,8 @@ public class TestUtils {
 
     private static final char[] PASSWORD_AS_CHAR_ARRAY = getPassword().toCharArray();
 
+    private static final String INTERFACE_NAME = "TEST_CLIENT";
+
     /**
      * create a HTTP CMP client
      *
@@ -110,7 +112,7 @@ public class TestUtils {
         config.setSharedSecret(sharedSecret.getBytes());
         config.setPrf("SHA256");
         config.setMacAlgorithm("SHA256");
-        return new PasswordBasedMacProtection(config);
+        return new PasswordBasedMacProtection(config, INTERFACE_NAME);
     }
 
     public static ProtectionProvider createPasswordBasedMacProtection(
@@ -124,7 +126,7 @@ public class TestUtils {
         config.setSharedSecret(sharedSecret.getBytes());
         config.setPrf(owf.getId());
         config.setMacAlgorithm(mac.getId());
-        return new PasswordBasedMacProtection(config);
+        return new PasswordBasedMacProtection(config, INTERFACE_NAME);
     }
 
     public static ProtectionProvider createPBMAC1Protection(
@@ -135,7 +137,7 @@ public class TestUtils {
         config.setSharedSecret(sharedSecret.getBytes());
         config.setPrf(prf.getAlgorithm().getId());
         config.setMacAlgorithm(mac.getAlgorithm().getId());
-        return new PBMAC1Protection(config);
+        return new PBMAC1Protection(config, INTERFACE_NAME);
     }
 
     public static SignatureBasedProtection createSignatureBasedProtection(
@@ -143,7 +145,7 @@ public class TestUtils {
         final SignatureCredentialContextImpl config = new SignatureCredentialContextImpl();
         config.setKeyStore(ConfigFileLoader.getConfigFileAsUri(fileName));
         config.setPassword(new String(password).getBytes());
-        return new SignatureBasedProtection(config);
+        return new SignatureBasedProtection(config, INTERFACE_NAME);
     }
 
     public static VerificationContextImpl createVerificationContext(final String fileName) throws URISyntaxException {
@@ -167,9 +169,9 @@ public class TestUtils {
         }
     }
 
-    private static boolean deleteDirectory(final File directoryToBeDeleted) {
+    private static void deleteDirectory(final File directoryToBeDeleted) {
         deleteAllFilesIn(directoryToBeDeleted);
-        return directoryToBeDeleted.delete();
+        assertTrue("delete " + directoryToBeDeleted, directoryToBeDeleted.delete());
     }
 
     public static String getPassword() {
@@ -182,7 +184,7 @@ public class TestUtils {
 
     public static void removeDirectories(String... directoryNames) {
         for (final String akt : directoryNames) {
-            assertTrue("deleting " + akt, deleteDirectory(new File(akt)));
+            deleteDirectory(new File(akt));
         }
     }
 

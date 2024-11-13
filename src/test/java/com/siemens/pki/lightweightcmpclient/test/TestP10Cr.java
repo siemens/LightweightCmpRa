@@ -17,6 +17,8 @@
  */
 package com.siemens.pki.lightweightcmpclient.test;
 
+import static org.junit.Assert.assertTrue;
+
 import com.siemens.pki.lightweightcmpra.main.RA;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -39,7 +41,7 @@ public class TestP10Cr extends EnrollmentTestcaseBase {
      * @throws Exception
      */
     @Test
-    public void testP10Cr() throws Exception {
-        enrollWithConfig("ClientP10EnrollmentConfigWithHttpAndSignature.yaml");
+    public void testP10Cr() {
+        assertTrue(enrollWithConfig("ClientP10EnrollmentConfigWithHttpAndSignature.yaml"));
     }
 }

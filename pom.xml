@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.siemens.pki</groupId>
 	<artifactId>LightweightCmpRa</artifactId>
-	<version>4.0.2</version>
+	<version>4.0.3</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<parent.basedir>.</parent.basedir>
@@ -107,7 +107,7 @@
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
-				<version>9.2.0</version>
+				<version>10.0.2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -172,7 +172,7 @@
 		<dependency>
 			<groupId>com.siemens.pki</groupId>
 			<artifactId>CmpRaComponent</artifactId>
-			<version>4.1.2</version>
+			<version>4.1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>

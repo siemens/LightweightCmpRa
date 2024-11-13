@@ -134,4 +134,6 @@ fix: update some dependencies
 
 feat: add nested message support to CmpCaMock
 
+### 4.0.3 (Jun 19 2024)
 
+fix: update dependencies to CmpRaComponent
