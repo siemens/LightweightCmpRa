@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CmpHttpClient implements UpstreamInterface {
 
+    private static final String CONTENT_TYPE = "Content-type";
+    private static final String CMP_CONTENT_TYPE = "application/pkixcmp";
     private static final Logger LOGGER = LoggerFactory.getLogger(CmpHttpClient.class);
 
     /**
@@ -54,23 +56,22 @@ public class CmpHttpClient implements UpstreamInterface {
         httpConnection.setConnectTimeout(timeoutInSeconds > 0 ? timeoutInSeconds * 1000 : Integer.MAX_VALUE);
         httpConnection.setReadTimeout(timeoutInSeconds > 0 ? timeoutInSeconds * 1000 : Integer.MAX_VALUE);
         httpConnection.setRequestMethod("POST");
-        httpConnection.setRequestProperty("Content-type", "application/pkixcmp");
+        httpConnection.setRequestProperty(CONTENT_TYPE, CMP_CONTENT_TYPE);
         httpConnection.connect();
         try (final OutputStream outputStream = httpConnection.getOutputStream()) {
             LOGGER.debug("send " + message.length + " bytes to " + httpConnection);
             outputStream.write(message);
         }
         final int lastResponseCode = httpConnection.getResponseCode();
-
-        if (lastResponseCode == HttpURLConnection.HTTP_OK) {
-            final byte[] response = httpConnection.getInputStream().readAllBytes();
-            LOGGER.debug("got " + response.length + " bytes from " + httpConnection);
-            return response;
+        if (lastResponseCode != HttpURLConnection.HTTP_OK) {
+            final String errorString = "got response '" + lastResponseCode + " " + httpConnection.getResponseMessage()
+                    + "' from " + httpConnection;
+            LOGGER.warn(errorString);
+            if (!CMP_CONTENT_TYPE.equals(httpConnection.getHeaderField(CONTENT_TYPE))) {
+                throw new Exception(errorString);
+            }
         }
-        final String errorString = "got response '" + httpConnection.getResponseMessage() + "(" + lastResponseCode
-                + ")' from " + httpConnection;
-        LOGGER.error(errorString + ", closing client");
-        throw new Exception(errorString);
+        return httpConnection.getInputStream().readAllBytes();
     }
 
     protected final URL remoteUrl;
