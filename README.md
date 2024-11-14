@@ -1,21 +1,22 @@
 <!--
-Copyright (c) 2019 Siemens AG
-Licensed under the Apache License, Version 2.0
-SPDX-License-Identifier: Apache-2.0
+Copyright (c) 2019 - 2024 Siemens AG
 -->
 
-# Lightweight CMP RA CLI application
+# Lightweight CMP RA and CMP Client CLI applications
 
-This repository provides a CLI-based Registration Authority application
-for demonstration and test purposes that implements the
-[Lightweight CMP Profile](
-https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).
-The [generic CMP RA component](https://github.com/siemens/cmp-ra-component)
-is used as implementation of the core CMP Registration Authority (RA) functions.
+This repository provides CLI-based Registration Authority (RA) and CMP client
+Java applications for demonstration and test purposes.\
+It offers CMP features according to RFCs 4210 and 9480 
+according to the [Lightweight CMP Profile](
+https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).\
+It uses the [generic CMP RA component](https://github.com/siemens/cmp-ra-component)
+as an implementation of the core CMP features.
 
 ## License
 
 This software is licensed under the Apache License, Version 2.0.
+
+SPDX-License-Identifier: Apache-2.0
 
 # Disclaimer
 
@@ -84,7 +85,7 @@ git clone https://github.com/siemens/LightweightCmpRa.git
 cd LightweightCmpRa
 ```
 
-## Build the Lightweight CMP RA
+## Build the software
 
 ```bash
 mvn clean install
@@ -96,7 +97,7 @@ This includes running unit tests, which may also be invoked explicitly by
 mvn test
 ```
 
-## Updating the Lightweight CMP RA
+## Updating the build
 
 In case the software has already been installed before,
 for updating it is sufficient to execute
@@ -127,7 +128,7 @@ java -jar ../LightweightCmpRa-x.y.z.jar <YAML/JSON configuration file>
 If you use your IDE (e.g. Eclipse) to generate a "Runnable JAR file" it is recommended to have
 the required libraries in a subfolder and not packed with the generate JAR file.
 
-# Software architecture
+# RA Software architecture
 
 ## External components
 
@@ -212,17 +213,8 @@ explains the YAML configuration file structure.
 * File-based transport
 * CoAP transport
 
-Due to a lack of public available implementations the
+Due to a lack of publicly available implementations, the
 "HTTPS transport using shared secrets" is not implemented.
-
-## Other resources
-
-An End Entity (EE) client implementation of the
-[Lightweight CMP Profile](<https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/>)
-based on OpenSSL with an high-level C API and a CLI is provided by the
-[generic CMP client](https://github.com/siemens/gencmpclient).
-The [openssl-cmp manual page](https://github.com/openssl/openssl/blob/master/doc/man1/openssl-cmp.pod.in)
-gives an overview of the functionality from CLI usage perspective.
 
 ## Interoperability
 
@@ -240,13 +232,10 @@ With JDK 11, revocation checking has some issues:
 
 # Lightweight CMP client CLI application
 
-This repository provides a CLI-based CMP client application in Java
-for demonstration and test purposes that implements the
-[Lightweight CMP Profile](
-https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).
-Part of
+Besides and RA, this repository provides a CLI-based CMP client application,
+which uses part of
 the [generic CMP RA component](https://github.com/siemens/cmp-ra-component)
-is used as implementation of the core CMP CLient (EE) functions.
+as an implementation of the core CMP CLient (EE) features.
 
 ## Running the CLI Client
 
@@ -384,3 +373,15 @@ usage: java -jar path/to/CmpClient.jar
 
 The lower part of the [configuration README file](/doc/config/README.md)
 explains the YAML configuration file structure.
+
+
+## Related resources
+
+An End Entity (EE) client implementation of the
+[Lightweight CMP Profile](<https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/>)
+based on OpenSSL with an high-level C API and a CLI is provided by the
+[generic CMP client](https://github.com/siemens/gencmpclient).
+The [openssl-cmp manual page](https://github.com/openssl/openssl/blob/master/doc/man1/openssl-cmp.pod.in)
+gives an overview of the functionality from CLI usage perspective.
+
+
