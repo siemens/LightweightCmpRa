@@ -22,6 +22,7 @@ DownstreamConfiguration:
   - VerificationContext:
       trustedCertificates:
         - "credentials/ossl_cmp_signer.crt"
+        - "credentials/CMP_EE_Root.pem"
     OutputCredentials:
       Signature:
         keyStore: "credentials/CMP_LRA_DOWNSTREAM_Keystore.p12"
@@ -37,8 +38,11 @@ RaVerifiedAcceptable:
 ForceRaVerifyOnUpstream:
   - value: false
 
+VerifierAdapter:
+  - FactoryClass: "com.siemens.pki.verifieradapter.veraison.rest.VerifierAdapterFactory"
+    FactoryMethod: "getCreateVerifierClient"
+
 SupportMessageHandlerInterface:
-  - GetFreshRatNonce:
-      BasePath: http://192.168.202.128:8080/challenge-response/v1
+  - GetFreshRatNonce: {}
     
     

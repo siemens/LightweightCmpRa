@@ -120,6 +120,7 @@ It may contain declarations of the object types listed below in any order:
 | mandatory if central key generation shall be supported | [`CkgConfiguration` object](#the-ckgconfiguration-object)                 | x | x |
 | mandatory if GENM shall be processed locally           | [`SupportMessageHandlerInterface` object](#the-supportmessagehandlerinterface-object)| x |   |
 | mandatory if interaction with an inventory is required | [`InventoryInterface` object](#the-inventoryinterface-object)             | x | x |
+| mandatory if interaction with an remote attestation verifier is required | [`VerifyAdapter` object](#the-verifieradapter-object)   | x | x |
 
 All objects except for `DownstreamInterface` have array values.
 If an object type is not mandatory,
@@ -592,6 +593,7 @@ The value array contains
 |0..n| `GetRootCaCertificateUpdate` | [`GetRootCaCertificateUpdate` objects](#the-getrootcacertificateupdate-object)|
 |0..n| `GetCertificateRequestTemplate`| [`GetCertificateRequestTemplate` objects](#the-getcertificaterequesttemplate-object) |
 |0..n| `CrlUpdateRetrieval`| [`CrlUpdateRetrieval` objects](#the-crlupdateretrieval-object) |
+|0..n| `GetFreshRatNonce`| up to now just a placeholder without values|
 
 For each type of support message, multiple array entries may be given
 in order to differentiate between certificate profiles.
@@ -658,6 +660,18 @@ It contains
 An empty infoValue can be specified as `GetCertificateRequestTemplate: {}`.
 
 
+## The `VerifierAdapter` object
+
+The **`VerifierAdapter` object** describes the interface to an remote attestation verifier
+for checking/modifying certificate requests.
+
+The value array contains
+
+| requested cardinality | key | value type| value description |
+|-------------------------|-------------|--|--|
+|0..n| FactoryClass |string|the qualified name of a Java class.|
+|0..n| FactoryMethod |string|name of a parameterless static method to create an instance of `com.siemens.pki.cmpracomponent.configuration.VerifierAdapter`|
+
 ## The `InventoryInterface` object
 
 The **`InventoryInterface` object** describes the interface to an external inventory
@@ -677,7 +691,6 @@ using the parameter-less default constructor.
 This instance is then used to execute the appropriate methods
 of com.siemens.pki.cmpracomponent.configuration.InventoryInterface
 when an IR, CR, P10CR, KUR, IP, CP or KUP message is processed.
-
 
 # Configuration of the CMP Client CLI application
 
@@ -739,7 +752,16 @@ It contains all of the key/value pairs described below in any order:
 | mandatory/optional|default | key | value type| value description|
 |--|--|--|--|:--|
 |optional|absent|EnrollmentContext|[`EnrollmentContext` object](#the-enrollmentcontext-object)| required if enrollment will be invoked |
+|optional|absent|AttestationContext|[`AttestationContext` object](#the-attestationcontext-object)| required if remote attestation will be used|
 
+## The AttestationContext object
+The **`AttestationContext` object** controls
+the remote attestation specific behavior of the client.
+It contains all of the key/value pairs described below in any order:
+
+| mandatory/optional|default | key | value type| value description|
+|--|--|--|--|:--|
+|mandatory||EvidenceSource|URI|source to load the evidence|
 
 ## The EnrollmentContext object
 

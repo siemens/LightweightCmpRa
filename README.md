@@ -4,6 +4,10 @@ Licensed under the Apache License, Version 2.0
 SPDX-License-Identifier: Apache-2.0
 -->
 
+# Remote Attestation Support
+
+For details look at [RAT README](./README_RAT.md).  
+
 # Lightweight CMP RA CLI application
 
 This repository provides a CLI-based Registration Authority application

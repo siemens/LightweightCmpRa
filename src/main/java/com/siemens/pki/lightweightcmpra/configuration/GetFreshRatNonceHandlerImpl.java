@@ -18,34 +18,11 @@
 package com.siemens.pki.lightweightcmpra.configuration;
 
 import com.siemens.pki.cmpracomponent.configuration.GetFreshRatNonceHandler;
-import com.siemens.pki.cmpracomponent.remoteattestation.EvidenceObjectIdentifiers;
-import java.net.URI;
+import com.siemens.pki.verifieradapter.asn1.EvidenceObjectIdentifiers;
 
 public class GetFreshRatNonceHandlerImpl extends SupportMessageHandlerInterfaceImpl implements GetFreshRatNonceHandler {
 
-    private URI basePath;
-
-    private Integer nonceSize;
-
     public GetFreshRatNonceHandlerImpl() {
         super(EvidenceObjectIdentifiers.aa_nonce.getId());
-    }
-
-    @Override
-    public URI getBasePath() {
-        return basePath;
-    }
-
-    @Override
-    public Integer getNonceSize() {
-        return nonceSize;
-    }
-
-    public void setBasePath(URI basePath) {
-        this.basePath = basePath;
-    }
-
-    public void setNonceSize(Integer nonceSize) {
-        this.nonceSize = nonceSize;
     }
 }

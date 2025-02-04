@@ -94,6 +94,9 @@ public class ConfigurationImpl implements Configuration {
 
     private final CertProfileBodyTypeScopedList<InventoryInterfaceImpl> InventoryInterface =
             new CertProfileBodyTypeScopedList<>();
+    
+    private final CertProfileBodyTypeScopedList<VerifierAdapterImpl> VerifierAdapter =
+            new CertProfileBodyTypeScopedList<>();
 
     private final CertProfileBodyTypeScopedList<IntegerConfigImpl> RetryAfterTimeInSeconds =
             new CertProfileBodyTypeScopedList<>();
@@ -156,6 +159,11 @@ public class ConfigurationImpl implements Configuration {
     @Override
     public InventoryInterface getInventory(final String certProfile, final int bodyType) {
         return InventoryInterface.getMatchingConfig(certProfile, bodyType);
+    }
+    
+    @Override
+    public com.siemens.pki.cmpracomponent.configuration.VerifierAdapter getVerifierAdapter(final String certProfile, final int bodyType) {
+        return VerifierAdapter.getMatchingConfig(certProfile, bodyType);
     }
 
     @Override
