@@ -1,0 +1,33 @@
+---
+
+MessageInterface:
+  - HttpsClient:
+      UpstreamURI:  "https://localhost:6000/onlinelra"
+      clientTrust:
+        TrustedCertificates:
+          - "credentials/TLS_LRA_DOWNSTREAM_Root.pem"
+      clientCredentials:
+        KeyStore:  "credentials/TLS_EE_Keystore.p12"
+        Password: password      
+
+MessageConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_EE_Keystore.p12"
+        Password: "Password"
+    Recipient: "CN=recip"
+
+ClientContext:
+  - EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "CN=subject"
+      RequestImplictConfirm: false
+    
