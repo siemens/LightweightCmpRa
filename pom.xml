@@ -75,6 +75,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/local/**</exclude>
+						<exclude>**/TestInventoryHttpPlugin.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
