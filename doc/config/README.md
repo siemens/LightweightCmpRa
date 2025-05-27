@@ -404,7 +404,7 @@ It may contain the key/value pairs described below in any order:
 |optional |formerly set recipient|Recipient|String| recipient used in outgoing CMP message header, only used if protection is rebuild or absent|
 |optional|accept all|`VerificationContext`|[`VerificationContext` object](#the-verificationcontext-object)|trust for protection validation of incoming messages|
 | optional|mandatory for reprotect | outputCredentials| [`OutputCredentials` object](#the-outputcredentials-object) | determines protection of outgoing messages
-| optional|no special processing of nested messages |`NestedEndpointContext`| [`NestedEndpointContext` object](#the-nestedendpointcontext-object) |determines processing of nested messages
+| optional|no special processing w.r.t. nested messages |`NestedEndpointContext`| [`NestedEndpointContext` object](#the-nestedendpointcontext-object) |determines processing and generation of nested messages
 | optional|**keep** |ReprotectMode|enum { **reprotect, strip, keep** } |protection mode for outgoing message|
 | optional|3600 seconds| AllowedMessageTimeDeviation|integer value | the maximum acceptable age in seconds of an incoming message according to its messageTime |
 | optional|false | CacheExtraCerts| Boolean| whether received extra certificates should be cached |
@@ -510,7 +510,7 @@ as far as needed depending on the chosen MAC algorithm.
 #### The `NestedEndpointContext` object
 
 The **`NestedEndpointContext` object** provides values that determine
-if and how to unwrap incoming and to wrap outgoing nested messages.
+if and how to unwrap incoming nested messages and how to nest outgoing messages.
 It should contain all needed key/value pairs described below in any order:
 
 | mandatory/optional|default | key | value type| value description|
