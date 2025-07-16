@@ -202,7 +202,7 @@
 		<dependency>
 			<groupId>org.eclipse.californium</groupId>
 			<artifactId>californium-core</artifactId>
-			<version>3.13.0</version>
+			<version>4.0.0-M5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -222,7 +222,7 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>${jacoco.version}</version>
+			<version>0.8.12</version>
 		</dependency>
 		<dependency>
 			<!--		Indirect dependency of jacoco-maven-plugin. We add this one
@@ -231,7 +231,7 @@
 			CVE-2021-26291.-->
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>file-management</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0</version>
 		</dependency>
 
 	</dependencies>
