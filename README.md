@@ -6,11 +6,18 @@ Copyright (c) 2019 - 2024 Siemens AG
 
 This repository provides CLI-based Registration Authority (RA) and CMP client
 Java applications for demonstration and test purposes.\
-It offers CMP features according to RFCs 4210 and 9480 
-according to the [Lightweight CMP Profile](
-https://datatracker.ietf.org/doc/draft-ietf-lamps-lightweight-cmp-profile/).\
+It implements according to the [Lightweight CMP Profile, RFC 9483](
+https://datatracker.ietf.org/doc/rfc9483/)
+* most of the CMP features defined in the new
+  [Internet X.509 PKI -- Certificate Management Protocol (CMP), RFC 9810](
+  https://datatracker.ietf.org/doc/rfc9810/) and
+* HTTP(S)-based message transfer as defined in
+  [Internet X.509 PKI -- HTTP Transfer for the Certificate Management Protocol (CMP), RFC 9811](
+  https://datatracker.ietf.org/doc/rfc9811/).
+
 It uses the [generic CMP RA component](https://github.com/siemens/cmp-ra-component)
 as an implementation of the core CMP features.
+
 
 ## License
 
