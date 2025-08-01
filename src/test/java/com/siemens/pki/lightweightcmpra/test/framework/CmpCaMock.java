@@ -123,6 +123,8 @@ public class CmpCaMock implements ExFunction {
         final String servingUrl = args[1];
         final String enrollmentCredentials = args[2];
         final String protectionCredentials = args[3];
+
+        System.out.println("Start MockCA at: " + servingUrl + " conf: " + configFileDirectory);
         new CmpCaMock(servingUrl, enrollmentCredentials, protectionCredentials);
     }
 
