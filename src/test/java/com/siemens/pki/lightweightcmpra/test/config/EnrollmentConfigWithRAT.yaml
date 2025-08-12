@@ -2,12 +2,12 @@
 
 UpstreamInterface:
   - HttpClient:
-      UpstreamURI:  "http://localhost:7000/ca"
+      UpstreamURI:  "http://192.168.120.13:7000/ca"
       Timeout: 44
 
 DownstreamInterface:
   HttpServer:
-    UpstreamURI: "http://localhost:6666/pkix"
+    UpstreamURI: "http://192.168.100.12:6666/pkix"
 
 UpstreamConfiguration:
   - VerificationContext:
