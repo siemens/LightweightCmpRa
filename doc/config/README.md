@@ -61,7 +61,7 @@ or
 Uniform Resource Identifiers (URI), directory names, shared secrets, and passwords
 are case sensitive.**
 
-The format and syntax of an URI is specified in [RFC2396](https://www.ietf.org/rfc/rfc2396.txt).
+The format and syntax of an URI is specified in [RFC 2396](https://www.ietf.org/rfc/rfc2396).
 
 
 ## Matching array entries
@@ -80,10 +80,10 @@ equivalent strings `"ir"`, `"cr"`, `"kur"`, `"rr"`, and `"genm"` are allowed.
 An absent **bodyType** matches CMP messages of any type.
 
 While processing a CMP message (which may be a request or response, including
-an error message), its bodyType (see [RFC4210](https://datatracker.ietf.org/doc/html/rfc4210),
-section PKI Message Body) and any certProfile optionally given in the message header (see
-[CMP updates](https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cmp-updates),
-section certProfile)
+an error message), its bodyType
+(see [RFC 9810 section 5.1.2](https://datatracker.ietf.org/doc/html/rfc9810#section-5.1.2))
+and any certProfile optionally given in the message header
+(see [RFC 9810 section 5.1.1.4](https://datatracker.ietf.org/doc/html/rfc9810#section-5.1.1.4))
 are matched against the array entries until a fully matching entry is found.
 This entry is then used to control the further processing of this message.
 
@@ -167,7 +167,7 @@ It must contain exactly one of the objects described below:
 The **`HttpServer` object** describes the instantiation
 of the downstream interface to an HTTP server.
 Its used for CMP request reception and response delivery
-as specified in [RFC 6712](https://www.rfc-editor.org/rfc/rfc6712.txt).
+as specified in [RFC 9811](https://www.rfc-editor.org/rfc/rfc9811).
 
 It must contain the key/value pair described below:
 
@@ -183,7 +183,7 @@ The hostname or IP part of the **UpstreamURI** will be ignored.
 The **`HttpsServer` object** describes the instantiation
 of the downstream interface to an HTTPS server.
 Its used for CMP request reception and response delivery
-as specified in [RFC 6712](https://www.rfc-editor.org/rfc/rfc6712.txt).
+as specified in [RFC 9811](https://www.rfc-editor.org/rfc/rfc9811).
 
 It must contain the key/value pairs described below in any order:
 
@@ -201,7 +201,7 @@ The serverTrust and serverCredentials describe the TLS server configuration.
 
 The **`CoapServer` object** describes the instantiation
 of the downstream interface to a CoAP endpoint as described in
-[RFC 7252](https://www.rfc-editor.org/rfc/rfc7252.txt).
+[RFC 7252](https://www.rfc-editor.org/rfc/rfc7252).
 The UDP server binds to the standard CoAP port 5683.
 
 It must contain the key/value pair described below:
