@@ -405,7 +405,8 @@ It may contain the key/value pairs described below in any order:
 |optional|accept all|`VerificationContext`|[`VerificationContext` object](#the-verificationcontext-object)|trust for protection validation of incoming messages|
 | optional|mandatory for reprotect | outputCredentials| [`OutputCredentials` object](#the-outputcredentials-object) | determines protection of outgoing messages
 | optional|no special processing w.r.t. nested messages |`NestedEndpointContext`| [`NestedEndpointContext` object](#the-nestedendpointcontext-object) |determines processing and generation of nested messages
-| optional|**keep** |ReprotectMode|enum { **reprotect, strip, keep** } |protection mode for outgoing message|
+| optional|**keep** |ReprotectMode|enum { **reprotect, strip, keep** } |protection mode for outgoing message. If incoming message was MAC-based protected, **reprotect** is assumed.|
+| optional| false |EnforceReprotectMode| Boolean |enforce protection mode of outgoing messages as given by `ReprotectMode` even if the last incoming message was MAC-based protected|
 | optional|3600 seconds| AllowedMessageTimeDeviation|integer value | the maximum acceptable age in seconds of an incoming message according to its messageTime |
 | optional|false | CacheExtraCerts| Boolean| whether received extra certificates should be cached |
 | optional|false | SuppressRedundantExtraCerts|Boolean| whether to prevent repeated inclusion of certificates in the extraCerts field of outgoing messages within a transaction.|
