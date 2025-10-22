@@ -415,13 +415,10 @@ for certficate update (`KUR`) requests the reprotection mode is always **keep**.
 
 On the downstream interface, according to
 [RFC 9483 section 4.1.5](https://datatracker.ietf.org/doc/html/rfc9483#section-4.1.5),
-if a request message (e.g. of type `IR`) has MAC-based protection
-and the respective type of the outgoing response message (e.g., `IP`)
-is configured to be reprotected, any given configuration of outgoing
-credentials is ignored and the verification credentials are used instead.
+responses to MAC-based requests at Downstream are always reprotected using the 
+same credentials.
 Yet on error validating the protection of the request message,
 the configured outgoing credentials are used for the error response message.
-
 
 #### The `VerificationContext` object
 
