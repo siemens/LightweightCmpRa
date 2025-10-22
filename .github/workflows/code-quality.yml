@@ -63,5 +63,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Analyze dependencies
-        # this will run the OWASP dependency checker only
-        run: mvn -B verify -DskipTests -DnvdApiKey=${{ secrets.NVD_TOKEN }}
+        env:
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+         OSS_INDEX_PASSWORD: ${{ secrets.OSS_INDEX_PASSWORD }}
+         OSS_INDEX_USERNAME: ${{ secrets.OSS_INDEX_USERNAME }}
+        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_TOKEN }}
