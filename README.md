@@ -115,6 +115,12 @@ mvn clean install -DskipTests=true -Dgpg.skip
 ```
 in both directories.
 
+## Configuration
+
+A [README file documents](/doc/config/README.md)
+the YAML-based configuration,
+explaining the file structure and the effect of key/value pairs.
+
 ## Running the RA
 
 Example YAML configuration files can be found at
@@ -207,11 +213,6 @@ is used for implementing some tests.
 
 A [README file](src/test/java/com/siemens/pki/lightweightcmpra/test/config/credentials/README.txt)
 describes structure, purpose and use of the test credentials.
-
-## Configuration
-
-A [README file](/doc/config/README.md)
-explains the YAML configuration file structure.
 
 ### CMP message transport variants
 
