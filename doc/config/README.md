@@ -405,7 +405,8 @@ It may contain the key/value pairs described below in any order:
 |optional|accept all|`VerificationContext`|[`VerificationContext` object](#the-verificationcontext-object)|trust for protection validation of incoming messages|
 | optional|mandatory for reprotect | outputCredentials| [`OutputCredentials` object](#the-outputcredentials-object) | determines protection of outgoing messages
 | optional|no special processing w.r.t. nested messages |`NestedEndpointContext`| [`NestedEndpointContext` object](#the-nestedendpointcontext-object) |determines processing and generation of nested messages
-| optional|**keep** |ReprotectMode|enum { **reprotect, strip, keep** } |protection mode for outgoing message|
+| optional|**keep** |ReprotectMode|enum { **reprotect, strip, keep** } |protection mode for outgoing message. If incoming message was MAC-based protected, **reprotect** is assumed.|
+| optional| false |EnforceReprotectMode| Boolean |enforce protection mode of outgoing messages as given by `ReprotectMode` even if the last incoming message was MAC-based protected|
 | optional|3600 seconds| AllowedMessageTimeDeviation|integer value | the maximum acceptable age in seconds of an incoming message according to its messageTime |
 | optional|false | CacheExtraCerts| Boolean| whether received extra certificates should be cached |
 | optional|false | SuppressRedundantExtraCerts|Boolean| whether to prevent repeated inclusion of certificates in the extraCerts field of outgoing messages within a transaction.|
@@ -415,9 +416,9 @@ for certficate update (`KUR`) requests the reprotection mode is always **keep**.
 
 When responding to request messages with successfully verified MAC-based protection,
 the corresponding response messages are protected
-using the same MAC-based algorithm, credentials, and parameters
-(regardless of the configuration related to reprotection or output credentials).
-
+using the same MAC-based algorithm, credentials, and parameters. This behaviour 
+can be modified only by setting `EnforceReprotectMode` to true and `ReprotectMode`
+to **keep** or **strip**.
 
 Yet on error validating the protection of the request message,
 the configured outgoing credentials are used for the error response message.

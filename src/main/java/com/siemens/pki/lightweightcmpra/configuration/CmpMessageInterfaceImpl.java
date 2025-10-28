@@ -45,6 +45,12 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem imple
 
     private String recipient = CmpMessageInterface.super.getRecipient();
 
+    private boolean enforceReprotectMode = CmpMessageInterface.super.isEnforceReprotectMode();
+
+    public void setEnforceReprotectMode(boolean enforceReprotectMode) {
+        this.enforceReprotectMode = enforceReprotectMode;
+    }
+
     @Override
     public VerificationContext getInputVerification() {
         return VerificationContext;
@@ -68,6 +74,11 @@ public class CmpMessageInterfaceImpl extends CertProfileBodyTypeConfigItem imple
     @Override
     public ReprotectMode getReprotectMode() {
         return ReprotectMode;
+    }
+
+    @Override
+    public boolean isEnforceReprotectMode() {
+        return enforceReprotectMode;
     }
 
     @Override
