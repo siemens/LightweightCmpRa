@@ -413,10 +413,8 @@ It may contain the key/value pairs described below in any order:
 On the upstream interface,
 for certficate update (`KUR`) requests the reprotection mode is always **keep**.
 
-On the downstream interface, according to
-[RFC 9483 section 4.1.5](https://datatracker.ietf.org/doc/html/rfc9483#section-4.1.5),
-responses to MAC-based requests at Downstream are always reprotected using the 
-same credentials.
+When responding to request messages that include successfully verified MAC-based protection, the corresponding response messages are protected using the same MAC-based algorithm, credentials, and parameters — regardless of the configuration related to reprotection or output credentials.
+
 Yet on error validating the protection of the request message,
 the configured outgoing credentials are used for the error response message.
 
