@@ -416,9 +416,9 @@ for certficate update (`KUR`) requests the reprotection mode is always **keep**.
 
 When responding to request messages with successfully verified MAC-based protection,
 the corresponding response messages are protected
-using the same MAC-based algorithm, credentials, and parameters
-(regardless of the configuration related to reprotection or output credentials).
-
+using the same MAC-based algorithm, credentials, and parameters. This behaviour 
+can be modified only by setting `EnforceReprotectMode` to true and `ReprotectMode`
+to **keep** or **strip**.
 
 Yet on error validating the protection of the request message,
 the configured outgoing credentials are used for the error response message.
