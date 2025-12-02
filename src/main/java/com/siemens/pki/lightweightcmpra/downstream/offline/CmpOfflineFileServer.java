@@ -70,7 +70,7 @@ public class CmpOfflineFileServer implements DownstreamInterface {
             throw new IOException(config.getOutputDirectory() + " is not a writable directory");
         }
         final long pollInterval = config.getInputDirectoryPollcycle() * 1000L;
-        pollTimer = new Timer(true);
+        pollTimer = new Timer(false);
         final TimerTask task = new TimerTask() {
 
             @Override
