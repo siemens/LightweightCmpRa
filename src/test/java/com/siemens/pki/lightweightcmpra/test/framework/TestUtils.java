@@ -39,6 +39,7 @@ import java.security.SecureRandom;
 import java.util.function.Function;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.cmp.PKIMessage;
+import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
@@ -136,7 +137,13 @@ public class TestUtils {
         config.setSenderKID(keyId.getBytes());
         config.setSharedSecret(sharedSecret.getBytes());
         config.setPrf(prf.getAlgorithm().getId());
-        config.setMacAlgorithm(mac.getAlgorithm().getId());
+        final ASN1ObjectIdentifier macAlgorith = mac.getAlgorithm();
+        config.setMacAlgorithm(macAlgorith.getId());
+        if (macAlgorith.equals(NISTObjectIdentifiers.id_KmacWithSHAKE256)
+                || macAlgorith.equals(NISTObjectIdentifiers.id_KmacWithSHAKE128)) {
+            // KMAC doesnt like large keys
+            config.setKeyLength(8);
+        }
         return new PBMAC1Protection(config, INTERFACE_NAME);
     }
 
