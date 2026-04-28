@@ -32,14 +32,14 @@ public class DelayedEnrollmentTestcaseBase extends EnrollmentTestcaseBase {
 
     @BeforeClass
     public static void setupRas() throws GeneralSecurityException, InterruptedException, Exception {
-        TestUtils.createDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.createDirectories("./target/CmpTest/Downstream_REV", "./target/CmpTest/Upstream_REV");
         initTestbed("DelayedEnrollmentRaTestConfig.yaml", "DelayedEnrollmentLraTestConfig.yaml");
     }
 
     @AfterClass
     public static void stopAllRas() {
         RA.stopAllRas();
-        TestUtils.removeDirectories("./target/CmpTest/Downstream", "./target/CmpTest/Upstream");
+        TestUtils.removeDirectories("./target/CmpTest/Downstream_REV", "./target/CmpTest/Upstream_REV");
     }
 
     @After

@@ -1,0 +1,108 @@
+---
+
+MessageInterface:
+  - HttpClient:
+      UpstreamURI:  "http://localhost:6000/onlinelra"
+
+MessageConfiguration:
+  - VerificationContext:
+      trustedCertificates:
+        - "credentials/CMP_CA_Root.pem"
+        - "credentials/CMP_LRA_DOWNSTREAM_Root.pem"
+    outputCredentials:
+      Signature:
+        keyStore: "credentials/CMP_EE_Keystore.p12"
+        Password: "Password"
+    Recipient: "CN=recip"
+
+ClientContext:
+  - certProfile: ML-KEM-512 
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: ML-KEM-512
+      Subject: "CN=subject"
+      RequestImplictConfirm: false 
+    
+  - certProfile: ML-KEM-1024
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: ML-KEM-1024
+      Subject: "CN=subject"
+      RequestImplictConfirm: false  
+    
+    
+  - certProfile: ML-DSA-44
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: ML-DSA-44
+      Subject: "CN=subject"
+      RequestImplictConfirm: false       
+
+  - certProfile: SLH-DSA-SHA2-128S
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: SLH-DSA-SHA2-128S
+      Subject: "CN=subject"
+      RequestImplictConfirm: false    
+      
+  - certProfile: "RSA1024"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: RSA1024
+      Subject: "CN=subject"
+      RequestImplictConfirm: false 
+ 
+  - certProfile: "RSA2048"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: RSA2048
+      Subject: "CN=subject"
+      RequestImplictConfirm: false
+      
+  - certProfile: "Ed448"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: Ed448
+      Subject: "CN=subject"
+      RequestImplictConfirm: false
+      
+  - certProfile: "Ed25519"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: Ed25519
+      Subject: "CN=subject"
+      RequestImplictConfirm: false
+      
+  - certProfile: "secp256r1"
+    EnrollmentContext:
+      EnrollmentType: CR
+      EnrollmentTrust: 
+        trustedCertificates:
+          - "credentials/ENROLL_Root.pem"
+      KeyType: secp256r1
+      Subject: "CN=subject"
+      RequestImplictConfirm: false          

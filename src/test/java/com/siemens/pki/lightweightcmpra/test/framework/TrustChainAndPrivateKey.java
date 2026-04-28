@@ -27,6 +27,7 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,7 +87,7 @@ public class TrustChainAndPrivateKey {
         return new ProtectionProvider() {
             @Override
             public List<CMPCertificate> getProtectingExtraCerts()
-                    throws java.security.cert.CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
+                    throws CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
                 final List<CMPCertificate> ret = new ArrayList<>(trustChain.size());
                 ret.add(certificate);
                 for (final X509Certificate aktCert : trustChain) {
